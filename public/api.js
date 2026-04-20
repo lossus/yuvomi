@@ -44,9 +44,13 @@ async function apiFetch(path, options = {}, _retried = false) {
   });
 
   if (response.status === 401) {
-    // Session abgelaufen → zur Login-Seite
-    window.dispatchEvent(new CustomEvent('auth:expired'));
-    throw new Error('Sitzung abgelaufen.');
+    // Beim Login-Endpunkt bedeutet 401 "falsche Zugangsdaten", nicht "Session abgelaufen".
+    // auth:expired würde die Login-Seite neu rendern und die Fehlermeldung verwerfen.
+    if (path !== '/auth/login') {
+      window.dispatchEvent(new CustomEvent('auth:expired'));
+      throw new Error('Sitzung abgelaufen.');
+    }
+    // Für /auth/login: fall-through zum generischen !response.ok-Handler unten.
   }
 
   // CSRF-Token-Desync (haeufig nach iOS-PWA-Resume): einmal GET /auth/me

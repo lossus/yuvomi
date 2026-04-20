@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.20.34] - 2026-04-20
+
+### Fixed
+- Login on Safari/iOS PWA no longer loops back to the login screen when credentials are wrong: `apiFetch` no longer dispatches `auth:expired` for 401 responses from `/auth/login` (where 401 means invalid credentials, not expired session) — the error message is now shown correctly instead of the form being silently re-rendered
+
 ## [0.20.33] - 2026-04-20
 
 ### Fixed

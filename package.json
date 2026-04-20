@@ -1,6 +1,6 @@
 {
   "name": "oikos",
-  "version": "0.20.33",
+  "version": "0.20.34",
   "description": "Self-hosted family planner - calendar, tasks, shopping, meal planning, budget and more. Private, open-source, no subscription.",
   "main": "server/index.js",
   "type": "module",
@@ -21,7 +21,8 @@
     "test:ux-utils": "node test-ux-utils.js",
     "test:modal-utils": "node --loader ./test-browser-loader.mjs test-modal-utils.js",
     "test:reminders": "node --experimental-sqlite test-reminders.js",
-    "test": "node --experimental-sqlite test-db.js && node --experimental-sqlite test-dashboard.js && node --experimental-sqlite test-tasks.js && node --experimental-sqlite test-shopping.js && node --experimental-sqlite test-meals.js && node --experimental-sqlite test-calendar.js && node --experimental-sqlite test-notes-contacts-budget.js && npm run test:ux-utils && npm run test:modal-utils && npm run test:reminders"
+    "test:api": "node test-api.js",
+    "test": "node --experimental-sqlite test-db.js && node --experimental-sqlite test-dashboard.js && node --experimental-sqlite test-tasks.js && node --experimental-sqlite test-shopping.js && node --experimental-sqlite test-meals.js && node --experimental-sqlite test-calendar.js && node --experimental-sqlite test-notes-contacts-budget.js && npm run test:ux-utils && npm run test:modal-utils && npm run test:reminders && npm run test:api"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
