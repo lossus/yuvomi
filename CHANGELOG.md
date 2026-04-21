@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.20.43] - 2026-04-21
+
+### Added
+- `POST /api/v1/auth/setup` bootstrap endpoint: creates the first admin user when no users exist, enabling Docker-based deployments to initialise via HTTP without direct filesystem DB access. Returns 403 once any user exists.
+
 ## [0.20.42] - 2026-04-21
 
 ### Added
