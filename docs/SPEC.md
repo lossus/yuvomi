@@ -125,11 +125,11 @@ Reusable recipe cards that can be pre-filled into meal slots.
 | target_caldav_calendar_url | TEXT | CalDAV calendar URL (for outbound sync), nullable |
 
 ### External Calendars
-Display metadata (name, color) for synced Google/Apple/CalDAV calendars. Populated automatically during sync.
+Display metadata (name, color) for synced Google/CalDAV calendars. Populated automatically during sync.
 
 | Column | Type | Constraint |
 |--------|------|-----------|
-| source | TEXT | 'google', 'apple', or 'caldav', NOT NULL |
+| source | TEXT | 'google' or 'caldav', NOT NULL (legacy 'apple' entries migrated to 'caldav' in v0.44.0) |
 | external_id | TEXT | Calendar ID from the provider, NOT NULL |
 | name | TEXT | Display name from the provider, NOT NULL |
 | color | TEXT | Background color from the provider (HEX) |
@@ -179,11 +179,88 @@ Index: CREATE INDEX idx_caldav_selection_enabled ON caldav_calendar_selection(ac
 |--------|------|-----------|
 | name | TEXT | NOT NULL |
 | category | TEXT | Doctor, School/Nursery, Authority, Insurance, Tradesperson, Emergency, Other |
-| phone | TEXT | |
-| email | TEXT | |
-| address | TEXT | |
+| phone | TEXT | legacy single-value field |
+| email | TEXT | legacy single-value field |
+| address | TEXT | legacy single-value field |
 | notes | TEXT | |
+| organization | TEXT | nullable |
+| job_title | TEXT | nullable |
+| birthday | TEXT | DATE, nullable |
+| website | TEXT | nullable |
+| photo | TEXT | Base64 data URL, nullable |
+| nickname | TEXT | nullable |
 | family_user_id | INTEGER | FK → Users (CASCADE delete), UNIQUE (one linked user per contact), nullable |
+| carddav_account_id | INTEGER | FK → CardDAV Accounts (SET NULL on delete), nullable |
+| carddav_uid | TEXT | CardDAV UID from server, nullable |
+| carddav_addressbook_url | TEXT | Source addressbook URL, nullable |
+
+Index: UNIQUE on `(carddav_account_id, carddav_addressbook_url, carddav_uid)` WHERE `carddav_uid IS NOT NULL`
+
+### Contact Phones
+Multiple phone numbers per contact with label and primary flag.
+
+| Column | Type | Constraint |
+|--------|------|-----------|
+| id | INTEGER | PRIMARY KEY AUTOINCREMENT |
+| contact_id | INTEGER | FK → Contacts (CASCADE delete), NOT NULL |
+| label | TEXT | e.g. "mobile", "work", "home", nullable |
+| value | TEXT | NOT NULL |
+| is_primary | INTEGER | 0/1, default 0 |
+
+### Contact Emails
+Multiple email addresses per contact with label and primary flag.
+
+| Column | Type | Constraint |
+|--------|------|-----------|
+| id | INTEGER | PRIMARY KEY AUTOINCREMENT |
+| contact_id | INTEGER | FK → Contacts (CASCADE delete), NOT NULL |
+| label | TEXT | e.g. "work", "home", nullable |
+| value | TEXT | NOT NULL |
+| is_primary | INTEGER | 0/1, default 0 |
+
+### Contact Addresses
+Multiple addresses per contact with label and primary flag.
+
+| Column | Type | Constraint |
+|--------|------|-----------|
+| id | INTEGER | PRIMARY KEY AUTOINCREMENT |
+| contact_id | INTEGER | FK → Contacts (CASCADE delete), NOT NULL |
+| label | TEXT | e.g. "home", "work", nullable |
+| street | TEXT | nullable |
+| city | TEXT | nullable |
+| state | TEXT | nullable |
+| postal_code | TEXT | nullable |
+| country | TEXT | nullable |
+| is_primary | INTEGER | 0/1, default 0 |
+
+### CardDAV Accounts
+Multi-account CardDAV integration. Stores credentials for CardDAV servers (Nextcloud, iCloud, Radicale, Baikal, etc.).
+
+| Column | Type | Constraint |
+|--------|------|-----------|
+| id | INTEGER | PRIMARY KEY AUTOINCREMENT |
+| name | TEXT | User-defined label (e.g. "My Nextcloud", "iCloud"), NOT NULL |
+| carddav_url | TEXT | CardDAV server base URL, NOT NULL |
+| username | TEXT | CardDAV username, NOT NULL |
+| password | TEXT | CardDAV password (encrypted if DB_ENCRYPTION_KEY set), NOT NULL |
+| created_at | TEXT | ISO 8601 |
+| last_sync | TEXT | ISO 8601, nullable |
+| UNIQUE | | (carddav_url, username) |
+
+### CardDAV Addressbook Selection
+Per-account addressbook enable/disable state for CardDAV accounts.
+
+| Column | Type | Constraint |
+|--------|------|-----------|
+| id | INTEGER | PRIMARY KEY AUTOINCREMENT |
+| account_id | INTEGER | FK → CardDAV Accounts (CASCADE delete), NOT NULL |
+| addressbook_url | TEXT | CardDAV addressbook URL from provider, NOT NULL |
+| addressbook_name | TEXT | Display name from provider, NOT NULL |
+| enabled | INTEGER | 0/1 (default 1), controls sync for this addressbook |
+| created_at | TEXT | ISO 8601 |
+| UNIQUE | | (account_id, addressbook_url) |
+
+Index: CREATE INDEX idx_carddav_addressbook_account ON carddav_addressbook_selection(account_id, enabled)
 
 ### Budget Entries
 | Column | Type | Constraint |
@@ -255,6 +332,9 @@ Birthday records with optional profile photo and automatic calendar event + remi
 | calendar_event_id | INTEGER | FK → calendar_events (SET NULL on delete), nullable |
 | family_user_id | INTEGER | FK → Users (CASCADE delete), UNIQUE (one linked user per birthday), nullable |
 | created_by | INTEGER | FK → Users (CASCADE delete), NOT NULL |
+| reminder_offset | TEXT | Preset offset key (e.g. "1d", "1w") or "custom"; empty/null = no reminder |
+| reminder_custom_amount | INTEGER | Amount for custom offset, nullable |
+| reminder_custom_unit | TEXT | Unit for custom offset: "minutes", "hours", "days", "weeks", nullable |
 
 ### API Tokens
 Named Bearer / X-API-Key tokens for non-interactive external integrations. Admin-only creation and revocation. Token values are SHA-256-hashed at rest; the plaintext is shown only once after creation.
@@ -382,6 +462,7 @@ Skeleton loading instead of spinners. Clicking any widget navigates to that modu
 - Recurring: automatically create next instance on completion
 - Archive: completed tasks can be archived (status = 'archived'); visible in a separate Archived filter
 - Inline reminder presets: offset from due date/time — 15 min, 1 h, 1 d, 2 d, 1 w, 2 w, or fully custom offset
+- **Bulk actions (list view only):** select multiple tasks via checkboxes and apply batch operations (mark done, mark open, archive, delete); bulk select toggle in toolbar
 - Mobile swipe: left = done, right = edit
 - Badge for overdue tasks
 
@@ -449,11 +530,14 @@ Masonry grid with colored sticky notes.
 ### Contacts (`/contacts`)
 
 - CRUD with category filter
+- **Multi-value fields:** multiple phones, emails, and addresses per contact, each with a label (mobile, work, home, etc.) and optional `isPrimary` flag
+- **Additional fields:** organization, job_title, birthday, website, photo, nickname
 - Phone: `tel:` link, email: `mailto:` link
 - Address: Maps link (Google/Apple via user agent)
 - Real-time search filter
 - vCard export: each contact downloadable as `.vcf` (`GET /api/v1/contacts/:id/vcard`)
 - vCard import: upload file → client-side parser (FN, TEL, EMAIL, ADR, NOTE, CATEGORIES) → create contact
+- **CardDAV multi-account sync:** connect multiple CardDAV servers (Nextcloud, iCloud, Radicale, Baikal); per-addressbook enable/disable via checkboxes; manual sync trigger; bidirectional sync. New API routes under `/api/v1/contacts/cardav/*`: create/delete accounts, test connections, discover/refresh addressbooks, toggle addressbook selection, sync contacts
 
 ### Documents (`/documents`)
 
@@ -483,12 +567,15 @@ User management and app configuration. Logged-in users only.
 
 - **Profile:** change display name, avatar color, password
 - **User management (admin):** create new users, edit/delete existing users, assign roles (admin/member)
-- **Calendar integration:** connect/disconnect Google Calendar OAuth, store Apple Calendar (CalDAV) credentials, configure sync interval; manage ICS URL subscriptions (add, delete, sync now, set color and visibility)
+- **Module toggles (admin, Settings → General):** individual modules (Tasks, Calendar, Shopping, Meals, Recipes, Birthdays, Notes, Contacts, Budget, Documents) can be disabled to hide them from navigation. Data is preserved and reappears when re-enabled. Dashboard and Settings remain essential and cannot be disabled. Stored as `disabled_modules` key in `sync_config`.
+- **Synchronization tab:** unified tab for calendar and contact sync, replacing the old Calendar tab. Contains two sections:
+  - **Calendar Sync:** connect/disconnect Google Calendar (OAuth 2.0); manage multiple CalDAV accounts (iCloud, Nextcloud, Radicale, Baikal) with per-account calendar selection via checkboxes, two-way sync, and optional outbound event target; manage ICS URL subscriptions (add, delete, sync now, set color and visibility); configure sync interval
+  - **Contact Sync:** manage multiple CardDAV accounts (iCloud, Nextcloud, Radicale, Baikal); per-addressbook enable/disable; manual sync trigger; real-time status badges (success, error, syncing with animated spinner)
 - **Weather:** configure OpenWeatherMap location
 - **Language:** System (follows `navigator.language`), German, English, Spanish, French, Italian, Swedish, Greek, Russian, Turkish, Chinese, Japanese, Arabic, Hindi, Portuguese - via `oikos-locale-picker` web component; switch without page reload
 - **API Tokens (admin):** create named Bearer / X-API-Key tokens for external integrations; the full token value is shown only once immediately after creation; tokens can be revoked at any time; support optional expiry and track last-used timestamp
-- **Backup Management (admin):** download the current database as a file (`GET /api/v1/backup/database`) or restore from a backup file (`POST /api/v1/backup/restore`, drag-and-drop supported). Validates that the uploaded file is a valid Oikos database. A rollback copy is created automatically before restore.
-- **Tab navigation:** Settings is organized in nine tabs (General, Meals, Budget, Shopping, Calendar, Family, API Tokens, Backup, Account). Admin-only tabs: Family, API Tokens, Backup. Sticky tab bar, active tab persists in sessionStorage, Calendar tab auto-activates after OAuth callbacks.
+- **Backup Management (admin):** download the current database as a file (`GET /api/v1/backup/database`) or restore from a backup file (`POST /api/v1/backup/restore`, drag-and-drop supported). Validates that the uploaded file is a valid Oikos database. A rollback copy is created automatically before restore. **Automatic scheduled backups:** configurable via `.env` (`BACKUP_ENABLED`, `BACKUP_SCHEDULE`, `BACKUP_DIR`, `BACKUP_KEEP`); default 2 AM daily, keeps last 7 copies; Settings → Backup shows scheduler status, schedule, retention policy, last backup timestamp, and a manual trigger button.
+- **Tab navigation:** Settings is organized in nine tabs (General, Meals, Budget, Shopping, Synchronization, Family, API Tokens, Backup, Account). Admin-only tabs: Family, API Tokens, Backup. Sticky tab bar, active tab persists in sessionStorage, Synchronization tab auto-activates after OAuth callbacks.
 - **Family management (admin):** assign a `family_role` (Dad, Mom, Parent, Child, Grandparent, Relative, Other) to each user, and set per-member phone, email, and birthday — automatically synced to Contacts and Birthdays. Displayed in the family member list and profile views.
 - **Profile picture:** users can upload a personal avatar (PNG/JPEG/WebP/GIF, ≤ 5 MB), stored as a Base64 data URL in `avatar_data`. Displayed alongside display name across the app.
 - **App info:** version, license
@@ -517,7 +604,7 @@ Personal birthday tracker with automatic calendar integration.
 - Profile photo upload (PNG/JPEG/WebP/GIF, ≤ 5 MB, stored as Base64 data URL)
 - **Upcoming view:** birthdays sorted by days until next occurrence; shows age when year is known
 - **Calendar integration:** creating or updating a birthday automatically creates/updates a recurring annual all-day calendar event (title: "🎂 {Name}"); deleting a birthday removes the linked event
-- **Automatic reminder:** a birthday reminder is synced 1 day before each occurrence (auto-dismissed when the birthday passes)
+- **Configurable reminder:** customizable reminder offset per birthday with preset options (none, at time, 15 min, 1 h, 1 d, 2 d, 1 w, 2 w) and a fully custom interval (amount + unit). Reminder time calculated from offset; auto-dismissed when the birthday passes
 - Search filter by name
 - API: `GET /api/v1/birthdays`, `GET /api/v1/birthdays/upcoming`, `GET /api/v1/birthdays/:id`, `POST /api/v1/birthdays`, `PUT /api/v1/birthdays/:id`, `DELETE /api/v1/birthdays/:id`
 

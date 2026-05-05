@@ -52,3 +52,16 @@ docs/repo-audit-*.md
 *.txt
 !public/robots.txt
 CLAUDE.md
+
+# Screenshot generation scripts (dev tooling, not part of the app)
+create-screenshots*.js
+custom-screenshots.js
+seed-demo-simple.js
+seed-english-demo*.js
+screenshots/
+
+# Database backup files
+*.db.backup-*
+
+# Duplicate GitHub Pages staging folder
+docs/github-pages/
