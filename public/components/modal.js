@@ -7,7 +7,7 @@
  *                 i18n.js (t)
  *
  * API:
- *   openModal({ title, content, onSave, onDelete, size }) → void
+ *   openModal({ title, content, onSave, onDelete, onClose, size }) → void
  *   closeModal() → void
  */
 
@@ -17,6 +17,7 @@ let activeOverlay = null;
 let previouslyFocused = null;
 let focusTrapHandler = null;
 let _initialFormSnapshot = null;
+let _initialFormTimeout = null;
 let _isClosing = false;
 
 // Overlay-Dimming: theme-color abdunkeln im Standalone-Modus
@@ -110,7 +111,7 @@ function serializeForm(container) {
 }
 
 function isFormDirty(container) {
-  if (!_initialFormSnapshot) return false;
+  if (_initialFormSnapshot === null) return false;
   return serializeForm(container) !== _initialFormSnapshot;
 }
 
@@ -180,7 +181,6 @@ function _doClose(overlayEl) {
   target.remove();
 
   // Globalen State nur zurücksetzen wenn kein neues Modal zwischenzeitlich geöffnet wurde.
-  // (activeOverlay !== target bedeutet: openModal hat bereits ein neues Modal registriert)
   if (activeOverlay === target) {
     activeOverlay = null;
 
@@ -211,18 +211,15 @@ function _doClose(overlayEl) {
  * @param {string}   opts.title    - Titel im Modal-Header
  * @param {string}   opts.content  - HTML-String für den Modal-Body
  * @param {Function} [opts.onSave]   - Callback, wird nach Einfügen in DOM aufgerufen
- *                                      (zum Binden von Form-Events)
+ * @param {Function} [opts.onClose]  - Callback, wird aufgerufen wenn das Modal geschlossen wird
  * @param {Function} [opts.onDelete] - Falls vorhanden, wird ein Löschen-Button eingebaut
  * @param {string}   [opts.size='md'] - 'sm' | 'md' | 'lg'
  */
-export function openModal({ title, content, onSave, onDelete, size = 'md' } = {}) {
+export function openModal({ title, content, onSave, onDelete, onClose, size = 'md' } = {}) {
   // Vorheriges Modal schließen (kein Stacking).
-  // ID sofort entfernen damit getElementById() nach dem Einfügen des neuen Modals
-  // nicht die noch animierende alte Instanz zurückgibt – sonst landen alle
-  // Event-Listener am falschen Element und Buttons reagieren nicht.
-  // force=true: kein Dirty-Check beim programmatischen Ersetzen (z.B. confirmModal öffnet sich).
   if (activeOverlay) {
     activeOverlay.removeAttribute('id');
+    // force:true ensures we don't trigger another dirty check while opening a new modal
     closeModal({ force: true });
   }
 
@@ -252,6 +249,7 @@ export function openModal({ title, content, onSave, onDelete, size = 'md' } = {}
 
   document.body.insertAdjacentHTML('beforeend', html);
   activeOverlay = document.getElementById('shared-modal-overlay');
+  activeOverlay._onCloseCallback = onClose;
 
   // Lucide-Icons rendern
   if (window.lucide) window.lucide.createIcons();
@@ -261,8 +259,9 @@ export function openModal({ title, content, onSave, onDelete, size = 'md' } = {}
   trapFocus(panel);
 
   // Snapshot für Dirty-Check (kurzer Delay: Felder könnten noch per JS befüllt werden)
+  if (_initialFormTimeout) clearTimeout(_initialFormTimeout);
   _initialFormSnapshot = null;
-  setTimeout(() => {
+  _initialFormTimeout = setTimeout(() => {
     if (activeOverlay) {
       _initialFormSnapshot = serializeForm(activeOverlay.querySelector('.modal-panel') ?? activeOverlay);
     }
@@ -278,8 +277,7 @@ export function openModal({ title, content, onSave, onDelete, size = 'md' } = {}
     if (e.target === activeOverlay) closeModal();
   });
 
-  // iOS PWA: click-Events auf non-interactive divs sind unzuverlässig →
-  // touchend als Fallback (passive, damit Scroll nicht blockiert wird)
+  // iOS PWA: touchend als Fallback
   activeOverlay.addEventListener('touchend', (e) => {
     if (e.target === activeOverlay) closeModal();
   }, { passive: true });
@@ -288,15 +286,14 @@ export function openModal({ title, content, onSave, onDelete, size = 'md' } = {}
   activeOverlay.querySelector('[data-action="close-modal"]')
     ?.addEventListener('click', () => closeModal());
 
-  // Escape
+  // Escape (nur einmal binden)
+  document.removeEventListener('keydown', onEscape);
   document.addEventListener('keydown', onEscape);
 
-  // Callback für Aufrufer (Form-Events binden etc.)
+  // Callback für Aufrufer
   if (typeof onSave === 'function') onSave(panel);
 
-  // Loading-State: btn--loading auf Submit-Button während async-Save.
-  // rAF-Check: Validierung schlägt fehl → btn bleibt enabled → Loading sofort entfernen.
-  // MutationObserver: Error-Pfad → btn wird re-enabled → Loading entfernen.
+  // Loading-State
   panel.addEventListener('submit', (e) => {
     const btn = e.target.querySelector('[type="submit"], .btn--primary');
     if (!btn || btn.disabled) return;
@@ -310,7 +307,7 @@ export function openModal({ title, content, onSave, onDelete, size = 'md' } = {}
     });
   }, { capture: true });
 
-  // Standalone: Statusbar abdunkeln (Overlay-Effekt)
+  // Standalone: Statusbar abdunkeln
   if (window.oikos?.setThemeColor) {
     window.oikos.setThemeColor(OVERLAY_THEME_COLOR, OVERLAY_THEME_COLOR);
   }
@@ -321,53 +318,61 @@ export function openModal({ title, content, onSave, onDelete, size = 'md' } = {}
 // --------------------------------------------------------
 
 export async function closeModal({ force = false } = {}) {
+  // If already closing, ignore call
   if (!activeOverlay || _isClosing) return;
-  _isClosing = true;
 
   if (!force) {
     const panel = activeOverlay.querySelector('.modal-panel');
     if (panel && isFormDirty(panel)) {
       const dirtyOverlay = activeOverlay;
       const dirtySnapshot = _initialFormSnapshot;
-      let confirmed;
-      try {
-        activeOverlay = null;
-        _isClosing = false;
-        confirmed = await confirmModal(t('modal.unsavedChanges'), {
-          danger: false,
-          confirmLabel: t('modal.discardChanges'),
-        });
-      } catch (err) {
+      const overlayId = dirtyOverlay.id;
+      
+      // Momentarily clear global state to allow confirmModal to open without deadlock
+      dirtyOverlay.removeAttribute('id');
+      activeOverlay = null;
+      
+      const confirmed = await confirmModal(t('modal.unsavedChanges'), {
+        danger: false,
+        confirmLabel: t('modal.discardChanges'),
+      });
+
+      if (!confirmed) {
+        // Restore previous modal state if user cancelled discard
+        if (overlayId) dirtyOverlay.id = overlayId;
         activeOverlay = dirtyOverlay;
         _initialFormSnapshot = dirtySnapshot;
-        _isClosing = false;
-        throw err;
-      }
-      activeOverlay = dirtyOverlay;
-      _initialFormSnapshot = dirtySnapshot;
-      if (!confirmed) {
         document.body.style.overflow = 'hidden';
         if (window.oikos?.setThemeColor) {
           window.oikos.setThemeColor(OVERLAY_THEME_COLOR, OVERLAY_THEME_COLOR);
         }
-        _isClosing = false;
         return;
       }
-      _isClosing = true;
+      
+      // User confirmed discard, re-assign activeOverlay so the rest of the logic cleans it up
+      activeOverlay = dirtyOverlay;
     }
   }
 
+  // Final closing phase starts here
+  _isClosing = true;
+
+  if (_initialFormTimeout) {
+    clearTimeout(_initialFormTimeout);
+    _initialFormTimeout = null;
+  }
   _initialFormSnapshot = null;
 
   document.removeEventListener('keydown', onEscape);
 
-  // Overlay sofort sichern: Bei Mobile-Animation öffnet openModal() ein neues Modal
-  // bevor animationend feuert. Ohne capturedOverlay würde _doClose() das neue Modal
-  // statt des alten entfernen (Race Condition → Buttons im Confirm-Dialog reagieren nicht).
   const capturedOverlay = activeOverlay;
   const panel = capturedOverlay.querySelector('.modal-panel');
 
-  // Focus-Trap-Handler und Virtual-Keyboard-Listener entfernen
+  if (typeof capturedOverlay._onCloseCallback === 'function') {
+    capturedOverlay._onCloseCallback();
+  }
+
+  // Focus-Trap Cleanup
   if (focusTrapHandler) {
     if (panel) panel.removeEventListener('keydown', focusTrapHandler);
     focusTrapHandler = null;
@@ -376,12 +381,14 @@ export async function closeModal({ force = false } = {}) {
     panel.removeEventListener('focusin', panel._onInputFocus);
   }
 
-  // Sheet-Out-Animation auf Mobile, danach _doClose
+  // Animation handling
   const isMobile = window.innerWidth < 768;
   if (isMobile && panel) {
     panel.classList.add('modal-panel--closing');
-    // Fallback-Timer falls animationend nicht feuert (prefers-reduced-motion, Tab-Wechsel etc.)
-    const fallback = setTimeout(() => { _isClosing = false; _doClose(capturedOverlay); }, 300);
+    const fallback = setTimeout(() => { 
+      _isClosing = false; 
+      _doClose(capturedOverlay); 
+    }, 400); // Slightly longer fallback
     panel.addEventListener('animationend', () => {
       clearTimeout(fallback);
       _isClosing = false;
@@ -395,17 +402,9 @@ export async function closeModal({ force = false } = {}) {
 }
 
 // --------------------------------------------------------
-// promptModal - Ersatz für native prompt()
+// promptModal
 // --------------------------------------------------------
 
-/**
- * Öffnet ein Modal mit Textfeld als Ersatz für native prompt().
- * Gibt ein Promise zurück: string bei OK, null bei Cancel/Escape.
- *
- * @param {string} label   - Beschriftung / Frage
- * @param {string} [defaultValue=''] - Vorausgefüllter Wert
- * @returns {Promise<string|null>}
- */
 export function promptModal(label, defaultValue = '') {
   return new Promise((resolve) => {
     let resolved = false;
@@ -413,7 +412,7 @@ export function promptModal(label, defaultValue = '') {
     function finish(value) {
       if (resolved) return;
       resolved = true;
-      closeModal();
+      closeModal({ force: true });
       resolve(value);
     }
 
@@ -431,6 +430,7 @@ export function promptModal(label, defaultValue = '') {
             <button type="submit" class="btn btn--primary" id="prompt-modal-ok">${t('common.save')}</button>
           </div>
         </form>`,
+      onClose: () => finish(null),
       onSave(panel) {
         const form  = panel.querySelector('#prompt-modal-form');
         const input = panel.querySelector('#prompt-modal-input');
@@ -443,24 +443,6 @@ export function promptModal(label, defaultValue = '') {
 
         cancel.addEventListener('click', () => finish(null));
 
-        // Escape soll null liefern (closeModal wird über onEscape bereits ausgelöst)
-        const escHandler = (e) => {
-          if (e.key === 'Escape') {
-            document.removeEventListener('keydown', escHandler);
-            finish(null);
-          }
-        };
-        document.addEventListener('keydown', escHandler);
-
-        // Overlay-Click soll null liefern
-        const overlay = panel.closest('.modal-overlay');
-        if (overlay) {
-          overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) finish(null);
-          });
-        }
-
-        // Input fokussieren und Text selektieren
         setTimeout(() => {
           input.focus();
           input.select();
@@ -471,16 +453,9 @@ export function promptModal(label, defaultValue = '') {
 }
 
 // --------------------------------------------------------
-// selectModal - Ersatz für native prompt() mit Auswahlliste
+// selectModal
 // --------------------------------------------------------
 
-/**
- * Öffnet ein Modal mit Select-Dropdown als Ersatz für native prompt() bei Listenauswahl.
- *
- * @param {string} label - Beschriftung / Frage
- * @param {{ value: string|number, label: string }[]} options - Auswahloptionen
- * @returns {Promise<string|number|null>}
- */
 export function selectModal(label, options) {
   return new Promise((resolve) => {
     let resolved = false;
@@ -488,7 +463,7 @@ export function selectModal(label, options) {
     function finish(value) {
       if (resolved) return;
       resolved = true;
-      closeModal();
+      closeModal({ force: true });
       resolve(value);
     }
 
@@ -509,6 +484,7 @@ export function selectModal(label, options) {
             <button type="submit" class="btn btn--primary" id="select-modal-ok">${t('common.save')}</button>
           </div>
         </form>`,
+      onClose: () => finish(null),
       onSave(panel) {
         const form   = panel.querySelector('#select-modal-form');
         const select = panel.querySelector('#select-modal-input');
@@ -520,40 +496,15 @@ export function selectModal(label, options) {
         });
 
         cancel.addEventListener('click', () => finish(null));
-
-        const escHandler = (e) => {
-          if (e.key === 'Escape') {
-            document.removeEventListener('keydown', escHandler);
-            finish(null);
-          }
-        };
-        document.addEventListener('keydown', escHandler);
-
-        const overlay = panel.closest('.modal-overlay');
-        if (overlay) {
-          overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) finish(null);
-          });
-        }
       },
     });
   });
 }
 
 // --------------------------------------------------------
-// confirmModal - Ersatz für native confirm()
+// confirmModal
 // --------------------------------------------------------
 
-/**
- * Zeigt ein Bestätigungs-Modal als Ersatz für native confirm().
- * Gibt ein Promise zurück: true bei OK, false bei Cancel/Escape/Overlay-Klick.
- *
- * @param {string} message   - Frage / Meldung im Titel
- * @param {Object} [opts]
- * @param {string}  [opts.confirmLabel]   - Text des Bestätigungs-Buttons (default: t('common.confirm'))
- * @param {boolean} [opts.danger=false]   - Roten Danger-Button statt Primary verwenden
- * @returns {Promise<boolean>}
- */
 export function confirmModal(message, { confirmLabel, danger = false } = {}) {
   return new Promise((resolve) => {
     let resolved = false;
@@ -561,7 +512,7 @@ export function confirmModal(message, { confirmLabel, danger = false } = {}) {
     function finish(value) {
       if (resolved) return;
       resolved = true;
-      closeModal();
+      closeModal({ force: true });
       resolve(value);
     }
 
@@ -575,31 +526,17 @@ export function confirmModal(message, { confirmLabel, danger = false } = {}) {
             ${confirmLabel ?? t('common.confirm')}
           </button>
         </div>`,
+      onClose: () => finish(false),
       onSave(panel) {
         panel.querySelector('#confirm-modal-ok')?.addEventListener('click', () => finish(true));
         panel.querySelector('#confirm-modal-cancel')?.addEventListener('click', () => finish(false));
-
-        const escHandler = (e) => {
-          if (e.key === 'Escape') {
-            document.removeEventListener('keydown', escHandler);
-            finish(false);
-          }
-        };
-        document.addEventListener('keydown', escHandler);
-
-        const overlay = panel.closest('.modal-overlay');
-        if (overlay) {
-          overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) finish(false);
-          });
-        }
       },
     });
   });
 }
 
 // --------------------------------------------------------
-// Inline Blur-Validierung
+// Validation & Feedback
 // --------------------------------------------------------
 
 function _validateField(input) {
@@ -625,23 +562,12 @@ function _validateField(input) {
   return hasValue;
 }
 
-/**
- * Aktiviert Blur-Validierung für alle required-Inputs in einem Container.
- * @param {HTMLElement} formContainer
- */
 export function wireBlurValidation(formContainer) {
   formContainer.querySelectorAll('input[required], select[required], textarea[required]').forEach((input) => {
     input.addEventListener('blur', () => _validateField(input));
   });
 }
 
-/**
- * Validiert alle required-Inputs sofort (z.B. beim Submit ohne vorangehendes Blur).
- * Markiert Fehler inline und fokussiert das erste ungültige Feld.
- *
- * @param {HTMLElement} formContainer
- * @returns {boolean} true wenn alle Felder valide sind
- */
 export function validateAll(formContainer) {
   let firstInvalid = null;
   let allValid = true;
@@ -656,16 +582,6 @@ export function validateAll(formContainer) {
   return allValid;
 }
 
-// --------------------------------------------------------
-// Submit-Feedback (Checkmark + Shake)
-// --------------------------------------------------------
-
-/**
- * Zeigt Erfolgs-Feedback auf einem Button (Checkmark für 700ms).
- * Respektiert prefers-reduced-motion: zeigt nur Farb-Feedback ohne Icon-Wechsel.
- * @param {HTMLButtonElement} btn
- * @param {string} [originalLabel]
- */
 export function btnSuccess(btn, originalLabel) {
   btn.classList.remove('btn--loading');
   const label = originalLabel ?? btn.textContent;
@@ -691,13 +607,6 @@ export function btnSuccess(btn, originalLabel) {
   }, 700);
 }
 
-/**
- * Versetzt einen Button in den Lade-Zustand (Spinner, nicht klickbar).
- * Gibt eine Cleanup-Funktion zurück, die den Originalzustand wiederherstellt.
- *
- * @param {HTMLButtonElement} btn
- * @returns {() => void} cleanup
- */
 export function btnLoading(btn) {
   btn.classList.add('btn--loading');
   btn.disabled = true;
@@ -707,11 +616,6 @@ export function btnLoading(btn) {
   };
 }
 
-/**
- * Zeigt Fehler-Feedback auf einem Button (Shake-Animation).
- * Respektiert prefers-reduced-motion: kein visuelles Schütteln, nur Farb-Feedback.
- * @param {HTMLButtonElement} btn
- */
 export function btnError(btn) {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
     btn.classList.add('btn--error-static');
@@ -719,7 +623,7 @@ export function btnError(btn) {
     return;
   }
   btn.classList.remove('btn--shaking');
-  void btn.offsetWidth; // Reflow für Animation-Restart
+  void btn.offsetWidth;
   btn.classList.add('btn--shaking');
   btn.addEventListener('animationend', () => btn.classList.remove('btn--shaking'), { once: true });
 }

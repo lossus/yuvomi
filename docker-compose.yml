@@ -7,12 +7,14 @@ services:
     ports:
       - "0.0.0.0:3000:3000"
     volumes:
-      - oikos_data:/data
+      - ${DATA_DIR:-./data}:/data
+      - ${BACKUP_DIR:-./backups}:/backups
     env_file:
       - .env
     environment:
       - NODE_ENV=production
-      - DB_PATH=/data/oikos.db
+      - DB_PATH=${DB_PATH:-/data/oikos.db}
+      - BACKUP_DIR=${BACKUP_DIR:-/backups}
       # Reverse proxy setup (Caddy, nginx, Traefik):
       #   - Remove SESSION_SECURE=false (default is true)
       #   - TRUST_PROXY is automatically set to 1 (trust one proxy hop)
@@ -24,7 +26,3 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
-
-volumes:
-  oikos_data:
-    driver: local

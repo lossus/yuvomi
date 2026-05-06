@@ -402,6 +402,13 @@ function attachmentHtml(event) {
     </a>`;
 }
 
+function truncateDescription(description, maxLength = 500) {
+  const text = String(description || '').trim();
+  if (!text) return '';
+  if (text.length <= maxLength) return text;
+  return `${text.slice(0, maxLength)} (...)`;
+}
+
 function attachmentPreviewHtml(event) {
   if (!event?.attachment_data) return '';
   const name = esc(event.attachment_name || t('calendar.attachmentFallback'));
@@ -1067,14 +1074,14 @@ function showEventPopup(ev, anchor) {
       + (ev.end_datetime ? ` – ${formatTime(ev.end_datetime)}${t('calendar.timeSuffix') ? ' ' + t('calendar.timeSuffix') : ''}`.trim() : '');
 
   const displayColor = ev.cal_color || ev.color;
-  popup.innerHTML = `
+  popup.insertAdjacentHTML('beforeend', `
     <div class="event-popup__color-bar" style="background-color:${esc(displayColor)};"></div>
     <div class="event-popup__title">${eventIconHtml(ev.icon)}<span>${esc(ev.title)}</span></div>
     <div class="event-popup__meta">
       ${ev.cal_name ? `<div><span class="event-cal-label" style="--cal-color:${esc(displayColor)}">${esc(ev.cal_name)}</span></div>` : ''}
       <div>${timeStr}</div>
       ${ev.location ? `<div>📍 ${esc(fmtLocation(ev.location))}</div>` : ''}
-      ${ev.description ? `<div>${esc(ev.description)}</div>` : ''}
+      ${ev.description ? `<div>${esc(truncateDescription(ev.description, 500))}</div>` : ''}
       ${ev.attachment_data ? attachmentHtml(ev) : ''}
       ${ev.assigned_name ? `<div>👤 ${esc(ev.assigned_name)}</div>` : ''}
     </div>
@@ -1084,7 +1091,7 @@ function showEventPopup(ev, anchor) {
         <i data-lucide="trash-2" style="width:16px;height:16px;" aria-hidden="true"></i>
       </button>
     </div>
-  `;
+  `);
 
   document.body.appendChild(popup);
   if (window.lucide) lucide.createIcons();

@@ -268,7 +268,7 @@ async function runSync() {
 // Server starten
 // --------------------------------------------------------
 app.listen(PORT, () => {
-  logOikos.info(`Server running on port ${PORT}`);
+  logOikos.info(`Server running on port ${PORT} | Version ${APP_VERSION}`);
   logOikos.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
 
   // Erster Sync nach 10 Sekunden (warten bis DB vollständig initialisiert)

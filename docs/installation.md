@@ -59,7 +59,7 @@ Complete setup instructions for Oikos - from Docker installation to your first l
 
 ## Architecture Overview
 
-Oikos is a self-hosted family planner that runs as a single Docker container. The Express.js backend serves both the API and the static frontend files. All data is stored in a SQLCipher-encrypted SQLite database inside a Docker volume.
+Oikos is a self-hosted family planner that runs as a single Docker container. The Express.js backend serves both the API and the static frontend files. All data is stored in a SQLCipher-encrypted SQLite database inside a host-mounted data folder, and automated backups are written to a separate host-mounted backup folder.
 
 ```
 Browser ──HTTP──▶ Docker Container (Express.js :3000) ──▶ SQLite/SQLCipher (/data/oikos.db)
@@ -453,7 +453,9 @@ docker compose up -d --build
 
 ### Where is the Data?
 
-The SQLite database lives in a Docker named volume called `oikos_data`, mounted at `/data` inside the container. The database file is `/data/oikos.db`.
+The SQLite database lives in the host folder configured through `DATA_DIR` and is mounted at `/data` inside the container. The database file is `/data/oikos.db`.
+
+Scheduled backups are written to the host folder configured through `BACKUP_DIR` and mounted at `/backups` inside the container.
 
 ### Backup
 
@@ -465,6 +467,13 @@ docker cp oikos:/data/oikos-backup.db ./oikos-backup-$(date +%Y%m%d).db
 ```
 
 Admins can also download a backup from **Settings → Backup Management**.
+
+If you want to store the database and backups in specific local folders, set these in `.env` before starting Compose:
+
+```bash
+DATA_DIR=./data
+BACKUP_DIR=./backups
+```
 
 ### Restore
 
