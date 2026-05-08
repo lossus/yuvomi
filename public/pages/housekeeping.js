@@ -15,6 +15,13 @@ function localDate(d = new Date()) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
+function localDayParams() {
+  return new URLSearchParams({
+    local_date: localDate(),
+    timezone_offset_minutes: String(new Date().getTimezoneOffset()),
+  });
+}
+
 let state = {
   tab: 'dashboard',
   dashboard: null,
@@ -94,12 +101,13 @@ async function loadStaffVisits(workerId = state.selectedStaffId, monthValue = st
 }
 
 async function loadData() {
+  const dayParams = localDayParams();
   const [dashboard, tasks, reports, templates, workers, prefs] = await Promise.all([
     api.get('/housekeeping/dashboard'),
     api.get('/housekeeping/decay-tasks'),
     api.get('/housekeeping/visits'),
     api.get('/housekeeping/task-templates'),
-    api.get('/housekeeping/workers'),
+    api.get(`/housekeeping/workers?${dayParams.toString()}`),
     api.get('/preferences'),
   ]);
   state.dashboard = dashboard.data;
@@ -182,6 +190,8 @@ async function toggleSession(container, workerId) {
         worker_id: worker.id,
         daily_rate: worker.daily_rate || 0,
         extras: 0,
+        local_date: localDate(),
+        timezone_offset_minutes: new Date().getTimezoneOffset(),
         ...visitTextPayload(worker, localDate(), worker.daily_rate || 0, 0),
       });
       window.oikos?.showToast(t('housekeeping.checkedInToast'), 'success');

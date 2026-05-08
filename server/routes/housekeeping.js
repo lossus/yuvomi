@@ -45,10 +45,31 @@ function currentMonth() {
   return nowIso().slice(0, 7);
 }
 
-function localDayRange(dateValue = new Date()) {
+function localDateString(dateValue = new Date()) {
   const date = dateValue instanceof Date ? dateValue : new Date(dateValue);
-  const start = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  const end = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+  return [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, '0'),
+    String(date.getDate()).padStart(2, '0'),
+  ].join('-');
+}
+
+function localDayContext(source = {}) {
+  const dateValue = typeof source.local_date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(source.local_date)
+    ? source.local_date
+    : localDateString();
+  const offset = Number(source.timezone_offset_minutes);
+  return {
+    localDate: dateValue,
+    timezoneOffsetMinutes: Number.isFinite(offset) ? offset : new Date().getTimezoneOffset(),
+  };
+}
+
+function localDayRange(context = localDayContext()) {
+  const [year, monthValue, day] = context.localDate.split('-').map(Number);
+  const startMs = Date.UTC(year, monthValue - 1, day) + (context.timezoneOffsetMinutes * 60_000);
+  const start = new Date(startMs);
+  const end = new Date(startMs + 86_400_000);
   return { start: start.toISOString(), end: end.toISOString() };
 }
 
@@ -70,9 +91,9 @@ function publicSession(row) {
   };
 }
 
-function publicWorker(row) {
+function publicWorker(row, context = localDayContext()) {
   if (!row) return null;
-  const todaySession = loadTodaySession(row.id);
+  const todaySession = loadTodaySession(row.id, context);
   return {
     id: row.id,
     user_id: row.user_id,
@@ -158,8 +179,8 @@ function loadOpenSession(workerId = null) {
   `).get();
 }
 
-function loadTodaySession(workerId) {
-  const { start, end } = localDayRange();
+function loadTodaySession(workerId, context = localDayContext()) {
+  const { start, end } = localDayRange(context);
   return db.get().prepare(`
     SELECT * FROM housekeeping_work_sessions
     WHERE worker_id = ? AND check_in >= ? AND check_in < ?
@@ -206,8 +227,8 @@ function loadWorkers() {
   `).all();
 }
 
-function createVisitCalendarEvent(database, worker, checkIn, actorId, title = null) {
-  const visitDate = checkIn.slice(0, 10);
+function createVisitCalendarEvent(database, worker, checkIn, actorId, title = null, visitDateOverride = null) {
+  const visitDate = visitDateOverride || checkIn.slice(0, 10);
   const result = database.prepare(`
     INSERT INTO calendar_events
       (title, start_datetime, end_datetime, all_day, color, icon, assigned_to, created_by, external_source)
@@ -225,8 +246,8 @@ function createVisitCalendarEvent(database, worker, checkIn, actorId, title = nu
   return result.lastInsertRowid;
 }
 
-function createPaymentTask(database, worker, checkIn, amount, actorId, title = null, description = null) {
-  const visitDate = checkIn.slice(0, 10);
+function createPaymentTask(database, worker, checkIn, amount, actorId, title = null, description = null, visitDateOverride = null) {
+  const visitDate = visitDateOverride || checkIn.slice(0, 10);
   const result = database.prepare(`
     INSERT INTO tasks (title, description, due_date, priority, category, status, created_by)
     VALUES (?, ?, ?, 'medium', 'household', 'open', ?)
@@ -446,18 +467,19 @@ router.get('/task-templates', (_req, res) => {
   }
 });
 
-router.get('/worker', (_req, res) => {
+router.get('/worker', (req, res) => {
   try {
-    res.json({ data: publicWorker(loadWorker()) });
+    res.json({ data: publicWorker(loadWorker(), localDayContext(req.query)) });
   } catch (err) {
     log.error('GET /worker error:', err);
     res.status(500).json({ error: 'Internal server error.', code: 500 });
   }
 });
 
-router.get('/workers', (_req, res) => {
+router.get('/workers', (req, res) => {
   try {
-    res.json({ data: loadWorkers().map(publicWorker) });
+    const context = localDayContext(req.query);
+    res.json({ data: loadWorkers().map((worker) => publicWorker(worker, context)) });
   } catch (err) {
     log.error('GET /workers error:', err);
     res.status(500).json({ error: 'Internal server error.', code: 500 });
@@ -645,7 +667,8 @@ router.post('/work-sessions/check-in', (req, res) => {
     if (vWorkerId.error) return res.status(400).json({ error: vWorkerId.error, code: 400 });
     const worker = loadWorkerById(vWorkerId.value);
     if (!worker) return res.status(404).json({ error: 'Housekeeper not found.', code: 404 });
-    if (loadTodaySession(worker.id)) return res.status(409).json({ error: 'A visit is already recorded today for this housekeeper.', code: 409 });
+    const context = localDayContext(req.body);
+    if (loadTodaySession(worker.id, context)) return res.status(409).json({ error: 'A visit is already recorded today for this housekeeper.', code: 409 });
 
     const vDailyRate = num(req.body.daily_rate, 'daily_rate', { required: true });
     const vExtras = num(req.body.extras, 'extras');
@@ -661,10 +684,10 @@ router.post('/work-sessions/check-in', (req, res) => {
     const actorId = userId(req);
     const checkIn = nowIso();
     const result = db.get().transaction(() => {
-      const eventId = createVisitCalendarEvent(db.get(), worker, checkIn, actorId, vEventTitle.value);
+      const eventId = createVisitCalendarEvent(db.get(), worker, checkIn, actorId, vEventTitle.value, context.localDate);
       const totalAmount = Number(vDailyRate.value || 0) + Number(vExtras.value || 0);
       const taskId = housekeepingPaymentTasksEnabled(db.get())
-        ? createPaymentTask(db.get(), worker, checkIn, totalAmount, actorId, vPaymentTitle.value, vPaymentDescription.value)
+        ? createPaymentTask(db.get(), worker, checkIn, totalAmount, actorId, vPaymentTitle.value, vPaymentDescription.value, context.localDate)
         : null;
       return db.get().prepare(`
         INSERT INTO housekeeping_work_sessions (worker_id, check_in, check_out, daily_rate, extras, calendar_event_id, payment_task_id, created_by)
