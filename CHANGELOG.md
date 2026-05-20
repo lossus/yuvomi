@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.52.16] - 2026-05-20
+
+### Changed
+- Notes is now a primary bottom navigation item (index 4), replacing it in the More-Sheet; the bottom bar order is now Dashboard → Calendar → Tasks → Notes → Kitchen → More
+- More-Sheet item count reduced from 7 to 6 by promoting Notes to the primary navigation bar
+- Tapping the search bar in the More-Sheet now closes the sheet instantly (no slide-out animation) before opening the search overlay, eliminating the jarring double-animation sequence
+
 ## [0.52.15] - 2026-05-20
 
 ### Fixed

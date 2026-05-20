@@ -134,7 +134,7 @@ let _pendingLoginRedirect = false;
 const ROUTE_ORDER = ['/', '/calendar', '/tasks', '/meals', '/recipes', '/shopping',
                      '/birthdays', '/notes', '/contacts', '/budget', '/documents', '/housekeeping', '/settings'];
 
-const PRIMARY_NAV = 3;
+const PRIMARY_NAV = 4;
 
 const DEFAULT_APP_NAME = 'Oikos';
 const APP_NAME_STORAGE_KEY = 'oikos-app-name';
@@ -887,7 +887,13 @@ function initMoreSheet(container, openSearch) {
 
   const moreSearchBar = sheet.querySelector('#more-sheet-search');
   if (moreSearchBar && openSearch) {
-    const triggerSearch = () => { closeSheet(); openSearch(); };
+    const triggerSearch = () => {
+      // Sheet sofort (ohne Slide-Animation) schließen, damit nur eine Animation abläuft
+      sheet.style.transition = 'none';
+      closeSheet();
+      requestAnimationFrame(() => { sheet.style.transition = ''; });
+      openSearch();
+    };
     moreSearchBar.addEventListener('click', triggerSearch);
     moreSearchBar.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); triggerSearch(); }
@@ -1029,10 +1035,10 @@ function navItems() {
   const all = [
     { path: '/',          label: t('nav.dashboard'), icon: 'layout-dashboard', module: 'dashboard' },
     { path: '/calendar',  label: t('nav.calendar'),  icon: 'calendar',         module: 'calendar'  },
-    // More-Sheet Items:
     { path: '/tasks',     label: t('nav.tasks'),     icon: 'check-square',     module: 'tasks'     },
-    { path: '/birthdays', label: t('nav.birthdays'), icon: 'cake',             module: 'birthdays' },
     { path: '/notes',     label: t('nav.notes'),     icon: 'sticky-note',      module: 'notes'     },
+    // More-Sheet Items:
+    { path: '/birthdays', label: t('nav.birthdays'), icon: 'cake',             module: 'birthdays' },
     { path: '/contacts',  label: t('nav.contacts'),  icon: 'book-user',        module: 'contacts'  },
     { path: '/budget',    label: t('nav.budget'),    icon: 'wallet',           module: 'budget'    },
     { path: '/documents', label: t('nav.documents'), icon: 'folder-lock',      module: 'documents' },

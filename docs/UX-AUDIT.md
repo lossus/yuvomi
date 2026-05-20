@@ -68,7 +68,7 @@ Status-Spalte beim Abarbeiten: `[ ]` offen → `[x]` erledigt
 - **Fix-Option A (empfohlen):** `PRIMARY_NAV` auf 4 erhöhen (+ Notes oder Contacts in die Bottom-Bar aufnehmen). Dazu Bottom-Bar von 5 auf 5 Items halten: Dashboard | Kalender | Aufgaben | Notizen | Mehr.
 - **Fix-Option B:** More-Sheet mit `grid-template-columns: repeat(4, 1fr)` in zwei Zeilen à 4 statt drei Zeilen à 3 anordnen — besser scanbar.
 - **Hintergrund:** Material Design empfiehlt max. 5 primäre Nav-Items; alles dahinter verliert Entdeckbarkeit um ~60 %.
-- **Status:** [ ]
+- **Status:** [x]
 
 ---
 
@@ -185,7 +185,7 @@ Status-Spalte beim Abarbeiten: `[ ]` offen → `[x]` erledigt
 - **Datei:** `public/router.js:883–890`
 - **Problem:** Tippen auf die Suchleiste im More-Sheet schließt erst das Sheet und öffnet dann das Search-Overlay — zwei Animationen hintereinander. Das fühlt sich träge an.
 - **Fix:** Suchleiste direkt als `<input>` im More-Sheet implementieren, das beim Fokus das Sheet in ein Search-Interface verwandelt (ohne Schließen/Öffnen). Oder: Suchleiste in der Bottom-Nav als eigener 5. Button (Lupe-Icon) zugänglich machen.
-- **Status:** [ ]
+- **Status:** [x]
 
 ---
 
@@ -394,7 +394,8 @@ Diese Aspekte sind gut umgesetzt und sollten nicht verändert werden:
 
 - **Phase 1 abgeschlossen (v0.52.12–v0.52.14):** K1, K3 ✅
 - **Phase 2 abgeschlossen (v0.52.15):** H5, M2 ✅
-- **Nächste Phase:** Phase 3 — K4 + H8 (Navigation-Refaktor)
+- **Phase 3 abgeschlossen (v0.52.16):** K4, H8 ✅
+- **Nächste Phase:** Phase 4 — H1 (Desktop-Sidebar Breakpoint)
 
 ---
 
