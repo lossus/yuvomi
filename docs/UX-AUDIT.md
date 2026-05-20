@@ -88,7 +88,7 @@ Status-Spalte beim Abarbeiten: `[ ]` offen → `[x]` erledigt
   }
   ```
   Oder: Labels als Mini-Captions (10px) dauerhaft unterhalb der Icons bei 56px-Breite anzeigen.
-- **Status:** [ ]
+- **Status:** [x]
 
 ---
 
@@ -395,7 +395,8 @@ Diese Aspekte sind gut umgesetzt und sollten nicht verändert werden:
 - **Phase 1 abgeschlossen (v0.52.12–v0.52.14):** K1, K3 ✅
 - **Phase 2 abgeschlossen (v0.52.15):** H5, M2 ✅
 - **Phase 3 abgeschlossen (v0.52.16):** K4, H8 ✅
-- **Nächste Phase:** Phase 4 — H1 (Desktop-Sidebar Breakpoint)
+- **Phase 4 abgeschlossen (v0.52.17):** H1 ✅
+- **Nächste Phase:** Phase 5 — H3 (Dashboard-Hero Mobile, CSS-only)
 
 ---
 
