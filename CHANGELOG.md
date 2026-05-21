@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.52.21] - 2026-05-21
+
+### Added
+- Global search now includes contacts (matched by name, phone, email) and shopping items (matched by name); clicking a result navigates directly to the respective module
+- Contacts search results deep-link via `?open=<id>` and open the edit modal immediately on page load
+- Shopping search results deep-link via `?list=<id>&highlight=<id>`: the correct list tab is activated and the matched item is scrolled into view
+- Calendar search results deep-link via `?open=<id>` and open the event edit modal immediately on page load
+
+### Fixed
+- Calendar search results previously navigated to `/calendar` without identifying the specific event; results now carry the event id and open the edit modal directly
+- Replaced all `innerHTML` assignments in `calendar.js`, `contacts.js`, and `shopping.js` with `replaceChildren()` and `insertAdjacentHTML` to comply with the project XSS policy
+
 ## [0.52.20] - 2026-05-21
 
 ### Fixed
