@@ -2029,6 +2029,10 @@
  * -------------------------------------------------------- */
 .dashboard {
   max-width: min(1680px, 100%);
+  /* isolation:isolate + overflow:clip (Modern Skin) cause blank-screen on scroll on iOS WebKit.
+   * The blob decorations they were meant to contain are hidden, so both can be reset. */
+  isolation: auto;
+  overflow: visible;
 }
 
 .dashboard::before,
