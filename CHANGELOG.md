@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.52.36] - 2026-05-23
+
+### Fixed
+- Dashboard blank-screen on scroll — removed `overflow: auto` from `.widget__body`, which created up to four nested scroll containers inside `.app-content` (one per task/event/birthday/shopping widget). iOS WebKit and Android Blink promote each `overflow:auto` child to its own compositor layer; multiple nested vertical scroll containers in one viewport trigger the blank-screen-on-scroll symptom even with `prefers-reduced-transparency: reduce` active, ruling out the earlier backdrop-filter and `color-mix` gradient theories. Widget content (3–7 list items) fits naturally; `.widget` already has `overflow: hidden` for rounded-corner clipping.
+
 ## [0.52.35] - 2026-05-23
 
 ### Fixed
