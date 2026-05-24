@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.52.48] - 2026-05-24
+
+### Changed
+- Module page content area now carries a subtle top radial gradient tinted with the active module accent color for atmospheric depth.
+- Bottom navigation active-item pill opacity raised from 14 % to 20 % and gains an inset specular highlight ring; global active nav-item background raised from 14 % to 18 %.
+- FAB entrance animation overshoots to scale 1.07 at 65 % before settling, duration extended to 0.42 s for a spring feel.
+- Interactive card hover lift increased from −2 px to −3 px with a fractional scale and a larger shadow.
+- Dashboard greeting title now scales fluidly from 18 px to 24 px via `clamp()` instead of a fixed size.
+
+### Added
+- Login page gains a dual radial-gradient ambient glow in the accent violet instead of a flat background.
+
 ## [0.52.47] - 2026-05-24
 
 ### Changed
