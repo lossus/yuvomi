@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.52.55] - 2026-05-25
+
+### Fixed
+- Improved mobile bottom navigation spacing with wider pill-shaped icon wells and more reliable label line-height to avoid clipped text on Android.
+
 ## [0.52.54] - 2026-05-25
 
 ### Fixed
