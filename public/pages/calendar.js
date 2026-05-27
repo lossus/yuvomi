@@ -1189,21 +1189,22 @@ function renderAgendaView(container) {
   const days = Array.from({ length: 31 }, (_, i) => addDays(from, i));
 
   const groups = days
-    .map((d) => ({ date: d, events: eventsOnDay(d) }))
-    .filter((g) => g.events.length > 0);
+    .map((d) => ({ date: d, events: eventsOnDay(d), tasks: tasksOnDay(d) }))
+    .filter((g) => g.events.length > 0 || g.tasks.length > 0);
 
   container.replaceChildren();
   container.insertAdjacentHTML('beforeend', `
     <div class="agenda-view" id="agenda-view">
       ${groups.length === 0
         ? `<div class="agenda-empty">${t('calendar.agendaEmpty')}</div>`
-        : groups.map(({ date, events }) => `
+        : groups.map(({ date, events, tasks }) => `
           <div class="agenda-day">
             <div class="agenda-day__header ${date === state.today ? 'agenda-day__header--today' : ''}">
               <span class="agenda-day__date">${formatDate(date)}</span>
               <span class="agenda-day__weekday">${DAY_NAMES_LONG()[new Date(date + 'T00:00:00').getDay()]}</span>
             </div>
             ${events.map((ev) => renderAgendaEvent(ev)).join('')}
+            ${tasks.length ? `<div class="agenda-tasks">${tasks.map(renderTaskChip).join('')}</div>` : ''}
           </div>
         `).join('')
       }
@@ -1213,6 +1214,11 @@ function renderAgendaView(container) {
   stagger(container.querySelectorAll('.agenda-event'));
 
   container.querySelector('#agenda-view').addEventListener('click', (e) => {
+    const taskChip = e.target.closest('.cal-task-chip');
+    if (taskChip) {
+      window.oikos.navigate(`/tasks?open=${taskChip.dataset.taskId}`);
+      return;
+    }
     const evEl = e.target.closest('.agenda-event');
     if (evEl) {
       const ev = state.events.find((ev) => ev.id === parseInt(evEl.dataset.id, 10));
