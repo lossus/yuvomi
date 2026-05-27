@@ -515,7 +515,8 @@
     "caldavTargetLocal": "Зберігати тільки локально",
     "attachmentDocumentName": "{{title}} - {{name}}",
     "attachmentDocumentDescription": "Вкладення завантажено для події календаря «{{title}}».",
-    "agendaEmpty": "Немає подій у вибраному періоді"
+    "agendaEmpty": "Немає подій у вибраному періоді",
+    "taskChipAriaLabel": "Завдання: {{title}}"
   },
   "notes": {
     "title": "Нотатки",

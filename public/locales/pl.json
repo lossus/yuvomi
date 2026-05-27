@@ -521,7 +521,8 @@
     "iconCleaning": "Sprzątanie",
     "attachmentDocumentName": "{{title}} - {{name}}",
     "attachmentDocumentDescription": "Załącznik do wpisu kalendarza \"{{title}}\" przesłany.",
-    "agendaEmpty": "Brak wydarzeń w wybranym zakresie"
+    "agendaEmpty": "Brak wydarzeń w wybranym zakresie",
+    "taskChipAriaLabel": "Zadanie: {{title}}"
   },
   "notes": {
     "title": "Notatki",

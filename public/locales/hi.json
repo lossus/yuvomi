@@ -515,7 +515,8 @@
     "caldavTargetLocal": "Store locally only",
     "attachmentDocumentName": "{{title}} - {{name}}",
     "attachmentDocumentDescription": "कैलेंडर इवेंट \"{{title}}\" के लिए अपलोड किया गया अटैचमेंट।",
-    "agendaEmpty": "चुनी गई अवधि में कोई कार्यक्रम नहीं"
+    "agendaEmpty": "चुनी गई अवधि में कोई कार्यक्रम नहीं",
+    "taskChipAriaLabel": "कार्य: {{title}}"
   },
   "notes": {
     "title": "नोट बोर्ड",

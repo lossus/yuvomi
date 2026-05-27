@@ -515,7 +515,8 @@
     "caldavTargetLocal": "Store locally only",
     "attachmentDocumentName": "{{title}} - {{name}}",
     "attachmentDocumentDescription": "Pièce jointe téléversée pour l’événement \"{{title}}\".",
-    "agendaEmpty": "Aucun événement dans la période sélectionnée"
+    "agendaEmpty": "Aucun événement dans la période sélectionnée",
+    "taskChipAriaLabel": "Tâche : {{title}}"
   },
   "notes": {
     "title": "Notes",

@@ -515,7 +515,8 @@
     "caldavTargetLocal": "Store locally only",
     "attachmentDocumentName": "{{title}} - {{name}}",
     "attachmentDocumentDescription": "Συνημμένο που ανέβηκε για το συμβάν ημερολογίου \"{{title}}\".",
-    "agendaEmpty": "Δεν υπάρχουν ραντεβού στο επιλεγμένο διάστημα"
+    "agendaEmpty": "Δεν υπάρχουν ραντεβού στο επιλεγμένο διάστημα",
+    "taskChipAriaLabel": "Εργασία: {{title}}"
   },
   "notes": {
     "title": "Σημειώσεις",

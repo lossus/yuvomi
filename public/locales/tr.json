@@ -515,7 +515,8 @@
     "caldavTargetLocal": "Store locally only",
     "attachmentDocumentName": "{{title}} - {{name}}",
     "attachmentDocumentDescription": "\"{{title}}\" takvim etkinliği için ek yüklendi.",
-    "agendaEmpty": "Seçilen aralıkta etkinlik yok"
+    "agendaEmpty": "Seçilen aralıkta etkinlik yok",
+    "taskChipAriaLabel": "Görev: {{title}}"
   },
   "notes": {
     "title": "Notlar",

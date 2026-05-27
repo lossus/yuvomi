@@ -521,7 +521,8 @@
     "iconCleaning": "Reinigung",
     "attachmentDocumentName": "{{title}} - {{name}}",
     "attachmentDocumentDescription": "Anhang für Kalendereintrag \"{{title}}\" hochgeladen.",
-    "agendaEmpty": "Keine Termine im ausgewählten Zeitraum"
+    "agendaEmpty": "Keine Termine im ausgewählten Zeitraum",
+    "taskChipAriaLabel": "Aufgabe: {{title}}"
   },
   "notes": {
     "title": "Notizen",

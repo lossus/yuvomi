@@ -515,7 +515,8 @@
     "caldavTargetLocal": "Store locally only",
     "attachmentDocumentName": "{{title}} - {{name}}",
     "attachmentDocumentDescription": "カレンダー予定「{{title}}」にアップロードされた添付ファイル。",
-    "agendaEmpty": "選択した期間に予定はありません"
+    "agendaEmpty": "選択した期間に予定はありません",
+    "taskChipAriaLabel": "タスク: {{title}}"
   },
   "notes": {
     "title": "メモボード",

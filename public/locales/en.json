@@ -515,7 +515,8 @@
     "iconCleaning": "Cleaning",
     "attachmentDocumentName": "{{title}} - {{name}}",
     "attachmentDocumentDescription": "Attachment uploaded for calendar event \"{{title}}\".",
-    "agendaEmpty": "No events in the selected range"
+    "agendaEmpty": "No events in the selected range",
+    "taskChipAriaLabel": "Task: {{title}}"
   },
   "notes": {
     "title": "Board",

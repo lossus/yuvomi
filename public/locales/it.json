@@ -515,7 +515,8 @@
     "caldavTargetLocal": "Store locally only",
     "attachmentDocumentName": "{{title}} - {{name}}",
     "attachmentDocumentDescription": "Allegato caricato per l’evento calendario \"{{title}}\".",
-    "agendaEmpty": "Nessun evento nell'intervallo selezionato"
+    "agendaEmpty": "Nessun evento nell'intervallo selezionato",
+    "taskChipAriaLabel": "Attività: {{title}}"
   },
   "notes": {
     "title": "Bacheca",
