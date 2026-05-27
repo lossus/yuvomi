@@ -12,6 +12,11 @@
  */
 
 import { t } from '/i18n.js';
+import {
+  getPwaInstallState,
+  onPwaInstallStateChanged,
+  promptPwaInstall,
+} from '/utils/pwa-install.js';
 
 const DISMISS_KEY = 'oikos-install-dismissed';
 const DISMISS_DURATION_MS = 7 * 24 * 60 * 60 * 1000; // 7 Tage
@@ -28,10 +33,7 @@ class OikosInstallPrompt extends HTMLElement {
 
   connectedCallback() {
     // Bereits im Standalone-Modus - nichts anzeigen
-    if (
-      window.matchMedia('(display-mode: standalone)').matches ||
-      navigator.standalone === true
-    ) {
+    if (getPwaInstallState().installed) {
       return;
     }
 
@@ -66,6 +68,7 @@ class OikosInstallPrompt extends HTMLElement {
   disconnectedCallback() {
     window.removeEventListener('beforeinstallprompt', this._onBeforeInstall);
     if (this._offInteraction) this._offInteraction();
+    if (this._offInstallState) this._offInstallState();
     if (this._onLocaleChanged) {
       window.removeEventListener('locale-changed', this._onLocaleChanged);
     }
@@ -91,21 +94,17 @@ class OikosInstallPrompt extends HTMLElement {
 
   /** iOS Safari erkennen (kein beforeinstallprompt-Support) */
   _isIOS() {
-    return (
-      navigator.standalone === undefined &&
-      /iPhone|iPad/.test(navigator.userAgent) &&
-      !window.MSStream
-    );
+    return getPwaInstallState().ios;
   }
 
   /** Chrome/Android: beforeinstallprompt abfangen */
   _listenForInstallPrompt() {
-    this._onBeforeInstall = (e) => {
-      e.preventDefault();
-      this._deferredPrompt = e;
+    this._onBeforeInstall = () => {
       this._showBanner(false);
     };
-    window.addEventListener('beforeinstallprompt', this._onBeforeInstall);
+    this._offInstallState = onPwaInstallStateChanged((state) => {
+      if (state.canPrompt) this._onBeforeInstall();
+    });
   }
 
   /** Banner rendern */
@@ -362,11 +361,8 @@ class OikosInstallPrompt extends HTMLElement {
 
   /** Install-Button geklickt */
   async _onInstallClick() {
-    if (!this._deferredPrompt) return;
-
     try {
-      this._deferredPrompt.prompt();
-      const result = await this._deferredPrompt.userChoice;
+      const result = await promptPwaInstall();
       console.log('[oikos-install-prompt] Ergebnis:', result.outcome);
 
       if (result.outcome === 'accepted') {
@@ -375,7 +371,6 @@ class OikosInstallPrompt extends HTMLElement {
     } catch (err) {
       console.error('[oikos-install-prompt] Fehler:', err);
     }
-
     this._deferredPrompt = null;
   }
 
