@@ -2442,3 +2442,95 @@ textarea.input { resize: vertical; }
   .modal-panel  { border: 2px solid CanvasText; }
   .nav-item[aria-current="page"] { border-bottom: 2px solid Highlight; }
 }
+
+/* ============================================================
+ * Liquid Nav — Custom Icons, Indikatoren, Abschnittsbezeichnung
+ * ============================================================ */
+
+/* SVG-Icons füllen ihren Eltern-Container */
+.nav-item__icon svg,
+.more-item__icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ── Sidebar: Indikator-Container braucht position:relative ── */
+.nav-sidebar__items {
+  position: relative;
+}
+
+/* ── Sidebar: Morphende Indikator-Pille (Strukturell) ── */
+.nav-sidebar__indicator {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: var(--target-base); /* 44px */
+  border-radius: var(--radius-sm);
+  pointer-events: none;
+  transition:
+    transform 0.45s cubic-bezier(0.28, 1.25, 0.36, 1),
+    opacity 0.25s ease;
+  will-change: transform;
+  z-index: 0;
+}
+
+/* Nav-Items über dem Sidebar-Indikator */
+.nav-sidebar__items--liquid .nav-item {
+  z-index: 1;
+}
+
+/* Kein linker Akzentbalken wenn Liquid-Indikator aktiv */
+.nav-sidebar__items--liquid .nav-item[aria-current="page"]::before {
+  display: none;
+}
+
+/* Kein statischer Hintergrund und kein Shadow-Highlight wenn Indikator aktiv */
+.nav-sidebar__items--liquid .nav-item[aria-current="page"] {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* ── Sidebar: Abschnittsbezeichnung (z.B. "Haushalt") ── */
+.nav-section-label {
+  font-size: var(--text-2xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  padding: var(--space-3) var(--space-3) var(--space-1);
+  user-select: none;
+  pointer-events: none;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Mobile: Tab-Indikator (Strukturell) ── */
+.nav-bottom__indicator {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 0;
+  border-radius: var(--radius-full);
+  pointer-events: none;
+  transition:
+    transform 0.45s cubic-bezier(0.28, 1.25, 0.36, 1),
+    width 0.45s cubic-bezier(0.28, 1.25, 0.36, 1),
+    opacity 0.25s ease;
+  will-change: transform, width;
+  z-index: 0;
+}
+
+/* Nav-Items im Bottom-Bar über dem Indikator */
+.nav-bottom .nav-item {
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-sidebar__indicator,
+  .nav-bottom__indicator {
+    transition: opacity 0.01ms;
+  }
+}

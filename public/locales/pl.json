@@ -57,7 +57,8 @@
     "search": "Szukaj",
     "housekeeping": "Sprzątanie",
     "splitExpenses": "Podział",
-    "kitchenActiveLabel": "Kuchnia, {{section}} aktywne"
+    "kitchenActiveLabel": "Kuchnia, {{section}} aktywne",
+    "section.household": "Gospodarstwo"
   },
   "search": {
     "title": "Szukaj",

@@ -57,7 +57,8 @@
     "search": "Ara",
     "housekeeping": "Housekeeping",
     "splitExpenses": "Böl",
-    "kitchenActiveLabel": "Mutfak, {{section}} aktif"
+    "kitchenActiveLabel": "Mutfak, {{section}} aktif",
+    "section.household": "Ev"
   },
   "dashboard": {
     "title": "Genel Bakış",

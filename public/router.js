@@ -9,6 +9,7 @@ import { initI18n, getLocale, t } from '/i18n.js';
 import { esc } from '/utils/html.js';
 import { init as initReminders, stop as stopReminders } from '/reminders.js';
 import { isKitchenRoute, getLastKitchenRoute } from '/utils/kitchen-tabs.js';
+import { NAV_ICONS } from '/nav-icons.js';
 
 // --------------------------------------------------------
 // Routen-Definitionen
@@ -634,10 +635,24 @@ function renderAppShell(container) {
   sidebarBrandText.append(sidebarLogoSpan, sidebarVersion);
   sidebarLogo.appendChild(sidebarBrandText);
   const sidebarItems = document.createElement('div');
-  sidebarItems.className = 'nav-sidebar__items';
+  sidebarItems.className = 'nav-sidebar__items nav-sidebar__items--liquid';
   sidebarItems.setAttribute('role', 'list');
   sidebarNavItems().forEach((item) => sidebarItems.appendChild(item));
   if (window.lucide) window.lucide.createIcons({ el: sidebarItems });
+
+  // Hover-Delegation: Indikator-Pille zeigt Vorschau wohin sie gleiten würde
+  sidebarItems.addEventListener('mouseover', (ev) => {
+    const item = ev.target.closest('.nav-item');
+    if (!item) return;
+    const ind = sidebarItems.querySelector('.nav-sidebar__indicator');
+    if (!ind) return;
+    const cr = sidebarItems.getBoundingClientRect();
+    const ir = item.getBoundingClientRect();
+    ind.style.transform = `translateY(${ir.top - cr.top + sidebarItems.scrollTop}px)`;
+    ind.style.opacity = '0.5';
+  });
+  sidebarItems.addEventListener('mouseleave', () => positionSidebarIndicator());
+
   sidebar.appendChild(sidebarLogo);
   sidebar.appendChild(sidebarItems);
 
@@ -667,11 +682,20 @@ function renderAppShell(container) {
     kitchenBtnWrap.className = 'nav-item__icon-wrap';
     const kitchenBtnWell = document.createElement('div');
     kitchenBtnWell.className = 'nav-item__icon-well';
-    const kitchenBtnIcon = document.createElement('i');
-    kitchenBtnIcon.dataset.lucide = 'utensils';
-    kitchenBtnIcon.className = 'nav-item__icon';
-    kitchenBtnIcon.setAttribute('aria-hidden', 'true');
-    kitchenBtnWell.appendChild(kitchenBtnIcon);
+    {
+      const iconFactory = NAV_ICONS['utensils'];
+      if (iconFactory) {
+        const svg = iconFactory();
+        svg.classList.add('nav-item__icon');
+        kitchenBtnWell.appendChild(svg);
+      } else {
+        const kitchenBtnIcon = document.createElement('i');
+        kitchenBtnIcon.dataset.lucide = 'utensils';
+        kitchenBtnIcon.className = 'nav-item__icon';
+        kitchenBtnIcon.setAttribute('aria-hidden', 'true');
+        kitchenBtnWell.appendChild(kitchenBtnIcon);
+      }
+    }
     kitchenBtnWrap.appendChild(kitchenBtnWell);
     const kitchenBtnLabel = document.createElement('span');
     kitchenBtnLabel.className = 'nav-item__label';
@@ -694,11 +718,20 @@ function renderAppShell(container) {
     moreBtnWrap.className = 'nav-item__icon-wrap';
     const moreBtnWell = document.createElement('div');
     moreBtnWell.className = 'nav-item__icon-well';
-    const moreBtnIcon = document.createElement('i');
-    moreBtnIcon.dataset.lucide = 'grid-2x2';
-    moreBtnIcon.className = 'nav-item__icon';
-    moreBtnIcon.setAttribute('aria-hidden', 'true');
-    moreBtnWell.appendChild(moreBtnIcon);
+    {
+      const iconFactory = NAV_ICONS['grid-2x2'];
+      if (iconFactory) {
+        const svg = iconFactory();
+        svg.classList.add('nav-item__icon');
+        moreBtnWell.appendChild(svg);
+      } else {
+        const moreBtnIcon = document.createElement('i');
+        moreBtnIcon.dataset.lucide = 'grid-2x2';
+        moreBtnIcon.className = 'nav-item__icon';
+        moreBtnIcon.setAttribute('aria-hidden', 'true');
+        moreBtnWell.appendChild(moreBtnIcon);
+      }
+    }
     moreBtnWrap.appendChild(moreBtnWell);
     const moreBtnLabel = document.createElement('span');
     moreBtnLabel.className = 'nav-item__label';
@@ -749,6 +782,14 @@ function renderAppShell(container) {
   }
 
   bottomNav.appendChild(bottomItems);
+
+  // Gleitender Tab-Indikator — Geschwister von bottomItems, überlebt replaceChildren auf items
+  if (!isGuest) {
+    const tabIndicator = document.createElement('div');
+    tabIndicator.className = 'nav-bottom__indicator';
+    tabIndicator.setAttribute('aria-hidden', 'true');
+    bottomNav.appendChild(tabIndicator);
+  }
 
   const searchOverlay = document.createElement('div');
   searchOverlay.className = 'search-overlay';
@@ -1259,7 +1300,17 @@ function navItems() {
 
 function sidebarNavItems() {
   const elements = [];
+  // Morphende Indikator-Pille — wird als erstes Kind eingefügt damit
+  // z-index: 0 es hinter den nav-items (z-index: 1) hält.
+  const indicator = document.createElement('div');
+  indicator.className = 'nav-sidebar__indicator';
+  indicator.setAttribute('aria-hidden', 'true');
+  elements.push(indicator);
+
   let kitchenAdded = false;
+  let nonKitchenCount = 0;
+  let sectionAdded = false;
+
   navItems().forEach((item) => {
     if (item.kitchenGroup) {
       if (!kitchenAdded) {
@@ -1268,6 +1319,15 @@ function sidebarNavItems() {
       }
       return;
     }
+    // Abschnittsbezeichnung vor dem (PRIMARY_NAV+1)ten Nicht-Küche-Eintrag
+    if (!sectionAdded && nonKitchenCount === PRIMARY_NAV) {
+      sectionAdded = true;
+      const label = document.createElement('div');
+      label.className = 'nav-section-label';
+      label.textContent = t('nav.section.household');
+      elements.push(label);
+    }
+    nonKitchenCount++;
     elements.push(navItemEl(item));
   });
   return elements;
@@ -1322,11 +1382,18 @@ function navItemEl({ path, label, icon, module: mod, accent }) {
   iconWrap.className = 'nav-item__icon-wrap';
   const well = document.createElement('div');
   well.className = 'nav-item__icon-well';
-  const i = document.createElement('i');
-  i.dataset.lucide = icon;
-  i.className = 'nav-item__icon';
-  i.setAttribute('aria-hidden', 'true');
-  well.appendChild(i);
+  const iconFactory = NAV_ICONS[icon];
+  if (iconFactory) {
+    const svg = iconFactory();
+    svg.classList.add('nav-item__icon');
+    well.appendChild(svg);
+  } else {
+    const i = document.createElement('i');
+    i.dataset.lucide = icon;
+    i.className = 'nav-item__icon';
+    i.setAttribute('aria-hidden', 'true');
+    well.appendChild(i);
+  }
   iconWrap.appendChild(well);
   const span = document.createElement('span');
   span.className = 'nav-item__label';
@@ -1348,6 +1415,65 @@ function replaceLucideIcon(container, selector, iconName) {
   next.setAttribute('aria-hidden', 'true');
   current.replaceWith(next);
   if (window.lucide) window.lucide.createIcons({ el: container });
+}
+
+/**
+ * Ersetzt ein Nav-Icon (Custom SVG bevorzugt, Lucide als Fallback).
+ * Funktioniert sowohl mit <svg>- als auch <i data-lucide>-Elementen.
+ */
+function replaceNavIcon(container, selector, lucideIconName) {
+  const current = container.querySelector(selector);
+  if (!current) return;
+  const iconFactory = NAV_ICONS[lucideIconName];
+  if (iconFactory) {
+    const classes = (current.getAttribute('class') || '')
+      .split(/\s+/)
+      .filter((cls) => cls && cls !== 'lucide' && !cls.startsWith('lucide-'));
+    const svg = iconFactory();
+    svg.className.baseVal = classes.join(' ') || 'nav-item__icon';
+    current.replaceWith(svg);
+  } else {
+    replaceLucideIcon(container, selector, lucideIconName);
+  }
+}
+
+/**
+ * Positioniert den morphenden Indikator in der Sidebar auf dem aktiven Nav-Item.
+ */
+function positionSidebarIndicator() {
+  const container = document.querySelector('.nav-sidebar__items');
+  const indicator = container?.querySelector('.nav-sidebar__indicator');
+  if (!indicator) return;
+  const active = container.querySelector('.nav-item[aria-current="page"]');
+  if (!active) {
+    indicator.style.opacity = '0';
+    return;
+  }
+  const cr = container.getBoundingClientRect();
+  const ar = active.getBoundingClientRect();
+  indicator.style.transform = `translateY(${ar.top - cr.top + container.scrollTop}px)`;
+  indicator.style.opacity = '';
+}
+
+/**
+ * Positioniert den gleitenden Indikator in der mobilen Tab-Bar.
+ */
+function positionTabIndicator() {
+  const nav = document.querySelector('.nav-bottom');
+  const indicator = nav?.querySelector('.nav-bottom__indicator');
+  if (!indicator || !nav) return;
+  const active = document.querySelector(
+    '.nav-bottom__items .nav-item[aria-current="page"], .nav-bottom__items .nav-item--active',
+  );
+  if (!active) {
+    indicator.style.opacity = '0';
+    return;
+  }
+  const nr = nav.getBoundingClientRect();
+  const ar = active.getBoundingClientRect();
+  indicator.style.width = `${ar.width}px`;
+  indicator.style.transform = `translateX(${ar.left - nr.left}px)`;
+  indicator.style.opacity = '';
 }
 
 function sidebarKitchenEl() {
@@ -1373,11 +1499,18 @@ function moreItemEl({ path, label, icon, module: mod, accent }) {
   else if (mod) a.style.setProperty('--item-module-accent', `var(--module-${mod})`);
   const well = document.createElement('div');
   well.className = 'more-item__icon-well';
-  const i = document.createElement('i');
-  i.dataset.lucide = icon;
-  i.className = 'more-item__icon';
-  i.setAttribute('aria-hidden', 'true');
-  well.appendChild(i);
+  const iconFactory = NAV_ICONS[icon];
+  if (iconFactory) {
+    const svg = iconFactory();
+    svg.classList.add('more-item__icon');
+    well.appendChild(svg);
+  } else {
+    const i = document.createElement('i');
+    i.dataset.lucide = icon;
+    i.className = 'more-item__icon';
+    i.setAttribute('aria-hidden', 'true');
+    well.appendChild(i);
+  }
   const span = document.createElement('span');
   span.className = 'more-item__label';
   span.textContent = label;
@@ -1422,7 +1555,7 @@ function setMoreButtonState(moreBtn, activeSecondary) {
 
   const moreBtnLabel = moreBtn.querySelector('.nav-item__label');
   if (moreBtnLabel) moreBtnLabel.textContent = moreLabel;
-  replaceLucideIcon(moreBtn, '.nav-item__icon', moreIcon);
+  replaceNavIcon(moreBtn, '.nav-item__icon', moreIcon);
 }
 
 function updateNav(path) {
@@ -1448,9 +1581,7 @@ function updateNav(path) {
     }
 
     const kitchenBtnLabel = kitchenNavBtn.querySelector('.nav-item__label');
-    const kitchenBtnIcon  = kitchenNavBtn.querySelector('.nav-item__icon');
     if (kitchenBtnLabel) kitchenBtnLabel.textContent = t('nav.kitchen');
-    if (kitchenBtnIcon) kitchenBtnIcon.dataset.lucide = 'utensils';
     kitchenNavBtn.setAttribute('aria-label', kitchenNavAriaLabel(path));
     kitchenNavBtn.setAttribute('title', t('nav.kitchen'));
   }
@@ -1479,6 +1610,11 @@ function updateNav(path) {
   if (window.lucide) {
     window.lucide.createIcons();
   }
+
+  requestAnimationFrame(() => {
+    positionSidebarIndicator();
+    positionTabIndicator();
+  });
 }
 
 function renderError(container, err) {
@@ -1701,6 +1837,7 @@ function rebuildNavigation({ updateLabels = true } = {}) {
     const sidebarEls = sidebarNavItems();
     navSidebarItems.replaceChildren(...sidebarEls);
     if (window.lucide) window.lucide.createIcons({ el: navSidebarItems });
+    requestAnimationFrame(() => positionSidebarIndicator());
   }
   if (bottomItems) {
     const kitchenBtnEl = bottomItems.querySelector('#kitchen-btn');
@@ -1713,6 +1850,7 @@ function rebuildNavigation({ updateLabels = true } = {}) {
     const newItems = navItems().filter((item) => !item.kitchenGroup).slice(0, PRIMARY_NAV).map(navItemEl);
     const tail = [kitchenBtnEl, moreBtn].filter(Boolean);
     bottomItems.replaceChildren(...newItems, ...tail);
+    requestAnimationFrame(() => positionTabIndicator());
   }
   if (moreSheet) {
     const handle = moreSheet.querySelector('.more-sheet__handle');
@@ -1754,6 +1892,11 @@ function refreshCurrentRoute() {
 
 window.addEventListener('date-format-changed', refreshCurrentRoute);
 window.addEventListener('time-format-changed', refreshCurrentRoute);
+
+window.addEventListener('resize', () => {
+  positionSidebarIndicator();
+  positionTabIndicator();
+}, { passive: true });
 
 // --------------------------------------------------------
 // Virtuelle Tastatur: FAB ausblenden wenn Keyboard offen

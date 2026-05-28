@@ -57,7 +57,8 @@
     "search": "Пошук",
     "housekeeping": "Прибирання",
     "splitExpenses": "Поділ",
-    "kitchenActiveLabel": "Кухня, {{section}} активно"
+    "kitchenActiveLabel": "Кухня, {{section}} активно",
+    "section.household": "Господарство"
   },
   "dashboard": {
     "title": "Огляд",

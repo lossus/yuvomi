@@ -57,7 +57,8 @@
     "search": "Suche",
     "housekeeping": "Hauspflege",
     "splitExpenses": "Aufteilen",
-    "kitchenActiveLabel": "Küche, {{section}} aktiv"
+    "kitchenActiveLabel": "Küche, {{section}} aktiv",
+    "section.household": "Haushalt"
   },
   "search": {
     "title": "Suche",

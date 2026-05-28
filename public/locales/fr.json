@@ -57,7 +57,8 @@
     "search": "Recherche",
     "housekeeping": "Ménage",
     "splitExpenses": "Partager",
-    "kitchenActiveLabel": "Cuisine, {{section}} actif"
+    "kitchenActiveLabel": "Cuisine, {{section}} actif",
+    "section.household": "Maison"
   },
   "dashboard": {
     "title": "Accueil",
