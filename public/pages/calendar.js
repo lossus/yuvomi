@@ -780,6 +780,18 @@ async function goToday() {
   renderView();
 }
 
+async function switchToDayView(date) {
+  state.cursor = date;
+  state.view = 'day';
+  setSavedCalendarView('day');
+  _container.querySelectorAll('[data-view]').forEach((b) =>
+    b.classList.toggle('cal-toolbar__view-btn--active', b.dataset.view === 'day')
+  );
+  await reloadForView();
+  updateLabel();
+  renderView();
+}
+
 async function reloadForView() {
   const { from, to } = getRangeForView(state.view, state.cursor);
 
@@ -857,7 +869,7 @@ function renderMonthView(container) {
     }
     const dayEl = e.target.closest('.month-day');
     if (dayEl) {
-      openEventModal({ mode: 'create', date: dayEl.dataset.date });
+      switchToDayView(dayEl.dataset.date);
     }
   });
 }
@@ -932,7 +944,7 @@ function renderWeekView(container) {
         <div class="week-view__time-gutter"></div>
         ${days.map((d) => {
           const dt = new Date(d + 'T00:00:00');
-          return `<div class="week-view__day-header">
+          return `<div class="week-view__day-header" data-date="${d}">
             <div class="week-view__day-name">${DAY_NAMES_SHORT()[dt.getDay()]}</div>
             <div class="week-view__day-num ${d === state.today ? 'week-view__day-num--today' : ''}">${dt.getDate()}</div>
           </div>`;
@@ -979,6 +991,11 @@ function renderWeekView(container) {
   `);
 
   // Event-Delegation
+  container.querySelector('#week-header').addEventListener('click', (e) => {
+    const header = e.target.closest('.week-view__day-header[data-date]');
+    if (header) switchToDayView(header.dataset.date);
+  });
+
   container.querySelector('#week-cols').addEventListener('click', (e) => {
     const evEl = e.target.closest('.week-event');
     if (evEl) {
@@ -987,7 +1004,7 @@ function renderWeekView(container) {
       return;
     }
     const col = e.target.closest('[data-date]');
-    if (col) openEventModal({ mode: 'create', date: col.dataset.date });
+    if (col) switchToDayView(col.dataset.date);
   });
 
   container.querySelector('.allday-row').addEventListener('click', (e) => {

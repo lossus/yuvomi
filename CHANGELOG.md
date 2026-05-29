@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.54.8] - 2026-05-29
+
+### Changed
+- **Calendar – day navigation from month and week views:** Tapping a day cell in month view now navigates to the day view for that date instead of immediately opening the create-event modal. In week view, tapping a day header or an empty time-slot column likewise switches to the day view, allowing users to review the day's schedule before adding an event via the "+" button or by tapping a time slot in day view.
+
 ## [0.54.7] - 2026-05-29
 
 ### Fixed

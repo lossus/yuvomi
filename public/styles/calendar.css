@@ -301,6 +301,12 @@
   padding: var(--space-2) var(--space-1);
   text-align: center;
   border-left: 1px solid var(--color-border-subtle);
+  cursor: pointer;
+}
+
+.week-view__day-header:hover .week-view__day-num:not(.week-view__day-num--today) {
+  background-color: var(--color-bg-subtle);
+  border-radius: var(--radius-full);
 }
 
 .week-view__day-name {
