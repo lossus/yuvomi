@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.55.0] - 2026-05-29
+
+### Added
+- **Screen-reader summary for the budget category chart:** The category bar chart now exposes a concise `.sr-only` summary (number of categories plus the largest category and its share) so assistive technologies can convey the data without parsing the purely visual bars.
+
+### Changed
+- **Enter submits modal forms:** Pressing Enter in a single-line field inside a modal now submits the form (the standard web convention) instead of advancing focus to the next field.
+- **More robust modal lifecycle:** Reworked the shared modal into an explicit state machine (idle/open/confirming/closing) with encapsulated suspend/restore helpers, hardening the unsaved-changes confirmation against double-close and back-navigation races. Behavior is otherwise unchanged.
+
+### Security
+- **Escaped modal titles and option labels:** Modal titles, `selectModal` option labels, and `promptModal` default values are now centrally HTML-escaped, closing an XSS vector where raw user-supplied text (e.g. a task title reused as a modal heading) was injected unescaped.
+
 ## [0.54.12] - 2026-05-29
 
 ### Added
