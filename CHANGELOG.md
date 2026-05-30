@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.55.1] - 2026-05-30
+
+### Fixed
+- **Kitchen pages no longer drift under the tab bar while scrolling:** The meal planner and recipes pages did not subtract the kitchen tab bar height from their viewport height, so the outer scroll container overflowed by exactly the tab bar height. On desktop this made the whole page (week navigation and the day header row, e.g. "MO") drift upward while scrolling instead of only the inner content. Both pages now reduce their height by the tab bar height, matching the shopping page, so only the inner grid scrolls and the day headers stick correctly.
+
 ## [0.55.0] - 2026-05-29
 
 ### Added
