@@ -83,6 +83,12 @@ export async function render(container) {
   const submitBtn = container.querySelector('#login-btn');
   const versionEl = container.querySelector('#login-version');
 
+  // OIDC-Fehlermeldung aus URL-Parameter anzeigen (z.B. ?error=oidc_failed nach gescheitertem Callback)
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('error')?.startsWith('oidc_')) {
+    showError(errorEl, t('login.ssoError'));
+  }
+
   // K3: Passwort-Sichtbarkeits-Toggle
   const passwordInput = form.querySelector('#password');
   const passwordWrapper = document.createElement('div');
@@ -119,6 +125,28 @@ export async function render(container) {
         setAppBranding(d.app_name);
       }
       versionEl.textContent = t('login.version', { version: d.version });
+    })
+    .catch(() => {});
+
+  // OIDC/SSO: SSO-Button anzeigen wenn Backend OIDC aktiviert hat
+  fetch('/api/v1/auth/oidc/config', { cache: 'no-store' })
+    .then(r => r.json())
+    .then(data => {
+      if (!data?.enabled) return;
+
+      const card = container.querySelector('.login-card');
+
+      const divider = document.createElement('div');
+      divider.className = 'login-divider';
+      divider.textContent = t('login.orDivider');
+
+      const ssoBtn = document.createElement('a');
+      ssoBtn.href = '/api/v1/auth/oidc/start';
+      ssoBtn.className = 'btn btn--secondary login-form__submit';
+      ssoBtn.textContent = t('login.loginWithSso');
+
+      card.appendChild(divider);
+      card.appendChild(ssoBtn);
     })
     .catch(() => {});
 
