@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.55.14] - 2026-06-01
+
+### Added
+- OIDC/SSO single sign-on support via any OpenID Connect provider (Authentik, Keycloak, Google, etc.), configurable through four environment variables (`OIDC_ISSUER`, `OIDC_CLIENT_ID`, `OIDC_CLIENT_SECRET`, `OIDC_REDIRECT_URI`).
+- Authorization Code flow with PKCE (S256) and nonce for secure SSO; state, nonce, and code verifier are stored in the session and consumed once.
+- Login page shows an "Sign in with SSO" button only when OIDC is configured; displays a localised error message on failed SSO attempts.
+- Database migration v42 adds `oidc_sub` and `oidc_provider` columns to the `users` table with a partial unique index.
+- SSO i18n keys (`loginWithSso`, `orDivider`, `ssoError`) added to all 16 supported locales.
+
 ## [0.55.13] - 2026-06-01
 
 ### Fixed
