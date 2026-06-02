@@ -11,7 +11,7 @@ This repository ships the official Docker template for Oikos. The image is publi
 **Support:** open an issue at https://github.com/ulsklyc/oikos/issues
   </Profile>
   <!-- Repository icon -->
-  <Icon>https://raw.githubusercontent.com/ulsklyc/oikos/main/public/icons/icon-512.png</Icon>
+  <Icon>https://raw.githubusercontent.com/ulsklyc/oikos/main/icon.svg</Icon>
   <!-- Project web page -->
   <WebPage>https://github.com/ulsklyc/oikos</WebPage>
 </CommunityApplications>

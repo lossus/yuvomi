@@ -9,7 +9,7 @@
   <Privileged>false</Privileged>
   <WebUI>http://[IP]:[PORT:3000]</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/ulsklyc/oikos/main/templates/oikos.xml</TemplateURL>
-  <Icon>https://raw.githubusercontent.com/ulsklyc/oikos/main/public/icons/icon-512.png</Icon>
+  <Icon>https://raw.githubusercontent.com/ulsklyc/oikos/main/icon.svg</Icon>
 
   <Overview>Oikos is a self-hosted family planner PWA. It keeps your household organized — tasks, groceries, meals, recipes, calendar, documents, budget, housekeeping, notes, contacts and birthdays — in one private place, without cloud accounts or subscriptions. Each module is independent: use what fits, skip what doesn't. Polished mobile-first interface, offline-capable PWA, optional CalDAV/CardDAV and Google Calendar sync, OIDC SSO, and encrypted-at-rest storage (SQLCipher).
 
