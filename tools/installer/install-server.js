@@ -140,6 +140,18 @@ async function route(req, res, server) {
     return serveStatic(res, resolve(projectRoot(), 'public', 'fonts', name), 'font/woff2');
   }
 
+  // i18n-Mini-Modul des Installers (Phase 4: i18n-Verdrahtung).
+  if (req.method === 'GET' && url.pathname === '/i18n-mini.js') {
+    return serveStatic(res, resolve(__dirname, 'i18n-mini.js'), 'text/javascript; charset=utf-8');
+  }
+
+  // Installer-Locale-Dateien. basename() neutralisiert Path-Traversal;
+  // nur .json aus tools/installer/locales wird ausgeliefert.
+  if (req.method === 'GET' && url.pathname.startsWith('/locales/') && url.pathname.endsWith('.json')) {
+    const name = basename(url.pathname);
+    return serveStatic(res, resolve(__dirname, 'locales', name), 'application/json; charset=utf-8');
+  }
+
   if (req.method === 'GET' && url.pathname === '/api/defaults') {
     return json(res, 200, { catalog: ENV_SCHEMA });
   }

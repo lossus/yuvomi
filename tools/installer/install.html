@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Oikos Setup</title>
+  <title data-i18n="title">Oikos Setup</title>
   <!-- App-Designtokens + Plus Jakarta Sans, vom Installer-Server ausgeliefert.
        Dark Mode folgt automatisch der prefers-color-scheme-Media-Query in tokens.css. -->
   <link rel="stylesheet" href="/tokens.css">
@@ -113,198 +113,198 @@
     <!-- Step 1: Basic Config -->
     <div class="step" id="step-config">
       <div class="card-head">
-        <div class="step-tag">Step 1 of 7</div>
-        <h1>Basic Configuration</h1>
-        <p>How will you access Oikos?</p>
+        <div class="step-tag" data-i18n="config.tag">Step 1 of 7</div>
+        <h1 data-i18n="config.title">Basic Configuration</h1>
+        <p data-i18n="config.subtitle">How will you access Oikos?</p>
       </div>
       <div class="card-body">
-        <div class="info-banner" id="cfg-existing" style="display:none">
-          Existing configuration detected — your current <code>.env</code> will be backed up before saving.
+        <div class="info-banner" id="cfg-existing" style="display:none" data-i18n="config.existing">
+          Existing configuration detected — your current .env file will be backed up before saving.
         </div>
         <div class="field">
-          <label for="cfg-host">Domain or IP address</label>
+          <label for="cfg-host" data-i18n="config.hostLabel">Domain or IP address</label>
           <input type="text" id="cfg-host" value="localhost" placeholder="localhost or 192.168.1.x">
-          <div class="hint">The address you'll use to open Oikos in your browser.</div>
+          <div class="hint" data-i18n="config.hostHint">The address you'll use to open Oikos in your browser.</div>
         </div>
         <div class="field">
-          <label for="cfg-port">Port</label>
+          <label for="cfg-port" data-i18n="config.portLabel">Port</label>
           <input type="text" id="cfg-port" value="3000">
         </div>
         <div class="field">
-          <label for="cfg-tz">Timezone</label>
+          <label for="cfg-tz" data-i18n="config.tzLabel">Timezone</label>
           <input type="text" id="cfg-tz" placeholder="Europe/Berlin">
         </div>
       </div>
       <div class="card-foot">
         <div id="cfg-err" class="error" style="display:none"></div>
-        <button class="btn btn-primary" id="cfg-next">Continue</button>
+        <button class="btn btn-primary" id="cfg-next" data-i18n="common.continue">Continue</button>
       </div>
     </div>
 
     <!-- Step 2: Secrets -->
     <div class="step" id="step-secrets">
       <div class="card-head">
-        <div class="step-tag">Step 2 of 7</div>
-        <h1>Security Keys</h1>
-        <p>These protect your session and encrypt the database. Store your <code>.env</code> file safely — losing these keys means losing access to your data.</p>
+        <div class="step-tag" data-i18n="secrets.tag">Step 2 of 7</div>
+        <h1 data-i18n="secrets.title">Security Keys</h1>
+        <p data-i18n="secrets.subtitle">These protect your session and encrypt the database. Store your .env file safely — losing these keys means losing access to your data.</p>
       </div>
       <div class="card-body">
         <div class="field">
-          <label for="sec-session">Session Secret</label>
+          <label for="sec-session" data-i18n="secrets.sessionLabel">Session Secret</label>
           <div class="secret-row">
             <input type="password" id="sec-session" autocomplete="off" spellcheck="false">
             <button class="btn btn-ghost btn-sm" data-eye="sec-session">&#x1F441;</button>
-            <button class="btn btn-ghost btn-sm" data-gen="sec-session">Generate</button>
+            <button class="btn btn-ghost btn-sm" data-gen="sec-session" data-i18n="common.generate">Generate</button>
           </div>
-          <div class="hint">Signs browser session cookies.</div>
+          <div class="hint" data-i18n="secrets.sessionHint">Signs browser session cookies.</div>
         </div>
         <div class="field">
-          <label for="sec-db">Database Encryption Key</label>
+          <label for="sec-db" data-i18n="secrets.dbLabel">Database Encryption Key</label>
           <div class="secret-row">
             <input type="password" id="sec-db" autocomplete="off" spellcheck="false">
             <button class="btn btn-ghost btn-sm" data-eye="sec-db">&#x1F441;</button>
-            <button class="btn btn-ghost btn-sm" data-gen="sec-db">Generate</button>
+            <button class="btn btn-ghost btn-sm" data-gen="sec-db" data-i18n="common.generate">Generate</button>
           </div>
-          <div class="hint">Encrypts the SQLite database at rest.</div>
+          <div class="hint" data-i18n="secrets.dbHint">Encrypts the SQLite database at rest.</div>
         </div>
         <div class="error-banner" id="sec-err"></div>
       </div>
       <div class="card-foot">
-        <button class="btn btn-ghost" data-back>Back</button>
-        <button class="btn btn-primary" id="sec-next">Continue</button>
+        <button class="btn btn-ghost" data-back data-i18n="common.back">Back</button>
+        <button class="btn btn-primary" id="sec-next" data-i18n="common.continue">Continue</button>
       </div>
     </div>
 
     <!-- Step 3: Weather -->
     <div class="step" id="step-weather">
       <div class="card-head">
-        <div class="step-tag">Step 3 of 7</div>
-        <h1>Weather Widget</h1>
-        <p>Show live weather on your dashboard. Requires a free OpenWeatherMap API key.</p>
+        <div class="step-tag" data-i18n="weather.tag">Step 3 of 7</div>
+        <h1 data-i18n="weather.title">Weather Widget</h1>
+        <p data-i18n="weather.subtitle">Show live weather on your dashboard. Requires a free OpenWeatherMap API key.</p>
       </div>
       <div class="card-body">
         <div class="field">
-          <label><input type="checkbox" id="wea-enable"> Enable weather widget</label>
+          <label><input type="checkbox" id="wea-enable"> <span data-i18n="weather.enable">Enable weather widget</span></label>
         </div>
         <div id="wea-fields" style="display:none">
           <div class="field">
-            <label for="wea-key">API Key <span class="opt">(free tier)</span></label>
+            <label for="wea-key"><span data-i18n="weather.keyLabel">API Key</span> <span class="opt" data-i18n="weather.keyOpt">(free tier)</span></label>
             <input type="text" id="wea-key" placeholder="your_api_key">
-            <div class="hint">Get one free at <a href="https://openweathermap.org/api" target="_blank" rel="noopener">openweathermap.org/api</a></div>
+            <div class="hint" id="wea-hint">Get one free at <a href="https://openweathermap.org/api" target="_blank" rel="noopener">openweathermap.org/api</a></div>
           </div>
           <div class="field">
-            <label for="wea-city">City</label>
+            <label for="wea-city" data-i18n="weather.cityLabel">City</label>
             <input type="text" id="wea-city" value="Berlin">
           </div>
           <div class="field">
-            <label for="wea-units">Units</label>
+            <label for="wea-units" data-i18n="weather.unitsLabel">Units</label>
             <select id="wea-units">
-              <option value="metric">Metric (&#xB0;C)</option>
-              <option value="imperial">Imperial (&#xB0;F)</option>
+              <option value="metric" data-i18n="weather.unitsMetric">Metric (&#xB0;C)</option>
+              <option value="imperial" data-i18n="weather.unitsImperial">Imperial (&#xB0;F)</option>
             </select>
           </div>
         </div>
         <div class="error-banner" id="wea-err"></div>
       </div>
       <div class="card-foot">
-        <button class="btn btn-ghost" data-back>Back</button>
-        <button class="btn btn-primary" id="wea-next">Continue</button>
+        <button class="btn btn-ghost" data-back data-i18n="common.back">Back</button>
+        <button class="btn btn-primary" id="wea-next" data-i18n="common.continue">Continue</button>
       </div>
     </div>
 
     <!-- Step 4: Calendar -->
     <div class="step" id="step-calendar">
       <div class="card-head">
-        <div class="step-tag">Step 4 of 7</div>
-        <h1>Calendar Sync</h1>
-        <p>Connect Oikos to Google Calendar or Apple iCloud. Both optional — expand to configure.</p>
+        <div class="step-tag" data-i18n="calendar.tag">Step 4 of 7</div>
+        <h1 data-i18n="calendar.title">Calendar Sync</h1>
+        <p data-i18n="calendar.subtitle">Connect Oikos to Google Calendar or Apple iCloud. Both optional — expand to configure.</p>
       </div>
       <div class="card-body">
         <div class="toggle-card">
           <div class="toggle-head" data-toggle="gcal-body">
-            <span>Google Calendar</span>
-            <span class="toggle-badge" id="gcal-badge">Optional</span>
+            <span data-i18n="calendar.google">Google Calendar</span>
+            <span class="toggle-badge" id="gcal-badge" data-i18n="common.optional">Optional</span>
           </div>
           <div class="toggle-body" id="gcal-body">
-            <p class="hint" style="margin-bottom:12px">
+            <p class="hint" id="gcal-hint" style="margin-bottom:12px">
               Create OAuth credentials at <a href="https://console.cloud.google.com" target="_blank" rel="noopener">console.cloud.google.com</a>.
               Redirect URI: <code id="gcal-redirect-hint"></code>
             </p>
             <div class="field">
-              <label for="gcal-id">Client ID</label>
+              <label for="gcal-id" data-i18n="calendar.googleIdLabel">Client ID</label>
               <input type="text" id="gcal-id">
             </div>
             <div class="field">
-              <label for="gcal-secret">Client Secret</label>
+              <label for="gcal-secret" data-i18n="calendar.googleSecretLabel">Client Secret</label>
               <input type="password" id="gcal-secret">
             </div>
           </div>
         </div>
         <div class="toggle-card">
           <div class="toggle-head" data-toggle="apple-body">
-            <span>Apple iCloud CalDAV</span>
-            <span class="toggle-badge" id="apple-badge">Optional</span>
+            <span data-i18n="calendar.apple">Apple iCloud CalDAV</span>
+            <span class="toggle-badge" id="apple-badge" data-i18n="common.optional">Optional</span>
           </div>
           <div class="toggle-body" id="apple-body">
-            <p class="hint" style="margin-bottom:12px">
+            <p class="hint" id="apple-hint" style="margin-bottom:12px">
               Create an app-specific password at <a href="https://appleid.apple.com" target="_blank" rel="noopener">appleid.apple.com</a>.
             </p>
             <div class="field">
-              <label for="apple-user">Apple ID (email)</label>
+              <label for="apple-user" data-i18n="calendar.appleUserLabel">Apple ID (email)</label>
               <input type="email" id="apple-user">
             </div>
             <div class="field">
-              <label for="apple-pass">App-Specific Password</label>
+              <label for="apple-pass" data-i18n="calendar.applePassLabel">App-Specific Password</label>
               <input type="password" id="apple-pass">
             </div>
           </div>
         </div>
       </div>
       <div class="card-foot">
-        <button class="btn btn-ghost" data-back>Back</button>
-        <button class="btn btn-primary" id="cal-next">Continue</button>
+        <button class="btn btn-ghost" data-back data-i18n="common.back">Back</button>
+        <button class="btn btn-primary" id="cal-next" data-i18n="common.continue">Continue</button>
       </div>
     </div>
 
     <!-- Step 5: Review -->
     <div class="step" id="step-review">
       <div class="card-head">
-        <div class="step-tag">Step 5 of 7</div>
-        <h1>Review</h1>
-        <p>Check your settings before writing <code>.env</code> and starting the container.</p>
+        <div class="step-tag" data-i18n="review.tag">Step 5 of 7</div>
+        <h1 data-i18n="review.title">Review</h1>
+        <p data-i18n="review.subtitle">Check your settings before writing .env and starting the container.</p>
       </div>
       <div class="card-body">
         <div class="review-grid">
-          <div class="review-key">Host</div>           <div id="rv-host"></div>
-          <div class="review-key">Port</div>           <div id="rv-port"></div>
-          <div class="review-key">Timezone</div>       <div id="rv-tz"></div>
+          <div class="review-key" data-i18n="review.host">Host</div>           <div id="rv-host"></div>
+          <div class="review-key" data-i18n="review.port">Port</div>           <div id="rv-port"></div>
+          <div class="review-key" data-i18n="review.tz">Timezone</div>       <div id="rv-tz"></div>
           <div class="review-key">SESSION_SECRET</div> <div class="masked">&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;</div>
           <div class="review-key">DB_ENCRYPT_KEY</div> <div class="masked">&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;</div>
-          <div class="review-key">Weather</div>        <div id="rv-weather"></div>
-          <div class="review-key">Google Calendar</div><div id="rv-google"></div>
-          <div class="review-key">Apple CalDAV</div>   <div id="rv-apple"></div>
+          <div class="review-key" data-i18n="review.weather">Weather</div>        <div id="rv-weather"></div>
+          <div class="review-key" data-i18n="review.google">Google Calendar</div><div id="rv-google"></div>
+          <div class="review-key" data-i18n="review.apple">Apple CalDAV</div>   <div id="rv-apple"></div>
         </div>
         <div class="error-banner" id="rev-err"></div>
       </div>
       <div class="card-foot">
-        <button class="btn btn-ghost" data-back>Back</button>
-        <button class="btn btn-primary" id="rev-next">Save &amp; Start Docker</button>
+        <button class="btn btn-ghost" data-back data-i18n="common.back">Back</button>
+        <button class="btn btn-primary" id="rev-next" data-i18n="review.save">Save &amp; Start Docker</button>
       </div>
     </div>
 
     <!-- Step 6: Docker -->
     <div class="step" id="step-docker">
       <div class="card-head">
-        <div class="step-tag">Step 6 of 7</div>
-        <h1>Starting Oikos</h1>
-        <p>Pulling the image and starting the Docker container.</p>
+        <div class="step-tag" data-i18n="docker.tag">Step 6 of 7</div>
+        <h1 data-i18n="docker.title">Starting Oikos</h1>
+        <p data-i18n="docker.subtitle">Pulling the image and starting the Docker container.</p>
       </div>
       <div class="card-body">
         <div class="status-box">
           <div class="status-row">
             <div class="spinner" id="dkr-icon"></div>
             <div>
-              <div id="dkr-text">Starting container&#x2026;</div>
+              <div id="dkr-text" data-i18n="docker.starting">Starting container&#x2026;</div>
               <div class="elapsed" id="dkr-elapsed"></div>
             </div>
           </div>
@@ -312,42 +312,42 @@
         </div>
       </div>
       <div class="card-foot" id="dkr-foot" style="display:none">
-        <button class="btn btn-primary" id="dkr-next">Continue to Admin Setup</button>
+        <button class="btn btn-primary" id="dkr-next" data-i18n="docker.toAdmin">Continue to Admin Setup</button>
       </div>
     </div>
 
     <!-- Step 7: Admin -->
     <div class="step" id="step-admin">
       <div class="card-head">
-        <div class="step-tag">Step 7 of 7</div>
-        <h1>Create Admin Account</h1>
-        <p>Set up your first login. This account has full access to Oikos.</p>
+        <div class="step-tag" data-i18n="admin.tag">Step 7 of 7</div>
+        <h1 data-i18n="admin.title">Create Admin Account</h1>
+        <p data-i18n="admin.subtitle">Set up your first login. This account has full access to Oikos.</p>
       </div>
       <div class="card-body">
         <div class="field">
-          <label for="adm-user">Username</label>
+          <label for="adm-user" data-i18n="admin.userLabel">Username</label>
           <input type="text" id="adm-user" placeholder="jane" autocomplete="username">
-          <div class="hint">3&#x2013;64 characters: letters, numbers, . - _</div>
+          <div class="hint" data-i18n="admin.userHint">3&#x2013;64 characters: letters, numbers, . - _</div>
         </div>
         <div class="field">
-          <label for="adm-name">Display Name</label>
+          <label for="adm-name" data-i18n="admin.nameLabel">Display Name</label>
           <input type="text" id="adm-name" placeholder="Jane Smith" autocomplete="name">
         </div>
         <div class="field">
-          <label for="adm-pass">Password</label>
+          <label for="adm-pass" data-i18n="admin.passLabel">Password</label>
           <div class="secret-row">
-            <input type="password" id="adm-pass" placeholder="At least 8 characters" autocomplete="new-password">
+            <input type="password" id="adm-pass" placeholder="At least 8 characters" data-i18n-ph="admin.passPlaceholder" autocomplete="new-password">
             <button class="btn btn-ghost btn-sm" data-eye="adm-pass">&#x1F441;</button>
           </div>
         </div>
         <div class="field">
-          <label for="adm-conf">Confirm Password</label>
+          <label for="adm-conf" data-i18n="admin.confLabel">Confirm Password</label>
           <input type="password" id="adm-conf" autocomplete="new-password">
         </div>
         <div class="error-banner" id="adm-err"></div>
       </div>
       <div class="card-foot">
-        <button class="btn btn-primary" id="adm-next">Create Account</button>
+        <button class="btn btn-primary" id="adm-next" data-i18n="admin.create">Create Account</button>
       </div>
     </div>
 
@@ -356,9 +356,9 @@
       <div class="card-body">
         <div class="done-wrap">
           <div class="icon">&#x1F389;</div>
-          <h2>Oikos is ready!</h2>
-          <p>Your family planner is running and your admin account is set up.</p>
-          <a id="done-link" class="open-link" href="#" target="_blank" rel="noopener">Open Oikos &#x2192;</a>
+          <h2 data-i18n="done.title">Oikos is ready!</h2>
+          <p data-i18n="done.subtitle">Your family planner is running and your admin account is set up.</p>
+          <a id="done-link" class="open-link" href="#" target="_blank" rel="noopener" data-i18n="done.open">Open Oikos &#x2192;</a>
         </div>
       </div>
     </div>
@@ -369,8 +369,35 @@
 // All step panels live in the static HTML above.
 // JS only: toggles active class, reads/writes input values, sets textContent.
 // No dynamic DOM generation. DOM API only (textContent, classList, style).
+import { initInstallerI18n, t, applyTranslations, applyRich } from '/i18n-mini.js';
 
 const $ = id => document.getElementById(id);
+
+// Browser-Sprache erkennen, Übersetzungen laden und ins Markup einsetzen,
+// bevor die UI sichtbar interagiert. Setzt lang/dir (RTL für ar) am <html>.
+await initInstallerI18n();
+applyTranslations(document);
+
+// Strings mit eingebetteten Links/Code: innerHTML-frei über applyRich
+// zusammensetzen, damit die Wortstellung je Sprache erhalten bleibt.
+const owmLink = document.createElement('a');
+owmLink.href = 'https://openweathermap.org/api';
+owmLink.target = '_blank'; owmLink.rel = 'noopener';
+owmLink.textContent = t('weather.keyHintLink');
+applyRich($('wea-hint'), 'weather.keyHint', { link: owmLink });
+
+const gcalLink = document.createElement('a');
+gcalLink.href = 'https://console.cloud.google.com';
+gcalLink.target = '_blank'; gcalLink.rel = 'noopener';
+gcalLink.textContent = t('calendar.googleLink');
+applyRich($('gcal-hint'), 'calendar.googleHint', { link: gcalLink, redirect: $('gcal-redirect-hint') });
+
+const appleLink = document.createElement('a');
+appleLink.href = 'https://appleid.apple.com';
+appleLink.target = '_blank'; appleLink.rel = 'noopener';
+appleLink.textContent = t('calendar.appleLink');
+applyRich($('apple-hint'), 'calendar.appleHint', { link: appleLink });
+
 const STEPS = ['config','secrets','weather','calendar','review','docker','admin','done'];
 let currentStep = 0;
 
@@ -421,12 +448,12 @@ document.addEventListener('click', async e => {
   if (genId) {
     const btn = e.target.closest('[data-gen]');
     btn.disabled = true;
-    btn.textContent = '...';
+    btn.textContent = t('common.generating');
     const r = await fetch('/api/generate-secret', { method: 'POST' });
     const d = await r.json();
     $(genId).value = d.secret;
     btn.disabled = false;
-    btn.textContent = 'Generate';
+    btn.textContent = t('common.generate');
     return;
   }
 
@@ -452,11 +479,11 @@ $('cfg-next').addEventListener('click', () => {
   const rawHost = $('cfg-host').value.trim() || 'localhost';
   const rawPort = parseInt($('cfg-port').value.trim(), 10);
   if (!/^[a-zA-Z0-9]([a-zA-Z0-9\-\.]*[a-zA-Z0-9])?$/.test(rawHost) && rawHost !== 'localhost') {
-    showErr('cfg-err', 'Invalid hostname. Use only letters, digits, hyphens and dots.');
+    showErr('cfg-err', t('config.errHost'));
     return;
   }
   if (isNaN(rawPort) || rawPort < 1 || rawPort > 65535) {
-    showErr('cfg-err', 'Invalid port. Must be a number between 1 and 65535.');
+    showErr('cfg-err', t('config.errPort'));
     return;
   }
   showErr('cfg-err', '');
@@ -469,7 +496,7 @@ $('cfg-next').addEventListener('click', () => {
 $('sec-next').addEventListener('click', () => {
   const ss = $('sec-session').value.trim();
   const dk = $('sec-db').value.trim();
-  if (!ss || !dk) { showErr('sec-err', 'Both keys are required.'); return; }
+  if (!ss || !dk) { showErr('sec-err', t('secrets.errBoth')); return; }
   showErr('sec-err', '');
   S.SESSION_SECRET = ss;
   S.DB_ENCRYPTION_KEY = dk;
@@ -483,7 +510,7 @@ $('wea-enable').addEventListener('change', function() {
 $('wea-next').addEventListener('click', () => {
   if ($('wea-enable').checked) {
     const k = $('wea-key').value.trim();
-    if (!k) { showErr('wea-err', 'API key is required when weather is enabled.'); return; }
+    if (!k) { showErr('wea-err', t('weather.errKey')); return; }
     S.OPENWEATHER_API_KEY = k;
     S.OPENWEATHER_CITY = $('wea-city').value.trim() || 'Berlin';
     S.OPENWEATHER_UNITS = $('wea-units').value;
@@ -507,8 +534,8 @@ $('cal-next').addEventListener('click', () => {
   $('rv-host').textContent    = S.host;
   $('rv-port').textContent    = S.port;
   $('rv-tz').textContent      = S.tz;
-  $('rv-weather').textContent = S.OPENWEATHER_API_KEY ? `enabled (${S.OPENWEATHER_CITY})` : '-';
-  $('rv-google').textContent  = S.GOOGLE_CLIENT_ID ? 'configured' : '-';
+  $('rv-weather').textContent = S.OPENWEATHER_API_KEY ? t('review.weatherEnabled', { city: S.OPENWEATHER_CITY }) : '-';
+  $('rv-google').textContent  = S.GOOGLE_CLIENT_ID ? t('review.configured') : '-';
   $('rv-apple').textContent   = S.APPLE_USERNAME || '-';
 
   showStep(4);
@@ -516,7 +543,7 @@ $('cal-next').addEventListener('click', () => {
 
 $('rev-next').addEventListener('click', async () => {
   const btn = $('rev-next');
-  btn.disabled = true; btn.textContent = 'Saving...';
+  btn.disabled = true; btn.textContent = t('review.saving');
   const env = {
     SESSION_SECRET: S.SESSION_SECRET, DB_ENCRYPTION_KEY: S.DB_ENCRYPTION_KEY,
     OPENWEATHER_API_KEY: S.OPENWEATHER_API_KEY, OPENWEATHER_CITY: S.OPENWEATHER_CITY,
@@ -533,11 +560,11 @@ $('rev-next').addEventListener('click', async () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ env }),
     });
-    if (!r.ok) throw new Error('Failed to save .env');
+    if (!r.ok) throw new Error(t('review.errSave'));
     showStep(5);
     startDocker();
   } catch (e) {
-    btn.disabled = false; btn.textContent = 'Save & Start Docker';
+    btn.disabled = false; btn.textContent = t('review.save');
     showErr('rev-err', e.message);
   }
 });
@@ -560,7 +587,7 @@ async function startDocker() {
 function tickElapsed() {
   const el = $('dkr-elapsed');
   if (!el || currentStep !== 5) return;
-  el.textContent = `${Math.floor((Date.now() - dockerStart) / 1000)}s elapsed`;
+  el.textContent = t('docker.elapsed', { n: Math.floor((Date.now() - dockerStart) / 1000) });
   setTimeout(tickElapsed, 1000);
 }
 
@@ -572,12 +599,12 @@ async function pollDocker() {
       clearInterval(pollInterval);
       $('dkr-icon').className = 'ok-icon';
       $('dkr-icon').textContent = '✓';
-      $('dkr-text').textContent = 'Container is healthy and running';
+      $('dkr-text').textContent = t('docker.running');
       $('dkr-foot').style.display = 'flex';
       $('dkr-next').addEventListener('click', () => showStep(6));
     } else if (d.status === 'error') {
       clearInterval(pollInterval);
-      dockerFailed(d.logs || 'Unknown error');
+      dockerFailed(d.logs || t('docker.unknownError'));
     }
   } catch { /* keep polling during startup */ }
 }
@@ -585,12 +612,12 @@ async function pollDocker() {
 function dockerFailed(logs) {
   $('dkr-icon').className = 'err-icon';
   $('dkr-icon').textContent = '✗';
-  $('dkr-text').textContent = 'Container failed to start';
+  $('dkr-text').textContent = t('docker.failed');
   const logEl = $('dkr-log');
   logEl.style.display = 'block';
   logEl.textContent = logs;
   $('dkr-foot').style.display = 'flex';
-  $('dkr-next').textContent = 'Retry';
+  $('dkr-next').textContent = t('docker.retry');
   $('dkr-next').addEventListener('click', () => { showStep(5); startDocker(); }, { once: true });
 }
 
@@ -601,13 +628,13 @@ async function createAdmin() {
   const dn = $('adm-name').value.trim();
   const p  = $('adm-pass').value;
   const c  = $('adm-conf').value;
-  if (!u || !dn || !p) { showErr('adm-err', 'All fields are required.'); return; }
-  if (!/^[a-zA-Z0-9._-]{3,64}$/.test(u)) { showErr('adm-err', 'Invalid username format (3-64 chars, letters/numbers/._-).'); return; }
-  if (p.length < 8) { showErr('adm-err', 'Password must be at least 8 characters.'); return; }
-  if (p !== c) { showErr('adm-err', 'Passwords do not match.'); return; }
+  if (!u || !dn || !p) { showErr('adm-err', t('admin.errAll')); return; }
+  if (!/^[a-zA-Z0-9._-]{3,64}$/.test(u)) { showErr('adm-err', t('admin.errUser')); return; }
+  if (p.length < 8) { showErr('adm-err', t('admin.errPass')); return; }
+  if (p !== c) { showErr('adm-err', t('admin.errMatch')); return; }
 
   const btn = $('adm-next');
-  btn.disabled = true; btn.textContent = 'Creating...';
+  btn.disabled = true; btn.textContent = t('admin.creating');
   try {
     const r = await fetch('/api/create-admin', {
       method: 'POST',
@@ -622,11 +649,11 @@ async function createAdmin() {
       $('done-link').href = appUrl.href;
       showStep(7);
     } else {
-      btn.disabled = false; btn.textContent = 'Create Account';
-      showErr('adm-err', d.error || 'Failed to create admin account.');
+      btn.disabled = false; btn.textContent = t('admin.create');
+      showErr('adm-err', d.error || t('admin.errCreate'));
     }
   } catch (e) {
-    btn.disabled = false; btn.textContent = 'Create Account';
+    btn.disabled = false; btn.textContent = t('admin.create');
     showErr('adm-err', e.message);
   }
 }

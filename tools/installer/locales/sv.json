@@ -1,0 +1,113 @@
+{
+  "title": "Oikos-installation",
+  "common": {
+    "continue": "Fortsätt",
+    "back": "Tillbaka",
+    "generate": "Generera",
+    "generating": "…",
+    "optional": "Valfritt"
+  },
+  "config": {
+    "tag": "Steg 1 av 7",
+    "title": "Grundkonfiguration",
+    "subtitle": "Hur kommer du att nå Oikos?",
+    "existing": "Befintlig konfiguration upptäckt — en säkerhetskopia av din nuvarande .env-fil skapas innan den sparas.",
+    "hostLabel": "Domän eller IP-adress",
+    "hostHint": "Adressen du använder för att öppna Oikos i webbläsaren.",
+    "portLabel": "Port",
+    "tzLabel": "Tidszon",
+    "errHost": "Ogiltigt värdnamn. Använd endast bokstäver, siffror, bindestreck och punkter.",
+    "errPort": "Ogiltig port. Måste vara ett tal mellan 1 och 65535."
+  },
+  "secrets": {
+    "tag": "Steg 2 av 7",
+    "title": "Säkerhetsnycklar",
+    "subtitle": "De skyddar din session och krypterar databasen. Förvara din .env-fil säkert — att förlora dessa nycklar innebär att du förlorar åtkomsten till dina data.",
+    "sessionLabel": "Sessionshemlighet",
+    "sessionHint": "Signerar webbläsarens sessionscookies.",
+    "dbLabel": "Krypteringsnyckel för databasen",
+    "dbHint": "Krypterar SQLite-databasen i vila.",
+    "errBoth": "Båda nycklarna krävs."
+  },
+  "weather": {
+    "tag": "Steg 3 av 7",
+    "title": "Väderwidget",
+    "subtitle": "Visa väder i realtid på din instrumentpanel. Kräver en gratis API-nyckel från OpenWeatherMap.",
+    "enable": "Aktivera väderwidget",
+    "keyLabel": "API-nyckel",
+    "keyOpt": "(gratisnivå)",
+    "keyHint": "Skaffa en gratis på {{link}}",
+    "keyHintLink": "openweathermap.org/api",
+    "cityLabel": "Stad",
+    "unitsLabel": "Enheter",
+    "unitsMetric": "Metriska (°C)",
+    "unitsImperial": "Imperiella (°F)",
+    "errKey": "En API-nyckel krävs när vädret är aktiverat."
+  },
+  "calendar": {
+    "tag": "Steg 4 av 7",
+    "title": "Kalendersynkronisering",
+    "subtitle": "Anslut Oikos till Google Kalender eller Apple iCloud. Båda är valfria — expandera för att konfigurera.",
+    "google": "Google Kalender",
+    "googleHint": "Skapa OAuth-uppgifter på {{link}}. Omdirigerings-URI: {{redirect}}",
+    "googleLink": "console.cloud.google.com",
+    "googleIdLabel": "Klient-ID",
+    "googleSecretLabel": "Klienthemlighet",
+    "apple": "Apple iCloud CalDAV",
+    "appleHint": "Skapa ett appspecifikt lösenord på {{link}}.",
+    "appleLink": "appleid.apple.com",
+    "appleUserLabel": "Apple-ID (e-post)",
+    "applePassLabel": "Appspecifikt lösenord"
+  },
+  "review": {
+    "tag": "Steg 5 av 7",
+    "title": "Granskning",
+    "subtitle": "Kontrollera dina inställningar innan .env skrivs och containern startas.",
+    "host": "Värd",
+    "port": "Port",
+    "tz": "Tidszon",
+    "weather": "Väder",
+    "google": "Google Kalender",
+    "apple": "Apple CalDAV",
+    "save": "Spara och starta Docker",
+    "saving": "Sparar …",
+    "errSave": "Det gick inte att spara .env.",
+    "weatherEnabled": "aktiverat ({{city}})",
+    "configured": "konfigurerat"
+  },
+  "docker": {
+    "tag": "Steg 6 av 7",
+    "title": "Startar Oikos",
+    "subtitle": "Hämtar avbildningen och startar Docker-containern.",
+    "starting": "Startar containern …",
+    "elapsed": "{{n}} s förflutna",
+    "running": "Containern är frisk och körs",
+    "failed": "Det gick inte att starta containern",
+    "unknownError": "Okänt fel",
+    "toAdmin": "Fortsätt till administratörsinställning",
+    "retry": "Försök igen"
+  },
+  "admin": {
+    "tag": "Steg 7 av 7",
+    "title": "Skapa administratörskonto",
+    "subtitle": "Konfigurera din första inloggning. Detta konto har full åtkomst till Oikos.",
+    "userLabel": "Användarnamn",
+    "userHint": "3–64 tecken: bokstäver, siffror, . - _",
+    "nameLabel": "Visningsnamn",
+    "passLabel": "Lösenord",
+    "passPlaceholder": "Minst 8 tecken",
+    "confLabel": "Bekräfta lösenord",
+    "creating": "Skapar …",
+    "create": "Skapa konto",
+    "errAll": "Alla fält är obligatoriska.",
+    "errUser": "Ogiltigt format på användarnamn (3–64 tecken, bokstäver/siffror/._-).",
+    "errPass": "Lösenordet måste vara minst 8 tecken.",
+    "errMatch": "Lösenorden matchar inte.",
+    "errCreate": "Det gick inte att skapa administratörskontot."
+  },
+  "done": {
+    "title": "Oikos är klart!",
+    "subtitle": "Din familjeplanerare körs och ditt administratörskonto är konfigurerat.",
+    "open": "Öppna Oikos →"
+  }
+}

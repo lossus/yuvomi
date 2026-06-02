@@ -1,0 +1,113 @@
+{
+  "title": "Oikos einrichten",
+  "common": {
+    "continue": "Weiter",
+    "back": "Zurück",
+    "generate": "Generieren",
+    "generating": "…",
+    "optional": "Optional"
+  },
+  "config": {
+    "tag": "Schritt 1 von 7",
+    "title": "Grundkonfiguration",
+    "subtitle": "Wie möchtest du auf Oikos zugreifen?",
+    "existing": "Bestehende Konfiguration erkannt — deine aktuelle .env-Datei wird vor dem Speichern gesichert.",
+    "hostLabel": "Domain oder IP-Adresse",
+    "hostHint": "Die Adresse, über die du Oikos im Browser öffnest.",
+    "portLabel": "Port",
+    "tzLabel": "Zeitzone",
+    "errHost": "Ungültiger Hostname. Verwende nur Buchstaben, Ziffern, Bindestriche und Punkte.",
+    "errPort": "Ungültiger Port. Muss eine Zahl zwischen 1 und 65535 sein."
+  },
+  "secrets": {
+    "tag": "Schritt 2 von 7",
+    "title": "Sicherheitsschlüssel",
+    "subtitle": "Diese schützen deine Sitzung und verschlüsseln die Datenbank. Bewahre deine .env-Datei sicher auf — der Verlust dieser Schlüssel bedeutet den Verlust des Zugriffs auf deine Daten.",
+    "sessionLabel": "Session-Secret",
+    "sessionHint": "Signiert die Sitzungs-Cookies des Browsers.",
+    "dbLabel": "Datenbank-Verschlüsselungsschlüssel",
+    "dbHint": "Verschlüsselt die SQLite-Datenbank im Ruhezustand.",
+    "errBoth": "Beide Schlüssel sind erforderlich."
+  },
+  "weather": {
+    "tag": "Schritt 3 von 7",
+    "title": "Wetter-Widget",
+    "subtitle": "Zeige Live-Wetter auf deinem Dashboard. Erfordert einen kostenlosen OpenWeatherMap-API-Schlüssel.",
+    "enable": "Wetter-Widget aktivieren",
+    "keyLabel": "API-Schlüssel",
+    "keyOpt": "(kostenlose Stufe)",
+    "keyHint": "Hol dir kostenlos einen bei {{link}}",
+    "keyHintLink": "openweathermap.org/api",
+    "cityLabel": "Stadt",
+    "unitsLabel": "Einheiten",
+    "unitsMetric": "Metrisch (°C)",
+    "unitsImperial": "Imperial (°F)",
+    "errKey": "Ein API-Schlüssel ist erforderlich, wenn das Wetter aktiviert ist."
+  },
+  "calendar": {
+    "tag": "Schritt 4 von 7",
+    "title": "Kalender-Synchronisation",
+    "subtitle": "Verbinde Oikos mit Google Kalender oder Apple iCloud. Beides optional — zum Konfigurieren ausklappen.",
+    "google": "Google Kalender",
+    "googleHint": "Erstelle OAuth-Anmeldedaten unter {{link}}. Redirect-URI: {{redirect}}",
+    "googleLink": "console.cloud.google.com",
+    "googleIdLabel": "Client-ID",
+    "googleSecretLabel": "Client-Secret",
+    "apple": "Apple iCloud CalDAV",
+    "appleHint": "Erstelle ein app-spezifisches Passwort unter {{link}}.",
+    "appleLink": "appleid.apple.com",
+    "appleUserLabel": "Apple-ID (E-Mail)",
+    "applePassLabel": "App-spezifisches Passwort"
+  },
+  "review": {
+    "tag": "Schritt 5 von 7",
+    "title": "Überprüfung",
+    "subtitle": "Prüfe deine Einstellungen, bevor .env geschrieben und der Container gestartet wird.",
+    "host": "Host",
+    "port": "Port",
+    "tz": "Zeitzone",
+    "weather": "Wetter",
+    "google": "Google Kalender",
+    "apple": "Apple CalDAV",
+    "save": "Speichern & Docker starten",
+    "saving": "Wird gespeichert …",
+    "errSave": "Speichern der .env fehlgeschlagen.",
+    "weatherEnabled": "aktiviert ({{city}})",
+    "configured": "konfiguriert"
+  },
+  "docker": {
+    "tag": "Schritt 6 von 7",
+    "title": "Oikos wird gestartet",
+    "subtitle": "Das Image wird geladen und der Docker-Container gestartet.",
+    "starting": "Container wird gestartet …",
+    "elapsed": "{{n}} s vergangen",
+    "running": "Container ist gesund und läuft",
+    "failed": "Container konnte nicht gestartet werden",
+    "unknownError": "Unbekannter Fehler",
+    "toAdmin": "Weiter zur Admin-Einrichtung",
+    "retry": "Erneut versuchen"
+  },
+  "admin": {
+    "tag": "Schritt 7 von 7",
+    "title": "Admin-Konto erstellen",
+    "subtitle": "Richte deinen ersten Login ein. Dieses Konto hat vollen Zugriff auf Oikos.",
+    "userLabel": "Benutzername",
+    "userHint": "3–64 Zeichen: Buchstaben, Zahlen, . - _",
+    "nameLabel": "Anzeigename",
+    "passLabel": "Passwort",
+    "passPlaceholder": "Mindestens 8 Zeichen",
+    "confLabel": "Passwort bestätigen",
+    "creating": "Wird erstellt …",
+    "create": "Konto erstellen",
+    "errAll": "Alle Felder sind erforderlich.",
+    "errUser": "Ungültiges Benutzername-Format (3–64 Zeichen, Buchstaben/Zahlen/._-).",
+    "errPass": "Das Passwort muss mindestens 8 Zeichen lang sein.",
+    "errMatch": "Die Passwörter stimmen nicht überein.",
+    "errCreate": "Admin-Konto konnte nicht erstellt werden."
+  },
+  "done": {
+    "title": "Oikos ist bereit!",
+    "subtitle": "Dein Familienplaner läuft und dein Admin-Konto ist eingerichtet.",
+    "open": "Oikos öffnen →"
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "title": "Konfiguracja Oikos",
+  "common": {
+    "continue": "Dalej",
+    "back": "Wstecz",
+    "generate": "Generuj",
+    "generating": "…",
+    "optional": "Opcjonalne"
+  },
+  "config": {
+    "tag": "Krok 1 z 7",
+    "title": "Konfiguracja podstawowa",
+    "subtitle": "Jak będziesz uzyskiwać dostęp do Oikos?",
+    "existing": "Wykryto istniejącą konfigurację — przed zapisaniem zostanie utworzona kopia zapasowa bieżącego pliku .env.",
+    "hostLabel": "Domena lub adres IP",
+    "hostHint": "Adres, którego użyjesz, aby otworzyć Oikos w przeglądarce.",
+    "portLabel": "Port",
+    "tzLabel": "Strefa czasowa",
+    "errHost": "Nieprawidłowa nazwa hosta. Używaj tylko liter, cyfr, myślników i kropek.",
+    "errPort": "Nieprawidłowy port. Musi być liczbą od 1 do 65535."
+  },
+  "secrets": {
+    "tag": "Krok 2 z 7",
+    "title": "Klucze bezpieczeństwa",
+    "subtitle": "Chronią Twoją sesję i szyfrują bazę danych. Przechowuj plik .env w bezpiecznym miejscu — utrata tych kluczy oznacza utratę dostępu do danych.",
+    "sessionLabel": "Sekret sesji",
+    "sessionHint": "Podpisuje pliki cookie sesji przeglądarki.",
+    "dbLabel": "Klucz szyfrowania bazy danych",
+    "dbHint": "Szyfruje bazę danych SQLite w spoczynku.",
+    "errBoth": "Oba klucze są wymagane."
+  },
+  "weather": {
+    "tag": "Krok 3 z 7",
+    "title": "Widżet pogody",
+    "subtitle": "Wyświetlaj pogodę na żywo na pulpicie. Wymaga bezpłatnego klucza API OpenWeatherMap.",
+    "enable": "Włącz widżet pogody",
+    "keyLabel": "Klucz API",
+    "keyOpt": "(plan bezpłatny)",
+    "keyHint": "Zdobądź go bezpłatnie na {{link}}",
+    "keyHintLink": "openweathermap.org/api",
+    "cityLabel": "Miasto",
+    "unitsLabel": "Jednostki",
+    "unitsMetric": "Metryczne (°C)",
+    "unitsImperial": "Imperialne (°F)",
+    "errKey": "Klucz API jest wymagany, gdy pogoda jest włączona."
+  },
+  "calendar": {
+    "tag": "Krok 4 z 7",
+    "title": "Synchronizacja kalendarza",
+    "subtitle": "Połącz Oikos z Kalendarzem Google lub Apple iCloud. Oba są opcjonalne — rozwiń, aby skonfigurować.",
+    "google": "Kalendarz Google",
+    "googleHint": "Utwórz dane uwierzytelniające OAuth na {{link}}. URI przekierowania: {{redirect}}",
+    "googleLink": "console.cloud.google.com",
+    "googleIdLabel": "Identyfikator klienta",
+    "googleSecretLabel": "Sekret klienta",
+    "apple": "Apple iCloud CalDAV",
+    "appleHint": "Utwórz hasło specyficzne dla aplikacji na {{link}}.",
+    "appleLink": "appleid.apple.com",
+    "appleUserLabel": "Apple ID (e-mail)",
+    "applePassLabel": "Hasło specyficzne dla aplikacji"
+  },
+  "review": {
+    "tag": "Krok 5 z 7",
+    "title": "Przegląd",
+    "subtitle": "Sprawdź ustawienia przed zapisaniem pliku .env i uruchomieniem kontenera.",
+    "host": "Host",
+    "port": "Port",
+    "tz": "Strefa czasowa",
+    "weather": "Pogoda",
+    "google": "Kalendarz Google",
+    "apple": "Apple CalDAV",
+    "save": "Zapisz i uruchom Docker",
+    "saving": "Zapisywanie …",
+    "errSave": "Nie udało się zapisać pliku .env.",
+    "weatherEnabled": "włączone ({{city}})",
+    "configured": "skonfigurowano"
+  },
+  "docker": {
+    "tag": "Krok 6 z 7",
+    "title": "Uruchamianie Oikos",
+    "subtitle": "Pobieranie obrazu i uruchamianie kontenera Docker.",
+    "starting": "Uruchamianie kontenera …",
+    "elapsed": "upłynęło {{n}} s",
+    "running": "Kontener jest sprawny i działa",
+    "failed": "Nie udało się uruchomić kontenera",
+    "unknownError": "Nieznany błąd",
+    "toAdmin": "Przejdź do konfiguracji administratora",
+    "retry": "Spróbuj ponownie"
+  },
+  "admin": {
+    "tag": "Krok 7 z 7",
+    "title": "Utwórz konto administratora",
+    "subtitle": "Skonfiguruj swoje pierwsze logowanie. To konto ma pełny dostęp do Oikos.",
+    "userLabel": "Nazwa użytkownika",
+    "userHint": "3–64 znaki: litery, cyfry, . - _",
+    "nameLabel": "Wyświetlana nazwa",
+    "passLabel": "Hasło",
+    "passPlaceholder": "Co najmniej 8 znaków",
+    "confLabel": "Potwierdź hasło",
+    "creating": "Tworzenie …",
+    "create": "Utwórz konto",
+    "errAll": "Wszystkie pola są wymagane.",
+    "errUser": "Nieprawidłowy format nazwy użytkownika (3–64 znaki, litery/cyfry/._-).",
+    "errPass": "Hasło musi mieć co najmniej 8 znaków.",
+    "errMatch": "Hasła nie są zgodne.",
+    "errCreate": "Nie udało się utworzyć konta administratora."
+  },
+  "done": {
+    "title": "Oikos jest gotowy!",
+    "subtitle": "Twój planer rodzinny działa, a konto administratora jest skonfigurowane.",
+    "open": "Otwórz Oikos →"
+  }
+}

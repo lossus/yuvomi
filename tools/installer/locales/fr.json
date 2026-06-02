@@ -1,0 +1,113 @@
+{
+  "title": "Configuration d'Oikos",
+  "common": {
+    "continue": "Continuer",
+    "back": "Retour",
+    "generate": "Générer",
+    "generating": "…",
+    "optional": "Facultatif"
+  },
+  "config": {
+    "tag": "Étape 1 sur 7",
+    "title": "Configuration de base",
+    "subtitle": "Comment accéderez-vous à Oikos ?",
+    "existing": "Configuration existante détectée — une sauvegarde de votre fichier .env actuel sera créée avant l'enregistrement.",
+    "hostLabel": "Domaine ou adresse IP",
+    "hostHint": "L'adresse que vous utiliserez pour ouvrir Oikos dans votre navigateur.",
+    "portLabel": "Port",
+    "tzLabel": "Fuseau horaire",
+    "errHost": "Nom d'hôte non valide. Utilisez uniquement des lettres, des chiffres, des tirets et des points.",
+    "errPort": "Port non valide. Doit être un nombre compris entre 1 et 65535."
+  },
+  "secrets": {
+    "tag": "Étape 2 sur 7",
+    "title": "Clés de sécurité",
+    "subtitle": "Elles protègent votre session et chiffrent la base de données. Conservez votre fichier .env en lieu sûr — perdre ces clés signifie perdre l'accès à vos données.",
+    "sessionLabel": "Secret de session",
+    "sessionHint": "Signe les cookies de session du navigateur.",
+    "dbLabel": "Clé de chiffrement de la base de données",
+    "dbHint": "Chiffre la base de données SQLite au repos.",
+    "errBoth": "Les deux clés sont requises."
+  },
+  "weather": {
+    "tag": "Étape 3 sur 7",
+    "title": "Widget météo",
+    "subtitle": "Affichez la météo en direct sur votre tableau de bord. Nécessite une clé d'API OpenWeatherMap gratuite.",
+    "enable": "Activer le widget météo",
+    "keyLabel": "Clé d'API",
+    "keyOpt": "(offre gratuite)",
+    "keyHint": "Obtenez-en une gratuitement sur {{link}}",
+    "keyHintLink": "openweathermap.org/api",
+    "cityLabel": "Ville",
+    "unitsLabel": "Unités",
+    "unitsMetric": "Métriques (°C)",
+    "unitsImperial": "Impériales (°F)",
+    "errKey": "Une clé d'API est requise lorsque la météo est activée."
+  },
+  "calendar": {
+    "tag": "Étape 4 sur 7",
+    "title": "Synchronisation du calendrier",
+    "subtitle": "Connectez Oikos à Google Agenda ou Apple iCloud. Les deux sont facultatifs — dépliez pour configurer.",
+    "google": "Google Agenda",
+    "googleHint": "Créez des identifiants OAuth sur {{link}}. URI de redirection : {{redirect}}",
+    "googleLink": "console.cloud.google.com",
+    "googleIdLabel": "ID client",
+    "googleSecretLabel": "Secret client",
+    "apple": "Apple iCloud CalDAV",
+    "appleHint": "Créez un mot de passe spécifique à l'application sur {{link}}.",
+    "appleLink": "appleid.apple.com",
+    "appleUserLabel": "Identifiant Apple (e-mail)",
+    "applePassLabel": "Mot de passe spécifique à l'application"
+  },
+  "review": {
+    "tag": "Étape 5 sur 7",
+    "title": "Vérification",
+    "subtitle": "Vérifiez vos paramètres avant d'écrire .env et de démarrer le conteneur.",
+    "host": "Hôte",
+    "port": "Port",
+    "tz": "Fuseau horaire",
+    "weather": "Météo",
+    "google": "Google Agenda",
+    "apple": "Apple CalDAV",
+    "save": "Enregistrer et démarrer Docker",
+    "saving": "Enregistrement …",
+    "errSave": "Échec de l'enregistrement de .env.",
+    "weatherEnabled": "activé ({{city}})",
+    "configured": "configuré"
+  },
+  "docker": {
+    "tag": "Étape 6 sur 7",
+    "title": "Démarrage d'Oikos",
+    "subtitle": "Téléchargement de l'image et démarrage du conteneur Docker.",
+    "starting": "Démarrage du conteneur …",
+    "elapsed": "{{n}} s écoulées",
+    "running": "Le conteneur est sain et en cours d'exécution",
+    "failed": "Le conteneur n'a pas pu démarrer",
+    "unknownError": "Erreur inconnue",
+    "toAdmin": "Continuer vers la configuration de l'administrateur",
+    "retry": "Réessayer"
+  },
+  "admin": {
+    "tag": "Étape 7 sur 7",
+    "title": "Créer un compte administrateur",
+    "subtitle": "Configurez votre première connexion. Ce compte a un accès complet à Oikos.",
+    "userLabel": "Nom d'utilisateur",
+    "userHint": "3–64 caractères : lettres, chiffres, . - _",
+    "nameLabel": "Nom affiché",
+    "passLabel": "Mot de passe",
+    "passPlaceholder": "Au moins 8 caractères",
+    "confLabel": "Confirmer le mot de passe",
+    "creating": "Création …",
+    "create": "Créer le compte",
+    "errAll": "Tous les champs sont requis.",
+    "errUser": "Format de nom d'utilisateur non valide (3–64 caractères, lettres/chiffres/._-).",
+    "errPass": "Le mot de passe doit comporter au moins 8 caractères.",
+    "errMatch": "Les mots de passe ne correspondent pas.",
+    "errCreate": "Échec de la création du compte administrateur."
+  },
+  "done": {
+    "title": "Oikos est prêt !",
+    "subtitle": "Votre organiseur familial est en marche et votre compte administrateur est configuré.",
+    "open": "Ouvrir Oikos →"
+  }
+}

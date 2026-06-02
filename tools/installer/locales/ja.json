@@ -1,0 +1,113 @@
+{
+  "title": "Oikos セットアップ",
+  "common": {
+    "continue": "続ける",
+    "back": "戻る",
+    "generate": "生成",
+    "generating": "…",
+    "optional": "任意"
+  },
+  "config": {
+    "tag": "ステップ 1 / 7",
+    "title": "基本設定",
+    "subtitle": "Oikos にどのようにアクセスしますか？",
+    "existing": "既存の設定が検出されました — 保存前に現在の .env ファイルがバックアップされます。",
+    "hostLabel": "ドメインまたは IP アドレス",
+    "hostHint": "ブラウザで Oikos を開くために使用するアドレスです。",
+    "portLabel": "ポート",
+    "tzLabel": "タイムゾーン",
+    "errHost": "ホスト名が無効です。英字、数字、ハイフン、ピリオドのみを使用してください。",
+    "errPort": "ポートが無効です。1 から 65535 までの数値である必要があります。"
+  },
+  "secrets": {
+    "tag": "ステップ 2 / 7",
+    "title": "セキュリティキー",
+    "subtitle": "これらはセッションを保護し、データベースを暗号化します。.env ファイルは安全に保管してください — これらのキーを失うと、データへのアクセスを失います。",
+    "sessionLabel": "セッションシークレット",
+    "sessionHint": "ブラウザのセッション Cookie に署名します。",
+    "dbLabel": "データベース暗号化キー",
+    "dbHint": "保存時に SQLite データベースを暗号化します。",
+    "errBoth": "両方のキーが必要です。"
+  },
+  "weather": {
+    "tag": "ステップ 3 / 7",
+    "title": "天気ウィジェット",
+    "subtitle": "ダッシュボードにリアルタイムの天気を表示します。無料の OpenWeatherMap API キーが必要です。",
+    "enable": "天気ウィジェットを有効にする",
+    "keyLabel": "API キー",
+    "keyOpt": "（無料プラン）",
+    "keyHint": "{{link}} で無料で取得できます",
+    "keyHintLink": "openweathermap.org/api",
+    "cityLabel": "都市",
+    "unitsLabel": "単位",
+    "unitsMetric": "メートル法（°C）",
+    "unitsImperial": "ヤード・ポンド法（°F）",
+    "errKey": "天気を有効にする場合は API キーが必要です。"
+  },
+  "calendar": {
+    "tag": "ステップ 4 / 7",
+    "title": "カレンダー同期",
+    "subtitle": "Oikos を Google カレンダーまたは Apple iCloud に接続します。どちらも任意です — 設定するには展開してください。",
+    "google": "Google カレンダー",
+    "googleHint": "{{link}} で OAuth 認証情報を作成します。リダイレクト URI: {{redirect}}",
+    "googleLink": "console.cloud.google.com",
+    "googleIdLabel": "クライアント ID",
+    "googleSecretLabel": "クライアントシークレット",
+    "apple": "Apple iCloud CalDAV",
+    "appleHint": "{{link}} で App 用パスワードを作成します。",
+    "appleLink": "appleid.apple.com",
+    "appleUserLabel": "Apple ID（メール）",
+    "applePassLabel": "App 用パスワード"
+  },
+  "review": {
+    "tag": "ステップ 5 / 7",
+    "title": "確認",
+    "subtitle": ".env を書き込んでコンテナを起動する前に、設定を確認してください。",
+    "host": "ホスト",
+    "port": "ポート",
+    "tz": "タイムゾーン",
+    "weather": "天気",
+    "google": "Google カレンダー",
+    "apple": "Apple CalDAV",
+    "save": "保存して Docker を起動",
+    "saving": "保存中 …",
+    "errSave": ".env の保存に失敗しました。",
+    "weatherEnabled": "有効（{{city}}）",
+    "configured": "設定済み"
+  },
+  "docker": {
+    "tag": "ステップ 6 / 7",
+    "title": "Oikos を起動しています",
+    "subtitle": "イメージを取得し、Docker コンテナを起動しています。",
+    "starting": "コンテナを起動しています …",
+    "elapsed": "{{n}} 秒経過",
+    "running": "コンテナは正常に稼働しています",
+    "failed": "コンテナの起動に失敗しました",
+    "unknownError": "不明なエラー",
+    "toAdmin": "管理者セットアップに進む",
+    "retry": "再試行"
+  },
+  "admin": {
+    "tag": "ステップ 7 / 7",
+    "title": "管理者アカウントを作成",
+    "subtitle": "最初のログインを設定します。このアカウントは Oikos への完全なアクセス権を持ちます。",
+    "userLabel": "ユーザー名",
+    "userHint": "3〜64 文字：英字、数字、. - _",
+    "nameLabel": "表示名",
+    "passLabel": "パスワード",
+    "passPlaceholder": "8 文字以上",
+    "confLabel": "パスワードを確認",
+    "creating": "作成中 …",
+    "create": "アカウントを作成",
+    "errAll": "すべての項目が必須です。",
+    "errUser": "ユーザー名の形式が無効です（3〜64 文字、英字/数字/._-）。",
+    "errPass": "パスワードは 8 文字以上である必要があります。",
+    "errMatch": "パスワードが一致しません。",
+    "errCreate": "管理者アカウントの作成に失敗しました。"
+  },
+  "done": {
+    "title": "Oikos の準備が整いました！",
+    "subtitle": "ファミリープランナーが稼働し、管理者アカウントの設定が完了しました。",
+    "open": "Oikos を開く →"
+  }
+}

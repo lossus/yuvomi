@@ -1,0 +1,113 @@
+{
+  "title": "Oikos Kurulumu",
+  "common": {
+    "continue": "Devam",
+    "back": "Geri",
+    "generate": "Oluştur",
+    "generating": "…",
+    "optional": "İsteğe bağlı"
+  },
+  "config": {
+    "tag": "Adım 1 / 7",
+    "title": "Temel Yapılandırma",
+    "subtitle": "Oikos'a nasıl erişeceksiniz?",
+    "existing": "Mevcut yapılandırma algılandı — kaydetmeden önce geçerli .env dosyanızın yedeği alınacak.",
+    "hostLabel": "Alan adı veya IP adresi",
+    "hostHint": "Oikos'u tarayıcınızda açmak için kullanacağınız adres.",
+    "portLabel": "Bağlantı noktası",
+    "tzLabel": "Saat dilimi",
+    "errHost": "Geçersiz ana bilgisayar adı. Yalnızca harf, rakam, tire ve nokta kullanın.",
+    "errPort": "Geçersiz bağlantı noktası. 1 ile 65535 arasında bir sayı olmalıdır."
+  },
+  "secrets": {
+    "tag": "Adım 2 / 7",
+    "title": "Güvenlik Anahtarları",
+    "subtitle": "Bunlar oturumunuzu korur ve veritabanını şifreler. .env dosyanızı güvenli bir şekilde saklayın — bu anahtarları kaybetmek verilerinize erişimi kaybetmek anlamına gelir.",
+    "sessionLabel": "Oturum Gizli Anahtarı",
+    "sessionHint": "Tarayıcı oturum çerezlerini imzalar.",
+    "dbLabel": "Veritabanı Şifreleme Anahtarı",
+    "dbHint": "SQLite veritabanını beklemede şifreler.",
+    "errBoth": "Her iki anahtar da gereklidir."
+  },
+  "weather": {
+    "tag": "Adım 3 / 7",
+    "title": "Hava Durumu Widget'ı",
+    "subtitle": "Panonuzda canlı hava durumunu gösterin. Ücretsiz bir OpenWeatherMap API anahtarı gerektirir.",
+    "enable": "Hava durumu widget'ını etkinleştir",
+    "keyLabel": "API Anahtarı",
+    "keyOpt": "(ücretsiz katman)",
+    "keyHint": "{{link}} adresinden ücretsiz bir tane edinin",
+    "keyHintLink": "openweathermap.org/api",
+    "cityLabel": "Şehir",
+    "unitsLabel": "Birimler",
+    "unitsMetric": "Metrik (°C)",
+    "unitsImperial": "İngiliz (°F)",
+    "errKey": "Hava durumu etkinleştirildiğinde API anahtarı gereklidir."
+  },
+  "calendar": {
+    "tag": "Adım 4 / 7",
+    "title": "Takvim Senkronizasyonu",
+    "subtitle": "Oikos'u Google Takvim veya Apple iCloud'a bağlayın. İkisi de isteğe bağlı — yapılandırmak için genişletin.",
+    "google": "Google Takvim",
+    "googleHint": "{{link}} adresinde OAuth kimlik bilgileri oluşturun. Yönlendirme URI'si: {{redirect}}",
+    "googleLink": "console.cloud.google.com",
+    "googleIdLabel": "İstemci kimliği",
+    "googleSecretLabel": "İstemci gizli anahtarı",
+    "apple": "Apple iCloud CalDAV",
+    "appleHint": "{{link}} adresinde uygulamaya özel bir parola oluşturun.",
+    "appleLink": "appleid.apple.com",
+    "appleUserLabel": "Apple kimliği (e-posta)",
+    "applePassLabel": "Uygulamaya özel parola"
+  },
+  "review": {
+    "tag": "Adım 5 / 7",
+    "title": "İnceleme",
+    "subtitle": ".env yazılmadan ve kapsayıcı başlatılmadan önce ayarlarınızı kontrol edin.",
+    "host": "Ana bilgisayar",
+    "port": "Bağlantı noktası",
+    "tz": "Saat dilimi",
+    "weather": "Hava durumu",
+    "google": "Google Takvim",
+    "apple": "Apple CalDAV",
+    "save": "Kaydet ve Docker'ı başlat",
+    "saving": "Kaydediliyor …",
+    "errSave": ".env kaydedilemedi.",
+    "weatherEnabled": "etkin ({{city}})",
+    "configured": "yapılandırıldı"
+  },
+  "docker": {
+    "tag": "Adım 6 / 7",
+    "title": "Oikos başlatılıyor",
+    "subtitle": "İmaj indiriliyor ve Docker kapsayıcısı başlatılıyor.",
+    "starting": "Kapsayıcı başlatılıyor …",
+    "elapsed": "{{n}} sn geçti",
+    "running": "Kapsayıcı sağlıklı ve çalışıyor",
+    "failed": "Kapsayıcı başlatılamadı",
+    "unknownError": "Bilinmeyen hata",
+    "toAdmin": "Yönetici Kurulumuna devam et",
+    "retry": "Yeniden dene"
+  },
+  "admin": {
+    "tag": "Adım 7 / 7",
+    "title": "Yönetici Hesabı Oluştur",
+    "subtitle": "İlk girişinizi ayarlayın. Bu hesap Oikos'a tam erişime sahiptir.",
+    "userLabel": "Kullanıcı adı",
+    "userHint": "3–64 karakter: harfler, rakamlar, . - _",
+    "nameLabel": "Görünen ad",
+    "passLabel": "Parola",
+    "passPlaceholder": "En az 8 karakter",
+    "confLabel": "Parolayı onayla",
+    "creating": "Oluşturuluyor …",
+    "create": "Hesap oluştur",
+    "errAll": "Tüm alanlar gereklidir.",
+    "errUser": "Geçersiz kullanıcı adı biçimi (3–64 karakter, harf/rakam/._-).",
+    "errPass": "Parola en az 8 karakter olmalıdır.",
+    "errMatch": "Parolalar eşleşmiyor.",
+    "errCreate": "Yönetici hesabı oluşturulamadı."
+  },
+  "done": {
+    "title": "Oikos hazır!",
+    "subtitle": "Aile planlayıcınız çalışıyor ve yönetici hesabınız ayarlandı.",
+    "open": "Oikos'u aç →"
+  }
+}

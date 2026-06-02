@@ -1,0 +1,113 @@
+{
+  "title": "Oikos Setup",
+  "common": {
+    "continue": "Continue",
+    "back": "Back",
+    "generate": "Generate",
+    "generating": "…",
+    "optional": "Optional"
+  },
+  "config": {
+    "tag": "Step 1 of 7",
+    "title": "Basic Configuration",
+    "subtitle": "How will you access Oikos?",
+    "existing": "Existing configuration detected — your current .env file will be backed up before saving.",
+    "hostLabel": "Domain or IP address",
+    "hostHint": "The address you'll use to open Oikos in your browser.",
+    "portLabel": "Port",
+    "tzLabel": "Timezone",
+    "errHost": "Invalid hostname. Use only letters, digits, hyphens and dots.",
+    "errPort": "Invalid port. Must be a number between 1 and 65535."
+  },
+  "secrets": {
+    "tag": "Step 2 of 7",
+    "title": "Security Keys",
+    "subtitle": "These protect your session and encrypt the database. Store your .env file safely — losing these keys means losing access to your data.",
+    "sessionLabel": "Session Secret",
+    "sessionHint": "Signs browser session cookies.",
+    "dbLabel": "Database Encryption Key",
+    "dbHint": "Encrypts the SQLite database at rest.",
+    "errBoth": "Both keys are required."
+  },
+  "weather": {
+    "tag": "Step 3 of 7",
+    "title": "Weather Widget",
+    "subtitle": "Show live weather on your dashboard. Requires a free OpenWeatherMap API key.",
+    "enable": "Enable weather widget",
+    "keyLabel": "API Key",
+    "keyOpt": "(free tier)",
+    "keyHint": "Get one free at {{link}}",
+    "keyHintLink": "openweathermap.org/api",
+    "cityLabel": "City",
+    "unitsLabel": "Units",
+    "unitsMetric": "Metric (°C)",
+    "unitsImperial": "Imperial (°F)",
+    "errKey": "API key is required when weather is enabled."
+  },
+  "calendar": {
+    "tag": "Step 4 of 7",
+    "title": "Calendar Sync",
+    "subtitle": "Connect Oikos to Google Calendar or Apple iCloud. Both optional — expand to configure.",
+    "google": "Google Calendar",
+    "googleHint": "Create OAuth credentials at {{link}}. Redirect URI: {{redirect}}",
+    "googleLink": "console.cloud.google.com",
+    "googleIdLabel": "Client ID",
+    "googleSecretLabel": "Client Secret",
+    "apple": "Apple iCloud CalDAV",
+    "appleHint": "Create an app-specific password at {{link}}.",
+    "appleLink": "appleid.apple.com",
+    "appleUserLabel": "Apple ID (email)",
+    "applePassLabel": "App-Specific Password"
+  },
+  "review": {
+    "tag": "Step 5 of 7",
+    "title": "Review",
+    "subtitle": "Check your settings before writing .env and starting the container.",
+    "host": "Host",
+    "port": "Port",
+    "tz": "Timezone",
+    "weather": "Weather",
+    "google": "Google Calendar",
+    "apple": "Apple CalDAV",
+    "save": "Save & Start Docker",
+    "saving": "Saving …",
+    "errSave": "Failed to save .env.",
+    "weatherEnabled": "enabled ({{city}})",
+    "configured": "configured"
+  },
+  "docker": {
+    "tag": "Step 6 of 7",
+    "title": "Starting Oikos",
+    "subtitle": "Pulling the image and starting the Docker container.",
+    "starting": "Starting container …",
+    "elapsed": "{{n}}s elapsed",
+    "running": "Container is healthy and running",
+    "failed": "Container failed to start",
+    "unknownError": "Unknown error",
+    "toAdmin": "Continue to Admin Setup",
+    "retry": "Retry"
+  },
+  "admin": {
+    "tag": "Step 7 of 7",
+    "title": "Create Admin Account",
+    "subtitle": "Set up your first login. This account has full access to Oikos.",
+    "userLabel": "Username",
+    "userHint": "3–64 characters: letters, numbers, . - _",
+    "nameLabel": "Display Name",
+    "passLabel": "Password",
+    "passPlaceholder": "At least 8 characters",
+    "confLabel": "Confirm Password",
+    "creating": "Creating …",
+    "create": "Create Account",
+    "errAll": "All fields are required.",
+    "errUser": "Invalid username format (3–64 chars, letters/numbers/._-).",
+    "errPass": "Password must be at least 8 characters.",
+    "errMatch": "Passwords do not match.",
+    "errCreate": "Failed to create admin account."
+  },
+  "done": {
+    "title": "Oikos is ready!",
+    "subtitle": "Your family planner is running and your admin account is set up.",
+    "open": "Open Oikos →"
+  }
+}
