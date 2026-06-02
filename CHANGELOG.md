@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.56.0] - 2026-06-02
+
+### Added
+- Podman support for RHEL-based distributions (RHEL, Fedora, CentOS Stream, Rocky, Alma): a dedicated `podman-compose.yml` adds the SELinux `:Z` volume relabel so rootless containers can access their data, and exposes a configurable `OIKOS_HTTP_BIND` host bind address (default `0.0.0.0`).
+- `tools/quadlet/oikos.container` — a systemd Quadlet unit for rootless Podman autostart, with `EnvironmentFile`, `:Z` volumes, the same healthcheck as Compose, and boot persistence via `loginctl enable-linger`.
+- Both the web installer and the CLI installer now auto-detect the container engine, preferring Docker and falling back to `podman compose` (Podman 4.1+) or `podman-compose`.
+
+### Changed
+- Web and CLI installers route every container command (start, inspect, logs, prerequisite checks) through the detected engine instead of a hard-coded `docker`; with Podman they use `podman-compose.yml` automatically.
+- Documentation (README, installation guide, SPEC, MODULES, installer README, and the GitHub Pages landing/install pages) now covers the Podman/SELinux install path, the new `OIKOS_HTTP_BIND` variable, and rootless systemd autostart.
+
 ## [0.55.19] - 2026-06-02
 
 ### Added
