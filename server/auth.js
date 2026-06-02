@@ -14,8 +14,8 @@ import { generateToken, csrfMiddleware } from './middleware/csrf.js';
 import { collectErrors, date as validateDate, str, MAX_SHORT, MAX_TITLE } from './middleware/validate.js';
 import { createLogger } from './logger.js';
 import { deleteBirthdayArtifacts, syncBirthdayArtifacts } from './services/birthdays.js';
-import { generators } from 'openid-client';
-import { isOidcEnabled, getClient as getOidcClient } from './services/oidc.js';
+import * as oidcClient from 'openid-client';
+import { isOidcEnabled, getConfig as getOidcConfig } from './services/oidc.js';
 
 const log = createLogger('Auth');
 const router = express.Router();
@@ -545,15 +545,15 @@ router.get('/oidc/config', (_req, res) => {
  */
 router.get('/oidc/start', async (req, res) => {
   try {
-    const client = await getOidcClient();
-    if (!client) {
+    const config = await getOidcConfig();
+    if (!config) {
       return res.status(404).json({ error: 'OIDC is not configured.', code: 404 });
     }
 
-    const state         = generators.state();
-    const nonce         = generators.nonce();
-    const codeVerifier  = generators.codeVerifier();
-    const codeChallenge = generators.codeChallenge(codeVerifier);
+    const state         = oidcClient.randomState();
+    const nonce         = oidcClient.randomNonce();
+    const codeVerifier  = oidcClient.randomPKCECodeVerifier();
+    const codeChallenge = await oidcClient.calculatePKCECodeChallenge(codeVerifier);
 
     req.session.oidc = { state, nonce, codeVerifier };
 
@@ -561,13 +561,16 @@ router.get('/oidc/start', async (req, res) => {
       req.session.save(err => (err ? reject(err) : resolve()))
     );
 
-    res.redirect(client.authorizationUrl({
-      scope: 'openid email profile',
+    const authUrl = oidcClient.buildAuthorizationUrl(config, {
+      redirect_uri:          process.env.OIDC_REDIRECT_URI,
+      scope:                 'openid email profile',
       state,
       nonce,
-      code_challenge: codeChallenge,
+      code_challenge:        codeChallenge,
       code_challenge_method: 'S256',
-    }));
+    });
+
+    res.redirect(authUrl.href);
   } catch (err) {
     log.error('OIDC start error:', err);
     res.status(500).json({ error: 'OIDC initialization failed.', code: 500 });
@@ -583,8 +586,8 @@ router.get('/oidc/start', async (req, res) => {
  */
 router.get('/oidc/callback', async (req, res) => {
   try {
-    const client = await getOidcClient();
-    if (!client) return res.redirect('/login?error=oidc_not_configured');
+    const config = await getOidcConfig();
+    if (!config) return res.redirect('/login?error=oidc_not_configured');
 
     // Einmalig konsumieren — verhindert Wiederverwendung von state/nonce/verifier
     const stored = req.session.oidc;
@@ -595,16 +598,21 @@ router.get('/oidc/callback', async (req, res) => {
       return res.redirect('/login?error=oidc_state_mismatch');
     }
 
-    const params   = client.callbackParams(req);
-    const tokenSet = await client.callback(
-      process.env.OIDC_REDIRECT_URI,
-      params,
-      { state: stored.state, nonce: stored.nonce, code_verifier: stored.codeVerifier }
-    );
+    // Aktuelle Callback-URL: Host/Schema aus der registrierten redirect_uri (zuverlässig
+    // hinter Reverse-Proxy), Query (code, state, …) aus der eingehenden Anfrage.
+    const currentUrl = new URL(req.originalUrl, process.env.OIDC_REDIRECT_URI);
 
-    // Identität aus dem validierten ID-Token; userinfo() erzwingt sub-Abgleich
-    const claims   = tokenSet.claims();
-    const userinfo = await client.userinfo(tokenSet);
+    // authorizationCodeGrant validiert state, tauscht den Code gegen Tokens und prüft
+    // Signatur, iss, aud, exp sowie nonce (über expectedNonce) am ID-Token.
+    const tokens = await oidcClient.authorizationCodeGrant(config, currentUrl, {
+      expectedState:    stored.state,
+      expectedNonce:    stored.nonce,
+      pkceCodeVerifier: stored.codeVerifier,
+    });
+
+    // Identität aus dem validierten ID-Token; fetchUserInfo erzwingt sub-Abgleich
+    const claims   = tokens.claims();
+    const userinfo = await oidcClient.fetchUserInfo(config, tokens.access_token, claims.sub);
 
     const user = findOrCreateOidcUser(db.get(), {
       sub:                claims.sub,

@@ -1,12 +1,12 @@
 /**
  * Modul: OIDC-Client
- * Zweck: OpenID-Connect-Client-Singleton, konfiguriert via Umgebungsvariablen.
- *        getClient() führt Discovery durch und cached den Client für die Laufzeit.
+ * Zweck: OpenID-Connect-Konfiguration (openid-client v6), via Umgebungsvariablen.
+ *        getConfig() führt Discovery durch und cached die Configuration für die Laufzeit.
  *        resetClient() wird in Tests verwendet um den Cache zu leeren.
  */
-import { Issuer } from 'openid-client';
+import * as client from 'openid-client';
 
-let _client = null;
+let _config = null;
 
 /**
  * Gibt true zurück wenn alle vier OIDC-Umgebungsvariablen gesetzt sind.
@@ -22,28 +22,29 @@ export function isOidcEnabled() {
 }
 
 /**
- * Gibt den initialisierten OIDC-Client zurück (Discovery bei erstem Aufruf).
+ * Gibt die initialisierte OIDC-Configuration zurück (Discovery bei erstem Aufruf).
  * Gibt null zurück wenn OIDC nicht konfiguriert ist.
- * @returns {Promise<import('openid-client').Client|null>}
+ * @returns {Promise<import('openid-client').Configuration|null>}
  */
-export async function getClient() {
+export async function getConfig() {
   if (!isOidcEnabled()) return null;
-  if (_client) return _client;
+  if (_config) return _config;
 
-  const issuer = await Issuer.discover(process.env.OIDC_ISSUER);
-  _client = new issuer.Client({
-    client_id:      process.env.OIDC_CLIENT_ID,
-    client_secret:  process.env.OIDC_CLIENT_SECRET,
-    redirect_uris:  [process.env.OIDC_REDIRECT_URI],
-    response_types: ['code'],
-  });
+  // client_secret_basic explizit erzwingen — der v6-Default wäre client_secret_post,
+  // was eine stille Verhaltensänderung gegenüber v5 gewesen wäre.
+  _config = await client.discovery(
+    new URL(process.env.OIDC_ISSUER),
+    process.env.OIDC_CLIENT_ID,
+    process.env.OIDC_CLIENT_SECRET,
+    client.ClientSecretBasic(process.env.OIDC_CLIENT_SECRET),
+  );
 
-  return _client;
+  return _config;
 }
 
 /**
- * Leert den Client-Cache. Nur für Tests.
+ * Leert den Configuration-Cache. Nur für Tests.
  */
 export function resetClient() {
-  _client = null;
+  _config = null;
 }

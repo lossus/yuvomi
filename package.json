@@ -54,15 +54,15 @@
     "helmet": "^8.2.0",
     "node-cron": "^4.2.1",
     "node-fetch": "^3.3.2",
-    "openid-client": "^5.7.1"
+    "openid-client": "^6.8.4"
   },
   "optionalDependencies": {
-    "googleapis": "^172.0.0",
+    "googleapis": "^173.0.0",
     "tsdav": "^2.2.2"
   },
   "license": "MIT",
   "devDependencies": {
-    "puppeteer": "^25.0.4",
+    "puppeteer": "^25.1.0",
     "sharp": "^0.34.5"
   }
 }
