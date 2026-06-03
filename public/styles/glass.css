@@ -95,11 +95,7 @@
     -webkit-backdrop-filter: var(--blur-xs) saturate(120%);
   }
 
-  .modal-panel {
-    background: var(--glass-bg-elevated);
-    backdrop-filter: var(--blur-sm);
-    -webkit-backdrop-filter: var(--blur-sm);
-  }
+  /* No backdrop-filter on .modal-panel: it breaks async scrolling on the inner scroll container. Blur lives on .modal-overlay. */
 
   .modal-panel__header {
     background: var(--glass-bg-elevated);
