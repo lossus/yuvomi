@@ -12,6 +12,7 @@ import * as googleCalendar from '../services/google-calendar.js';
 import * as appleCalendar from '../services/apple-calendar.js';
 import * as icsSubscription from '../services/ics-subscription.js';
 import * as caldavSync from '../services/caldav-sync.js';
+import * as caldavReminders from '../services/caldav-reminders-sync.js';
 import { requireAdmin } from '../auth.js';
 import { str, color, datetime, rrule, collectErrors, MAX_TITLE, MAX_TEXT, DATE_RE, DATETIME_RE } from '../middleware/validate.js';
 import { nextOccurrence } from '../services/recurrence.js';
@@ -1042,6 +1043,64 @@ router.get('/caldav/status', (req, res) => {
   } catch (err) {
     log.error('CalDAV status failed:', err);
     res.status(500).json({ error: 'Failed to get CalDAV status.', code: 500 });
+  }
+});
+
+// --------------------------------------------------------
+// CalDAV Reminders (VTODO) Sync Routes — read-only into Tasks & Shopping
+// --------------------------------------------------------
+
+// Reminder-list discovery & selection
+
+router.get('/caldav/accounts/:id/reminder-lists', requireAdmin, async (req, res) => {
+  try {
+    const accountId = parseInt(req.params.id, 10);
+    const refresh = req.query.refresh === 'true';
+
+    const lists = await caldavReminders.getReminderLists(accountId, { refresh });
+    res.json({ data: lists });
+  } catch (err) {
+    log.error('CalDAV reminder lists fetch failed:', err);
+    res.status(500).json({ error: err.message || 'Failed to fetch reminder lists.', code: 500 });
+  }
+});
+
+router.patch('/caldav/accounts/:id/reminder-lists', requireAdmin, (req, res) => {
+  try {
+    const accountId = parseInt(req.params.id, 10);
+    const { listUrl, enabled, targetModule } = req.body;
+
+    if (!listUrl || (enabled === undefined && targetModule === undefined)) {
+      return res.status(400).json({ error: 'Missing listUrl or update fields.', code: 400 });
+    }
+
+    const result = caldavReminders.updateReminderSelection(accountId, listUrl, { enabled, targetModule });
+    res.json({ data: result });
+  } catch (err) {
+    log.error('CalDAV reminder selection update failed:', err);
+    res.status(500).json({ error: err.message || 'Failed to update reminder selection.', code: 500 });
+  }
+});
+
+// Sync & Status
+
+router.post('/caldav/reminders/sync', requireAdmin, async (req, res) => {
+  try {
+    const result = await caldavReminders.sync();
+    res.json({ data: result });
+  } catch (err) {
+    log.error('CalDAV reminders sync failed:', err);
+    res.status(500).json({ error: 'CalDAV reminders sync failed.', code: 500 });
+  }
+});
+
+router.get('/caldav/reminders/status', (req, res) => {
+  try {
+    const status = caldavReminders.getStatus();
+    res.json({ data: status });
+  } catch (err) {
+    log.error('CalDAV reminders status failed:', err);
+    res.status(500).json({ error: 'Failed to get reminders status.', code: 500 });
   }
 });
 

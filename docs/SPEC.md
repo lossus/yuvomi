@@ -186,6 +186,30 @@ Per-account calendar enable/disable state for CalDAV accounts.
 
 Index: CREATE INDEX idx_caldav_selection_enabled ON caldav_calendar_selection(account_id, enabled)
 
+### CalDAV Reminder Selection
+Per-account reminder-list selection for CalDAV accounts. Apple Reminders lists are CalDAV
+collections whose supported components include `VTODO`. Reuses the same CalDAV Accounts; each
+enabled list is mirrored **read-only** (iCloud → Oikos) into the Tasks or Shopping module.
+
+| Column | Type | Constraint |
+|--------|------|-----------|
+| id | INTEGER | PRIMARY KEY AUTOINCREMENT |
+| account_id | INTEGER | FK → CalDAV Accounts (CASCADE delete), NOT NULL |
+| list_url | TEXT | CalDAV VTODO collection URL from provider, NOT NULL |
+| list_name | TEXT | Display name from provider, NOT NULL |
+| target_module | TEXT | 'tasks' or 'shopping' (default 'tasks') |
+| target_list_id | INTEGER | FK → Shopping Lists (SET NULL on delete), nullable; auto-created when mapped to Shopping |
+| enabled | INTEGER | 0/1 (default 0 — reminders are opt-in), controls sync for this list |
+| created_at | TEXT | ISO 8601 |
+| UNIQUE | | (account_id, list_url) |
+
+Index: CREATE INDEX idx_caldav_reminder_selection_enabled ON caldav_reminder_selection(account_id, enabled)
+
+The `tasks` and `shopping_items` tables carry `external_uid`, `external_source` (default `'local'`,
+set to `'caldav'` for imported reminders), and `external_account_id` columns for this linkage.
+Imported rows are keyed on `(external_source, external_account_id, external_uid)`; items that
+disappear from the remote list are pruned on the next sync.
+
 ### Notes
 | Column | Type | Constraint |
 |--------|------|-----------|

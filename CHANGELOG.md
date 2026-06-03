@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.60.0] - 2026-06-03
+
+### Added
+- Sync Apple Reminders into Tasks and Shopping via CalDAV (#218). Apple Reminders lists are CalDAV collections whose supported components include `VTODO`. Reusing the existing CalDAV accounts, an admin can now discover an account's reminder lists in Settings → Synchronization, enable individual lists, and map each one to either the Tasks or the Shopping module. Enabled lists are mirrored **read-only** (iCloud → Oikos) on each sync: reminders become tasks or shopping items keyed on their remote UID, completed reminders are reflected as done/checked, due dates and priorities are imported, and items removed from a list are pruned locally. Migration 45 adds the `caldav_reminder_selection` table and `external_uid`/`external_source`/`external_account_id` columns to `tasks` and `shopping_items`.
+
 ## [0.59.0] - 2026-06-03
 
 ### Added

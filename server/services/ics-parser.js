@@ -68,6 +68,45 @@ function parseICS(ics) {
   return events;
 }
 
+function parseVTODO(ics) {
+  const unfolded = unfoldLines(ics);
+  const todos    = [];
+  const vTodoRe  = /BEGIN:VTODO([\s\S]*?)END:VTODO/g;
+  let match;
+  while ((match = vTodoRe.exec(unfolded)) !== null) {
+    const block = match[1];
+    const get   = (prop) => {
+      const re = new RegExp(`^${prop}(?:;[^:]*)?:(.*)$`, 'im');
+      const m  = re.exec(block);
+      return m ? m[1].trim() : null;
+    };
+    const uid = get('UID');
+    if (!uid) continue;
+    const summary     = unescapeICSText(get('SUMMARY') || '(kein Titel)');
+    const description = unescapeICSText(get('DESCRIPTION')) || null;
+    const statusRaw   = (get('STATUS') || '').toUpperCase();
+    const completedAt = get('COMPLETED');
+    const completed   = statusRaw === 'COMPLETED' || completedAt !== null;
+    const status      = statusRaw ? statusRaw.toLowerCase() : (completed ? 'completed' : 'needs-action');
+    // DUE date / datetime (reuse VEVENT date-line parsing semantics)
+    const dueRe   = /^DUE((?:;[^:]*)*):(.*)$/im;
+    const dueM    = block.match(dueRe);
+    let   due     = null;
+    if (dueM) {
+      const params  = dueM[1];
+      const value   = dueM[2].trim();
+      const tzMatch = params.match(/;TZID=([^;:]+)/i);
+      const dateOnly = /;VALUE=DATE\b/i.test(params) || /^\d{8}$/.test(value);
+      due = formatICSDate(value, dateOnly, tzMatch ? tzMatch[1].trim() : null);
+    }
+    const prioRaw = get('PRIORITY');
+    let priority  = prioRaw !== null ? parseInt(prioRaw, 10) : null;
+    if (priority === 0 || Number.isNaN(priority)) priority = null;
+    todos.push({ uid, summary, description, completed, status, due, priority });
+  }
+  return todos;
+}
+
 function tzLocalToUTC(localStr, tzid) {
   try {
     const fakeUTC = new Date(localStr + 'Z');
@@ -160,4 +199,4 @@ function expandRRULE(vevent, windowStart, windowEnd) {
   return results;
 }
 
-export { unfoldLines, unescapeICSText, parseICS, formatICSDate, tzLocalToUTC, applyDuration, expandRRULE };
+export { unfoldLines, unescapeICSText, parseICS, parseVTODO, formatICSDate, tzLocalToUTC, applyDuration, expandRRULE };

@@ -938,6 +938,12 @@ async function loadCalDAVAccounts(container, user) {
       const calendarsRes = await api.get(`/calendar/caldav/accounts/${account.id}/calendars`);
       const calendars = calendarsRes.data || [];
 
+      let reminderLists = [];
+      try {
+        const remindersRes = await api.get(`/calendar/caldav/accounts/${account.id}/reminder-lists`);
+        reminderLists = remindersRes.data || [];
+      } catch { /* reminder lists optional — ignore fetch errors */ }
+
       const accountCard = document.createElement('div');
       accountCard.className = 'caldav-account-item';
       accountCard.insertAdjacentHTML('beforeend', `
@@ -965,9 +971,38 @@ async function loadCalDAVAccounts(container, user) {
             `).join('')}
           </div>
         </details>
+        <details class="caldav-calendars-details">
+          <summary class="caldav-calendars-summary">
+            ${t('settings.caldavRemindersToggle')} (${reminderLists.length})
+          </summary>
+          <p class="settings-card-description">${t('settings.caldavRemindersHint')}</p>
+          <div class="caldav-calendars-list">
+            ${reminderLists.length === 0
+              ? `<p class="settings-card-description">${t('settings.caldavRemindersEmpty')}</p>`
+              : reminderLists.map((list) => `
+              <div class="caldav-reminder-item">
+                <label class="caldav-calendar-item">
+                  <input type="checkbox" class="caldav-reminder-checkbox"
+                         data-account-id="${account.id}"
+                         data-list-url="${esc(list.listUrl)}"
+                         ${list.enabled ? 'checked' : ''}>
+                  <span class="caldav-calendar-name">${esc(list.listName)}</span>
+                </label>
+                <select class="caldav-reminder-module"
+                        data-account-id="${account.id}"
+                        data-list-url="${esc(list.listUrl)}">
+                  <option value="tasks" ${list.targetModule === 'tasks' ? 'selected' : ''}>${t('settings.caldavReminderMapTasks')}</option>
+                  <option value="shopping" ${list.targetModule === 'shopping' ? 'selected' : ''}>${t('settings.caldavReminderMapShopping')}</option>
+                </select>
+              </div>
+            `).join('')}
+          </div>
+        </details>
         <div class="caldav-account-actions">
           <button class="btn btn--secondary btn--sm" data-caldav-sync="${account.id}">${t('settings.syncNow')}</button>
           <button class="btn btn--secondary btn--sm" data-caldav-refresh="${account.id}">${t('settings.caldavRefreshCalendars')}</button>
+          <button class="btn btn--secondary btn--sm" data-reminders-refresh="${account.id}">${t('settings.caldavRefreshReminders')}</button>
+          <button class="btn btn--secondary btn--sm" data-reminders-sync="${account.id}">${t('settings.caldavSyncReminders')}</button>
           ${user?.role === 'admin' ? `<button class="btn btn--danger-outline btn--sm" data-caldav-delete="${account.id}">${t('common.delete')}</button>` : ''}
         </div>
       `);
@@ -995,6 +1030,86 @@ async function loadCalDAVAccounts(container, user) {
         } catch (err) {
           window.oikos?.showToast(err.message, 'danger');
           checkbox.checked = !enabled; // Revert on error
+        }
+      });
+    });
+
+    // Bind reminder-list enable/disable toggles
+    listEl.querySelectorAll('.caldav-reminder-checkbox').forEach((checkbox) => {
+      checkbox.addEventListener('change', async () => {
+        const accountId = parseInt(checkbox.dataset.accountId, 10);
+        const listUrl = checkbox.dataset.listUrl;
+        const enabled = checkbox.checked;
+        const select = checkbox.closest('.caldav-reminder-item')?.querySelector('.caldav-reminder-module');
+        try {
+          await api.patch(`/calendar/caldav/accounts/${accountId}/reminder-lists`, {
+            listUrl,
+            enabled,
+            targetModule: select ? select.value : undefined,
+          });
+          window.oikos?.showToast(
+            enabled ? t('settings.reminderListEnabled') : t('settings.reminderListDisabled'),
+            'success'
+          );
+        } catch (err) {
+          window.oikos?.showToast(err.message, 'danger');
+          checkbox.checked = !enabled;
+        }
+      });
+    });
+
+    // Bind reminder-list target-module selectors
+    listEl.querySelectorAll('.caldav-reminder-module').forEach((select) => {
+      select.addEventListener('change', async () => {
+        const accountId = parseInt(select.dataset.accountId, 10);
+        const listUrl = select.dataset.listUrl;
+        try {
+          await api.patch(`/calendar/caldav/accounts/${accountId}/reminder-lists`, {
+            listUrl,
+            targetModule: select.value,
+          });
+          window.oikos?.showToast(t('settings.reminderMapUpdated'), 'success');
+        } catch (err) {
+          window.oikos?.showToast(err.message, 'danger');
+        }
+      });
+    });
+
+    // Bind reminder-list refresh (discover VTODO collections)
+    listEl.querySelectorAll('[data-reminders-refresh]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const accountId = parseInt(btn.dataset.remindersRefresh, 10);
+        btn.disabled = true;
+        const originalText = btn.textContent;
+        btn.textContent = t('settings.loading');
+        try {
+          await api.get(`/calendar/caldav/accounts/${accountId}/reminder-lists?refresh=true`);
+          await loadCalDAVAccounts(container, user);
+          window.oikos?.showToast(t('settings.reminderListsRefreshed'), 'success');
+        } catch (err) {
+          window.oikos?.showToast(err.message, 'danger');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = originalText;
+        }
+      });
+    });
+
+    // Bind reminder sync buttons (read-only: iCloud → Tasks/Shopping)
+    listEl.querySelectorAll('[data-reminders-sync]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        btn.disabled = true;
+        const originalText = btn.textContent;
+        btn.textContent = t('settings.synchronizing');
+        try {
+          await api.post('/calendar/caldav/reminders/sync');
+          window.oikos?.showToast(t('settings.reminderSyncSuccess'), 'success');
+          await loadCalDAVAccounts(container, user);
+        } catch (err) {
+          window.oikos?.showToast(err.message || t('settings.reminderSyncFailed'), 'danger');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = originalText;
         }
       });
     });

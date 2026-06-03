@@ -18,6 +18,7 @@ import { buildOpenApiSpec } from './openapi.js';
 import * as googleCalendar from './services/google-calendar.js';
 import * as appleCalendar from './services/apple-calendar.js';
 import * as icsSubscription from './services/ics-subscription.js';
+import * as caldavReminders from './services/caldav-reminders-sync.js';
 import { startScheduler as startBackupScheduler } from './services/backup-scheduler.js';
 import { startScheduler as startSplitExpenseScheduler } from './services/split-expenses-scheduler.js';
 import dashboardRouter from './routes/dashboard.js';
@@ -337,6 +338,10 @@ async function runSync() {
 
   // ICS: kein Guard nötig — sync() fragt die DB ab und kehrt sofort zurück wenn keine Abonnements existieren
   icsSubscription.sync().catch((e) => logSync.error('ICS error:', e.message));
+
+  // CalDAV Reminders (VTODO → Tasks/Shopping): kein Guard nötig — sync() kehrt sofort
+  // zurück, wenn keine aktivierten Reminder-Listen konfiguriert sind.
+  caldavReminders.sync().catch((e) => logSync.error('CalDAV reminders error:', e.message));
 }
 
 // --------------------------------------------------------
