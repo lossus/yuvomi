@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.57.7] - 2026-06-03
+
 ### Fixed
 - Make the weather widget follow the app language, support city IDs, and key its cache per city/units/language.
 - Fix janky, laggy scrolling in tall modals (e.g. the event editor) caused by a backdrop-filter on the scroll container.

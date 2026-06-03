@@ -1,6 +1,6 @@
 ---
 name: docs-sync
-description: Sync all user-facing documentation (README, SPEC, installation guide, GitHub Pages landing/install pages, installer README, .env.example, directory listings) with the latest features and CHANGELOG. Use after completing any task that adds, changes, or removes a user-facing feature, env var, module, or installation step — and before running release-prep.
+description: Sync all user-facing documentation (README, SPEC, installation guide, GitHub Pages landing/install pages, installer README, .env.example, directory listings) plus the CLAUDE.md command/env sections with the latest features and CHANGELOG. Use after completing any task that adds, changes, or removes a user-facing feature, env var, module, or installation step — and before running release-prep.
 user-invocable: true
 argument-hint: "[version or changelog range, e.g. v0.55.19 or v0.55.18-v0.55.19]"
 allowed-tools:
@@ -58,6 +58,7 @@ sync targets below and update **only** what the change actually affects.
 | `docs/awesome-selfhosted/issue-addition.md` | Directory-submission blurb matches `oikos.yml` |
 | `CONTRIBUTING.md` | Only when commit format, conventions, or test workflow changed |
 | `SECURITY.md` | Only when the security model or supported-version policy changed |
+| `CLAUDE.md` | **Only two sections:** the `## Commands` test-script list (keep in lockstep with the `test:*` scripts in `package.json`) and the `## Environment` env-var list (keep in lockstep with `.env.example`). Never touch any other part — architecture, hard constraints, key locations, conventions belong to the separate CLAUDE.md maintenance process |
 
 ## Conventions & guardrails
 
@@ -70,5 +71,8 @@ sync targets below and update **only** what the change actually affects.
 - **Never touch historical/working docs:** `docs/archive/**`, `docs/design/**`,
   `docs/UI-UX-AUDIT-2026-05.md`, `docs/installer-*.md`, `BACKLOG.md`, `SECURITY_RESEARCH.md`.
 - `CHANGELOG.md` is read-only here — it is the source of truth, maintained by `release-prep`.
-- Do not edit `CLAUDE.md` (it has its own maintenance process) and do not commit/push — that is
-  `release-prep`'s job. This skill only edits documentation files in the working tree.
+- **`CLAUDE.md` is scoped:** edit **only** the `## Commands` test-script list and the
+  `## Environment` env-var list (see sync targets). Everything else in `CLAUDE.md` — architecture,
+  hard constraints, key locations, conventions — belongs to its own maintenance process and is
+  off-limits here.
+- Do not commit/push — that is `release-prep`'s job. This skill only edits files in the working tree.
