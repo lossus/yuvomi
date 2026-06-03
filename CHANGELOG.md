@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.60.2] - 2026-06-03
+
+### Fixed
+- Show multi-day events as a single continuous span instead of repeating them on each day (#225). A multi-day timed event (e.g. the 14th 03:00 → the 19th 08:05) was placed on every day of its range and each view used the raw start/end clock times, so it appeared as an identical `03:00–08:05` block on every day rather than one event spanning the whole window. Multi-day events are now rendered in the all-day row of the week and day views (reading as a continuous bar across the days), and the agenda view shows per-day segment labels (`from {time}` on the start day, `all day` on the middle days, `until {time}` on the end day).
+
 ## [0.60.1] - 2026-06-03
 
 ### Fixed
