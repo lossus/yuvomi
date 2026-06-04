@@ -378,6 +378,26 @@ router.delete('/google/disconnect', requireAdmin, (req, res) => {
   }
 });
 
+/**
+ * PUT /api/v1/calendar/google/readonly
+ * Admin only. Aktiviert/deaktiviert den Nur-lesen-Modus.
+ * Body: { readonly: boolean }
+ * Response: { data: { readonly: boolean } }
+ */
+router.put('/google/readonly', requireAdmin, (req, res) => {
+  const { readonly } = req.body;
+  if (typeof readonly !== 'boolean') {
+    return res.status(400).json({ error: 'readonly muss ein Boolean sein.', code: 400 });
+  }
+  try {
+    googleCalendar.setReadonly(readonly);
+    res.json({ data: { readonly } });
+  } catch (err) {
+    log.error('', err);
+    res.status(500).json({ error: err.message, code: 500 });
+  }
+});
+
 // --------------------------------------------------------
 // Apple Calendar Sync-Routen
 // --------------------------------------------------------
