@@ -587,6 +587,13 @@ export async function render(container, { user }) {
                   </select>
                   <p class="form-hint">${t('settings.googleCalendarSelectHint')}</p>
                 </div>
+                <div class="form-group">
+                  <label class="toggle-row">
+                    <input type="checkbox" id="google-readonly-cb" ${googleStatus.readonly ? 'checked' : ''}>
+                    <span>${t('settings.googleReadonly')}</span>
+                  </label>
+                  <p class="form-hint">${t('settings.googleReadonlyHint')}</p>
+                </div>
               ` : ''}
               <div class="settings-sync-actions">
                 ${googleStatus.connected ? `
@@ -1907,6 +1914,21 @@ function bindEvents(container, user, users, categories, icsSubscriptions, apiTok
         if (currentCalId) googleCalSelect.value = currentCalId;
       } finally {
         googleCalSelect.disabled = false;
+      }
+    });
+  }
+
+  const googleReadonlyCb = container.querySelector('#google-readonly-cb');
+  if (googleReadonlyCb) {
+    googleReadonlyCb.addEventListener('change', async () => {
+      const enabled = googleReadonlyCb.checked;
+      googleReadonlyCb.disabled = true;
+      try {
+        await api.put('/calendar/google/readonly', { readonly: enabled });
+      } catch {
+        googleReadonlyCb.checked = !enabled;
+      } finally {
+        googleReadonlyCb.disabled = false;
       }
     });
   }
