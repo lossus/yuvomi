@@ -300,6 +300,8 @@ async function sync() {
   const calendar = google.calendar({ version: 'v3', auth: client });
 
   const calendarIds = enabledCalendarIds();
+  // accessRole je Kalender, memoisiert über Inbound + Outbound hinweg.
+  const roleCache = new Map();
 
   // --------------------------------------------------------
   // Inbound: jeder aktivierte Kalender mit eigenem syncToken
@@ -310,6 +312,7 @@ async function sync() {
     try {
       const meta = await calendar.calendarList.get({ calendarId });
       calColor   = meta.data.backgroundColor || GOOGLE_COLOR;
+      roleCache.set(calendarId, meta.data.accessRole);
       const calName = meta.data.summaryOverride || meta.data.summary || 'Google Calendar';
       calRefId   = upsertExternalCalendar('google', calendarId, calName, calColor);
     } catch (err) {
@@ -366,6 +369,21 @@ async function sync() {
       const targetId = event.target_google_calendar_id;
       if (!activeIds.has(targetId)) {
         log.warn(`Target calendar ${targetId} not active, skipping event ${event.id}.`);
+        continue;
+      }
+      let role = roleCache.get(targetId);
+      if (role === undefined) {
+        try {
+          const meta = await calendar.calendarList.get({ calendarId: targetId });
+          role = meta.data.accessRole;
+        } catch (err) {
+          log.warn(`Access role for ${targetId} not retrievable: ${err.message}`);
+          role = null;
+        }
+        roleCache.set(targetId, role);
+      }
+      if (!isWritableRole(role)) {
+        log.warn(`Target calendar ${targetId} is read-only, skipping event ${event.id}.`);
         continue;
       }
       try {
