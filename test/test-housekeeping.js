@@ -90,3 +90,31 @@ test('GET /visits/:id: unknown id returns null row', () => {
   const row = db.prepare('SELECT * FROM housekeeping_work_sessions WHERE id = 99999').get();
   assert.equal(row, undefined);
 });
+
+test('staff separation: hidden from task assignees but birthday stays visible', () => {
+  // Staff-User + Worker + birthdays-Zeile anlegen
+  const staff = db.prepare(`
+    INSERT INTO users (username, display_name, password_hash, role, family_role)
+    VALUES ('hk1','HK One','x','member','other')
+  `).run().lastInsertRowid;
+  db.prepare(`INSERT INTO housekeeping_workers (user_id, daily_rate) VALUES (?, 0)`).run(staff);
+  db.prepare(`INSERT INTO birthdays (name, birth_date, created_by, family_user_id) VALUES ('HK One','1990-04-01',1,?)`).run(staff);
+
+  // Normalen Familien-User anlegen
+  const fam = db.prepare(`
+    INSERT INTO users (username, display_name, password_hash, role, family_role)
+    VALUES ('mom','Mom','x','member','mom')
+  `).run().lastInsertRowid;
+
+  // Task-Zuweisungsliste (NOT EXISTS Filter)
+  const assignees = db.prepare(`
+    SELECT id FROM users u
+    WHERE NOT EXISTS (SELECT 1 FROM housekeeping_workers hw WHERE hw.user_id = u.id)
+  `).all().map((r) => r.id);
+  assert.ok(!assignees.includes(Number(staff)), 'staff should not be in assignees');
+  assert.ok(assignees.includes(Number(fam)), 'family member should be in assignees');
+
+  // Geburtstag bleibt (birthdays-Query unverändert)
+  const bd = db.prepare('SELECT 1 FROM birthdays WHERE family_user_id = ?').get(staff);
+  assert.ok(bd, 'staff birthday should remain visible');
+});

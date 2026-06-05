@@ -152,7 +152,9 @@ router.get('/', (req, res) => {
   // Alle User (für Avatar-Farben in Widgets)
   try {
     result.users = d.prepare(
-      'SELECT id, display_name, avatar_color, avatar_data FROM users ORDER BY display_name'
+      `SELECT id, display_name, avatar_color, avatar_data FROM users u
+       WHERE NOT EXISTS (SELECT 1 FROM housekeeping_workers hw WHERE hw.user_id = u.id)
+       ORDER BY display_name`
     ).all();
   } catch (err) {
     result.users = [];

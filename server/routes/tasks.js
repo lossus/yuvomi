@@ -390,7 +390,9 @@ router.delete('/:id', (req, res) => {
 router.get('/meta/options', (req, res) => {
   try {
     const users = db.get().prepare(
-      'SELECT id, display_name, avatar_color FROM users ORDER BY display_name'
+      `SELECT id, display_name, avatar_color FROM users u
+       WHERE NOT EXISTS (SELECT 1 FROM housekeeping_workers hw WHERE hw.user_id = u.id)
+       ORDER BY display_name`
     ).all();
     res.json({ users, priorities: VALID_PRIORITIES, statuses: VALID_STATUSES, categories: VALID_CATEGORIES });
   } catch (err) {

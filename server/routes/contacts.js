@@ -160,7 +160,7 @@ router.get('/', (req, res) => {
   try {
     let sql    = 'SELECT * FROM contacts';
     const params = [];
-    const where  = [];
+    const where  = ['NOT EXISTS (SELECT 1 FROM housekeeping_workers hw WHERE hw.user_id = contacts.family_user_id)'];
 
     if (req.query.category && VALID_CATEGORIES.includes(req.query.category)) {
       where.push('category = ?');
