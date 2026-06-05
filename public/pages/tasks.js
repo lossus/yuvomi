@@ -582,12 +582,22 @@ function openTaskModal({ task = null, users = [], reminder = null } = {}, contai
         customFields.style.display = offset.value === 'offset_custom' ? '' : 'none';
       });
       panel.querySelectorAll('.js-date-input').forEach((input) => {
+        input.addEventListener('keydown', (e) => {
+          if (e.ctrlKey || e.metaKey || e.altKey) return;
+          if (e.key.length !== 1) return;
+          if (!/[\d./\-]/.test(e.key)) e.preventDefault();
+        });
         input.addEventListener('blur', () => {
           const parsed = parseDateInput(input.value);
           if (parsed) input.value = formatDateInput(parsed);
         });
       });
       panel.querySelectorAll('.js-time-input').forEach((input) => {
+        input.addEventListener('keydown', (e) => {
+          if (e.ctrlKey || e.metaKey || e.altKey) return;
+          if (e.key.length !== 1) return;
+          if (!/[\d: apmAPM]/.test(e.key)) e.preventDefault();
+        });
         input.addEventListener('blur', () => {
           const parsed = parseTimeInput(input.value);
           if (parsed) input.value = formatTimeInput(parsed);
