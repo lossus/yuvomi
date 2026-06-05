@@ -282,96 +282,92 @@ function disconnect() {
  * Outbound: lokale Termine (external_source='local', external_calendar_id IS NULL) → Google
  */
 async function sync() {
-  const client  = loadAuthorizedClient();
+  const client   = loadAuthorizedClient();
   const calendar = google.calendar({ version: 'v3', auth: client });
-  const calendarId = getCalendarId();
 
-  // Kalender-Metadaten holen und in external_calendars upserten
-  let calRefId = null;
-  let calColor = GOOGLE_COLOR;
-  try {
-    const meta = await calendar.calendarList.get({ calendarId });
-    calColor  = meta.data.backgroundColor || GOOGLE_COLOR;
-    const calName = meta.data.summaryOverride || meta.data.summary || 'Google Calendar';
-    calRefId  = upsertExternalCalendar('google', calendarId, calName, calColor);
-  } catch (err) {
-    log.warn('Calendar metadata is not accessible:', err.message);
+  const calendarIds = enabledCalendarIds();
+
+  // --------------------------------------------------------
+  // Inbound: jeder aktivierte Kalender mit eigenem syncToken
+  // --------------------------------------------------------
+  for (const calendarId of calendarIds) {
+    let calRefId = null;
+    let calColor = GOOGLE_COLOR;
+    try {
+      const meta = await calendar.calendarList.get({ calendarId });
+      calColor   = meta.data.backgroundColor || GOOGLE_COLOR;
+      const calName = meta.data.summaryOverride || meta.data.summary || 'Google Calendar';
+      calRefId   = upsertExternalCalendar('google', calendarId, calName, calColor);
+    } catch (err) {
+      log.warn(`Calendar metadata is not accessible (${calendarId}):`, err.message);
+    }
+
+    let syncToken    = getSyncToken(calendarId);
+    let pageToken    = undefined;
+    let newSyncToken = null;
+
+    do {
+      const listParams = { calendarId, singleEvents: true, pageToken };
+      if (syncToken) {
+        listParams.syncToken = syncToken;
+      } else {
+        listParams.timeMin = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString();
+        listParams.timeMax = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString();
+      }
+
+      let response;
+      try {
+        response = await calendar.events.list(listParams);
+      } catch (err) {
+        if (err.code === 410) {
+          log.warn(`syncToken invalid (${calendarId}) - full resync.`);
+          recordSyncToken(calendarId, null);
+          syncToken = null;
+          continue;
+        }
+        throw err;
+      }
+
+      upsertGoogleEvents(response.data.items || [], calRefId, calColor);
+      pageToken    = response.data.nextPageToken;
+      newSyncToken = response.data.nextSyncToken || newSyncToken;
+    } while (pageToken);
+
+    if (newSyncToken) recordSyncToken(calendarId, newSyncToken);
   }
 
   // --------------------------------------------------------
-  // Inbound: Google → lokal
-  // --------------------------------------------------------
-  let syncToken = cfgGet('google_sync_token');
-  let pageToken = undefined;
-  let newSyncToken = null;
-
-  do {
-    let listParams = {
-      calendarId,
-      singleEvents:  true,
-      pageToken,
-    };
-
-    if (syncToken) {
-      listParams.syncToken = syncToken;
-    } else {
-      // Erstsync: letzte 3 Monate + nächste 12 Monate
-      const timeMin = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString();
-      const timeMax = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString();
-      listParams.timeMin = timeMin;
-      listParams.timeMax = timeMax;
-    }
-
-    let response;
-    try {
-      response = await calendar.events.list(listParams);
-    } catch (err) {
-      if (err.code === 410) {
-        // syncToken abgelaufen → vollständiger Resync
-        log.warn('syncToken invalid - full resync.');
-        cfgDel('google_sync_token');
-        syncToken = null;
-        continue;
-      }
-      throw err;
-    }
-
-    const items = response.data.items || [];
-    upsertGoogleEvents(items, calRefId, calColor);
-
-    pageToken    = response.data.nextPageToken;
-    newSyncToken = response.data.nextSyncToken || newSyncToken;
-  } while (pageToken);
-
-  if (newSyncToken) cfgSet('google_sync_token', newSyncToken);
-
-  // --------------------------------------------------------
-  // Outbound: lokal → Google
+  // Outbound: nur lokale Events mit explizitem Google-Ziel
   // --------------------------------------------------------
   if (isReadonly()) {
     log.info('Read-only mode – outbound sync skipped.');
   } else {
     const localEvents = db.get().prepare(`
       SELECT * FROM calendar_events
-      WHERE external_source = 'local' AND external_calendar_id IS NULL
+      WHERE external_source = 'local' AND target_google_calendar_id IS NOT NULL
     `).all();
 
+    const activeIds = new Set(calendarIds);
     for (const event of localEvents) {
+      const targetId = event.target_google_calendar_id;
+      if (!activeIds.has(targetId)) {
+        log.warn(`Target calendar ${targetId} not active, skipping event ${event.id}.`);
+        continue;
+      }
       try {
-        const gEvent = localEventToGoogle(event);
-        const created = await calendar.events.insert({
-          calendarId,
-          requestBody: gEvent,
-        });
+        const gEvent  = localEventToGoogle(event);
+        const created = await calendar.events.insert({ calendarId: targetId, requestBody: gEvent });
+        const calRefId = upsertExternalCalendar('google', targetId, targetId, GOOGLE_COLOR);
         db.get().prepare(`
-          UPDATE calendar_events SET external_calendar_id = ?, external_source = 'google' WHERE id = ?
-        `).run(created.data.id, event.id);
+          UPDATE calendar_events
+          SET external_calendar_id = ?, external_source = 'google', calendar_ref_id = ?
+          WHERE id = ?
+        `).run(created.data.id, calRefId, event.id);
       } catch (err) {
         log.error(`Outbound error for event ${event.id}:`, err.message);
       }
     }
-
-    log.info(`Sync completed - ${localEvents.length} local → Google, inbound via syncToken.`);
+    log.info(`Sync completed - ${localEvents.length} candidate local → Google.`);
   }
 
   cfgSet('google_last_sync', new Date().toISOString());
