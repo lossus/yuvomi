@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.63.2] - 2026-06-05
+
+### Fixed
+- The calendar event popup was semi-transparent (`rgba(255,255,255,0.70)`) due to the `--glass-bg-card` token, making text hard to read over colourful calendar content. Changed to `--color-surface` (fully opaque) (#252).
+
 ## [0.63.1] - 2026-06-05
 
 ### Fixed
