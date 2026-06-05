@@ -1602,9 +1602,10 @@ async function loadSyncTargets(selectElement, currentEvent = null) {
   // Google calendars (enabled only)
   try {
     const res = await api.get('/calendar/google/calendars');
-    const enabled = (res.data || []).filter((c) => c.enabled);
+    const enabled = (res.data || []).filter((c) => c.enabled && c.writable);
     if (enabled.length) {
       const group = document.createElement('optgroup');
+      group.className = 'js-google-targets';
       group.label = t('calendar.syncTargetGoogleGroup');
       for (const cal of enabled) {
         const option = document.createElement('option');
@@ -1645,7 +1646,24 @@ async function loadSyncTargets(selectElement, currentEvent = null) {
 
   // Pre-select the editing event's existing target
   if (currentEvent?.target_google_calendar_id) {
-    selectElement.value = `google:${currentEvent.target_google_calendar_id}`;
+    const value = `google:${currentEvent.target_google_calendar_id}`;
+    // Zeigt das Event auf ein (jetzt) nur-lesbares Ziel, das nicht mehr in der
+    // gefilterten Liste steht: Option nachtragen, damit Speichern das Ziel nicht
+    // still auf "Lokal" zurücksetzt. Der Server-Guard fängt den Outbound-Fall ab.
+    if (!selectElement.querySelector(`option[value="${value}"]`)) {
+      let group = selectElement.querySelector('optgroup.js-google-targets');
+      if (!group) {
+        group = document.createElement('optgroup');
+        group.className = 'js-google-targets';
+        group.label = t('calendar.syncTargetGoogleGroup');
+        selectElement.appendChild(group);
+      }
+      const option = document.createElement('option');
+      option.value = value;
+      option.textContent = currentEvent.target_google_calendar_id;
+      group.appendChild(option);
+    }
+    selectElement.value = value;
   } else if (currentEvent?.target_caldav_account_id && currentEvent?.target_caldav_calendar_url) {
     selectElement.value = `caldav:${currentEvent.target_caldav_account_id}|${currentEvent.target_caldav_calendar_url}`;
   }
