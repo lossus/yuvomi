@@ -83,6 +83,7 @@ function setReadonly(enabled) {
   }
 }
 
+/** Nur owner/writer dürfen via events.insert beschrieben werden. */
 function isWritableRole(role) {
   return role === 'owner' || role === 'writer';
 }
@@ -161,7 +162,7 @@ function getSyncToken(calendarId) {
 
 /**
  * Listet die für den verbundenen Account verfügbaren Google-Kalender.
- * @returns {Promise<Array<{id,summary,primary,backgroundColor,selected}>>}
+ * @returns {Promise<Array<{id,summary,primary,backgroundColor,enabled,accessRole,writable}>>}
  */
 async function listCalendars() {
   const client   = loadAuthorizedClient();
@@ -179,7 +180,7 @@ async function listCalendars() {
         primary:         !!cal.primary,
         backgroundColor: cal.backgroundColor || GOOGLE_COLOR,
         enabled:         enabledSet.has(cal.id),
-        accessRole:      cal.accessRole,
+        accessRole:      cal.accessRole ?? null,
         writable:        isWritableRole(cal.accessRole),
       });
     }
