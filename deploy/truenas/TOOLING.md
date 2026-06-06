@@ -24,19 +24,18 @@ und schreibt `catalog-version.json` fort.
 
 `.github/workflows/truenas-publish.yml` läuft bei jedem `release: published`
 (Default `patch`) und kann manuell via `workflow_dispatch` mit `minor`/`major`
-ausgelöst werden. Ablauf pro Lauf: den Branch `community/oikos` **frisch aus
-`upstream/master` (truenas/apps) bauen** (der Branch wird nach jedem Merge
-gelöscht, daher kein Verlass darauf), die Versionsdateien hineingenerieren,
-`community/oikos` force-pushen und `catalog-version.json` zurück nach `main`
-committen. Den PR gegen `truenas/apps:master` öffnet anschließend automatisch
-der offizielle TrueNAS-Bot auf Basis des gepushten Branches — keine manuelle
-oder CI-seitige PR-Erstellung nötig.
+ausgelöst werden. Ablauf pro Lauf: die Versionsdateien generieren (Validierung,
+Ausgabe nach `/tmp` und damit verworfen) und dabei `catalog-version.json`
+fortschreiben, anschließend **nur** `catalog-version.json` zurück nach `main`
+committen.
+
+**Kein Fork-Push, kein PR.** Der Workflow pusht nichts nach `truenas/apps` und
+öffnet keinen Pull Request. Der offizielle TrueNAS-Bot zieht App-Updates direkt
+und eigenständig — eine CI-seitige PR-Erstellung oder ein force-pushter
+`community/oikos`-Branch ist nicht (mehr) nötig.
 
 ## Voraussetzungen für die Automatik
 
-- Secret `TRUENAS_FORK_TOKEN` im Oikos-Repo (Settings → Secrets → Actions):
-  ein PAT des Fork-Owners mit `repo`-Scope (nur Schreibzugriff auf den Fork
-  `ulsklyc/apps` nötig — keine PR-Rechte auf `truenas/apps` erforderlich).
 - `main` darf keine Branch-Protection-Regel haben, die den `github-actions[bot]`
   am direkten Push hindert — sonst schlägt der Rück-Commit der
   `catalog-version.json` fehl.
@@ -47,4 +46,4 @@ Wenn TrueNAS eine neue `lib_version` verlangt:
 1. Im Fork die neue Library nach `templates/library/base_vX_Y_Z/` vendoren.
 2. In `app.yaml.tmpl` `lib_version` und `lib_version_hash` auf die neuen Werte
    setzen (Hash aus `library/hashes.yaml` des TrueNAS-Repos).
-3. Generator laufen lassen und PR prüfen.
+3. Generator laufen lassen und das Ergebnis prüfen.
