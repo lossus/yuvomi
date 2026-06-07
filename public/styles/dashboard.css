@@ -1073,6 +1073,14 @@
   height: 28px;
 }
 
+/* Open-Meteo rendert Wetter-Icons als Lucide-<svg> (Klassen werden vom
+   <i data-lucide> übernommen, Größe via Regeln oben). OWM-Legacy nutzt <img>.
+   Stroke nur für die SVG-Variante setzen — <img> bleibt unberührt. */
+svg.weather-widget__icon,
+svg.weather-forecast__icon {
+  stroke: var(--color-text-secondary);
+}
+
 .weather-forecast__temps {
   display: flex;
   gap: var(--space-1);

@@ -845,9 +845,23 @@ const WEATHER_ICON_BASE = '/api/v1/weather/icon/';
 function renderWeatherWidget(weather) {
   if (!weather) return '';
 
-  const { city, current, forecast, units } = weather;
+  const { city, current, forecast, units, provider } = weather;
+  const isOm = provider === 'open-meteo';
+
+  // OWM-Legacy kann 'standard' (Kelvin) liefern; Open-Meteo nur metric/imperial.
   const unitSymbol = units === 'imperial' ? '°F' : units === 'standard' ? 'K' : '°C';
   const windUnit   = units === 'imperial' ? 'mph' : 'km/h';
+
+  // Open-Meteo liefert Lucide-Icon-Namen + wmo.*-i18n-Keys; OWM (Legacy) liefert
+  // OWM-Icon-Codes (via /icon-Proxy) + bereits lokalisierten Beschreibungstext.
+  const descText = (desc) => (isOm ? t(desc) : desc);
+  function iconHtml(icon, cls, size, desc) {
+    if (isOm) {
+      return `<i data-lucide="${esc(icon)}" class="${cls}" aria-hidden="true"></i>`;
+    }
+    return `<img class="${cls}" src="${WEATHER_ICON_BASE}${esc(icon)}"
+             alt="${esc(desc)}" width="${size}" height="${size}" loading="lazy">`;
+  }
 
   const forecastHtml = forecast.map((d, i) => {
     const date = new Date(d.date + 'T12:00:00');
@@ -856,8 +870,7 @@ function renderWeatherWidget(weather) {
     return `
       <div class="weather-forecast__day${extraCls}">
         <div class="weather-forecast__label">${label}</div>
-        <img class="weather-forecast__icon" src="${WEATHER_ICON_BASE}${d.icon}"
-             alt="${esc(d.desc)}" width="32" height="32" loading="lazy">
+        ${iconHtml(d.icon, 'weather-forecast__icon', 32, descText(d.desc))}
         <div class="weather-forecast__temps">
           <span class="weather-forecast__high">${d.temp_max}°</span>
           <span class="weather-forecast__low">${d.temp_min}°</span>
@@ -874,14 +887,13 @@ function renderWeatherWidget(weather) {
         <div class="weather-widget__main">
           <div class="weather-widget__left">
             <div class="weather-widget__temp">${esc(current.temp)}${unitSymbol}</div>
-            <div class="weather-widget__desc">${esc(current.desc)}</div>
+            <div class="weather-widget__desc">${esc(descText(current.desc))}</div>
             <div class="weather-widget__city">${esc(city)}</div>
             <div class="weather-widget__meta">
               ${t('dashboard.weatherFeelsLike', { temp: current.feels_like, humidity: current.humidity, wind: current.wind_speed, windUnit })}
             </div>
           </div>
-          <img class="weather-widget__icon" src="${WEATHER_ICON_BASE}${current.icon}"
-               alt="${esc(current.desc)}" width="80" height="80" loading="lazy">
+          ${iconHtml(current.icon, 'weather-widget__icon', 80, descText(current.desc))}
         </div>
         ${forecast.length ? `<div class="weather-forecast">${forecastHtml}</div>` : ''}
       </div>
