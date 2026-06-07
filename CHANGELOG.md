@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.65.7] - 2026-06-07
+
+### Added
+- "Install anywhere" platform showcase on the GitHub Pages landing page, featuring Docker, Podman, TrueNAS, Umbrel and Unraid with inline brand logos and one-click badges.
+- Umbrel and Unraid documented as installation options in the README and the installation guide; the install page now covers all six methods (Web Installer, Docker image, build from source, TrueNAS, Umbrel, Unraid).
+
+### Changed
+- GitHub Pages landing page (`docs/index.html`) and installation page (`docs/install.html`) fully rebuilt with a brand-aligned design: self-hosted Plus Jakarta Sans replacing the Google Fonts CDN, the app's warm-neutral palette with violet and per-module accent colors, a Liquid-Glass-meets-editorial look, refined light/dark themes, and reworked EN/DE copy.
+- Landing page restructured with a new hero, feature showcase, 14-module grid, screenshot carousel, platform section and expanded footer.
+
 ## [0.65.6] - 2026-06-07
 
 ### Changed

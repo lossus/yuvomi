@@ -103,6 +103,14 @@ Open `http://localhost:3000` — the first visit guides you through creating you
 
 Oikos is available in the TrueNAS SCALE Community Apps Catalog — no terminal required. Open **Apps → Discover Apps**, search for **Oikos**, and install it directly from the UI. Set `SESSION_SECRET` (required) and `DB_ENCRYPTION_KEY` (recommended) during installation. The first visit to the WebUI walks you through creating your admin account.
 
+**Option E — Umbrel (App Store)**
+
+Oikos is in the Umbrel App Store — no terminal required. Open the **App Store** on your Umbrel, search for **Oikos**, and install it in one click. Everything runs on, and stays on, your Umbrel. Open Oikos from your home screen and finish the first-run setup right away to create your admin account.
+
+**Option F — Unraid (Community Apps)**
+
+Oikos ships as an Unraid Community Applications template. Open the **Apps** tab, search for **Oikos**, set `SESSION_SECRET` (required) and `DB_ENCRYPTION_KEY` (recommended), then **Apply**. Once the container is running, open the WebUI to create your admin account.
+
 > **Using Podman (RHEL / Fedora / CentOS Stream)?** Both installers above auto-detect
 > Podman and use `podman-compose.yml` (SELinux `:Z` labels, configurable host bind).
 > For a manual start, replace `docker compose` with `podman compose -f podman-compose.yml`
