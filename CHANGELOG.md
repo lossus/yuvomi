@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.64.1] - 2026-06-07
+
+### Removed
+- Removed the obsolete TrueNAS catalog generator and its `truenas-publish` release workflow. The community catalog now updates entirely through the published `ghcr.io` images, which TrueNAS's own bot picks up automatically — the local generator no longer delivered anything and failed on every release. The TrueNAS app config source (`deploy/truenas/questions.yaml`, compose) is retained.
+
 ## [0.64.0] - 2026-06-07
 
 ### Added
