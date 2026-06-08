@@ -2878,14 +2878,17 @@ function renderWebdavStatus(grid, d) {
   if (!grid) return;
   if (!d.configured) { grid.replaceChildren(); return; }
 
-  const lastUploadText = d.lastUpload
-    ? t('settings.backupWebdavLastUpload', { date: d.lastUpload })
+  // Format date exactly like the scheduler status does
+  const lastUploadValue = d.lastUpload
+    ? formatDate(d.lastUpload) + ' ' + formatTime(d.lastUpload)
     : t('settings.backupWebdavNeverUploaded');
+
+  const lastUploadColor = d.lastUpload ? 'var(--color-success)' : '';
 
   const errorRow = d.lastError
     ? `<div class="settings-info-row">
          <span class="settings-info-label">${t('settings.backupWebdavLastError')}</span>
-         <span class="settings-info-value" style="color:var(--color-danger);">${esc(d.lastError)}</span>
+         <span class="settings-info-value" style="color:var(--color-danger);word-break:break-all;">${esc(d.lastError)}</span>
        </div>`
     : '';
 
@@ -2893,10 +2896,10 @@ function renderWebdavStatus(grid, d) {
   grid.insertAdjacentHTML('beforeend', `
     <div class="settings-info-row">
       <span class="settings-info-label">${t('settings.backupWebdavLastUpload')}</span>
-      <span class="settings-info-value">${esc(lastUploadText)}</span>
+      <span class="settings-info-value" style="${lastUploadColor ? `color:${lastUploadColor};font-weight:var(--font-weight-semibold);` : ''}">${esc(lastUploadValue)}</span>
     </div>
     ${errorRow}
-    <div class="settings-form-actions">
+    <div class="settings-form-actions" style="margin-top:var(--space-2);">
       <button class="btn btn--secondary" id="webdav-trigger-btn">
         <i data-lucide="upload-cloud" aria-hidden="true"></i>
         ${t('settings.backupWebdavTriggerBtn')}
