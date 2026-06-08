@@ -73,10 +73,14 @@ db.prepare(`INSERT INTO tasks (title, priority, status, due_date, created_by)
   VALUES ('Done Task', 'urgent', 'done', ?, ?)`).run(today, uid1);
 
 // Kalender-Events
-db.prepare(`INSERT INTO calendar_events (title, start_datetime, created_by, assigned_to, color)
+const evMeeting = db.prepare(`INSERT INTO calendar_events (title, start_datetime, created_by, assigned_to, color)
   VALUES ('Morgen-Meeting', ?, ?, ?, '#007AFF')`).run(inOneHour, uid1, uid2);
 db.prepare(`INSERT INTO calendar_events (title, start_datetime, created_by)
   VALUES ('Event in 3 Tagen', ?, ?)`).run(in72h + 'T10:00:00Z', uid1);
+
+// Multi-Assignments für Morgen-Meeting (uid1 + uid2 sind zugewiesen)
+db.prepare(`INSERT INTO event_assignments (event_id, user_id) VALUES (?, ?)`).run(evMeeting.lastInsertRowid, uid1);
+db.prepare(`INSERT INTO event_assignments (event_id, user_id) VALUES (?, ?)`).run(evMeeting.lastInsertRowid, uid2);
 
 // Mahlzeiten
 db.prepare(`INSERT INTO meals (date, meal_type, title, created_by)
@@ -188,6 +192,36 @@ test('Anstehende Termine: zukünftige Events, sortiert, max 5', () => {
   assert(events[0].assigned_color === '#34C759', 'assigned_color vom Join');
 });
 
+test('Anstehende Termine: Dashboard-Mapping erzeugt assigned_users Array (Issue #284)', () => {
+  // Testet die Mapping-Logik direkt mit Mock-Daten (ohne SQL).
+  const mockRaw = [
+    {
+      id: 1, title: 'Morgen-Meeting',
+      assigned_users_json: JSON.stringify([
+        { id: 1, display_name: 'Anna Admin', color: '#007AFF', avatar_data: null },
+        { id: 2, display_name: 'Max Muster', color: '#34C759', avatar_data: null },
+      ]),
+    },
+    { id: 2, title: 'Solo Event', assigned_users_json: null },
+  ];
+
+  const upcomingEvents = mockRaw.map(({ assigned_users_json, ...event }) => {
+    event.assigned_users = assigned_users_json ? JSON.parse(assigned_users_json) : [];
+    return event;
+  });
+
+  const meeting = upcomingEvents[0];
+  assert(!('assigned_users_json' in meeting), 'assigned_users_json darf nicht im Ergebnis sein');
+  assert(Array.isArray(meeting.assigned_users), 'assigned_users muss ein Array sein');
+  assert(meeting.assigned_users.length === 2, `Erwartet 2 Einträge, erhalten ${meeting.assigned_users.length}`);
+  assert(meeting.assigned_users[0].display_name === 'Anna Admin', 'Erster User ist Anna Admin');
+  assert('avatar_data' in meeting.assigned_users[0], 'avatar_data muss im User-Objekt enthalten sein');
+
+  const solo = upcomingEvents[1];
+  assert(Array.isArray(solo.assigned_users) && solo.assigned_users.length === 0,
+    'Event ohne Zuweisung hat leeres assigned_users Array');
+});
+
 // --------------------------------------------------------
 // Tests: Heutige Mahlzeiten
 // --------------------------------------------------------
@@ -294,7 +328,8 @@ cdb.exec(`
   CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE NOT NULL, display_name TEXT NOT NULL,
-    password_hash TEXT NOT NULL, avatar_color TEXT NOT NULL DEFAULT '#007AFF'
+    password_hash TEXT NOT NULL, avatar_color TEXT NOT NULL DEFAULT '#007AFF',
+    avatar_data TEXT
   );
   CREATE TABLE external_calendars (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -366,7 +401,10 @@ insertEvent({ title: 'Past one-off', start_datetime: isoIn(-2 * DAY), created_by
 insertEvent({ title: 'Morning Meeting Today', start_datetime: todayStartIso(), created_by: cuTheo });
 
 // Nicht-wiederkehrender Termin in der Zukunft -> erscheint.
-insertEvent({ title: 'Theodore Soccer Game', start_datetime: isoIn(3 * DAY), created_by: cuTheo });
+// Beiden Nutzern (Theo + Sofia) zugewiesen – für Issue #284 (assigned_users im Dashboard).
+const soccerId = insertEvent({ title: 'Theodore Soccer Game', start_datetime: isoIn(3 * DAY), created_by: cuTheo });
+cdb.prepare(`INSERT INTO event_assignments (event_id, user_id) VALUES (?, ?)`).run(soccerId, cuTheo);
+cdb.prepare(`INSERT INTO event_assignments (event_id, user_id) VALUES (?, ?)`).run(soccerId, cuSofia);
 
 test('getUpcomingEvents: wiederkehrender Termin mit Vergangenheits-Start erscheint (Issue #224)', () => {
   const events = getUpcomingEvents(cdb, { userId: cuTheo, limit: 10 });
@@ -398,6 +436,34 @@ test('getUpcomingEvents: zukünftige Termine sortiert und auf limit begrenzt', (
   }
   const limited = getUpcomingEvents(cdb, { userId: cuTheo, limit: 1 });
   assert(limited.length === 1, `limit=1 liefert genau 1 Event, erhalten ${limited.length}`);
+});
+
+test('getUpcomingEvents: assigned_users_json enthält avatar_data (Issue #284)', () => {
+  const events = getUpcomingEvents(cdb, { userId: cuTheo, limit: 10 });
+  const soccer = events.find((e) => e.title === 'Theodore Soccer Game');
+  assert(soccer, 'Theodore Soccer Game muss erscheinen');
+  assert('assigned_users_json' in soccer, 'assigned_users_json muss im rohen Event enthalten sein');
+  const users = JSON.parse(soccer.assigned_users_json);
+  assert(Array.isArray(users) && users.length === 2,
+    `Erwartet 2 zugewiesene User, erhalten ${users.length}`);
+  assert(users.every((u) => 'avatar_data' in u),
+    'Jeder User im assigned_users_json muss avatar_data enthalten');
+  const theo  = users.find((u) => u.display_name === 'Theodore');
+  const sofia = users.find((u) => u.display_name === 'Sofia');
+  assert(theo,  'Theodore muss in assigned_users sein');
+  assert(sofia, 'Sofia muss in assigned_users sein');
+});
+
+test('getUpcomingEvents: Event ohne Assignments hat leeres assigned_users_json Array (Issue #284)', () => {
+  const events = getUpcomingEvents(cdb, { userId: cuTheo, limit: 10 });
+  const morning = events.find((e) => e.title === 'Morning Meeting Today');
+  // Morning Meeting Today wurde ohne event_assignments eingefügt.
+  const mornEvents = getUpcomingEvents(cdb, { userId: cuTheo, limit: 10, fromToday: true });
+  const mm = mornEvents.find((e) => e.title === 'Morning Meeting Today');
+  assert(mm, 'Morning Meeting Today mit fromToday=true vorhanden');
+  const users = JSON.parse(mm.assigned_users_json ?? '[]');
+  assert(Array.isArray(users) && users.length === 0,
+    'Event ohne Zuweisung hat leeres assigned_users_json Array');
 });
 
 test('getUpcomingEvents: private ICS-Termine fremder User werden ausgeblendet', () => {

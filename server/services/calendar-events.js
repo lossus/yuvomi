@@ -10,7 +10,8 @@ import { nextOccurrence } from './recurrence.js';
 // Zugewiesene Personen eines Events als JSON-Array (Multi-Assignment).
 const ASSIGNED_USERS_SQL = `(
   SELECT json_group_array(json_object(
-    'id', u.id, 'display_name', u.display_name, 'color', u.avatar_color
+    'id', u.id, 'display_name', u.display_name, 'color', u.avatar_color,
+    'avatar_data', u.avatar_data
   ))
   FROM event_assignments ea JOIN users u ON u.id = ea.user_id
   WHERE ea.event_id = e.id

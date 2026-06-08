@@ -60,7 +60,10 @@ router.get('/', (req, res) => {
   // sodass auch Termine erscheinen, deren Master-Start in der Vergangenheit liegt.
   try {
     result.upcomingEvents = getUpcomingEvents(d, { userId, limit: 5, fromToday: true })
-      .map(({ assigned_users_json, ...event }) => event);
+      .map(({ assigned_users_json, ...event }) => {
+        event.assigned_users = assigned_users_json ? JSON.parse(assigned_users_json) : [];
+        return event;
+      });
   } catch (err) {
     log.error('upcomingEvents error:', err.message);
     result.upcomingEvents = [];
