@@ -2750,7 +2750,8 @@ function bindApiTokenEvents(container, initialTokens) {
   });
 }
 
-async function loadBackupSchedulerStatus(container) {  const infoContainer = container.querySelector('#backup-scheduler-info');
+async function loadBackupSchedulerStatus(container) {
+  const infoContainer = container.querySelector('#backup-scheduler-info');
   if (!infoContainer) return;
 
   try {
@@ -2913,7 +2914,6 @@ function renderWebdavStatus(grid, d) {
   if (triggerBtn) {
     triggerBtn.addEventListener('click', async () => {
       triggerBtn.disabled = true;
-      const origHtml = triggerBtn.innerHTML;
       triggerBtn.textContent = t('settings.backupWebdavTriggering');
       try {
         await api.post('/backup/webdav/trigger');
@@ -2921,9 +2921,12 @@ function renderWebdavStatus(grid, d) {
         loadWebdavConfig(triggerBtn.closest('.settings-tab-panel') ?? document);
       } catch (err) {
         window.oikos?.showToast(err.message ?? t('common.errorGeneric'), 'danger');
-        triggerBtn.disabled = false;
-        triggerBtn.innerHTML = origHtml;
+        const icon = document.createElement('i');
+        icon.dataset.lucide = 'upload-cloud';
+        icon.setAttribute('aria-hidden', 'true');
+        triggerBtn.replaceChildren(icon, document.createTextNode(' ' + t('settings.backupWebdavTriggerBtn')));
         if (window.lucide) window.lucide.createIcons({ el: triggerBtn });
+        triggerBtn.disabled = false;
       }
     });
   }
@@ -2938,7 +2941,8 @@ function bindWebdavBackupEvents(container) {
   loadWebdavConfig(container);
 
   // Password reveal toggle
-  form.querySelectorAll('[data-reveal-target]').forEach((btn) => {    btn.addEventListener('click', () => {
+  form.querySelectorAll('[data-reveal-target]').forEach((btn) => {
+    btn.addEventListener('click', () => {
       const input = form.querySelector(`#${btn.dataset.revealTarget}`);
       if (!input) return;
       const isText = input.type === 'text';
