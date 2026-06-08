@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.65.24] - 2026-06-08
+
+### Security
+- Escape `req.url` before embedding it in the mock WebDAV XML response in tests (CodeQL `js/reflected-xss` alert #14).
+
 ## [0.65.23] - 2026-06-08
 
 ### Fixed
