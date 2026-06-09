@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.66.1] - 2026-06-09
+
+### Fixed
+- Deactivated kitchen modules (Meals, Recipes, Shopping) no longer appear as sub-tabs in the Kitchen view; clicking Kitchen now navigates to the first enabled kitchen module instead of looping back to the dashboard.
+- Dashboard "Today" cockpit cards for disabled modules are now hidden.
+- Dashboard widgets for disabled modules are no longer rendered.
+- Settings navigation icon now displays a gear/cogwheel instead of a sun shape.
+- Sidebar logo and navigation icon wells are now pixel-aligned on the horizontal center axis.
+
 ## [0.66.0] - 2026-06-09
 
 ### Changed
