@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.68.1] - 2026-06-09
+
+### Security
+- **Documents preview**: hardened the new `GET /api/v1/documents/:id/preview` endpoint with defense-in-depth against stored XSS. It now enforces its own server-side allowlist of previewable MIME types (PDF, PNG, JPEG, WebP, plain text, CSV) and returns `415` for anything else, instead of serving any stored `mime_type` inline. Responses additionally carry `X-Content-Type-Options: nosniff` and a restrictive `Content-Security-Policy` (`default-src 'none'`) so no inline content can execute scripts even if a file were ever misclassified. (Not exploitable in 0.68.0 — uploads already reject HTML/SVG — but this removes the implicit dependency on the upload allowlist.)
+
 ## [0.68.0] - 2026-06-09
 
 ### Added

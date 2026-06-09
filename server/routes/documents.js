@@ -29,6 +29,20 @@ const ALLOWED_MIME = new Set([
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
 ]);
 
+// Nur diese Typen werden mit `Content-Disposition: inline` ausgeliefert. Bewusst
+// eine zweite, engere Allowlist (zusätzlich zur Upload-Prüfung): Sie schützt den
+// Preview-Endpunkt davor, jemals skriptfähige Inhalte (HTML, SVG) inline zu
+// rendern — selbst falls ALLOWED_MIME künftig erweitert wird. Spiegelt das
+// Client-seitige VIEWABLE_MIME in public/pages/documents.js.
+const PREVIEWABLE_MIME = new Set([
+  'application/pdf',
+  'image/png',
+  'image/jpeg',
+  'image/webp',
+  'text/plain',
+  'text/csv',
+]);
+
 function userId(req) {
   return req.authUserId || req.session.userId;
 }
@@ -293,11 +307,20 @@ router.get('/:id/preview', (req, res) => {
     const id = Number(req.params.id);
     const doc = getVisibleDocument(id, req, true);
     if (!doc) return res.status(404).json({ error: 'Document not found.', code: 404 });
+    // Inline-Auslieferung nur für nicht-skriptfähige Typen. Alles andere kann über
+    // /download (als attachment) geholt werden.
+    if (!PREVIEWABLE_MIME.has(doc.mime_type)) {
+      return res.status(415).json({ error: 'Preview not supported for this file type.', code: 415 });
+    }
     const filename = encodeURIComponent(doc.original_name.replace(/[/\\]/g, '_'));
     res.setHeader('Content-Type', doc.mime_type);
     res.setHeader('Content-Length', String(doc.file_size));
     res.setHeader('Content-Disposition', `inline; filename="${filename}"`);
     res.setHeader('Cache-Control', 'private, max-age=300');
+    // Defense-in-Depth: MIME-Sniffing unterbinden und jegliche Skriptausführung im
+    // Antwortdokument verbieten, falls ein Inhalt je fehlklassifiziert würde.
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('Content-Security-Policy', "default-src 'none'; img-src 'self'; style-src 'unsafe-inline'");
     res.end(Buffer.from(doc.content_data, 'base64'));
   } catch (err) {
     log.error('GET /:id/preview error:', err);
