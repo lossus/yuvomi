@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.66.3] - 2026-06-09
+
+### Fixed
+- WebDAV "Upload now" now creates a fresh, uniquely timestamped backup of the current database and uploads that, instead of re-uploading the latest existing local backup under its original filename. Manual uploads no longer overwrite the previous remote backup, so each trigger adds a distinct file (subject to the configured keep limit).
+
 ## [0.66.2] - 2026-06-09
 
 ### Security
