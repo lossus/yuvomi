@@ -535,7 +535,9 @@
     "attachmentDocumentName": "{{title}} - {{name}}",
     "attachmentDocumentDescription": "カレンダー予定「{{title}}」にアップロードされた添付ファイル。",
     "agendaEmpty": "選択した期間に予定はありません",
-    "taskChipAriaLabel": "タスク: {{title}}"
+    "taskChipAriaLabel": "タスク: {{title}}",
+    "toggleHolidays": "祝日",
+    "toggleSchool": "学校の休暇"
   },
   "notes": {
     "title": "メモボード",
@@ -1223,7 +1225,28 @@
     "weatherLocateUnsupported": "お使いのブラウザは位置情報に対応していません。",
     "cropDialogTitle": "画像をトリミング",
     "cropConfirm": "トリミング",
-    "cropZoomLabel": "ズーム"
+    "cropZoomLabel": "ズーム",
+    "sectionHolidays": "祝日と学校の休暇",
+    "holidayTitle": "OpenHolidays API（無料、APIキー不要）",
+    "holidayDescription": "公式の祝日と学校の休暇をカレンダーに表示します。",
+    "holidayCountryLabel": "国",
+    "holidayCountryPlaceholder": "国を選択…",
+    "holidaySubdivisionLabel": "州 / 地域",
+    "holidaySubdivisionNone": "国全体",
+    "holidaySubdivisionPlaceholder": "地域を選択…",
+    "holidayPublicLabel": "祝日を表示",
+    "holidaySchoolLabel": "学校の休暇を表示",
+    "holidayPublicColor": "祝日の色",
+    "holidaySchoolColor": "学校の休暇の色",
+    "holidaySaveBtn": "保存",
+    "holidaySaved": "カレンダー設定を保存しました。",
+    "holidaySyncBtn": "今すぐ同期",
+    "holidaySynced": "祝日を同期しました。",
+    "holidaySyncError": "同期に失敗しました。",
+    "holidayLastSync": "最終同期: {{date}}",
+    "holidayNeverSynced": "まだ同期されていません",
+    "holidayCountryRequired": "最初に国を選択してください。",
+    "adminOnly": "このセクションは管理者のみが利用できます。"
   },
   "login": {
     "tagline": "家族計画。安全。プライバシー重視。オープンソース。",

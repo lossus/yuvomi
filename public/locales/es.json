@@ -535,7 +535,9 @@
     "attachmentDocumentName": "{{title}} - {{name}}",
     "attachmentDocumentDescription": "Archivo adjunto subido para el evento de calendario \"{{title}}\".",
     "agendaEmpty": "No hay eventos en el período seleccionado",
-    "taskChipAriaLabel": "Tarea: {{title}}"
+    "taskChipAriaLabel": "Tarea: {{title}}",
+    "toggleHolidays": "Días festivos",
+    "toggleSchool": "Vacaciones escolares"
   },
   "notes": {
     "title": "Notas",
@@ -1223,7 +1225,28 @@
     "weatherLocateUnsupported": "La geolocalización no es compatible con su navegador.",
     "cropDialogTitle": "Recortar imagen",
     "cropConfirm": "Recortar",
-    "cropZoomLabel": "Zoom"
+    "cropZoomLabel": "Zoom",
+    "sectionHolidays": "Días festivos y vacaciones escolares",
+    "holidayTitle": "API de OpenHolidays (gratuita, sin clave API)",
+    "holidayDescription": "Mostrar los días festivos oficiales y las vacaciones escolares en tu calendario.",
+    "holidayCountryLabel": "País",
+    "holidayCountryPlaceholder": "Seleccionar un país…",
+    "holidaySubdivisionLabel": "Estado / Región",
+    "holidaySubdivisionNone": "Todo el país",
+    "holidaySubdivisionPlaceholder": "Seleccionar una región…",
+    "holidayPublicLabel": "Mostrar días festivos",
+    "holidaySchoolLabel": "Mostrar vacaciones escolares",
+    "holidayPublicColor": "Color de días festivos",
+    "holidaySchoolColor": "Color de vacaciones escolares",
+    "holidaySaveBtn": "Guardar",
+    "holidaySaved": "Configuración del calendario guardada.",
+    "holidaySyncBtn": "Sincronizar ahora",
+    "holidaySynced": "Días festivos sincronizados.",
+    "holidaySyncError": "Error de sincronización.",
+    "holidayLastSync": "Última sincronización: {{date}}",
+    "holidayNeverSynced": "Aún no sincronizado",
+    "holidayCountryRequired": "Por favor, selecciona primero un país.",
+    "adminOnly": "Esta sección solo está disponible para administradores."
   },
   "login": {
     "tagline": "Planificación familiar. Segura. Privada. Código abierto.",

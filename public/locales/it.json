@@ -535,7 +535,9 @@
     "attachmentDocumentName": "{{title}} - {{name}}",
     "attachmentDocumentDescription": "Allegato caricato per l’evento calendario \"{{title}}\".",
     "agendaEmpty": "Nessun evento nell'intervallo selezionato",
-    "taskChipAriaLabel": "Attività: {{title}}"
+    "taskChipAriaLabel": "Attività: {{title}}",
+    "toggleHolidays": "Giorni festivi",
+    "toggleSchool": "Vacanze scolastiche"
   },
   "notes": {
     "title": "Bacheca",
@@ -1223,7 +1225,28 @@
     "weatherLocateUnsupported": "La geolocalizzazione non è supportata dal browser.",
     "cropDialogTitle": "Ritaglia immagine",
     "cropConfirm": "Ritaglia",
-    "cropZoomLabel": "Zoom"
+    "cropZoomLabel": "Zoom",
+    "sectionHolidays": "Giorni festivi e vacanze scolastiche",
+    "holidayTitle": "API OpenHolidays (gratuita, senza chiave API)",
+    "holidayDescription": "Mostra i giorni festivi ufficiali e le vacanze scolastiche nel tuo calendario.",
+    "holidayCountryLabel": "Paese",
+    "holidayCountryPlaceholder": "Seleziona un paese…",
+    "holidaySubdivisionLabel": "Regione / Stato",
+    "holidaySubdivisionNone": "Intero paese",
+    "holidaySubdivisionPlaceholder": "Seleziona una regione…",
+    "holidayPublicLabel": "Mostra giorni festivi",
+    "holidaySchoolLabel": "Mostra vacanze scolastiche",
+    "holidayPublicColor": "Colore giorni festivi",
+    "holidaySchoolColor": "Colore vacanze scolastiche",
+    "holidaySaveBtn": "Salva",
+    "holidaySaved": "Impostazioni del calendario salvate.",
+    "holidaySyncBtn": "Sincronizza ora",
+    "holidaySynced": "Giorni festivi sincronizzati.",
+    "holidaySyncError": "Sincronizzazione non riuscita.",
+    "holidayLastSync": "Ultima sincronizzazione: {{date}}",
+    "holidayNeverSynced": "Non ancora sincronizzato",
+    "holidayCountryRequired": "Seleziona prima un paese.",
+    "adminOnly": "Questa sezione è disponibile solo per gli amministratori."
   },
   "login": {
     "tagline": "Pianificazione familiare. Sicura. Rispettosa della privacy. Open source.",

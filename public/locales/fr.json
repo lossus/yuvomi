@@ -535,7 +535,9 @@
     "attachmentDocumentName": "{{title}} - {{name}}",
     "attachmentDocumentDescription": "Pièce jointe téléversée pour l’événement \"{{title}}\".",
     "agendaEmpty": "Aucun événement dans la période sélectionnée",
-    "taskChipAriaLabel": "Tâche : {{title}}"
+    "taskChipAriaLabel": "Tâche : {{title}}",
+    "toggleHolidays": "Jours fériés",
+    "toggleSchool": "Vacances scolaires"
   },
   "notes": {
     "title": "Notes",
@@ -1223,7 +1225,28 @@
     "weatherLocateUnsupported": "La géolocalisation n'est pas prise en charge par votre navigateur.",
     "cropDialogTitle": "Recadrer l'image",
     "cropConfirm": "Recadrer",
-    "cropZoomLabel": "Zoom"
+    "cropZoomLabel": "Zoom",
+    "sectionHolidays": "Jours fériés et vacances scolaires",
+    "holidayTitle": "API OpenHolidays (gratuite, sans clé API)",
+    "holidayDescription": "Afficher les jours fériés officiels et les vacances scolaires dans votre calendrier.",
+    "holidayCountryLabel": "Pays",
+    "holidayCountryPlaceholder": "Sélectionner un pays…",
+    "holidaySubdivisionLabel": "Région / État",
+    "holidaySubdivisionNone": "Pays entier",
+    "holidaySubdivisionPlaceholder": "Sélectionner une région…",
+    "holidayPublicLabel": "Afficher les jours fériés",
+    "holidaySchoolLabel": "Afficher les vacances scolaires",
+    "holidayPublicColor": "Couleur des jours fériés",
+    "holidaySchoolColor": "Couleur des vacances scolaires",
+    "holidaySaveBtn": "Enregistrer",
+    "holidaySaved": "Paramètres du calendrier enregistrés.",
+    "holidaySyncBtn": "Synchroniser maintenant",
+    "holidaySynced": "Jours fériés synchronisés.",
+    "holidaySyncError": "Échec de la synchronisation.",
+    "holidayLastSync": "Dernière synchro : {{date}}",
+    "holidayNeverSynced": "Pas encore synchronisé",
+    "holidayCountryRequired": "Veuillez d’abord sélectionner un pays.",
+    "adminOnly": "Cette section est réservée aux administrateurs."
   },
   "login": {
     "tagline": "Planification familiale. Sécurisée. Respectueuse de la vie privée. Open source.",

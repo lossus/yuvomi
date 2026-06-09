@@ -541,7 +541,9 @@
     "attachmentDocumentName": "{{title}} - {{name}}",
     "attachmentDocumentDescription": "Załącznik do wpisu kalendarza \"{{title}}\" przesłany.",
     "agendaEmpty": "Brak wydarzeń w wybranym zakresie",
-    "taskChipAriaLabel": "Zadanie: {{title}}"
+    "taskChipAriaLabel": "Zadanie: {{title}}",
+    "toggleHolidays": "Święta państwowe",
+    "toggleSchool": "Ferie szkolne"
   },
   "notes": {
     "title": "Notatki",
@@ -1229,7 +1231,28 @@
     "weatherLocateUnsupported": "Przeglądarka nie obsługuje geolokalizacji.",
     "cropDialogTitle": "Przytnij obraz",
     "cropConfirm": "Przytnij",
-    "cropZoomLabel": "Zoom"
+    "cropZoomLabel": "Zoom",
+    "sectionHolidays": "Święta i ferie szkolne",
+    "holidayTitle": "API OpenHolidays (bezpłatne, bez klucza API)",
+    "holidayDescription": "Wyświetlaj oficjalne święta i ferie szkolne w kalendarzu.",
+    "holidayCountryLabel": "Kraj",
+    "holidayCountryPlaceholder": "Wybierz kraj…",
+    "holidaySubdivisionLabel": "Region / województwo",
+    "holidaySubdivisionNone": "Cały kraj",
+    "holidaySubdivisionPlaceholder": "Wybierz region…",
+    "holidayPublicLabel": "Pokaż święta",
+    "holidaySchoolLabel": "Pokaż ferie szkolne",
+    "holidayPublicColor": "Kolor świąt",
+    "holidaySchoolColor": "Kolor ferii szkolnych",
+    "holidaySaveBtn": "Zapisz",
+    "holidaySaved": "Ustawienia kalendarza zapisane.",
+    "holidaySyncBtn": "Synchronizuj teraz",
+    "holidaySynced": "Święta zsynchronizowane.",
+    "holidaySyncError": "Synchronizacja nie powiodła się.",
+    "holidayLastSync": "Ostatnia synchronizacja: {{date}}",
+    "holidayNeverSynced": "Jeszcze nie zsynchronizowano",
+    "holidayCountryRequired": "Najpierw wybierz kraj.",
+    "adminOnly": "Ta sekcja jest dostępna tylko dla administratorów."
   },
   "login": {
     "tagline": "Planowanie rodziny. Bezpieczne. Chroniące prywatność. Open Source.",

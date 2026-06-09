@@ -535,7 +535,9 @@
     "attachmentDocumentName": "{{title}} - {{name}}",
     "attachmentDocumentDescription": "Вложение загружено для события календаря «{{title}}».",
     "agendaEmpty": "Нет событий в выбранном периоде",
-    "taskChipAriaLabel": "Задача: {{title}}"
+    "taskChipAriaLabel": "Задача: {{title}}",
+    "toggleHolidays": "Праздничные дни",
+    "toggleSchool": "Школьные каникулы"
   },
   "notes": {
     "title": "Заметки",
@@ -1223,7 +1225,28 @@
     "weatherLocateUnsupported": "Ваш браузер не поддерживает геолокацию.",
     "cropDialogTitle": "Обрезать изображение",
     "cropConfirm": "Обрезать",
-    "cropZoomLabel": "Масштаб"
+    "cropZoomLabel": "Масштаб",
+    "sectionHolidays": "Праздники и школьные каникулы",
+    "holidayTitle": "API OpenHolidays (бесплатно, без ключа API)",
+    "holidayDescription": "Показывать официальные праздники и школьные каникулы в календаре.",
+    "holidayCountryLabel": "Страна",
+    "holidayCountryPlaceholder": "Выберите страну…",
+    "holidaySubdivisionLabel": "Регион / штат",
+    "holidaySubdivisionNone": "Вся страна",
+    "holidaySubdivisionPlaceholder": "Выберите регион…",
+    "holidayPublicLabel": "Показывать праздники",
+    "holidaySchoolLabel": "Показывать школьные каникулы",
+    "holidayPublicColor": "Цвет праздников",
+    "holidaySchoolColor": "Цвет школьных каникул",
+    "holidaySaveBtn": "Сохранить",
+    "holidaySaved": "Настройки календаря сохранены.",
+    "holidaySyncBtn": "Синхронизировать сейчас",
+    "holidaySynced": "Праздники синхронизированы.",
+    "holidaySyncError": "Ошибка синхронизации.",
+    "holidayLastSync": "Последняя синхронизация: {{date}}",
+    "holidayNeverSynced": "Ещё не синхронизировано",
+    "holidayCountryRequired": "Сначала выберите страну.",
+    "adminOnly": "Этот раздел доступен только администраторам."
   },
   "login": {
     "tagline": "Семейное планирование. Безопасно. С уважением к приватности. Открытый исходный код.",

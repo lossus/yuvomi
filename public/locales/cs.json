@@ -535,7 +535,9 @@
     "attachmentDocumentName": "{{title}} - {{name}}",
     "attachmentDocumentDescription": "Příloha nahraná ke kalendářní události \"{{title}}\".",
     "agendaEmpty": "V vybraném rozsahu nejsou žádné události",
-    "taskChipAriaLabel": "Úkol: {{title}}"
+    "taskChipAriaLabel": "Úkol: {{title}}",
+    "toggleHolidays": "Státní svátky",
+    "toggleSchool": "Školní prázdniny"
   },
   "notes": {
     "title": "Nástěnka",
@@ -1223,7 +1225,28 @@
     "weatherLocateUnsupported": "Geolokalizace není vaším prohlížečem podporována.",
     "cropDialogTitle": "Oříznout obrázek",
     "cropConfirm": "Oříznout",
-    "cropZoomLabel": "Přiblížení"
+    "cropZoomLabel": "Přiblížení",
+    "sectionHolidays": "Státní svátky a školní prázdniny",
+    "holidayTitle": "OpenHolidays API (zdarma, bez API klíče)",
+    "holidayDescription": "Zobrazit oficiální státní svátky a školní prázdniny v kalendáři.",
+    "holidayCountryLabel": "Země",
+    "holidayCountryPlaceholder": "Vyberte zemi…",
+    "holidaySubdivisionLabel": "Region / kraj",
+    "holidaySubdivisionNone": "Celá země",
+    "holidaySubdivisionPlaceholder": "Vyberte region…",
+    "holidayPublicLabel": "Zobrazit státní svátky",
+    "holidaySchoolLabel": "Zobrazit školní prázdniny",
+    "holidayPublicColor": "Barva státních svátků",
+    "holidaySchoolColor": "Barva školních prázdnin",
+    "holidaySaveBtn": "Uložit",
+    "holidaySaved": "Nastavení kalendáře uloženo.",
+    "holidaySyncBtn": "Synchronizovat nyní",
+    "holidaySynced": "Svátky synchronizovány.",
+    "holidaySyncError": "Synchronizace selhala.",
+    "holidayLastSync": "Poslední synchronizace: {{date}}",
+    "holidayNeverSynced": "Dosud nesynchronizováno",
+    "holidayCountryRequired": "Nejprve vyberte zemi.",
+    "adminOnly": "Tato sekce je dostupná pouze administrátorům."
   },
   "login": {
     "tagline": "Rodinné plánování. Bezpečné. Soukromé. Open Source.",

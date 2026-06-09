@@ -157,6 +157,28 @@ Display metadata (name, color) for synced Google/CalDAV calendars. Populated aut
 | color | TEXT | Background color from the provider (HEX) |
 | UNIQUE | | (source, external_id) |
 
+### Holiday Cache
+Cached public holidays and school holidays from the free [OpenHolidays API](https://openholidaysapi.org)
+(no API key). Populated by an admin-configured country/subdivision in Settings → Calendar and refreshed
+by the auto-sync scheduler (covers previous, current, and next two years). Displayed as a read-only
+overlay in the calendar; layer visibility is toggled client-side. Outbound requests carry only the
+country/subdivision code — no household data leaves the server.
+
+| Column | Type | Constraint |
+|--------|------|-----------|
+| id | INTEGER | PRIMARY KEY AUTOINCREMENT |
+| type | TEXT | 'public' or 'school', NOT NULL |
+| country | TEXT | ISO-3166 alpha-2 country code, NOT NULL |
+| subdivision | TEXT | Region code (e.g. `DE-BY`), nullable for whole-country |
+| start_date | TEXT | YYYY-MM-DD, NOT NULL |
+| end_date | TEXT | YYYY-MM-DD, NOT NULL |
+| name | TEXT | Localized holiday name, NOT NULL |
+| year | INTEGER | Source year (used for scoped re-sync), NOT NULL |
+
+Indexes: `idx_holiday_cache_dates (start_date, end_date)`, `idx_holiday_cache_lookup (type, country, subdivision, year)`.
+Configuration lives in `sync_config`: `holiday_country`, `holiday_subdivision`, `holiday_show_public`,
+`holiday_show_school`, `holiday_public_color`, `holiday_school_color`, `holiday_last_sync` (all admin-only).
+
 ### CalDAV Accounts
 Multi-account CalDAV integration. Stores credentials for CalDAV servers (iCloud, Nextcloud, Radicale, Baikal, etc.).
 

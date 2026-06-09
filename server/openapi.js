@@ -408,6 +408,7 @@ function buildPaths() {
       }),
     },
     '/api/v1/calendar/upcoming': { get: op({ summary: 'List upcoming events', tag: 'Calendar' }) },
+    '/api/v1/calendar/holidays': { get: op({ summary: 'List public & school holidays in a date range', tag: 'Calendar', description: 'Reads cached OpenHolidays entries that overlap `from`/`to` (both `YYYY-MM-DD`, required). Returns `{ data: [{ id, type (`public`|`school`), start_date, end_date, name, color }] }`. Empty when no holiday country is configured.' }) },
     '/api/v1/calendar/google/auth': { get: op({ summary: 'Start Google Calendar OAuth', tag: 'Calendar', admin: true }) },
     '/api/v1/calendar/google/callback': { get: op({ summary: 'Google Calendar OAuth callback', tag: 'Calendar', auth: false }) },
     '/api/v1/calendar/google/sync': { post: op({ summary: 'Run Google Calendar sync', tag: 'Calendar', admin: true, stateChanging: true }) },
@@ -627,9 +628,12 @@ function buildPaths() {
       get: op({ summary: 'Get weather icon asset', tag: 'Weather', params: [{ name: 'code', in: 'path', required: true, schema: { type: 'string' } }] }),
     },
     '/api/v1/preferences': {
-      get: op({ summary: 'Get user preferences', tag: 'Preferences', description: 'Household preferences. Weather fields: `weather_provider` (`open-meteo` | `openweathermap` | `null` = auto-detect from env), `weather_lat`, `weather_lon`, `weather_city`, `weather_units` (`metric` | `imperial`).' }),
-      put: op({ summary: 'Update user preferences', tag: 'Preferences', description: 'Weather fields (`weather_provider`, `weather_lat`, `weather_lon`, `weather_city`, `weather_units`) are admin-only; `weather_lat`/`weather_lon` are validated to ±90 / ±180.', stateChanging: true, requestBody: jsonBody(null) }),
+      get: op({ summary: 'Get user preferences', tag: 'Preferences', description: 'Household preferences. Weather fields: `weather_provider` (`open-meteo` | `openweathermap` | `null` = auto-detect from env), `weather_lat`, `weather_lon`, `weather_city`, `weather_units` (`metric` | `imperial`). Holiday fields: `holiday_country` (ISO-3166 alpha-2 or `null`), `holiday_subdivision` (e.g. `DE-BY` or `null`), `holiday_show_public`, `holiday_show_school` (booleans), `holiday_public_color`, `holiday_school_color` (hex), `holiday_last_sync`.' }),
+      put: op({ summary: 'Update user preferences', tag: 'Preferences', description: 'Weather fields (`weather_provider`, `weather_lat`, `weather_lon`, `weather_city`, `weather_units`) and holiday fields (`holiday_country`, `holiday_subdivision`, `holiday_show_public`, `holiday_show_school`, `holiday_public_color`, `holiday_school_color`) are admin-only. `weather_lat`/`weather_lon` are validated to ±90 / ±180; colors must be 6-digit hex.', stateChanging: true, requestBody: jsonBody(null) }),
     },
+    '/api/v1/preferences/holidays/countries': { get: op({ summary: 'List countries supported by OpenHolidays', tag: 'Preferences', description: 'Proxies the OpenHolidays API. Returns `{ data: [{ isoCode, name }] }` for the country dropdown.' }) },
+    '/api/v1/preferences/holidays/subdivisions/{countryCode}': { get: op({ summary: 'List subdivisions for a country', tag: 'Preferences', params: [{ name: 'countryCode', in: 'path', required: true, schema: { type: 'string', pattern: '^[A-Z]{2}$' } }], description: 'Proxies the OpenHolidays API. Returns `{ data: [{ isoCode, name }] }` for the state/region dropdown.' }) },
+    '/api/v1/preferences/holidays/sync': { post: op({ summary: 'Sync holidays for the configured country', tag: 'Preferences', admin: true, stateChanging: true, description: 'Fetches public/school holidays from OpenHolidays for the configured country/subdivision and caches them. Returns `{ data: { last_sync } }`.' }) },
     '/api/v1/reminders/pending': { get: op({ summary: 'List pending reminders', tag: 'Reminders' }) },
     '/api/v1/reminders': {
       get: op({ summary: 'List reminders', tag: 'Reminders' }),

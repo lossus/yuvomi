@@ -535,7 +535,9 @@
     "attachmentDocumentName": "{{title}} - {{name}}",
     "attachmentDocumentDescription": "مرفق تم رفعه لحدث التقويم \"{{title}}\".",
     "agendaEmpty": "لا توجد مواعيد في الفترة المحددة",
-    "taskChipAriaLabel": "مهمة: {{title}}"
+    "taskChipAriaLabel": "مهمة: {{title}}",
+    "toggleHolidays": "العطلات الرسمية",
+    "toggleSchool": "العطلات المدرسية"
   },
   "notes": {
     "title": "لوحة الملاحظات",
@@ -1223,7 +1225,28 @@
     "weatherLocateUnsupported": "المتصفح لا يدعم تحديد الموقع الجغرافي.",
     "cropDialogTitle": "اقتصاص الصورة",
     "cropConfirm": "اقتصاص",
-    "cropZoomLabel": "تكبير"
+    "cropZoomLabel": "تكبير",
+    "sectionHolidays": "العطلات الرسمية والمدرسية",
+    "holidayTitle": "واجهة OpenHolidays (مجانية، بدون مفتاح API)",
+    "holidayDescription": "عرض العطلات الرسمية والعطلات المدرسية في التقويم الخاص بك.",
+    "holidayCountryLabel": "الدولة",
+    "holidayCountryPlaceholder": "اختر دولة…",
+    "holidaySubdivisionLabel": "الولاية / المنطقة",
+    "holidaySubdivisionNone": "الدولة بأكملها",
+    "holidaySubdivisionPlaceholder": "اختر منطقة…",
+    "holidayPublicLabel": "إظهار العطلات الرسمية",
+    "holidaySchoolLabel": "إظهار العطلات المدرسية",
+    "holidayPublicColor": "لون العطلات الرسمية",
+    "holidaySchoolColor": "لون العطلات المدرسية",
+    "holidaySaveBtn": "حفظ",
+    "holidaySaved": "تم حفظ إعدادات التقويم.",
+    "holidaySyncBtn": "المزامنة الآن",
+    "holidaySynced": "تمت مزامنة العطلات.",
+    "holidaySyncError": "فشلت المزامنة.",
+    "holidayLastSync": "آخر مزامنة: {{date}}",
+    "holidayNeverSynced": "لم تتم المزامنة بعد",
+    "holidayCountryRequired": "يرجى اختيار دولة أولاً.",
+    "adminOnly": "هذا القسم متاح للمسؤولين فقط."
   },
   "login": {
     "tagline": "تخطيط عائلي. آمن. يحترم الخصوصية. مفتوح المصدر.",

@@ -535,7 +535,9 @@
     "attachmentDocumentName": "{{title}} - {{name}}",
     "attachmentDocumentDescription": "Вкладення завантажено для події календаря «{{title}}».",
     "agendaEmpty": "Немає подій у вибраному періоді",
-    "taskChipAriaLabel": "Завдання: {{title}}"
+    "taskChipAriaLabel": "Завдання: {{title}}",
+    "toggleHolidays": "Святкові дні",
+    "toggleSchool": "Шкільні канікули"
   },
   "notes": {
     "title": "Нотатки",
@@ -1223,7 +1225,28 @@
     "weatherLocateUnsupported": "Ваш браузер не підтримує геолокацію.",
     "cropDialogTitle": "Обрізати зображення",
     "cropConfirm": "Обрізати",
-    "cropZoomLabel": "Масштаб"
+    "cropZoomLabel": "Масштаб",
+    "sectionHolidays": "Свята та шкільні канікули",
+    "holidayTitle": "API OpenHolidays (безкоштовно, без ключа API)",
+    "holidayDescription": "Показувати офіційні свята та шкільні канікули у вашому календарі.",
+    "holidayCountryLabel": "Країна",
+    "holidayCountryPlaceholder": "Виберіть країну…",
+    "holidaySubdivisionLabel": "Регіон / область",
+    "holidaySubdivisionNone": "Уся країна",
+    "holidaySubdivisionPlaceholder": "Виберіть регіон…",
+    "holidayPublicLabel": "Показувати свята",
+    "holidaySchoolLabel": "Показувати шкільні канікули",
+    "holidayPublicColor": "Колір свят",
+    "holidaySchoolColor": "Колір шкільних канікул",
+    "holidaySaveBtn": "Зберегти",
+    "holidaySaved": "Налаштування календаря збережено.",
+    "holidaySyncBtn": "Синхронізувати зараз",
+    "holidaySynced": "Свята синхронізовано.",
+    "holidaySyncError": "Помилка синхронізації.",
+    "holidayLastSync": "Остання синхронізація: {{date}}",
+    "holidayNeverSynced": "Ще не синхронізовано",
+    "holidayCountryRequired": "Спочатку виберіть країну.",
+    "adminOnly": "Цей розділ доступний лише адміністраторам."
   },
   "login": {
     "tagline": "Планування для родини. Безпечно. Конфіденційно. Відкритий код.",

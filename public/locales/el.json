@@ -535,7 +535,9 @@
     "attachmentDocumentName": "{{title}} - {{name}}",
     "attachmentDocumentDescription": "Συνημμένο που ανέβηκε για το συμβάν ημερολογίου \"{{title}}\".",
     "agendaEmpty": "Δεν υπάρχουν ραντεβού στο επιλεγμένο διάστημα",
-    "taskChipAriaLabel": "Εργασία: {{title}}"
+    "taskChipAriaLabel": "Εργασία: {{title}}",
+    "toggleHolidays": "Αργίες",
+    "toggleSchool": "Σχολικές διακοπές"
   },
   "notes": {
     "title": "Σημειώσεις",
@@ -1223,7 +1225,28 @@
     "weatherLocateUnsupported": "Ο εντοπισμός γεωγραφικής θέσης δεν υποστηρίζεται από τον περιηγητή σας.",
     "cropDialogTitle": "Περικοπή εικόνας",
     "cropConfirm": "Περικοπή",
-    "cropZoomLabel": "Ζουμ"
+    "cropZoomLabel": "Ζουμ",
+    "sectionHolidays": "Αργίες και σχολικές διακοπές",
+    "holidayTitle": "OpenHolidays API (δωρεάν, χωρίς κλειδί API)",
+    "holidayDescription": "Εμφάνιση επίσημων αργιών και σχολικών διακοπών στο ημερολόγιό σας.",
+    "holidayCountryLabel": "Χώρα",
+    "holidayCountryPlaceholder": "Επιλέξτε χώρα…",
+    "holidaySubdivisionLabel": "Περιφέρεια / Πολιτεία",
+    "holidaySubdivisionNone": "Ολόκληρη η χώρα",
+    "holidaySubdivisionPlaceholder": "Επιλέξτε περιφέρεια…",
+    "holidayPublicLabel": "Εμφάνιση αργιών",
+    "holidaySchoolLabel": "Εμφάνιση σχολικών διακοπών",
+    "holidayPublicColor": "Χρώμα αργιών",
+    "holidaySchoolColor": "Χρώμα σχολικών διακοπών",
+    "holidaySaveBtn": "Αποθήκευση",
+    "holidaySaved": "Οι ρυθμίσεις ημερολογίου αποθηκεύτηκαν.",
+    "holidaySyncBtn": "Συγχρονισμός τώρα",
+    "holidaySynced": "Οι αργίες συγχρονίστηκαν.",
+    "holidaySyncError": "Ο συγχρονισμός απέτυχε.",
+    "holidayLastSync": "Τελευταίος συγχρονισμός: {{date}}",
+    "holidayNeverSynced": "Δεν έχει συγχρονιστεί ακόμη",
+    "holidayCountryRequired": "Επιλέξτε πρώτα μια χώρα.",
+    "adminOnly": "Αυτή η ενότητα είναι διαθέσιμη μόνο για διαχειριστές."
   },
   "login": {
     "tagline": "Οικογενειακός προγραμματισμός. Ασφαλής. Φιλικός προς την ιδιωτικότητα. Ανοιχτός κώδικας.",

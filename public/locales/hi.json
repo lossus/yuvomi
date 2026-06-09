@@ -535,7 +535,9 @@
     "attachmentDocumentName": "{{title}} - {{name}}",
     "attachmentDocumentDescription": "कैलेंडर इवेंट \"{{title}}\" के लिए अपलोड किया गया अटैचमेंट।",
     "agendaEmpty": "चुनी गई अवधि में कोई कार्यक्रम नहीं",
-    "taskChipAriaLabel": "कार्य: {{title}}"
+    "taskChipAriaLabel": "कार्य: {{title}}",
+    "toggleHolidays": "सार्वजनिक अवकाश",
+    "toggleSchool": "स्कूल की छुट्टियाँ"
   },
   "notes": {
     "title": "नोट बोर्ड",
@@ -1223,7 +1225,28 @@
     "weatherLocateUnsupported": "आपका ब्राउज़र जियोलोकेशन का समर्थन नहीं करता।",
     "cropDialogTitle": "छवि क्रॉप करें",
     "cropConfirm": "क्रॉप करें",
-    "cropZoomLabel": "ज़ूम"
+    "cropZoomLabel": "ज़ूम",
+    "sectionHolidays": "सार्वजनिक अवकाश और स्कूल की छुट्टियाँ",
+    "holidayTitle": "OpenHolidays API (निःशुल्क, कोई API कुंजी नहीं)",
+    "holidayDescription": "अपने कैलेंडर में आधिकारिक सार्वजनिक अवकाश और स्कूल की छुट्टियाँ दिखाएँ।",
+    "holidayCountryLabel": "देश",
+    "holidayCountryPlaceholder": "एक देश चुनें…",
+    "holidaySubdivisionLabel": "राज्य / क्षेत्र",
+    "holidaySubdivisionNone": "पूरा देश",
+    "holidaySubdivisionPlaceholder": "एक राज्य चुनें…",
+    "holidayPublicLabel": "सार्वजनिक अवकाश दिखाएँ",
+    "holidaySchoolLabel": "स्कूल की छुट्टियाँ दिखाएँ",
+    "holidayPublicColor": "सार्वजनिक अवकाश का रंग",
+    "holidaySchoolColor": "स्कूल की छुट्टियों का रंग",
+    "holidaySaveBtn": "सहेजें",
+    "holidaySaved": "कैलेंडर सेटिंग्स सहेजी गईं।",
+    "holidaySyncBtn": "अभी सिंक करें",
+    "holidaySynced": "अवकाश सिंक हो गए।",
+    "holidaySyncError": "सिंक विफल रहा।",
+    "holidayLastSync": "अंतिम सिंक: {{date}}",
+    "holidayNeverSynced": "अभी तक सिंक नहीं हुआ",
+    "holidayCountryRequired": "कृपया पहले एक देश चुनें।",
+    "adminOnly": "यह अनुभाग केवल व्यवस्थापकों के लिए उपलब्ध है।"
   },
   "login": {
     "tagline": "पारिवारिक योजना। सुरक्षित। गोपनीयता-अनुकूल। ओपन सोर्स।",

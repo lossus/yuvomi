@@ -535,7 +535,9 @@
     "attachmentDocumentName": "{{title}} - {{name}}",
     "attachmentDocumentDescription": "为日历事件“{{title}}”上传的附件。",
     "agendaEmpty": "所选时间范围内没有日程",
-    "taskChipAriaLabel": "任务：{{title}}"
+    "taskChipAriaLabel": "任务：{{title}}",
+    "toggleHolidays": "法定节假日",
+    "toggleSchool": "学校假期"
   },
   "notes": {
     "title": "便签板",
@@ -1223,7 +1225,28 @@
     "weatherLocateUnsupported": "您的浏览器不支持地理定位。",
     "cropDialogTitle": "裁剪图片",
     "cropConfirm": "裁剪",
-    "cropZoomLabel": "缩放"
+    "cropZoomLabel": "缩放",
+    "sectionHolidays": "法定节假日和学校假期",
+    "holidayTitle": "OpenHolidays API（免费，无需 API 密钥）",
+    "holidayDescription": "在日历中显示官方法定节假日和学校假期。",
+    "holidayCountryLabel": "国家/地区",
+    "holidayCountryPlaceholder": "选择国家/地区…",
+    "holidaySubdivisionLabel": "州/地区",
+    "holidaySubdivisionNone": "整个国家/地区",
+    "holidaySubdivisionPlaceholder": "选择地区…",
+    "holidayPublicLabel": "显示法定节假日",
+    "holidaySchoolLabel": "显示学校假期",
+    "holidayPublicColor": "法定节假日颜色",
+    "holidaySchoolColor": "学校假期颜色",
+    "holidaySaveBtn": "保存",
+    "holidaySaved": "日历设置已保存。",
+    "holidaySyncBtn": "立即同步",
+    "holidaySynced": "节假日已同步。",
+    "holidaySyncError": "同步失败。",
+    "holidayLastSync": "上次同步：{{date}}",
+    "holidayNeverSynced": "尚未同步",
+    "holidayCountryRequired": "请先选择一个国家/地区。",
+    "adminOnly": "此部分仅对管理员可用。"
   },
   "login": {
     "tagline": "家庭规划。安全。注重隐私。开源。",

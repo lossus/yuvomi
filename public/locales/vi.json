@@ -535,7 +535,9 @@
     "attachmentDocumentDescription": "Tệp đính kèm đã được tải lên cho sự kiện lịch \"{{title}}\".",
     "agendaEmpty": "Không có sự kiện nào trong phạm vi đã chọn",
     "taskChipAriaLabel": "Nhiệm vụ: {{title}}",
-    "colorOverriddenByAssignee": "Màu sắc bị ghi đè bởi người được giao"
+    "colorOverriddenByAssignee": "Màu sắc bị ghi đè bởi người được giao",
+    "toggleHolidays": "Ngày lễ",
+    "toggleSchool": "Kỳ nghỉ học"
   },
   "notes": {
     "title": "Bảng ghi chú",
@@ -1223,7 +1225,28 @@
     "backupWebdavUsername": "Tên người dùng",
     "cropConfirm": "Xác nhận cắt xén",
     "cropDialogTitle": "Cắt xén hình ảnh",
-    "cropZoomLabel": "Thu phóng"
+    "cropZoomLabel": "Thu phóng",
+    "sectionHolidays": "Ngày lễ và kỳ nghỉ học",
+    "holidayTitle": "OpenHolidays API (miễn phí, không cần khóa API)",
+    "holidayDescription": "Hiển thị các ngày lễ chính thức và kỳ nghỉ học trong lịch của bạn.",
+    "holidayCountryLabel": "Quốc gia",
+    "holidayCountryPlaceholder": "Chọn một quốc gia…",
+    "holidaySubdivisionLabel": "Tỉnh / Khu vực",
+    "holidaySubdivisionNone": "Toàn bộ quốc gia",
+    "holidaySubdivisionPlaceholder": "Chọn một khu vực…",
+    "holidayPublicLabel": "Hiển thị ngày lễ",
+    "holidaySchoolLabel": "Hiển thị kỳ nghỉ học",
+    "holidayPublicColor": "Màu ngày lễ",
+    "holidaySchoolColor": "Màu kỳ nghỉ học",
+    "holidaySaveBtn": "Lưu",
+    "holidaySaved": "Đã lưu cài đặt lịch.",
+    "holidaySyncBtn": "Đồng bộ ngay",
+    "holidaySynced": "Đã đồng bộ ngày lễ.",
+    "holidaySyncError": "Đồng bộ thất bại.",
+    "holidayLastSync": "Lần đồng bộ cuối: {{date}}",
+    "holidayNeverSynced": "Chưa đồng bộ",
+    "holidayCountryRequired": "Vui lòng chọn một quốc gia trước.",
+    "adminOnly": "Phần này chỉ dành cho quản trị viên."
   },
   "login": {
     "tagline": "Kế hoạch gia đình. Bảo mật. Thân thiện với quyền riêng tư. Mã nguồn mở.",

@@ -535,7 +535,9 @@
     "attachmentDocumentName": "{{title}} - {{name}}",
     "attachmentDocumentDescription": "\"{{title}}\" takvim etkinliği için ek yüklendi.",
     "agendaEmpty": "Seçilen aralıkta etkinlik yok",
-    "taskChipAriaLabel": "Görev: {{title}}"
+    "taskChipAriaLabel": "Görev: {{title}}",
+    "toggleHolidays": "Resmi tatiller",
+    "toggleSchool": "Okul tatilleri"
   },
   "notes": {
     "title": "Notlar",
@@ -1223,7 +1225,28 @@
     "weatherLocateUnsupported": "Tarayıcınız coğrafi konum belirlemeyi desteklemiyor.",
     "cropDialogTitle": "Resmi kırp",
     "cropConfirm": "Kırp",
-    "cropZoomLabel": "Zoom"
+    "cropZoomLabel": "Zoom",
+    "sectionHolidays": "Resmi tatiller ve okul tatilleri",
+    "holidayTitle": "OpenHolidays API (ücretsiz, API anahtarı gerekmez)",
+    "holidayDescription": "Resmi tatilleri ve okul tatillerini takviminizde gösterin.",
+    "holidayCountryLabel": "Ülke",
+    "holidayCountryPlaceholder": "Bir ülke seçin…",
+    "holidaySubdivisionLabel": "Eyalet / Bölge",
+    "holidaySubdivisionNone": "Tüm ülke",
+    "holidaySubdivisionPlaceholder": "Bir bölge seçin…",
+    "holidayPublicLabel": "Resmi tatilleri göster",
+    "holidaySchoolLabel": "Okul tatillerini göster",
+    "holidayPublicColor": "Resmi tatil rengi",
+    "holidaySchoolColor": "Okul tatili rengi",
+    "holidaySaveBtn": "Kaydet",
+    "holidaySaved": "Takvim ayarları kaydedildi.",
+    "holidaySyncBtn": "Şimdi senkronize et",
+    "holidaySynced": "Tatiller senkronize edildi.",
+    "holidaySyncError": "Senkronizasyon başarısız oldu.",
+    "holidayLastSync": "Son senkronizasyon: {{date}}",
+    "holidayNeverSynced": "Henüz senkronize edilmedi",
+    "holidayCountryRequired": "Lütfen önce bir ülke seçin.",
+    "adminOnly": "Bu bölüm yalnızca yöneticiler için kullanılabilir."
   },
   "login": {
     "tagline": "Aile planlaması. Güvenli. Gizlilik dostu. Açık kaynak.",

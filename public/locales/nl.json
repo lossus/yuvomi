@@ -535,7 +535,9 @@
     "attachmentDocumentName": "{{title}} - {{name}}",
     "attachmentDocumentDescription": "Bijlage geüpload voor agendagebeurtenis \"{{title}}\".",
     "agendaEmpty": "Geen evenementen in het geselecteerde bereik",
-    "taskChipAriaLabel": "Taak: {{title}}"
+    "taskChipAriaLabel": "Taak: {{title}}",
+    "toggleHolidays": "Feestdagen",
+    "toggleSchool": "Schoolvakanties"
   },
   "notes": {
     "title": "Bord",
@@ -1223,7 +1225,28 @@
     "weatherLocateUnsupported": "Geolocatie wordt niet ondersteund door uw browser.",
     "cropDialogTitle": "Afbeelding bijsnijden",
     "cropConfirm": "Bijsnijden",
-    "cropZoomLabel": "Zoom"
+    "cropZoomLabel": "Zoom",
+    "sectionHolidays": "Feestdagen en schoolvakanties",
+    "holidayTitle": "OpenHolidays API (gratis, geen API-sleutel)",
+    "holidayDescription": "Officiële feestdagen en schoolvakanties in je agenda weergeven.",
+    "holidayCountryLabel": "Land",
+    "holidayCountryPlaceholder": "Selecteer een land…",
+    "holidaySubdivisionLabel": "Provincie / Regio",
+    "holidaySubdivisionNone": "Hele land",
+    "holidaySubdivisionPlaceholder": "Selecteer een regio…",
+    "holidayPublicLabel": "Feestdagen weergeven",
+    "holidaySchoolLabel": "Schoolvakanties weergeven",
+    "holidayPublicColor": "Kleur feestdagen",
+    "holidaySchoolColor": "Kleur schoolvakanties",
+    "holidaySaveBtn": "Opslaan",
+    "holidaySaved": "Agenda-instellingen opgeslagen.",
+    "holidaySyncBtn": "Nu synchroniseren",
+    "holidaySynced": "Feestdagen gesynchroniseerd.",
+    "holidaySyncError": "Synchronisatie mislukt.",
+    "holidayLastSync": "Laatste synchronisatie: {{date}}",
+    "holidayNeverSynced": "Nog niet gesynchroniseerd",
+    "holidayCountryRequired": "Selecteer eerst een land.",
+    "adminOnly": "Dit gedeelte is alleen beschikbaar voor beheerders."
   },
   "login": {
     "tagline": "Gezinsplanning. Veilig. Privacyvriendelijk. Open source.",
