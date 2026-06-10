@@ -5,7 +5,7 @@
  */
 
 import { api } from '/api.js';
-import { openModal as openSharedModal, closeModal } from '/components/modal.js';
+import { openModal as openSharedModal, closeModal, selectModal } from '/components/modal.js';
 import { t, formatDate } from '/i18n.js';
 import { esc } from '/utils/html.js';
 import { stagger } from '/utils/ux.js';
@@ -49,6 +49,7 @@ let state = {
   documents: [],
   folders: [],
   members: [],
+  dmsAccounts: [],
   view: localStorage.getItem('oikos-documents-view') || 'grid',
   status: 'active',
   category: '',
@@ -114,8 +115,9 @@ export async function render(container) {
 
   if (window.lucide) lucide.createIcons({ el: _container });
 
-  await Promise.all([loadMembers(), loadFolders()]);
+  await Promise.all([loadMembers(), loadFolders(), loadMetaOptions()]);
   await loadDocuments();
+  renderDmsHeaderBtn();
   bindPageEvents();
   renderFolderOptions();
   renderFolderBrowser();
@@ -139,6 +141,41 @@ async function loadDocuments() {
 async function loadFolders() {
   const res = await api.get('/documents/folders');
   state.folders = res.data || [];
+}
+
+async function loadMetaOptions() {
+  try {
+    const res = await api.get('/documents/meta/options');
+    state.dmsAccounts = res.data?.dms_accounts || [];
+  } catch {
+    state.dmsAccounts = [];
+  }
+}
+
+function renderDmsHeaderBtn() {
+  const toolbar = _container.querySelector('.documents-toolbar');
+  if (!toolbar) return;
+  const existing = toolbar.querySelector('#documents-dms-link-btn');
+  if (existing) existing.remove();
+  if (!state.dmsAccounts.length) return;
+  const btn = document.createElement('button');
+  btn.className = 'btn btn--secondary';
+  btn.id = 'documents-dms-link-btn';
+  const icon = document.createElement('i');
+  icon.dataset.lucide = 'link';
+  icon.className = 'icon-md';
+  icon.setAttribute('aria-hidden', 'true');
+  btn.append(icon);
+  btn.append(document.createTextNode(t('documents.linkFromDms')));
+  btn.addEventListener('click', () => openDmsLinkModal());
+  // Insert after the folder button
+  const folderBtn = toolbar.querySelector('#documents-folder-btn');
+  if (folderBtn) {
+    folderBtn.insertAdjacentElement('afterend', btn);
+  } else {
+    toolbar.append(btn);
+  }
+  if (window.lucide) lucide.createIcons({ el: btn });
 }
 
 function renderFolderOptions() {
@@ -299,6 +336,7 @@ function renderMeta(doc) {
     ${doc.folder_name ? `<span><i data-lucide="folder" aria-hidden="true"></i>${esc(doc.folder_name)}</span>` : ''}
     <span><i data-lucide="${doc.visibility === 'family' ? 'users' : doc.visibility === 'private' ? 'lock' : 'user-check'}" aria-hidden="true"></i>${t(`documents.visibility.${doc.visibility}`)}</span>
     <span>${formatFileSize(doc.file_size)}</span>
+    ${doc.storage_provider === 'external' ? `<span class="doc-badge doc-badge--dms">${t('documents.dmsLinked')}</span>` : ''}
   `;
 }
 
@@ -318,6 +356,10 @@ function renderActions(doc) {
     <button class="btn btn--ghost btn--icon btn--icon-sm" data-action="archive" data-id="${doc.id}" data-archived="${doc.status === 'archived'}" title="${doc.status === 'archived' ? t('documents.restoreAction') : t('documents.archiveAction')}" aria-label="${doc.status === 'archived' ? t('documents.restoreAction') : t('documents.archiveAction')}">
       <i data-lucide="${doc.status === 'archived' ? 'archive-restore' : 'archive'}" class="icon-md" aria-hidden="true"></i>
     </button>
+    ${doc.storage_provider === 'local' && state.dmsAccounts.length > 0 ? `
+    <button class="btn btn--ghost btn--icon btn--icon-sm" data-action="push-dms" data-id="${doc.id}" title="${t('documents.pushToDms')}" aria-label="${t('documents.pushToDms')}">
+      <i data-lucide="upload" class="icon-md" aria-hidden="true"></i>
+    </button>` : ''}
     <button class="btn btn--ghost btn--icon btn--icon-sm documents-danger" data-action="delete" data-id="${doc.id}" title="${t('common.delete')}" aria-label="${t('common.delete')}">
       <i data-lucide="trash-2" class="icon-md" aria-hidden="true"></i>
     </button>
@@ -377,6 +419,26 @@ async function handleDocumentAction(e) {
     await loadDocuments();
     renderFolderBrowser();
     renderDocuments();
+  }
+  if (btn.dataset.action === 'push-dms') {
+    if (!state.dmsAccounts.length) return;
+    let accountId = state.dmsAccounts[0].id;
+    if (state.dmsAccounts.length > 1) {
+      // Bei mehreren DMS-Konten Ziel auswählen lassen (promise-basiertes Auswahl-Modal
+      // ohne Dirty-Check, Abbruch → null).
+      accountId = await selectModal(
+        t('documents.pushToDms'),
+        state.dmsAccounts.map((account) => ({ value: account.id, label: account.name })),
+      );
+      if (!accountId) return;
+    }
+    try {
+      await api.post('/documents/dms/push', { account_id: accountId, document_id: doc.id });
+      window.oikos?.showToast(t('documents.pushToDmsQueued'), 'success');
+    } catch (err) {
+      window.oikos?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+    }
+    return;
   }
   if (btn.dataset.action === 'delete') {
     state.allDocuments = state.allDocuments.filter((d) => d.id !== doc.id);
@@ -625,6 +687,133 @@ function openFolderModal() {
   });
 }
 
+// --------------------------------------------------------
+// DMS Link Modal
+// --------------------------------------------------------
+
+function openDmsLinkModal() {
+  if (!state.dmsAccounts.length) return;
+  openSharedModal({
+    title: t('documents.linkFromDms'),
+    size: 'md',
+    content: '<div id="dms-modal-root"></div>',
+    onSave(panel) {
+      const root = panel.querySelector('#dms-modal-root');
+      if (!root) return;
+
+      let selectedAccountId = state.dmsAccounts[0].id;
+
+      // Account selector — only render when multiple accounts exist
+      if (state.dmsAccounts.length > 1) {
+        const accountLabel = document.createElement('label');
+        accountLabel.className = 'label';
+        accountLabel.setAttribute('for', 'dms-account-select');
+        accountLabel.textContent = t('documents.dmsAccountLabel');
+
+        const accountSelect = document.createElement('select');
+        accountSelect.className = 'input dms-account-select';
+        accountSelect.id = 'dms-account-select';
+        for (const account of state.dmsAccounts) {
+          const option = document.createElement('option');
+          option.value = account.id;
+          option.textContent = account.name;
+          accountSelect.appendChild(option);
+        }
+
+        accountSelect.addEventListener('change', () => {
+          selectedAccountId = accountSelect.value;
+          // Clear results and re-run search with new account
+          results.replaceChildren();
+          if (input.value.trim()) {
+            input.dispatchEvent(new Event('input'));
+          }
+        });
+
+        root.append(accountLabel, accountSelect);
+      }
+
+      const input = document.createElement('input');
+      input.className = 'input';
+      input.id = 'dms-search';
+      input.type = 'search';
+      input.placeholder = t('documents.dmsSearchPlaceholder');
+
+      const results = document.createElement('ul');
+      results.id = 'dms-results';
+      results.className = 'dms-results';
+
+      root.append(input, results);
+
+      let dmsSearchTimer;
+      input.addEventListener('input', () => {
+        clearTimeout(dmsSearchTimer);
+        dmsSearchTimer = setTimeout(async () => {
+          const q = input.value.trim();
+          results.replaceChildren();
+          if (!q) return;
+          try {
+            const res = await api.get(`/documents/dms/search?account_id=${selectedAccountId}&q=${encodeURIComponent(q)}`);
+            renderDmsResults(results, res.data, selectedAccountId);
+          } catch {
+            const li = document.createElement('li');
+            li.className = 'form-hint';
+            li.textContent = t('documents.dmsNoResults');
+            results.appendChild(li);
+          }
+        }, 300);
+      });
+
+      setTimeout(() => input.focus(), 60);
+    },
+  });
+}
+
+function renderDmsResults(container, items, accountId) {
+  container.replaceChildren();
+  if (!items || !items.length) {
+    const li = document.createElement('li');
+    li.className = 'form-hint';
+    li.textContent = t('documents.dmsNoResults');
+    container.appendChild(li);
+    return;
+  }
+  for (const item of items) {
+    const li = document.createElement('li');
+    li.className = 'dms-result';
+
+    const label = document.createElement('span');
+    label.className = 'dms-result__title';
+    label.textContent = item.title;
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'btn btn--primary btn--sm';
+    btn.textContent = t('documents.dmsLinkBtn');
+
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      try {
+        await api.post('/documents/dms/link', {
+          account_id: accountId,
+          dms_document_id: item.id,
+          category: state.category || 'other',
+          visibility: 'family',
+        });
+        closeModal({ force: true });
+        await loadDocuments();
+        renderFolderBrowser();
+        renderDocuments();
+      } catch (err) {
+        btn.disabled = false;
+        window.oikos?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+      }
+    });
+
+    li.append(label, btn);
+    container.appendChild(li);
+  }
+}
+
 function readFileAsDataUrl(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -648,6 +837,11 @@ function openDocumentViewer(doc) {
   const labels = categoryLabels();
   const previewUrl = `/api/v1/documents/${doc.id}/preview`;
   const downloadUrl = `/api/v1/documents/${doc.id}/download`;
+  // Defense-in-Depth: nur http(s)-Deep-Links rendern, niemals javascript:/data:-Schemata
+  // (zusätzlich zur serverseitigen base_url-Validierung bei der DMS-Account-Anlage).
+  const externalUrl = doc.storage_provider === 'external' && /^https?:\/\//i.test(doc.external_url || '')
+    ? doc.external_url
+    : '';
 
   openSharedModal({
     title: esc(doc.name),
@@ -659,6 +853,11 @@ function openDocumentViewer(doc) {
           ${doc.folder_name ? `<span><i data-lucide="folder" aria-hidden="true"></i>${esc(doc.folder_name)}</span>` : ''}
           <span>${formatFileSize(doc.file_size)}</span>
           <span class="document-viewer__actions">
+            ${externalUrl ? `
+            <a class="btn btn--ghost btn--sm doc-viewer__dms-link" href="${esc(externalUrl)}" target="_blank" rel="noopener noreferrer">
+              <i data-lucide="external-link" class="icon-md" aria-hidden="true"></i>
+              ${t('documents.dmsOpenExternal')}
+            </a>` : ''}
             <a class="btn btn--primary btn--icon btn--icon-sm" href="${downloadUrl}" download
                title="${t('documents.downloadAction')}" aria-label="${t('documents.downloadAction')}">
               <i data-lucide="download" class="icon-md" aria-hidden="true"></i>
