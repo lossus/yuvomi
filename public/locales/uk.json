@@ -1194,7 +1194,7 @@
         "thirdPartyModulesStatusDisabled": "Disabled",
         "thirdPartyModulesStatusError": "Error",
         "thirdPartyModulesSaved": "Module setting saved.",
-        "modulesDragHint": "Drag modules to define the left menu order. Settings always stays last.",
+        "modulesDragHint": "Перетягуйте модулі або використовуйте стрілки, щоб змінювати порядок лише в межах їхньої групи.",
         "modulesDragHandle": "Drag to reorder",
         "modulesBuiltInBadge": "Вбудований",
         "modulesThirdPartyBadge": "Module",
@@ -1365,7 +1365,14 @@
         "systemSetupComplete": "Завершено",
         "systemSetupRequired": "Потрібне налаштування",
         "apiTokensEmpty": "Токенів API ще немає.",
-        "familyEmpty": "Членів родини ще немає."
+        "familyEmpty": "Членів родини ще немає.",
+        "mobileNavigationTitle": "Мобільна навігація",
+        "mobileNavigationHint": "Виберіть три розділи, які відображатимуться між Оглядом і Більше в нижній навігації.",
+        "mobileNavigationSlotLabel": "Позиція {{position}}",
+        "mobileNavigationEmptyOption": "Не використовується",
+        "desktopNavigationTitle": "Вебнавігація",
+        "desktopNavigationHint": "Увімкніть модулі та впорядкуйте їх у групах Огляд, Планування й Дім.",
+        "mobileNavigationSaved": "Мобільну навігацію збережено."
     },
     "login": {
         "tagline": "Планування для родини. Безпечно. Конфіденційно. Відкритий код.",

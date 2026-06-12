@@ -1194,7 +1194,7 @@
         "thirdPartyModulesStatusDisabled": "Disabled",
         "thirdPartyModulesStatusError": "Error",
         "thirdPartyModulesSaved": "Module setting saved.",
-        "modulesDragHint": "Drag modules to define the left menu order. Settings always stays last.",
+        "modulesDragHint": "Drag modules or use the arrows to change their order within their group only.",
         "modulesDragHandle": "Drag to reorder",
         "modulesBuiltInBadge": "Built-in",
         "modulesThirdPartyBadge": "Module",
@@ -1365,7 +1365,14 @@
         "systemSetupComplete": "Complete",
         "systemSetupRequired": "Setup required",
         "apiTokensEmpty": "No API tokens yet.",
-        "familyEmpty": "No family members yet."
+        "familyEmpty": "No family members yet.",
+        "mobileNavigationTitle": "Mobile navigation",
+        "mobileNavigationHint": "Choose three destinations to show between Overview and More in the bottom navigation.",
+        "mobileNavigationSlotLabel": "Position {{position}}",
+        "mobileNavigationEmptyOption": "Not used",
+        "desktopNavigationTitle": "Web navigation",
+        "desktopNavigationHint": "Enable modules and sort them within the Overview, Plan, and Home groups.",
+        "mobileNavigationSaved": "Mobile navigation saved."
     },
     "login": {
         "tagline": "Family planning. Secure. Privacy-friendly. Open source.",

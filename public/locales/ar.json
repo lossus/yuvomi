@@ -1194,7 +1194,7 @@
         "thirdPartyModulesStatusDisabled": "Disabled",
         "thirdPartyModulesStatusError": "Error",
         "thirdPartyModulesSaved": "Module setting saved.",
-        "modulesDragHint": "Drag modules to define the left menu order. Settings always stays last.",
+        "modulesDragHint": "اسحب الوحدات أو استخدم الأسهم لتغيير ترتيبها داخل مجموعتها فقط.",
         "modulesDragHandle": "Drag to reorder",
         "modulesBuiltInBadge": "مدمج",
         "modulesThirdPartyBadge": "Module",
@@ -1365,7 +1365,14 @@
         "systemSetupComplete": "مكتمل",
         "systemSetupRequired": "الإعداد مطلوب",
         "apiTokensEmpty": "لا توجد رموز API بعد.",
-        "familyEmpty": "لا يوجد أفراد عائلة بعد."
+        "familyEmpty": "لا يوجد أفراد عائلة بعد.",
+        "mobileNavigationTitle": "التنقل على الهاتف",
+        "mobileNavigationHint": "اختر ثلاث وجهات تظهر بين النظرة العامة والمزيد في شريط التنقل السفلي.",
+        "mobileNavigationSlotLabel": "الموضع {{position}}",
+        "mobileNavigationEmptyOption": "غير مستخدم",
+        "desktopNavigationTitle": "التنقل على الويب",
+        "desktopNavigationHint": "فعّل الوحدات ورتّبها داخل مجموعات النظرة العامة والتخطيط والمنزل.",
+        "mobileNavigationSaved": "تم حفظ التنقل على الهاتف."
     },
     "login": {
         "tagline": "تخطيط عائلي. آمن. يحترم الخصوصية. مفتوح المصدر.",

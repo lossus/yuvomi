@@ -44,6 +44,8 @@ const TOGGLEABLE_MODULES = [
   'housekeeping',
 ];
 const MODULE_ORDER_RE = /^(dashboard|tasks|calendar|meals|recipes|shopping|birthdays|notes|contacts|budget|documents|housekeeping|third-party-[a-z0-9][a-z0-9-]{1,62}[a-z0-9])$/;
+const MOBILE_NAV_ORDER_RE = /^(tasks|calendar|kitchen|meals|recipes|shopping|birthdays|notes|contacts|budget|documents|housekeeping|third-party-[a-z0-9][a-z0-9-]{1,62}[a-z0-9])$/;
+const KITCHEN_NAV_IDS = new Set(['kitchen', 'meals', 'recipes', 'shopping']);
 
 function defaultWidgetSize(id) {
   if (['tasks', 'calendar'].includes(id)) return '2x2';
@@ -129,6 +131,28 @@ function parseModuleOrder(raw) {
   }
 }
 
+function normalizeMobileNavOrder(order) {
+  const normalized = [];
+
+  for (const id of Array.isArray(order) ? order : []) {
+    if (typeof id !== 'string' || !MOBILE_NAV_ORDER_RE.test(id)) continue;
+    const normalizedId = KITCHEN_NAV_IDS.has(id) ? 'kitchen' : id;
+    if (!normalized.includes(normalizedId)) normalized.push(normalizedId);
+    if (normalized.length === 3) break;
+  }
+
+  return normalized;
+}
+
+function parseMobileNavOrder(raw) {
+  if (!raw) return [];
+  try {
+    return normalizeMobileNavOrder(JSON.parse(raw));
+  } catch {
+    return [];
+  }
+}
+
 function normalizeWidgetConfig(input) {
   const valid = Array.isArray(input)
     ? input
@@ -170,6 +194,7 @@ router.get('/', (req, res) => {
     const dashboardWidgets = parseWidgetConfig(cfgGet('dashboard_widgets'));
     const disabledModules = parseDisabledModules(cfgGet('disabled_modules'));
     const moduleOrder = parseModuleOrder(cfgUserGet('module_order', req.authUserId) ?? cfgGet('module_order'));
+    const mobileNavOrder = parseMobileNavOrder(cfgUserGet('mobile_nav_order', req.authUserId));
 
     res.json({
       data: {
@@ -181,6 +206,7 @@ router.get('/', (req, res) => {
         dashboard_widgets: dashboardWidgets,
         disabled_modules: disabledModules,
         module_order: moduleOrder,
+        mobile_nav_order: mobileNavOrder,
         housekeeping_payment_tasks: cfgGet('housekeeping_payment_tasks') === '1',
         weather_provider: cfgGet('weather_provider') ?? null,
         weather_lat:      cfgGet('weather_lat')      ?? null,
@@ -211,7 +237,7 @@ router.get('/', (req, res) => {
 
 router.put('/', (req, res) => {
   try {
-    const { visible_meal_types, currency, date_format, time_format, app_name, dashboard_widgets, disabled_modules, module_order, housekeeping_payment_tasks, weather_provider, weather_lat, weather_lon, weather_city, weather_units, holiday_country, holiday_subdivision, holiday_show_public, holiday_show_school, holiday_public_color, holiday_school_color } = req.body;
+    const { visible_meal_types, currency, date_format, time_format, app_name, dashboard_widgets, disabled_modules, module_order, mobile_nav_order, housekeeping_payment_tasks, weather_provider, weather_lat, weather_lon, weather_city, weather_units, holiday_country, holiday_subdivision, holiday_show_public, holiday_show_school, holiday_public_color, holiday_school_color } = req.body;
 
     if (visible_meal_types !== undefined) {
       if (!Array.isArray(visible_meal_types)) {
@@ -279,6 +305,17 @@ router.put('/', (req, res) => {
       }
       const unique = [...new Set(module_order.filter((id) => typeof id === 'string' && MODULE_ORDER_RE.test(id)))];
       cfgUserSet('module_order', req.authUserId, JSON.stringify(unique));
+    }
+
+    if (mobile_nav_order !== undefined) {
+      if (!Array.isArray(mobile_nav_order)) {
+        return res.status(400).json({ error: 'mobile_nav_order muss ein Array sein', code: 400 });
+      }
+      cfgUserSet(
+        'mobile_nav_order',
+        req.authUserId,
+        JSON.stringify(normalizeMobileNavOrder(mobile_nav_order)),
+      );
     }
 
     if (housekeeping_payment_tasks !== undefined) {
@@ -398,6 +435,7 @@ router.put('/', (req, res) => {
     const savedWidgets = parseWidgetConfig(cfgGet('dashboard_widgets'));
     const savedDisabledModules = parseDisabledModules(cfgGet('disabled_modules'));
     const savedModuleOrder = parseModuleOrder(cfgUserGet('module_order', req.authUserId) ?? cfgGet('module_order'));
+    const savedMobileNavOrder = parseMobileNavOrder(cfgUserGet('mobile_nav_order', req.authUserId));
     const savedHousekeepingPaymentTasks = cfgGet('housekeeping_payment_tasks') === '1';
 
     res.json({
@@ -410,6 +448,7 @@ router.put('/', (req, res) => {
         dashboard_widgets: savedWidgets,
         disabled_modules: savedDisabledModules,
         module_order: savedModuleOrder,
+        mobile_nav_order: savedMobileNavOrder,
         housekeeping_payment_tasks: savedHousekeepingPaymentTasks,
         weather_provider: cfgGet('weather_provider') ?? null,
         weather_lat:      cfgGet('weather_lat')      ?? null,

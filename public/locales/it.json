@@ -1194,7 +1194,7 @@
         "thirdPartyModulesStatusDisabled": "Disabled",
         "thirdPartyModulesStatusError": "Error",
         "thirdPartyModulesSaved": "Module setting saved.",
-        "modulesDragHint": "Drag modules to define the left menu order. Settings always stays last.",
+        "modulesDragHint": "Trascina i moduli o usa le frecce per cambiarne l’ordine solo nel rispettivo gruppo.",
         "modulesDragHandle": "Drag to reorder",
         "modulesBuiltInBadge": "Integrato",
         "modulesThirdPartyBadge": "Module",
@@ -1365,7 +1365,14 @@
         "systemSetupComplete": "Completata",
         "systemSetupRequired": "Configurazione richiesta",
         "apiTokensEmpty": "Ancora nessun token API.",
-        "familyEmpty": "Ancora nessun membro della famiglia."
+        "familyEmpty": "Ancora nessun membro della famiglia.",
+        "mobileNavigationTitle": "Navigazione mobile",
+        "mobileNavigationHint": "Scegli tre destinazioni da mostrare tra Panoramica e Altro nella navigazione inferiore.",
+        "mobileNavigationSlotLabel": "Posizione {{position}}",
+        "mobileNavigationEmptyOption": "Non usato",
+        "desktopNavigationTitle": "Navigazione web",
+        "desktopNavigationHint": "Attiva i moduli e ordinali nei gruppi Panoramica, Pianifica e Casa.",
+        "mobileNavigationSaved": "Navigazione mobile salvata."
     },
     "login": {
         "tagline": "Pianificazione familiare. Sicura. Rispettosa della privacy. Open source.",

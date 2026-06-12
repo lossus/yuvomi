@@ -1194,7 +1194,7 @@
         "thirdPartyModulesStatusDisabled": "Disabled",
         "thirdPartyModulesStatusError": "Error",
         "thirdPartyModulesSaved": "Module setting saved.",
-        "modulesDragHint": "Drag modules to define the left menu order. Settings always stays last.",
+        "modulesDragHint": "Перетаскивайте модули или используйте стрелки, чтобы менять порядок только внутри их группы.",
         "modulesDragHandle": "Drag to reorder",
         "modulesBuiltInBadge": "Встроенный",
         "modulesThirdPartyBadge": "Module",
@@ -1365,7 +1365,14 @@
         "systemSetupComplete": "Завершена",
         "systemSetupRequired": "Требуется настройка",
         "apiTokensEmpty": "Токенов API пока нет.",
-        "familyEmpty": "Членов семьи пока нет."
+        "familyEmpty": "Членов семьи пока нет.",
+        "mobileNavigationTitle": "Мобильная навигация",
+        "mobileNavigationHint": "Выберите три раздела, которые будут показаны между Обзором и Ещё в нижней навигации.",
+        "mobileNavigationSlotLabel": "Позиция {{position}}",
+        "mobileNavigationEmptyOption": "Не используется",
+        "desktopNavigationTitle": "Веб-навигация",
+        "desktopNavigationHint": "Включайте модули и сортируйте их внутри групп Обзор, Планирование и Дом.",
+        "mobileNavigationSaved": "Мобильная навигация сохранена."
     },
     "login": {
         "tagline": "Семейное планирование. Безопасно. С уважением к приватности. Открытый исходный код.",

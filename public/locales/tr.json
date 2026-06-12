@@ -1194,7 +1194,7 @@
         "thirdPartyModulesStatusDisabled": "Disabled",
         "thirdPartyModulesStatusError": "Error",
         "thirdPartyModulesSaved": "Module setting saved.",
-        "modulesDragHint": "Drag modules to define the left menu order. Settings always stays last.",
+        "modulesDragHint": "Modülleri sürükleyin veya okları kullanarak sıralarını yalnızca kendi grupları içinde değiştirin.",
         "modulesDragHandle": "Drag to reorder",
         "modulesBuiltInBadge": "Yerleşik",
         "modulesThirdPartyBadge": "Module",
@@ -1365,7 +1365,14 @@
         "systemSetupComplete": "Tamamlandı",
         "systemSetupRequired": "Kurulum gerekli",
         "apiTokensEmpty": "Henüz API belirteci yok.",
-        "familyEmpty": "Henüz aile üyesi yok."
+        "familyEmpty": "Henüz aile üyesi yok.",
+        "mobileNavigationTitle": "Mobil gezinme",
+        "mobileNavigationHint": "Alt gezinmede Genel Bakış ile Daha Fazla arasında gösterilecek üç hedef seçin.",
+        "mobileNavigationSlotLabel": "Konum {{position}}",
+        "mobileNavigationEmptyOption": "Kullanılmıyor",
+        "desktopNavigationTitle": "Web gezinmesi",
+        "desktopNavigationHint": "Modülleri etkinleştirin ve Genel Bakış, Planlama ve Ev grupları içinde sıralayın.",
+        "mobileNavigationSaved": "Mobil gezinme kaydedildi."
     },
     "login": {
         "tagline": "Aile planlaması. Güvenli. Gizlilik dostu. Açık kaynak.",

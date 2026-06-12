@@ -1200,7 +1200,7 @@
         "thirdPartyModulesStatusDisabled": "Deaktiviert",
         "thirdPartyModulesStatusError": "Fehler",
         "thirdPartyModulesSaved": "Moduleinstellung gespeichert.",
-        "modulesDragHint": "Ziehe Module, um die Reihenfolge im linken Menue festzulegen. Einstellungen bleibt immer zuletzt.",
+        "modulesDragHint": "Ziehe Module oder nutze die Pfeile, um ihre Reihenfolge nur innerhalb der jeweiligen Gruppe zu ändern.",
         "modulesDragHandle": "Zum Sortieren ziehen",
         "modulesBuiltInBadge": "Integriert",
         "modulesThirdPartyBadge": "Modul",
@@ -1371,7 +1371,14 @@
         "systemSetupComplete": "Abgeschlossen",
         "systemSetupRequired": "Einrichtung erforderlich",
         "apiTokensEmpty": "Noch keine API-Tokens vorhanden.",
-        "familyEmpty": "Noch keine Familienmitglieder vorhanden."
+        "familyEmpty": "Noch keine Familienmitglieder vorhanden.",
+        "mobileNavigationTitle": "Mobile Navigation",
+        "mobileNavigationHint": "Wähle drei Ziele, die in der unteren Navigation zwischen Übersicht und Mehr erscheinen.",
+        "mobileNavigationSlotLabel": "Position {{position}}",
+        "mobileNavigationEmptyOption": "Nicht belegt",
+        "desktopNavigationTitle": "Web-Navigation",
+        "desktopNavigationHint": "Aktiviere Module und sortiere sie innerhalb der Gruppen Übersicht, Planen und Zuhause.",
+        "mobileNavigationSaved": "Mobile Navigation gespeichert."
     },
     "login": {
         "tagline": "Familienplanung. Sicher. Datenschutzfreundlich. Open Source.",

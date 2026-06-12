@@ -1194,7 +1194,7 @@
         "thirdPartyModulesStatusDisabled": "Disabled",
         "thirdPartyModulesStatusError": "Error",
         "thirdPartyModulesSaved": "Module setting saved.",
-        "modulesDragHint": "Drag modules to define the left menu order. Settings always stays last.",
+        "modulesDragHint": "Σύρετε τις μονάδες ή χρησιμοποιήστε τα βέλη για να αλλάξετε τη σειρά μόνο μέσα στην ομάδα τους.",
         "modulesDragHandle": "Drag to reorder",
         "modulesBuiltInBadge": "Ενσωματωμένο",
         "modulesThirdPartyBadge": "Module",
@@ -1365,7 +1365,14 @@
         "systemSetupComplete": "Ολοκληρώθηκε",
         "systemSetupRequired": "Απαιτείται εγκατάσταση",
         "apiTokensEmpty": "Δεν υπάρχουν ακόμη διακριτικά API.",
-        "familyEmpty": "Δεν υπάρχουν ακόμη μέλη οικογένειας."
+        "familyEmpty": "Δεν υπάρχουν ακόμη μέλη οικογένειας.",
+        "mobileNavigationTitle": "Πλοήγηση για κινητά",
+        "mobileNavigationHint": "Επιλέξτε τρεις προορισμούς που θα εμφανίζονται ανάμεσα στην Επισκόπηση και τα Περισσότερα στην κάτω πλοήγηση.",
+        "mobileNavigationSlotLabel": "Θέση {{position}}",
+        "mobileNavigationEmptyOption": "Δεν χρησιμοποιείται",
+        "desktopNavigationTitle": "Πλοήγηση ιστού",
+        "desktopNavigationHint": "Ενεργοποιήστε μονάδες και ταξινομήστε τις μέσα στις ομάδες Επισκόπηση, Σχεδιασμός και Σπίτι.",
+        "mobileNavigationSaved": "Η πλοήγηση για κινητά αποθηκεύτηκε."
     },
     "login": {
         "tagline": "Οικογενειακός προγραμματισμός. Ασφαλής. Φιλικός προς την ιδιωτικότητα. Ανοιχτός κώδικας.",

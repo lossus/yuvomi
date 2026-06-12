@@ -1194,7 +1194,7 @@
         "thirdPartyModulesStatusDisabled": "Disabled",
         "thirdPartyModulesStatusError": "Error",
         "thirdPartyModulesSaved": "Module setting saved.",
-        "modulesDragHint": "Drag modules to define the left menu order. Settings always stays last.",
+        "modulesDragHint": "モジュールをドラッグするか矢印を使い、同じグループ内でのみ順序を変更します。",
         "modulesDragHandle": "Drag to reorder",
         "modulesBuiltInBadge": "組み込み",
         "modulesThirdPartyBadge": "Module",
@@ -1365,7 +1365,14 @@
         "systemSetupComplete": "完了",
         "systemSetupRequired": "セットアップが必要",
         "apiTokensEmpty": "API トークンはまだありません。",
-        "familyEmpty": "家族のメンバーはまだいません。"
+        "familyEmpty": "家族のメンバーはまだいません。",
+        "mobileNavigationTitle": "モバイルナビゲーション",
+        "mobileNavigationHint": "下部ナビゲーションの概要とその他の間に表示する3つの移動先を選択します。",
+        "mobileNavigationSlotLabel": "位置 {{position}}",
+        "mobileNavigationEmptyOption": "未使用",
+        "desktopNavigationTitle": "ウェブナビゲーション",
+        "desktopNavigationHint": "モジュールを有効にし、概要、計画、ホームの各グループ内で並べ替えます。",
+        "mobileNavigationSaved": "モバイルナビゲーションを保存しました。"
     },
     "login": {
         "tagline": "家族計画。安全。プライバシー重視。オープンソース。",

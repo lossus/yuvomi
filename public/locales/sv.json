@@ -1194,7 +1194,7 @@
         "thirdPartyModulesStatusDisabled": "Disabled",
         "thirdPartyModulesStatusError": "Error",
         "thirdPartyModulesSaved": "Module setting saved.",
-        "modulesDragHint": "Drag modules to define the left menu order. Settings always stays last.",
+        "modulesDragHint": "Dra moduler eller använd pilarna för att ändra ordningen endast inom respektive grupp.",
         "modulesDragHandle": "Drag to reorder",
         "modulesBuiltInBadge": "Inbyggd",
         "modulesThirdPartyBadge": "Module",
@@ -1365,7 +1365,14 @@
         "systemSetupComplete": "Slutförd",
         "systemSetupRequired": "Installation krävs",
         "apiTokensEmpty": "Inga API-tokens ännu.",
-        "familyEmpty": "Inga familjemedlemmar ännu."
+        "familyEmpty": "Inga familjemedlemmar ännu.",
+        "mobileNavigationTitle": "Mobil navigering",
+        "mobileNavigationHint": "Välj tre mål som visas mellan Översikt och Mer i den nedre navigeringen.",
+        "mobileNavigationSlotLabel": "Position {{position}}",
+        "mobileNavigationEmptyOption": "Används inte",
+        "desktopNavigationTitle": "Webbnavigering",
+        "desktopNavigationHint": "Aktivera moduler och sortera dem inom grupperna Översikt, Planera och Hem.",
+        "mobileNavigationSaved": "Mobil navigering sparad."
     },
     "login": {
         "tagline": "Familjeplanering. Säker. Sekretessvänlig. Öppen källkod.",

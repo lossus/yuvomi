@@ -1194,7 +1194,7 @@
         "thirdPartyModulesStatusDisabled": "Desativado",
         "thirdPartyModulesStatusError": "Erro",
         "thirdPartyModulesSaved": "Configuração do módulo salva.",
-        "modulesDragHint": "Arraste os modulos para definir a ordem do menu esquerdo. Configuracoes sempre fica por ultimo.",
+        "modulesDragHint": "Arraste os módulos ou use as setas para alterar a ordem apenas dentro do respetivo grupo.",
         "modulesDragHandle": "Arrastar para reordenar",
         "modulesBuiltInBadge": "Integrado",
         "modulesThirdPartyBadge": "Modulo",
@@ -1365,7 +1365,14 @@
         "systemSetupComplete": "Concluída",
         "systemSetupRequired": "Configuração necessária",
         "apiTokensEmpty": "Ainda não há tokens de API.",
-        "familyEmpty": "Ainda não há membros da família."
+        "familyEmpty": "Ainda não há membros da família.",
+        "mobileNavigationTitle": "Navegação móvel",
+        "mobileNavigationHint": "Escolha três destinos para mostrar entre Visão geral e Mais na navegação inferior.",
+        "mobileNavigationSlotLabel": "Posição {{position}}",
+        "mobileNavigationEmptyOption": "Não utilizado",
+        "desktopNavigationTitle": "Navegação web",
+        "desktopNavigationHint": "Ative módulos e ordene-os nos grupos Visão geral, Planejar e Casa.",
+        "mobileNavigationSaved": "Navegação móvel guardada."
     },
     "login": {
         "tagline": "Planejamento familiar. Seguro. Privado. Código aberto.",

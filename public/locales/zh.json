@@ -1194,7 +1194,7 @@
         "thirdPartyModulesStatusDisabled": "Disabled",
         "thirdPartyModulesStatusError": "Error",
         "thirdPartyModulesSaved": "Module setting saved.",
-        "modulesDragHint": "Drag modules to define the left menu order. Settings always stays last.",
+        "modulesDragHint": "拖动模块或使用箭头，仅在所属分组内调整顺序。",
         "modulesDragHandle": "Drag to reorder",
         "modulesBuiltInBadge": "内置",
         "modulesThirdPartyBadge": "Module",
@@ -1365,7 +1365,14 @@
         "systemSetupComplete": "已完成",
         "systemSetupRequired": "需要设置",
         "apiTokensEmpty": "暂无 API 令牌。",
-        "familyEmpty": "暂无家庭成员。"
+        "familyEmpty": "暂无家庭成员。",
+        "mobileNavigationTitle": "移动导航",
+        "mobileNavigationHint": "选择三个目标，在底部导航的概览与更多之间显示。",
+        "mobileNavigationSlotLabel": "位置 {{position}}",
+        "mobileNavigationEmptyOption": "未使用",
+        "desktopNavigationTitle": "网页导航",
+        "desktopNavigationHint": "启用模块，并在概览、计划和家庭分组内排序。",
+        "mobileNavigationSaved": "移动导航已保存。"
     },
     "login": {
         "tagline": "家庭规划。安全。注重隐私。开源。",

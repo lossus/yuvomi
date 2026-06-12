@@ -1194,7 +1194,7 @@
         "thirdPartyModulesStatusDisabled": "Deaktivováno",
         "thirdPartyModulesStatusError": "Chyba",
         "thirdPartyModulesSaved": "Nastavení modulu uloženo.",
-        "modulesDragHint": "Přetáhněte moduly pro nastavení pořadí v levém menu. Nastavení zůstává vždy poslední.",
+        "modulesDragHint": "Přetažením nebo šipkami změňte pořadí modulů pouze v jejich skupině.",
         "modulesDragHandle": "Přetáhněte pro seřazení",
         "modulesBuiltInBadge": "Vestavěný",
         "modulesThirdPartyBadge": "Modul",
@@ -1365,7 +1365,14 @@
         "systemSetupComplete": "Dokončeno",
         "systemSetupRequired": "Vyžadováno nastavení",
         "apiTokensEmpty": "Zatím žádné API tokeny.",
-        "familyEmpty": "Zatím žádní členové rodiny."
+        "familyEmpty": "Zatím žádní členové rodiny.",
+        "mobileNavigationTitle": "Mobilní navigace",
+        "mobileNavigationHint": "Vyberte tři cíle, které se zobrazí mezi Přehledem a Dalšími ve spodní navigaci.",
+        "mobileNavigationSlotLabel": "Pozice {{position}}",
+        "mobileNavigationEmptyOption": "Nepoužito",
+        "desktopNavigationTitle": "Webová navigace",
+        "desktopNavigationHint": "Zapněte moduly a seřaďte je v rámci skupin Přehled, Plánování a Domov.",
+        "mobileNavigationSaved": "Mobilní navigace byla uložena."
     },
     "login": {
         "tagline": "Rodinné plánování. Bezpečné. Soukromé. Open Source.",

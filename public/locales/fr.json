@@ -1194,7 +1194,7 @@
         "thirdPartyModulesStatusDisabled": "Disabled",
         "thirdPartyModulesStatusError": "Error",
         "thirdPartyModulesSaved": "Module setting saved.",
-        "modulesDragHint": "Drag modules to define the left menu order. Settings always stays last.",
+        "modulesDragHint": "Faites glisser les modules ou utilisez les flèches pour modifier leur ordre uniquement dans leur groupe.",
         "modulesDragHandle": "Drag to reorder",
         "modulesBuiltInBadge": "Intégré",
         "modulesThirdPartyBadge": "Module",
@@ -1365,7 +1365,14 @@
         "systemSetupComplete": "Terminée",
         "systemSetupRequired": "Configuration requise",
         "apiTokensEmpty": "Aucun jeton d’API pour le moment.",
-        "familyEmpty": "Aucun membre de la famille pour le moment."
+        "familyEmpty": "Aucun membre de la famille pour le moment.",
+        "mobileNavigationTitle": "Navigation mobile",
+        "mobileNavigationHint": "Choisissez trois destinations à afficher entre Vue d’ensemble et Plus dans la navigation inférieure.",
+        "mobileNavigationSlotLabel": "Position {{position}}",
+        "mobileNavigationEmptyOption": "Non utilisé",
+        "desktopNavigationTitle": "Navigation web",
+        "desktopNavigationHint": "Activez les modules et triez-les dans les groupes Vue d’ensemble, Planifier et Maison.",
+        "mobileNavigationSaved": "Navigation mobile enregistrée."
     },
     "login": {
         "tagline": "Planification familiale. Sécurisée. Respectueuse de la vie privée. Open source.",

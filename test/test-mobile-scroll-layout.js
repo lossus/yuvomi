@@ -19,17 +19,17 @@ function cssRuleBody(css, selector) {
   return match?.[1] ?? '';
 }
 
-test('mobile dashboard scroll does not mutate root or fixed layers', () => {
+test('mobile scrolling keeps navigation and fixed layers stable', () => {
   assert.equal(
     routerJs.includes('document.documentElement.classList.toggle(\'nav-bottom--hidden\''),
     false,
     'Scroll-Handler darf den Bottom-Nav-Status nicht auf <html> spiegeln'
   );
 
-  assert.match(
-    routerJs,
-    /currentPath\s*===\s*'\/'[\s\S]{0,240}setNavHidden\(false\)[\s\S]{0,240}return/,
-    'Dashboard-Scroll darf die mobile Bottom-Nav nicht ausblenden'
+  assert.equal(
+    routerJs.includes('setNavHidden'),
+    false,
+    'Kein Scrollpfad darf die mobile Bottom-Nav ausblenden'
   );
 
   assert.equal(
@@ -45,11 +45,10 @@ test('mobile dashboard scroll does not mutate root or fixed layers', () => {
     'FAB darf bottom nicht animieren; fixed Layer sollen beim Scrollen stabil bleiben'
   );
 
-  const navHiddenRule = cssRuleBody(glassCss, '.nav-bottom--hidden');
   assert.equal(
-    /margin-bottom\s*:/.test(navHiddenRule),
+    glassCss.includes('.nav-bottom--hidden'),
     false,
-    'Ausblendende Bottom-Nav darf kein margin-bottom setzen; das verändert Layout während Momentum-Scroll'
+    'Die Glass-Schicht darf keinen versteckten Bottom-Nav-Zustand definieren'
   );
 });
 

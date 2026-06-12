@@ -15,10 +15,16 @@ import {
   settingsOverviewUrl,
 } from '../public/settings/registry.js';
 import {
+  DEFAULT_MOBILE_NAV_ORDER,
   KITCHEN_CHILD_IDS,
+  NAV_SECTION,
   expandModuleOrder,
   groupBuiltInModules,
+  moduleSection,
   normalizeModuleOrder,
+  normalizeMobileNavOrder,
+  resolveMobileNavOrder,
+  sortNavigationItems,
 } from '../public/settings/module-order.js';
 import {
   applyHolidaySubdivisionSelection,
@@ -39,6 +45,7 @@ import {
   persistMealTypeSelection,
 } from '../public/settings/pages/modules-kitchen.js';
 import {
+  buildMobileNavigationPayload,
   buildNavigationPayload,
   persistModuleToggle,
 } from '../public/settings/pages/modules-navigation.js';
@@ -68,6 +75,12 @@ const sharedTranslationKeys = [
   'settings.enabledCalendarCount',
   'settings.lastSyncValue',
   'settings.neverSynced',
+  'settings.mobileNavigationTitle',
+  'settings.mobileNavigationHint',
+  'settings.mobileNavigationSlotLabel',
+  'settings.mobileNavigationSaved',
+  'settings.desktopNavigationTitle',
+  'settings.desktopNavigationHint',
   'nav.sectionOverview',
   'nav.sectionPlan',
   'nav.sectionHome',
@@ -116,7 +129,20 @@ test('navigation settings leaf reuses the canonical module-order helpers', async
   );
   assert.match(source, /normalizeModuleOrder/);
   assert.match(source, /expandModuleOrder/);
+  assert.match(source, /sortNavigationItems/);
+  assert.match(source, /resolveMobileNavOrder/);
   assert.match(source, /from\s*'\/settings\/module-order\.js'/);
+});
+
+test('navigation settings expose separate mobile slots and grouped desktop lists', async () => {
+  const source = await readFile(
+    new URL('../public/settings/pages/modules-navigation.js', import.meta.url),
+    'utf8',
+  );
+
+  assert.match(source, /data-mobile-nav-slot/);
+  assert.match(source, /data-module-section/);
+  assert.match(source, /window\.oikos\?\.setMobileNavOrder/);
 });
 
 test('members only see the personal settings domain', () => {
@@ -419,6 +445,74 @@ test('module order helpers preserve stable unique non-Kitchen IDs', () => {
   );
 });
 
+test('navigation sections match the grouped desktop information architecture', () => {
+  assert.equal(moduleSection('dashboard'), NAV_SECTION.overview);
+  assert.equal(moduleSection('calendar'), NAV_SECTION.plan);
+  assert.equal(moduleSection('tasks'), NAV_SECTION.plan);
+  assert.equal(moduleSection('notes'), NAV_SECTION.plan);
+  assert.equal(moduleSection('kitchen'), NAV_SECTION.home);
+  assert.equal(moduleSection('contacts'), NAV_SECTION.home);
+  assert.equal(moduleSection('third-party-weather-station'), NAV_SECTION.home);
+  assert.equal(moduleSection('settings'), NAV_SECTION.home);
+});
+
+test('desktop navigation order is applied only inside each section', () => {
+  const items = [
+    { module: 'contacts' },
+    { module: 'calendar' },
+    { module: 'dashboard' },
+    { module: 'budget' },
+    { module: 'notes' },
+    { module: 'tasks' },
+    { module: 'settings' },
+  ];
+
+  assert.deepEqual(
+    sortNavigationItems(items, ['budget', 'tasks', 'contacts', 'calendar', 'notes']),
+    [
+      { module: 'dashboard' },
+      { module: 'tasks' },
+      { module: 'calendar' },
+      { module: 'notes' },
+      { module: 'budget' },
+      { module: 'contacts' },
+      { module: 'settings' },
+    ],
+  );
+});
+
+test('mobile navigation defaults to Calendar, Tasks, and Kitchen', () => {
+  assert.deepEqual(DEFAULT_MOBILE_NAV_ORDER, ['calendar', 'tasks', 'kitchen']);
+});
+
+test('mobile navigation normalization deduplicates Kitchen aliases and limits favorites', () => {
+  assert.deepEqual(
+    normalizeMobileNavOrder(['recipes', 'tasks', 'meals', 'calendar', 'notes']),
+    ['kitchen', 'tasks', 'calendar'],
+  );
+  assert.deepEqual(
+    normalizeMobileNavOrder(['dashboard', 'settings', 'notes', 'budget']),
+    ['notes', 'budget'],
+  );
+});
+
+test('mobile navigation fills unavailable favorites from defaults and remaining destinations', () => {
+  assert.deepEqual(
+    resolveMobileNavOrder(
+      ['notes', 'budget', 'contacts'],
+      ['calendar', 'tasks', 'kitchen', 'notes', 'budget'],
+    ),
+    ['notes', 'budget', 'calendar'],
+  );
+  assert.deepEqual(
+    resolveMobileNavOrder(
+      ['notes', 'budget', 'contacts'],
+      ['tasks', 'kitchen'],
+    ),
+    ['tasks', 'kitchen'],
+  );
+});
+
 test('stale holiday subdivision responses are rejected', () => {
   assert.equal(shouldApplySubdivisionResponse({
     requestId: 1,
@@ -636,6 +730,13 @@ test('buildNavigationPayload disables Kitchen children that are not enabled', ()
 
   assert.deepEqual(payload.disabled_modules, ['budget', 'recipes', 'shopping']);
   assert.deepEqual(payload.module_order, ['meals', 'recipes', 'shopping', 'budget']);
+});
+
+test('buildMobileNavigationPayload normalizes aliases, duplicates, and slot count', () => {
+  assert.deepEqual(
+    buildMobileNavigationPayload(['recipes', 'tasks', 'meals', 'calendar', 'budget']),
+    { mobile_nav_order: ['kitchen', 'tasks', 'calendar'] },
+  );
 });
 
 test('persistModuleToggle restores the toggle and re-enables it when saving fails', async () => {

@@ -1194,7 +1194,7 @@
         "thirdPartyModulesStatusDisabled": "Uitgeschakeld",
         "thirdPartyModulesStatusError": "Fout",
         "thirdPartyModulesSaved": "Module-instelling opgeslagen.",
-        "modulesDragHint": "Sleep modules om de volgorde in het linkermenu te bepalen. Instellingen staat altijd als laatste.",
+        "modulesDragHint": "Sleep modules of gebruik de pijlen om de volgorde alleen binnen hun groep te wijzigen.",
         "modulesDragHandle": "Slepen om te herordenen",
         "modulesBuiltInBadge": "Ingebouwd",
         "modulesThirdPartyBadge": "Module",
@@ -1365,7 +1365,14 @@
         "systemSetupComplete": "Voltooid",
         "systemSetupRequired": "Installatie vereist",
         "apiTokensEmpty": "Nog geen API-tokens.",
-        "familyEmpty": "Nog geen gezinsleden."
+        "familyEmpty": "Nog geen gezinsleden.",
+        "mobileNavigationTitle": "Mobiele navigatie",
+        "mobileNavigationHint": "Kies drie bestemmingen die tussen Overzicht en Meer in de onderste navigatie verschijnen.",
+        "mobileNavigationSlotLabel": "Positie {{position}}",
+        "mobileNavigationEmptyOption": "Niet gebruikt",
+        "desktopNavigationTitle": "Webnavigatie",
+        "desktopNavigationHint": "Schakel modules in en sorteer ze binnen de groepen Overzicht, Plannen en Thuis.",
+        "mobileNavigationSaved": "Mobiele navigatie opgeslagen."
     },
     "login": {
         "tagline": "Gezinsplanning. Veilig. Privacyvriendelijk. Open source.",

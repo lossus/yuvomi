@@ -182,11 +182,6 @@
   z-index: var(--z-nav);
   backdrop-filter: var(--blur-md) saturate(180%);
   -webkit-backdrop-filter: var(--blur-md) saturate(180%);
-  transition: transform 0.2s var(--ease-out);
-}
-
-.nav-bottom--hidden {
-  transform: translateY(100%);
 }
 
 /* ── Items-Reihe ── */
@@ -524,6 +519,7 @@
 
 .nav-bottom .nav-item {
   padding-block: var(--space-0h);
+  padding-inline: var(--space-0h);
 }
 
 .nav-item__icon-wrap {
@@ -569,9 +565,9 @@
   justify-content: center;
   flex-shrink: 0;
   border-radius: var(--radius-sm);
-  background: color-mix(in srgb, var(--item-module-accent, var(--color-text-secondary)) 18%, var(--color-surface-elevated));
-  color: var(--item-module-accent, var(--color-text-secondary));
-  box-shadow: inset 0 1px 0 color-mix(in srgb, white 28%, transparent);
+  background: var(--color-surface-elevated);
+  color: var(--color-text-secondary);
+  box-shadow: inset 0 var(--space-px) 0 var(--glass-highlight-subtle);
   transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 
@@ -586,14 +582,15 @@
   height: 26px;
 }
 
-/* Aktiv und nav-item--active: stärkere Farbe auf der Well */
+/* Der äußere Indikator ist die einzige aktive Fläche; das Icon trägt den Modulakzent. */
 .nav-item[aria-current="page"] .nav-item__icon-well,
 .nav-item--active .nav-item__icon-well {
-  background: color-mix(in srgb, var(--item-module-accent, var(--color-accent)) 28%, var(--color-surface-elevated));
+  background: transparent;
   color: var(--item-module-accent, var(--color-accent));
+  box-shadow: none;
 }
 
-/* Bottom-Nav aktiv: kein Chip-Hintergrund auf dem ganzen Item (Well übernimmt) */
+/* Bottom-Nav aktiv: die gleitende Indikatorfläche übernimmt den Zustand. */
 .nav-bottom .nav-item[aria-current="page"],
 .nav-bottom .nav-item--active {
   background: none;
@@ -2674,16 +2671,15 @@ textarea.input { resize: vertical; }
 /* ── Mobile: Tab-Indikator (Strukturell) ── */
 .nav-bottom__indicator {
   position: absolute;
-  top: 4px;
-  bottom: 4px;
+  top: var(--space-1);
+  bottom: var(--space-1);
   left: 0;
   border-radius: var(--radius-full);
   pointer-events: none;
   transition:
-    transform 0.45s cubic-bezier(0.28, 1.25, 0.36, 1),
-    width 0.45s cubic-bezier(0.28, 1.25, 0.36, 1),
-    opacity 0.25s ease;
-  will-change: transform, width;
+    transform 0.2s var(--ease-out),
+    opacity var(--transition-fast);
+  will-change: transform;
   z-index: 0;
 }
 

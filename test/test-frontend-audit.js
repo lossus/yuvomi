@@ -890,13 +890,35 @@ test('More button active state keeps visible More identity and accessible active
   assert.doesNotMatch(source, /moreBtn\.toggleAttribute\('aria-current',\s*inMoreSheet\)/);
 });
 
-test('mobile Kitchen and More nav buttons keep colored icon wells while inactive', () => {
+test('mobile navigation derives five stable destinations from three favorites', () => {
   const source = read('../public/router.js');
 
-  assert.match(source, /kitchenBtn\.style\.setProperty\('--item-module-accent',\s*'var\(--module-meals\)'\)/);
-  assert.match(source, /moreBtn\.style\.setProperty\('--item-module-accent',\s*'var\(--color-accent\)'\)/);
-  assert.doesNotMatch(source, /kitchenNavBtn\.style\.removeProperty\('--item-module-accent'\)/);
-  assert.doesNotMatch(source, /moreBtn\.style\.removeProperty\('--item-module-accent'\)/);
+  assert.match(source, /const\s+MOBILE_FAVORITE_COUNT\s*=\s*3/);
+  assert.match(source, /resolveMobileNavOrder/);
+  assert.match(source, /function\s+mobileFavoriteItems/);
+  assert.match(source, /function\s+buildBottomNavItems/);
+});
+
+test('mobile navigation uses neutral inactive wells and one active indicator', () => {
+  const layout = read('../public/styles/layout.css');
+
+  assert.match(
+    layout,
+    /\.nav-item__icon-well\s*\{[\s\S]*?background:\s*var\(--color-surface-elevated\)/,
+  );
+  assert.match(
+    layout,
+    /\.nav-item\[aria-current="page"\] \.nav-item__icon-well,[\s\S]*?background:\s*transparent/,
+  );
+  assert.doesNotMatch(layout, /\.nav-bottom__indicator\s*\{[\s\S]*?width\s+0\.45s/);
+});
+
+test('mobile bottom navigation remains visible while content scrolls', () => {
+  const source = read('../public/router.js');
+  const layout = read('../public/styles/layout.css');
+
+  assert.doesNotMatch(source, /initNavHideOnScroll/);
+  assert.doesNotMatch(layout, /\.nav-bottom--hidden\s*\{/);
 });
 
 test('More sheet closes route clicks through delegated handler after rebuilds', () => {

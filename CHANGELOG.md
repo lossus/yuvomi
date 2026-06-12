@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.71.26] - 2026-06-12
+
+### Changed
+- **Responsive navigation personalization**: the mobile bottom bar now keeps exactly five stable destinations visible — Overview, three user-selected favorites, and More — and remains present while content scrolls. Inactive buttons use neutral surfaces while the current module alone carries its accent through a faster 200 ms sliding indicator. Settings → Modules → Navigation now separates mobile favorites from web navigation; desktop entries can only be reordered within the Overview, Plan, and Home groups, with Dashboard and Settings pinned.
+
 ## [0.71.25] - 2026-06-12
 
 ### Fixed

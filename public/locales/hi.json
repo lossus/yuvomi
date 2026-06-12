@@ -1194,7 +1194,7 @@
         "thirdPartyModulesStatusDisabled": "Disabled",
         "thirdPartyModulesStatusError": "Error",
         "thirdPartyModulesSaved": "Module setting saved.",
-        "modulesDragHint": "Drag modules to define the left menu order. Settings always stays last.",
+        "modulesDragHint": "मॉड्यूल खींचें या तीरों से उनका क्रम केवल उनके समूह के भीतर बदलें।",
         "modulesDragHandle": "Drag to reorder",
         "modulesBuiltInBadge": "अंतर्निहित",
         "modulesThirdPartyBadge": "Module",
@@ -1365,7 +1365,14 @@
         "systemSetupComplete": "पूर्ण",
         "systemSetupRequired": "सेटअप आवश्यक",
         "apiTokensEmpty": "अभी तक कोई API टोकन नहीं।",
-        "familyEmpty": "अभी तक कोई परिवार सदस्य नहीं।"
+        "familyEmpty": "अभी तक कोई परिवार सदस्य नहीं।",
+        "mobileNavigationTitle": "मोबाइल नेविगेशन",
+        "mobileNavigationHint": "नीचे की नेविगेशन में अवलोकन और अधिक के बीच दिखाने के लिए तीन गंतव्य चुनें।",
+        "mobileNavigationSlotLabel": "स्थान {{position}}",
+        "mobileNavigationEmptyOption": "उपयोग नहीं",
+        "desktopNavigationTitle": "वेब नेविगेशन",
+        "desktopNavigationHint": "मॉड्यूल चालू करें और उन्हें अवलोकन, योजना और घर समूहों के भीतर क्रमबद्ध करें।",
+        "mobileNavigationSaved": "मोबाइल नेविगेशन सहेजा गया।"
     },
     "login": {
         "tagline": "पारिवारिक योजना। सुरक्षित। गोपनीयता-अनुकूल। ओपन सोर्स।",
