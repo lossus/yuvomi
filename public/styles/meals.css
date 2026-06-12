@@ -99,11 +99,7 @@
 }
 
 .day-header__name {
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-semibold);
   color: var(--color-text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
 }
 
 .day-header__date {
@@ -202,11 +198,7 @@
 }
 
 .meal-slot__type-label {
-  font-size: var(--text-xs);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-disabled);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
   padding: var(--space-1) var(--space-2) 0;
   text-align: left;
 }
@@ -280,14 +272,11 @@
 }
 
 .meal-card__title {
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: left;
-  line-height: 1.4;
   align-self: stretch;
 }
 

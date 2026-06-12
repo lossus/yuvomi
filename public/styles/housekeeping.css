@@ -183,7 +183,6 @@
 .housekeeping-metric span,
 .housekeeping-section-heading span {
   color: var(--color-text-secondary);
-  font-size: var(--text-sm);
 }
 
 .housekeeping-metric strong {

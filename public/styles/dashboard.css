@@ -123,9 +123,6 @@
 .dashboard-metric__title {
   font-size: var(--text-xs); /* was: var(--text-2xs) — WCAG minimum 12px */
   color: var(--color-text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  font-weight: var(--font-weight-medium);
 }
 
 .dashboard-metric__value {
@@ -342,7 +339,7 @@
 
 .widget-greeting__title {
   /* Fluid: 18px (375px viewport) → 24px (1440px viewport) */
-  font-size: clamp(1.125rem, 0.56vw + 0.99rem, 1.5rem);
+  font-size: var(--type-greeting-size);
   font-weight: var(--font-weight-bold);
 }
 
@@ -442,8 +439,6 @@
 }
 
 .widget__title {
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
   display: flex;
   align-items: center;
@@ -575,13 +570,10 @@
 }
 
 .task-item__title {
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  line-height: var(--line-height-snug);
 }
 
 .task-item__meta {
@@ -665,13 +657,10 @@
 }
 
 .event-item__title {
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  line-height: var(--line-height-snug);
 }
 
 .event-item__time {
@@ -762,9 +751,9 @@
 .meal-slot__type {
   font-size: var(--text-xs);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-text-disabled);
+  color: var(--color-text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.4px;
+  letter-spacing: var(--tracking-label);
 }
 
 .meal-slot--filled .meal-slot__type {
@@ -838,8 +827,6 @@
 }
 
 .shopping-widget-list__name {
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
 }
 
@@ -938,8 +925,6 @@
 }
 
 .note-item__title {
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
   margin-bottom: 2px;
   white-space: nowrap;
@@ -1464,8 +1449,6 @@ svg.weather-forecast__icon {
 
 .customize-row__name {
   flex: 1;
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-medium);
 }
 
 .customize-row__size {
@@ -1726,7 +1709,7 @@ svg.weather-forecast__icon {
   color: var(--color-accent);
   font-size: var(--text-xs);
   font-weight: var(--font-weight-semibold);
-  letter-spacing: 0.08em;
+  letter-spacing: var(--tracking-label);
   text-transform: uppercase;
 }
 
@@ -1734,10 +1717,6 @@ svg.weather-forecast__icon {
   margin: var(--space-3) 0 0;
   /* Feste Token-Stufe statt fluidem clamp (Produkt-Register + Token-Disziplin).
    * --text-4xl (36px) ist die DESIGN.md-Display-Stufe — der frühere 69px-Hero „schrie". */
-  font-size: var(--text-4xl);
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-  font-weight: var(--font-weight-bold);
   max-width: 18ch;
 }
 
@@ -1867,9 +1846,6 @@ svg.weather-forecast__icon {
 .today-cockpit__header h2 {
   margin: 0;
   color: var(--color-text-primary);
-  font-size: var(--text-lg);
-  line-height: var(--line-height-tight);
-  font-weight: var(--font-weight-bold);
 }
 
 .today-cockpit__date {
@@ -1934,11 +1910,6 @@ svg.weather-forecast__icon {
 
 .today-cockpit-card__label {
   color: var(--color-text-secondary);
-  font-size: var(--text-xs);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: 0;
-  line-height: var(--line-height-tight);
-  text-transform: uppercase;
 }
 
 .today-cockpit-card__value {
@@ -1986,10 +1957,7 @@ svg.weather-forecast__icon {
 }
 
 .dashboard-hero__summary-label {
-  font-size: var(--text-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--color-text-tertiary);
+  color: var(--color-text-secondary);
 }
 
 .dashboard-hero__summary-value {
@@ -2295,10 +2263,6 @@ svg.weather-forecast__icon {
 .dashboard-overview__title {
   margin: var(--space-1) 0 0;
   color: var(--color-text-primary);
-  font-size: var(--text-2xl);
-  line-height: var(--line-height-tight);
-  letter-spacing: 0;
-  font-weight: var(--font-weight-bold);
   overflow-wrap: normal;
   word-break: normal;
   hyphens: manual;
@@ -2987,7 +2951,6 @@ svg.weather-forecast__icon {
   }
 
   .dashboard-overview__title {
-    font-size: var(--text-xl);
   }
 
   .dashboard-overview__tools {

@@ -50,10 +50,7 @@
   align-items: center;
   gap: var(--space-2);
   margin: 0 var(--space-2) var(--space-1);
-  color: var(--color-text-tertiary);
-  font-size: var(--text-xs);
-  font-weight: var(--font-weight-semibold);
-  text-transform: uppercase;
+  color: var(--color-text-secondary);
 }
 
 .settings-shell__navigation-group--active .settings-shell__navigation-heading {
@@ -115,7 +112,6 @@
 .settings-leaf-header__title {
   margin: 0;
   color: var(--color-text-primary);
-  font-size: var(--text-2xl);
 }
 
 .settings-mobile-overview__description,
@@ -463,9 +459,6 @@
 }
 
 .settings-section__title {
-  font-size: var(--text-lg);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--line-height-snug);
   color: var(--color-text-primary);
   margin: 0 0 var(--space-3) var(--space-1);
 }
@@ -495,8 +488,6 @@
 }
 
 .settings-card__title {
-  font-size: var(--text-base);
-  font-weight: var(--font-weight-semibold);
   margin: 0 0 var(--space-3);
   color: var(--color-text-primary);
 }
@@ -539,7 +530,7 @@
 }
 
 .settings-user-info__name {
-  font-size: var(--text-md);
+  font-size: var(--text-base);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
 }
@@ -784,8 +775,6 @@
 }
 
 .settings-sync-info__name {
-  font-size: var(--text-base);
-  font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
 }
 
@@ -831,8 +820,6 @@
 
 .settings-provider__name {
   margin: 0;
-  font-size: var(--text-base);
-  font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
 }
 
@@ -882,8 +869,6 @@
 
 .settings-member__name {
   display: block;
-  font-size: var(--text-base);
-  font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
   white-space: nowrap;
   overflow: hidden;
@@ -1158,8 +1143,6 @@
 }
 
 .settings-empty-state__title {
-  font-size: var(--text-lg);
-  font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
   margin: 0 0 var(--space-2);
 }
@@ -1298,8 +1281,6 @@
 .cat-row__name {
   flex: 1;
   min-width: 0;
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
   cursor: pointer;
   white-space: nowrap;

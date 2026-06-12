@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.71.14] - 2026-06-12
+
+### Changed
+- **Typography consistency**: unified font sizes, weights, line-heights, and letter-spacing across every module and sub-module (dashboard, calendar, tasks, budget, kitchen, settings, and the rest) behind a shared typographic role layer. Page titles, section headings, eyebrow labels, and card titles now render consistently on mobile and desktop. Font sizes and letter-spacing are fully token-driven, and canonical breakpoint tokens document the mobile/tablet/desktop/wide boundaries.
+
+### Fixed
+- **Label legibility**: meal-slot type labels and several uppercase section/eyebrow labels used the too-faint "disabled"/"tertiary" text colors; they now use the readable secondary text color, improving contrast and visual consistency.
+
 ## [0.71.13] - 2026-06-11
 
 ### Changed
