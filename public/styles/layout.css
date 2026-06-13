@@ -721,8 +721,8 @@ html.fab-anim-done .page-fab {
 }
 
 .page-toolbar__title {
-  font-size: var(--type-section-title);
-  font-weight: var(--font-weight-bold);
+  /* Größe/Weight kommen aus der Canonical-Page-Head-Rolle in typography.css
+   * (.u-toolbar-title / .page-toolbar__title → --type-toolbar-title, 20px). */
   white-space: nowrap;
   min-width: 0;
 }

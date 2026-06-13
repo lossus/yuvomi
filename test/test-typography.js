@@ -216,11 +216,20 @@ test('lange Inhalts- und interaktive Texte verwenden mindestens die Sekundärrol
 
 test('globale Toolbar- und Kartentitel folgen den semantischen Rollen', () => {
   const layout = readFileSync(new URL('../public/styles/layout.css', import.meta.url), 'utf8');
+  const typography = readFileSync(new URL('../public/styles/typography.css', import.meta.url), 'utf8');
 
+  // Canonical Page Head: der Modul-Toolbartitel folgt der 20px-Rolle in
+  // typography.css (gemeinsam mit Settings-Leaf + Split), nicht mehr der
+  // Abschnittsrolle (18px) in layout.css.
   assert.match(
+    typography,
+    /\.page-toolbar__title[\s\S]*?font-size:\s*var\(--type-toolbar-title\)/,
+    'Modul-Toolbartitel müssen die Canonical-Page-Head-Rolle (--type-toolbar-title, 20px) verwenden',
+  );
+  assert.doesNotMatch(
     layout,
-    /\.page-toolbar__title[\s\S]*?font-size:\s*var\(--type-section-title\)/,
-    'Modul-Toolbartitel müssen konsistent die Abschnittsrolle verwenden',
+    /\.page-toolbar__title\s*\{[^}]*font-size:/,
+    'layout.css darf die Toolbartitel-Größe nicht mehr setzen — die Rolle in typography.css ist die Quelle',
   );
   assert.doesNotMatch(
     layout,

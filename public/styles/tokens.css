@@ -340,6 +340,7 @@
   --type-hero-desktop:         1.875rem;  /* 30px */
   --type-page-title-mobile:    1.375rem;  /* 22px */
   --type-page-title-desktop:   1.75rem;   /* 28px */
+  --type-toolbar-title:        1.25rem;   /* 20px — Modul-Kopf-Titel (Canonical Page Head: alle Module + Settings-Leaf + Split) */
   --type-section-title:        1.125rem;  /* 18px */
   --type-card-title:           1rem;      /* 16px */
   --type-body:                 1rem;      /* 16px */
