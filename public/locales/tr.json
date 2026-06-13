@@ -67,7 +67,8 @@
         "sidebarExpand": "Kenar çubuğunu genişlet",
         "sectionOverview": "Genel bakış",
         "sectionPlan": "Planla",
-        "sectionHome": "Ev"
+        "sectionHome": "Ev",
+        "help": "Hilfe"
     },
     "dashboard": {
         "title": "Genel Bakış",
@@ -1974,5 +1975,12 @@
         "95": "Gök gürültülü fırtına",
         "96": "Dolu eşliğinde fırtına",
         "99": "Şiddetli fırtına"
+    },
+    "help": {
+        "title": "Hilfe",
+        "mobileNavigate": "Navigiere über die Leiste unten und „Mehr“.",
+        "mobileCreate": "Mit dem +-Knopf unten rechts legst du Neues an.",
+        "mobileSearch": "Suche öffnest du über „Mehr“ → Suchen.",
+        "mobileSettings": "Einstellungen findest du unter „Mehr“."
     }
 }

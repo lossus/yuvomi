@@ -67,7 +67,8 @@
         "sidebarExpand": "Espandi barra laterale",
         "sectionOverview": "Panoramica",
         "sectionPlan": "Pianifica",
-        "sectionHome": "Casa"
+        "sectionHome": "Casa",
+        "help": "Hilfe"
     },
     "dashboard": {
         "title": "Panoramica",
@@ -1974,5 +1975,12 @@
         "95": "Temporale",
         "96": "Temporale con grandine",
         "99": "Temporale severo"
+    },
+    "help": {
+        "title": "Hilfe",
+        "mobileNavigate": "Navigiere über die Leiste unten und „Mehr“.",
+        "mobileCreate": "Mit dem +-Knopf unten rechts legst du Neues an.",
+        "mobileSearch": "Suche öffnest du über „Mehr“ → Suchen.",
+        "mobileSettings": "Einstellungen findest du unter „Mehr“."
     }
 }

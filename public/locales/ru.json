@@ -67,7 +67,8 @@
         "sidebarExpand": "Развернуть боковую панель",
         "sectionOverview": "Обзор",
         "sectionPlan": "План",
-        "sectionHome": "Дом"
+        "sectionHome": "Дом",
+        "help": "Hilfe"
     },
     "dashboard": {
         "title": "Обзор",
@@ -1974,5 +1975,12 @@
         "95": "Гроза",
         "96": "Гроза с градом",
         "99": "Сильная гроза"
+    },
+    "help": {
+        "title": "Hilfe",
+        "mobileNavigate": "Navigiere über die Leiste unten und „Mehr“.",
+        "mobileCreate": "Mit dem +-Knopf unten rechts legst du Neues an.",
+        "mobileSearch": "Suche öffnest du über „Mehr“ → Suchen.",
+        "mobileSettings": "Einstellungen findest du unter „Mehr“."
     }
 }

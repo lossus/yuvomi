@@ -67,7 +67,8 @@
         "sidebarExpand": "Fäll ut sidofältet",
         "sectionOverview": "Översikt",
         "sectionPlan": "Planera",
-        "sectionHome": "Hem"
+        "sectionHome": "Hem",
+        "help": "Hilfe"
     },
     "dashboard": {
         "title": "Översikt",
@@ -1974,5 +1975,12 @@
         "95": "Åska",
         "96": "Åska med hagel",
         "99": "Kraftig åska"
+    },
+    "help": {
+        "title": "Hilfe",
+        "mobileNavigate": "Navigiere über die Leiste unten und „Mehr“.",
+        "mobileCreate": "Mit dem +-Knopf unten rechts legst du Neues an.",
+        "mobileSearch": "Suche öffnest du über „Mehr“ → Suchen.",
+        "mobileSettings": "Einstellungen findest du unter „Mehr“."
     }
 }

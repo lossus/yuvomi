@@ -67,7 +67,8 @@
         "sidebarExpand": "साइडबार फैलाएं",
         "sectionOverview": "अवलोकन",
         "sectionPlan": "योजना",
-        "sectionHome": "घर"
+        "sectionHome": "घर",
+        "help": "Hilfe"
     },
     "dashboard": {
         "title": "डैशबोर्ड",
@@ -1974,5 +1975,12 @@
         "95": "तूफान",
         "96": "ओलों के साथ तूफान",
         "99": "भीषण तूफान"
+    },
+    "help": {
+        "title": "Hilfe",
+        "mobileNavigate": "Navigiere über die Leiste unten und „Mehr“.",
+        "mobileCreate": "Mit dem +-Knopf unten rechts legst du Neues an.",
+        "mobileSearch": "Suche öffnest du über „Mehr“ → Suchen.",
+        "mobileSettings": "Einstellungen findest du unter „Mehr“."
     }
 }

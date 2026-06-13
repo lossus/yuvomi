@@ -67,7 +67,8 @@
         "sidebarExpand": "Expand sidebar",
         "sectionOverview": "Overview",
         "sectionPlan": "Plan",
-        "sectionHome": "Home"
+        "sectionHome": "Home",
+        "help": "Help"
     },
     "dashboard": {
         "title": "Overview",
@@ -1974,5 +1975,12 @@
         "95": "Thunderstorm",
         "96": "Thunderstorm with hail",
         "99": "Severe thunderstorm"
+    },
+    "help": {
+        "title": "Help",
+        "mobileNavigate": "Use the bar at the bottom and “More” to navigate.",
+        "mobileCreate": "Create new items with the + button at the bottom right.",
+        "mobileSearch": "Open search via “More” → Search.",
+        "mobileSettings": "Find settings under “More”."
     }
 }

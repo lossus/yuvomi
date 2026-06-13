@@ -67,7 +67,8 @@
         "sidebarExpand": "展开侧边栏",
         "sectionOverview": "概览",
         "sectionPlan": "计划",
-        "sectionHome": "家庭"
+        "sectionHome": "家庭",
+        "help": "Hilfe"
     },
     "dashboard": {
         "title": "概览",
@@ -1974,5 +1975,12 @@
         "95": "雷阵雨",
         "96": "雷暴伴冰雹",
         "99": "强雷暴"
+    },
+    "help": {
+        "title": "Hilfe",
+        "mobileNavigate": "Navigiere über die Leiste unten und „Mehr“.",
+        "mobileCreate": "Mit dem +-Knopf unten rechts legst du Neues an.",
+        "mobileSearch": "Suche öffnest du über „Mehr“ → Suchen.",
+        "mobileSettings": "Einstellungen findest du unter „Mehr“."
     }
 }
