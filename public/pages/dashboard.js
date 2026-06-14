@@ -360,7 +360,15 @@ function buildTodayHighlights(data) {
   const meals = data?.meals ?? data?.todayMeals ?? null;
 
   const urgentTask = tasks.find((task) => task.priority === 'urgent') ?? tasks[0] ?? null;
-  const nextEvent = events[0] ?? null;
+
+  const today = new Date().toDateString();
+  const todayEvents = events.filter((e) => {
+    if (!e.start_datetime) return true;
+    const d = new Date(e.start_datetime);
+    return d.toDateString() === today;
+  });
+  const nextEvent = todayEvents[0] ?? null;
+
   const openShoppingCount = shoppingItems.length
     ? shoppingItems.filter((item) => !item.is_checked).length
     : shoppingLists.reduce((sum, list) => {
@@ -379,7 +387,7 @@ function buildTodayHighlights(data) {
     openShoppingCount,
     dinner,
     taskCount: tasks.length,
-    eventCount: events.length,
+    eventCount: todayEvents.length,
   };
 }
 

@@ -132,6 +132,22 @@ test('Today-Highlights priorisieren dringende Aufgaben und nächsten Termin', as
   assert(result.dinner.title === 'Soup', 'Abendessen sollte übernommen werden');
 });
 
+test('Today-Highlights filtert Termine auf den heutigen Tag', async () => {
+  const { __test } = await import('../public/pages/dashboard.js');
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const tomorrowStr = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+
+  const result = __test.buildTodayHighlights({
+    events: [
+      { id: 1, title: 'Termin Morgen', start_datetime: `${tomorrowStr}T10:00:00` },
+      { id: 2, title: 'Termin Heute', start_datetime: `${todayStr}T14:30:00` },
+    ],
+  });
+
+  assert(result.eventCount === 1, `Erwartet 1 Termin für heute, erhalten ${result.eventCount}`);
+  assert(result.nextEvent.title === 'Termin Heute', 'Erwartet "Termin Heute" als nächsten Termin');
+});
+
 // --------------------------------------------------------
 // Tests: Dringende Aufgaben
 // --------------------------------------------------------
