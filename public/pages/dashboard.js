@@ -124,8 +124,8 @@ function showOnboarding(appContainer) {
 // Widget-Definitionen (Reihenfolge = Standard-Layout)
 // --------------------------------------------------------
 
-// NEU — primäre Inhalte (tasks, calendar) ganz oben
-const WIDGET_IDS = ['tasks', 'calendar', 'weather', 'meals', 'shopping', 'birthdays', 'budget', 'family', 'notes'];
+// weather (kompaktes 2x1) ganz oben, danach primäre Inhalte (tasks, calendar)
+const WIDGET_IDS = ['weather', 'tasks', 'calendar', 'meals', 'shopping', 'birthdays', 'budget', 'family', 'notes'];
 
 const WIDGET_SIZE_PRESETS = [
   { value: '1x1', labelKey: 'dashboard.widgetSizeTiny'     },

@@ -33,7 +33,9 @@ const HEX_COLOR_RE = /^#[0-9a-fA-F]{6}$/;
 const COUNTRY_ISO_RE = /^[A-Z]{2}$/;
 const SUBDIVISION_RE = /^[A-Z]{2}-[A-Z0-9-]{1,10}$/;
 
-const VALID_WIDGET_IDS = ['tasks', 'calendar', 'weather', 'meals', 'shopping', 'birthdays', 'budget', 'family', 'notes'];
+// Order defines the default dashboard layout (weather first, then primary content).
+// Must stay in sync with WIDGET_IDS in public/pages/dashboard.js.
+const VALID_WIDGET_IDS = ['weather', 'tasks', 'calendar', 'meals', 'shopping', 'birthdays', 'budget', 'family', 'notes'];
 const VALID_WIDGET_SIZES = ['1x1', '1x2', '1x3', '1x4', '2x1', '2x2', '2x3', '2x4', '3x1', '3x2', '3x3', '3x4', '4x1', '4x2', '4x3', '4x4'];
 
 // Modul-Slugs, die per Settings deaktiviert werden können.
