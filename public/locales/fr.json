@@ -1379,7 +1379,22 @@
         "regionHint": "Définit la devise et les formats de date et d’heure selon la région. Choisissez « Personnalisé » pour les régler individuellement.",
         "regionCustom": "Personnalisé",
         "regionSaved": "Région enregistrée.",
-        "currencyMovedHint": "La devise se configure désormais dans Apparence → Région / Format."
+        "currencyMovedHint": "La devise se configure désormais dans Apparence → Région / Format.",
+        "pageNotifications": "Notifications",
+        "pageNotificationsDescription": "Gérer les notifications push sur cet appareil",
+        "notificationsTitle": "Notifications",
+        "pushToggleTitle": "Notifications push",
+        "pushToggleLabel": "Activer sur cet appareil",
+        "pushChecking": "Vérification du statut …",
+        "pushEnabled": "Les notifications push sont actives sur cet appareil.",
+        "pushDisabled": "Les notifications push sont désactivées sur cet appareil.",
+        "pushDenied": "Les notifications ont été bloquées dans le navigateur. Veuillez les autoriser dans les paramètres du navigateur.",
+        "pushUnsupported": "Ce navigateur ne prend pas en charge les notifications push.",
+        "pushError": "Échec de l’action. Veuillez réessayer.",
+        "pushTestButton": "Envoyer une notification de test",
+        "pushTestSent": "Notification de test envoyée.",
+        "pushTestTitle": "Yuvomi",
+        "pushTestBody": "Ceci est une notification de test."
     },
     "login": {
         "tagline": "Planification familiale. Sécurisée. Respectueuse de la vie privée. Open source.",

@@ -1379,7 +1379,22 @@
         "regionHint": "Para birimini, tarih ve saat biçimini bölgeye göre ayarlar. Bunları ayrı ayrı yapılandırmak için „Özel“ seçeneğini seçin.",
         "regionCustom": "Özel",
         "regionSaved": "Bölge kaydedildi.",
-        "currencyMovedHint": "Para birimi artık Görünüm → Bölge / Biçim altında ayarlanır."
+        "currencyMovedHint": "Para birimi artık Görünüm → Bölge / Biçim altında ayarlanır.",
+        "pageNotifications": "Bildirimler",
+        "pageNotificationsDescription": "Bu cihazdaki anlık bildirimleri yönet",
+        "notificationsTitle": "Bildirimler",
+        "pushToggleTitle": "Anlık bildirimler",
+        "pushToggleLabel": "Bu cihazda etkinleştir",
+        "pushChecking": "Durum kontrol ediliyor …",
+        "pushEnabled": "Anlık bildirimler bu cihazda etkin.",
+        "pushDisabled": "Anlık bildirimler bu cihazda devre dışı.",
+        "pushDenied": "Bildirimler tarayıcıda engellendi. Lütfen tarayıcı ayarlarından izin verin.",
+        "pushUnsupported": "Bu tarayıcı anlık bildirimleri desteklemiyor.",
+        "pushError": "İşlem başarısız oldu. Lütfen tekrar deneyin.",
+        "pushTestButton": "Test bildirimi gönder",
+        "pushTestSent": "Test bildirimi gönderildi.",
+        "pushTestTitle": "Yuvomi",
+        "pushTestBody": "Bu bir test bildirimidir."
     },
     "login": {
         "tagline": "Aile planlaması. Güvenli. Gizlilik dostu. Açık kaynak.",

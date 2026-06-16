@@ -1379,7 +1379,22 @@
         "regionHint": "Sets currency, date and time format to match the region. Choose “Custom” to configure them individually.",
         "regionCustom": "Custom",
         "regionSaved": "Region saved.",
-        "currencyMovedHint": "The currency is now set under Appearance → Region / Format."
+        "currencyMovedHint": "The currency is now set under Appearance → Region / Format.",
+        "pageNotifications": "Notifications",
+        "pageNotificationsDescription": "Manage push notifications on this device",
+        "notificationsTitle": "Notifications",
+        "pushToggleTitle": "Push notifications",
+        "pushToggleLabel": "Enable on this device",
+        "pushChecking": "Checking status …",
+        "pushEnabled": "Push notifications are active on this device.",
+        "pushDisabled": "Push notifications are disabled on this device.",
+        "pushDenied": "Notifications were blocked in the browser. Please allow them in your browser settings.",
+        "pushUnsupported": "This browser does not support push notifications.",
+        "pushError": "Action failed. Please try again.",
+        "pushTestButton": "Send test notification",
+        "pushTestSent": "Test notification sent.",
+        "pushTestTitle": "Yuvomi",
+        "pushTestBody": "This is a test notification."
     },
     "login": {
         "tagline": "Family planning. Secure. Privacy-friendly. Open source.",

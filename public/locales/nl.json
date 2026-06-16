@@ -1379,7 +1379,22 @@
         "regionHint": "Stelt valuta en datum- en tijdnotatie in op basis van de regio. Kies “Aangepast” om ze afzonderlijk in te stellen.",
         "regionCustom": "Aangepast",
         "regionSaved": "Regio opgeslagen.",
-        "currencyMovedHint": "De valuta wordt nu ingesteld onder Weergave → Regio / Formaat."
+        "currencyMovedHint": "De valuta wordt nu ingesteld onder Weergave → Regio / Formaat.",
+        "pageNotifications": "Meldingen",
+        "pageNotificationsDescription": "Pushmeldingen op dit apparaat beheren",
+        "notificationsTitle": "Meldingen",
+        "pushToggleTitle": "Pushmeldingen",
+        "pushToggleLabel": "Op dit apparaat inschakelen",
+        "pushChecking": "Status wordt gecontroleerd …",
+        "pushEnabled": "Pushmeldingen zijn actief op dit apparaat.",
+        "pushDisabled": "Pushmeldingen zijn uitgeschakeld op dit apparaat.",
+        "pushDenied": "Meldingen zijn geblokkeerd in de browser. Sta ze toe in je browserinstellingen.",
+        "pushUnsupported": "Deze browser ondersteunt geen pushmeldingen.",
+        "pushError": "Actie mislukt. Probeer het opnieuw.",
+        "pushTestButton": "Testmelding verzenden",
+        "pushTestSent": "Testmelding verzonden.",
+        "pushTestTitle": "Yuvomi",
+        "pushTestBody": "Dit is een testmelding."
     },
     "login": {
         "tagline": "Gezinsplanning. Veilig. Privacyvriendelijk. Open source.",

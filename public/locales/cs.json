@@ -1379,7 +1379,22 @@
         "regionHint": "Nastaví měnu a formát data a času podle regionu. Pro individuální nastavení zvolte „Vlastní“.",
         "regionCustom": "Vlastní",
         "regionSaved": "Region uložen.",
-        "currencyMovedHint": "Měna se nyní nastavuje v Vzhled → Region / Formát."
+        "currencyMovedHint": "Měna se nyní nastavuje v Vzhled → Region / Formát.",
+        "pageNotifications": "Oznámení",
+        "pageNotificationsDescription": "Spravovat push oznámení na tomto zařízení",
+        "notificationsTitle": "Oznámení",
+        "pushToggleTitle": "Push oznámení",
+        "pushToggleLabel": "Aktivovat na tomto zařízení",
+        "pushChecking": "Kontrola stavu …",
+        "pushEnabled": "Push oznámení jsou na tomto zařízení aktivní.",
+        "pushDisabled": "Push oznámení jsou na tomto zařízení vypnutá.",
+        "pushDenied": "Oznámení byla v prohlížeči zablokována. Povolte je v nastavení prohlížeče.",
+        "pushUnsupported": "Tento prohlížeč nepodporuje push oznámení.",
+        "pushError": "Akce se nezdařila. Zkuste to znovu.",
+        "pushTestButton": "Odeslat testovací oznámení",
+        "pushTestSent": "Testovací oznámení odesláno.",
+        "pushTestTitle": "Yuvomi",
+        "pushTestBody": "Toto je testovací oznámení."
     },
     "login": {
         "tagline": "Rodinné plánování. Bezpečné. Soukromé. Open Source.",

@@ -1379,7 +1379,22 @@
         "regionHint": "地域に合わせて通貨・日付・時刻の形式を設定します。個別に設定するには「カスタム」を選択してください。",
         "regionCustom": "カスタム",
         "regionSaved": "地域を保存しました。",
-        "currencyMovedHint": "通貨は「外観 → 地域 / 形式」で設定するようになりました。"
+        "currencyMovedHint": "通貨は「外観 → 地域 / 形式」で設定するようになりました。",
+        "pageNotifications": "通知",
+        "pageNotificationsDescription": "このデバイスのプッシュ通知を管理",
+        "notificationsTitle": "通知",
+        "pushToggleTitle": "プッシュ通知",
+        "pushToggleLabel": "このデバイスで有効にする",
+        "pushChecking": "ステータスを確認しています …",
+        "pushEnabled": "このデバイスでプッシュ通知が有効です。",
+        "pushDisabled": "このデバイスでプッシュ通知は無効です。",
+        "pushDenied": "ブラウザで通知がブロックされています。ブラウザの設定で許可してください。",
+        "pushUnsupported": "このブラウザはプッシュ通知に対応していません。",
+        "pushError": "操作に失敗しました。もう一度お試しください。",
+        "pushTestButton": "テスト通知を送信",
+        "pushTestSent": "テスト通知を送信しました。",
+        "pushTestTitle": "Yuvomi",
+        "pushTestBody": "これはテスト通知です。"
     },
     "login": {
         "tagline": "家族計画。安全。プライバシー重視。オープンソース。",

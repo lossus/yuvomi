@@ -1385,7 +1385,22 @@
         "regionHint": "Ustawia walutę oraz format daty i godziny odpowiednio do regionu. Wybierz „Niestandardowy”, aby ustawić je osobno.",
         "regionCustom": "Niestandardowy",
         "regionSaved": "Zapisano region.",
-        "currencyMovedHint": "Walutę ustawia się teraz w Wygląd → Region / Format."
+        "currencyMovedHint": "Walutę ustawia się teraz w Wygląd → Region / Format.",
+        "pageNotifications": "Powiadomienia",
+        "pageNotificationsDescription": "Zarządzaj powiadomieniami push na tym urządzeniu",
+        "notificationsTitle": "Powiadomienia",
+        "pushToggleTitle": "Powiadomienia push",
+        "pushToggleLabel": "Włącz na tym urządzeniu",
+        "pushChecking": "Sprawdzanie stanu …",
+        "pushEnabled": "Powiadomienia push są aktywne na tym urządzeniu.",
+        "pushDisabled": "Powiadomienia push są wyłączone na tym urządzeniu.",
+        "pushDenied": "Powiadomienia zostały zablokowane w przeglądarce. Zezwól na nie w ustawieniach przeglądarki.",
+        "pushUnsupported": "Ta przeglądarka nie obsługuje powiadomień push.",
+        "pushError": "Akcja nie powiodła się. Spróbuj ponownie.",
+        "pushTestButton": "Wyślij powiadomienie testowe",
+        "pushTestSent": "Powiadomienie testowe wysłane.",
+        "pushTestTitle": "Yuvomi",
+        "pushTestBody": "To jest powiadomienie testowe."
     },
     "login": {
         "tagline": "Planowanie rodziny. Bezpieczne. Chroniące prywatność. Open Source.",

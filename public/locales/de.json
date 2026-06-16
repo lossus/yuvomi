@@ -1385,7 +1385,22 @@
         "regionHint": "Setzt Währung, Datums- und Zeitformat passend zur Region. Für individuelle Einstellungen „Benutzerdefiniert“ wählen.",
         "regionCustom": "Benutzerdefiniert",
         "regionSaved": "Region gespeichert.",
-        "currencyMovedHint": "Die Währung wird jetzt unter Darstellung → Region / Format eingestellt."
+        "currencyMovedHint": "Die Währung wird jetzt unter Darstellung → Region / Format eingestellt.",
+        "pageNotifications": "Benachrichtigungen",
+        "pageNotificationsDescription": "Push-Benachrichtigungen auf diesem Gerät verwalten",
+        "notificationsTitle": "Benachrichtigungen",
+        "pushToggleTitle": "Push-Benachrichtigungen",
+        "pushToggleLabel": "Auf diesem Gerät aktivieren",
+        "pushChecking": "Status wird geprüft …",
+        "pushEnabled": "Push-Benachrichtigungen sind auf diesem Gerät aktiv.",
+        "pushDisabled": "Push-Benachrichtigungen sind auf diesem Gerät deaktiviert.",
+        "pushDenied": "Benachrichtigungen wurden im Browser blockiert. Bitte in den Browser-Einstellungen erlauben.",
+        "pushUnsupported": "Dieser Browser unterstützt keine Push-Benachrichtigungen.",
+        "pushError": "Aktion fehlgeschlagen. Bitte erneut versuchen.",
+        "pushTestButton": "Testbenachrichtigung senden",
+        "pushTestSent": "Testbenachrichtigung gesendet.",
+        "pushTestTitle": "Yuvomi",
+        "pushTestBody": "Das ist eine Testbenachrichtigung."
     },
     "login": {
         "tagline": "Familienplanung. Sicher. Datenschutzfreundlich. Open Source.",
