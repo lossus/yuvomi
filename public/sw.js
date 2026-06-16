@@ -31,6 +31,7 @@ const APP_SHELL = [
   '/i18n.js',
   '/rrule-ui.js',
   '/reminders.js',
+  '/push.js',
   '/sw-register.js',
   '/lucide.min.js',
   '/styles/tokens.css',
@@ -118,6 +119,7 @@ const PAGE_MODULES = [
   '/settings/pages/sync-calendar.js',
   '/settings/pages/sync-contacts.js',
   '/settings/pages/sync-reminders.js',
+  '/settings/pages/notifications.js',
   '/settings/pages/documents-storage.js',
   '/settings/pages/documents-dms.js',
   '/settings/pages/admin-family.js',
@@ -340,3 +342,42 @@ function isMutableAppResource(pathname) {
     || pathname === '/manifest.json'
     || /\.(css|js|json|html)$/i.test(pathname);
 }
+
+// --------------------------------------------------------
+// Web Push
+// --------------------------------------------------------
+self.addEventListener('push', (event) => {
+  let payload = {};
+  try {
+    payload = event.data ? event.data.json() : {};
+  } catch {
+    payload = { title: 'Yuvomi', body: event.data ? event.data.text() : '' };
+  }
+  const title = payload.title || 'Yuvomi';
+  const options = {
+    body: payload.body || '',
+    icon: '/icons/icon-192.png',
+    badge: '/icons/icon-192.png',
+    tag: payload.tag || 'yuvomi-push',
+    data: { url: payload.url || '/reminders' },
+  };
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const targetUrl = (event.notification.data && event.notification.data.url) || '/reminders';
+  event.waitUntil((async () => {
+    const all = await clients.matchAll({ type: 'window', includeUncontrolled: true });
+    for (const client of all) {
+      if ('focus' in client) {
+        client.focus();
+        if ('navigate' in client) {
+          try { await client.navigate(targetUrl); } catch { /* cross-origin/navigation guard */ }
+        }
+        return;
+      }
+    }
+    if (clients.openWindow) await clients.openWindow(targetUrl);
+  })());
+});
