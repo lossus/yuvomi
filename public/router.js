@@ -8,6 +8,7 @@ import { api, auth } from '/api.js';
 import { initI18n, getLocale, t } from '/i18n.js';
 import { esc } from '/utils/html.js';
 import { init as initReminders, stop as stopReminders } from '/reminders.js';
+import { initPush, stopPush } from '/push.js';
 import { isKitchenRoute, getLastKitchenRoute } from '/utils/kitchen-tabs.js';
 import { buildHelpRows } from '/utils/help.js';
 import { NAV_ICONS } from '/nav-icons.js';
@@ -347,6 +348,7 @@ async function navigate(path, userOrPushState = true, pushState = true) {
       if (currentUser && currentUser.access_scope !== 'split_guest') {
         loadReminderStyles();
         initReminders();
+        initPush();
       }
     } else {
       pushState = userOrPushState;
@@ -402,6 +404,7 @@ async function navigate(path, userOrPushState = true, pushState = true) {
         if (currentUser && currentUser.access_scope !== 'split_guest') {
           loadReminderStyles();
           initReminders();
+          initPush();
         }
       } catch {
         currentPath = null; // Reset damit navigate('/login') nicht geblockt wird
@@ -2079,6 +2082,7 @@ window.addEventListener('auth:expired', () => {
   currentUser = null;
   stopThirdPartyModulePolling();
   stopReminders();
+  stopPush();
   if (isNavigating) {
     // navigate('/login') kann nicht sofort aufgerufen werden - wird im finally-Block
     // der laufenden Navigation nachgeholt.
