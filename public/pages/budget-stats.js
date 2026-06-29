@@ -100,6 +100,37 @@ function renderBodyContent(body) {
     <div class="budget-stats__export"></div>
   `);
   updatePeriodLabel();
+  renderTrendChart();
+}
+
+function renderTrendChart() {
+  const host = view.root.querySelector('#budget-stats-trend');
+  if (!host) return;
+  const s = view.data.series;
+  const W = 600, H = 180, PAD = 8;
+  const incomes  = s.map((p) => p.income);
+  const expenses = s.map((p) => Math.abs(p.expenses));
+  const max = Math.max(1, ...incomes, ...expenses);
+  const x = (i) => PAD + (s.length <= 1 ? 0 : (i * (W - 2 * PAD)) / (s.length - 1));
+  const y = (v) => H - PAD - (v / max) * (H - 2 * PAD);
+  const points = (arr) => arr.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+
+  host.replaceChildren();
+  host.insertAdjacentHTML('beforeend', `
+    <div class="budget-chart-section">
+      <div class="budget-chart-section__title">${t('budget.statsTrendTitle')}</div>
+      <svg class="budget-stats__trend" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"
+           role="img" aria-label="${t('budget.statsTrendTitle')}">
+        <polyline fill="none" stroke="var(--color-success)" stroke-width="2"
+                  vector-effect="non-scaling-stroke" points="${points(incomes)}" />
+        <polyline fill="none" stroke="var(--color-danger)" stroke-width="2"
+                  vector-effect="non-scaling-stroke" points="${points(expenses)}" />
+      </svg>
+      <div class="budget-stats__legend">
+        <span><i class="budget-stats__swatch budget-stats__swatch--income"></i>${t('budget.statsIncome')}</span>
+        <span><i class="budget-stats__swatch budget-stats__swatch--expense"></i>${t('budget.statsExpenses')}</span>
+      </div>
+    </div>`);
 }
 
 function updatePeriodLabel() {
