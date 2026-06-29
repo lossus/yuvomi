@@ -1429,6 +1429,29 @@ export function computeStats(database, { range, anchor }) {
   };
 }
 
+/**
+ * GET /api/v1/budget/stats
+ * Statistik-Aggregation über Woche/Monat/Jahr.
+ * Query: ?range=week|month|year&anchor=YYYY-MM-DD
+ */
+export function statsHandler(req, res) {
+  try {
+    const range  = req.query.range || 'month';
+    const anchor = req.query.anchor || new Date().toISOString().slice(0, 10);
+    if (!STATS_RANGES.has(range))
+      return res.status(400).json({ error: 'range muss week|month|year sein', code: 400 });
+    if (!DATE_RE.test(anchor))
+      return res.status(400).json({ error: 'anchor muss YYYY-MM-DD sein', code: 400 });
+
+    res.json({ data: computeStats(db.get(), { range, anchor }) });
+  } catch (err) {
+    log.error('', err);
+    res.status(500).json({ error: 'Internal error', code: 500 });
+  }
+}
+
+router.get('/stats', statsHandler);
+
 export default router;
 export {
   generateRecurringInstances, monthsPerInterval, effectiveMonthly, RECURRENCE_INTERVAL_KEYS,
