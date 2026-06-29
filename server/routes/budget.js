@@ -1373,6 +1373,62 @@ router.delete('/:id', (req, res) => {
   }
 });
 
+/**
+ * Aggregiert Budget-Daten für den Statistik-Tab.
+ * @param {object} database  better-sqlite3/node:sqlite-Instanz mit .prepare()
+ */
+export function computeStats(database, { range, anchor }) {
+  const r = computeStatsRange(range, anchor);
+
+  const totalsRow = database.prepare(`
+    SELECT
+      COALESCE(SUM(CASE WHEN amount > 0 THEN amount ELSE 0 END), 0) AS income,
+      COALESCE(SUM(CASE WHEN amount < 0 THEN amount ELSE 0 END), 0) AS expenses,
+      COALESCE(SUM(amount), 0) AS balance
+    FROM budget_entries WHERE date BETWEEN ? AND ?
+  `).get(r.from, r.to);
+
+  const prevRow = database.prepare(`
+    SELECT
+      COALESCE(SUM(CASE WHEN amount > 0 THEN amount ELSE 0 END), 0) AS income,
+      COALESCE(SUM(CASE WHEN amount < 0 THEN amount ELSE 0 END), 0) AS expenses,
+      COALESCE(SUM(amount), 0) AS balance
+    FROM budget_entries WHERE date BETWEEN ? AND ?
+  `).get(r.prevFrom, r.prevTo);
+
+  const byCategory = database.prepare(`
+    SELECT category,
+           COALESCE(SUM(CASE WHEN amount > 0 THEN amount ELSE 0 END), 0) AS income,
+           COALESCE(SUM(CASE WHEN amount < 0 THEN amount ELSE 0 END), 0) AS expenses,
+           COALESCE(SUM(amount), 0) AS total
+    FROM budget_entries WHERE date BETWEEN ? AND ?
+    GROUP BY category ORDER BY ABS(SUM(amount)) DESC
+  `).all(r.from, r.to);
+
+  // Bucket-Schlüssel: bei 'day' das volle Datum, bei 'month' die ersten 7 Zeichen.
+  const keyExpr = r.granularity === 'month' ? "substr(date, 1, 7)" : "date";
+  const rawSeries = database.prepare(`
+    SELECT ${keyExpr} AS period,
+           COALESCE(SUM(CASE WHEN amount > 0 THEN amount ELSE 0 END), 0) AS income,
+           COALESCE(SUM(CASE WHEN amount < 0 THEN amount ELSE 0 END), 0) AS expenses,
+           COALESCE(SUM(amount), 0) AS balance
+    FROM budget_entries WHERE date BETWEEN ? AND ?
+    GROUP BY period
+  `).all(r.from, r.to);
+
+  const byPeriod = new Map(rawSeries.map((row) => [row.period, row]));
+  const series = r.bucketKeys.map((period) =>
+    byPeriod.get(period) || { period, income: 0, expenses: 0, balance: 0 });
+
+  return {
+    range: r.range, from: r.from, to: r.to,
+    totals: { income: totalsRow.income, expenses: totalsRow.expenses, balance: totalsRow.balance },
+    series,
+    byCategory,
+    comparison: { income: prevRow.income, expenses: prevRow.expenses, balance: prevRow.balance },
+  };
+}
+
 export default router;
 export {
   generateRecurringInstances, monthsPerInterval, effectiveMonthly, RECURRENCE_INTERVAL_KEYS,

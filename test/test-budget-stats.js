@@ -3,7 +3,8 @@
  * Zweck: computeStatsRange (Zeitraum/Buckets) + computeStats (Aggregation) + /stats-Validierung.
  * Ausführen: node --experimental-sqlite test/test-budget-stats.js
  */
-import { computeStatsRange } from '../server/routes/budget.js';
+import { computeStatsRange, computeStats } from '../server/routes/budget.js';
+import { DatabaseSync } from 'node:sqlite';
 
 let passed = 0, failed = 0;
 function test(name, fn) {
@@ -58,6 +59,77 @@ test('ungültiger anchor wirft', () => {
   let threw = false;
   try { computeStatsRange('month', 'not-a-date'); } catch { threw = true; }
   assert(threw, 'sollte werfen');
+});
+
+// --- computeStats ---
+function freshDb() {
+  const db = new DatabaseSync(':memory:');
+  db.exec(`
+    CREATE TABLE budget_entries (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL, amount REAL NOT NULL,
+      category TEXT NOT NULL DEFAULT 'Sonstiges', subcategory TEXT NOT NULL DEFAULT '',
+      date TEXT NOT NULL, is_recurring INTEGER NOT NULL DEFAULT 0, created_by INTEGER NOT NULL DEFAULT 1
+    );
+  `);
+  return db;
+}
+function add(db, date, amount, category = 'food') {
+  db.prepare('INSERT INTO budget_entries (title, amount, category, date) VALUES (?,?,?,?)')
+    .run('x', amount, category, date);
+}
+
+test('computeStats month: totals + series-länge + zero-fill', () => {
+  const db = freshDb();
+  add(db, '2026-06-02', 1000, 'salary');   // income
+  add(db, '2026-06-02', -200, 'food');     // expense
+  add(db, '2026-06-20', -50, 'leisure');
+  const r = computeStats(db, { range: 'month', anchor: '2026-06-15' });
+  eq(r.totals.income, 1000, 'income');
+  eq(r.totals.expenses, -250, 'expenses');
+  eq(r.totals.balance, 750, 'balance');
+  eq(r.series.length, 30, 'series len');
+  eq(r.series[1].period, '2026-06-02', 'bucket 2 period');
+  eq(r.series[1].balance, 800, 'bucket 2 balance (1000-200)');
+  eq(r.series[0].income, 0, 'leerer bucket zero-filled');
+});
+
+test('computeStats byCategory: aggregiert + sortiert', () => {
+  const db = freshDb();
+  add(db, '2026-06-02', -200, 'food');
+  add(db, '2026-06-10', -100, 'food');
+  add(db, '2026-06-05', -500, 'rent');
+  const r = computeStats(db, { range: 'month', anchor: '2026-06-15' });
+  eq(r.byCategory[0].category, 'rent', 'größte zuerst');
+  eq(r.byCategory[0].total, -500, 'rent total');
+  eq(r.byCategory[1].category, 'food', 'food zweite');
+  eq(r.byCategory[1].expenses, -300, 'food summe');
+});
+
+test('computeStats comparison: Vormonat', () => {
+  const db = freshDb();
+  add(db, '2026-05-10', -400, 'food'); // Vormonat
+  add(db, '2026-06-10', -100, 'food'); // aktueller
+  const r = computeStats(db, { range: 'month', anchor: '2026-06-15' });
+  eq(r.totals.expenses, -100, 'aktuell');
+  eq(r.comparison.expenses, -400, 'vormonat');
+});
+
+test('computeStats year: 12 buckets, monatliche aggregation', () => {
+  const db = freshDb();
+  add(db, '2026-03-10', -100, 'food');
+  add(db, '2026-03-20', -50, 'food');
+  const r = computeStats(db, { range: 'year', anchor: '2026-06-15' });
+  eq(r.series.length, 12, '12 monate');
+  eq(r.series[2].period, '2026-03', 'märz bucket');
+  eq(r.series[2].expenses, -150, 'märz summe');
+});
+
+test('computeStats leer: alles 0, series zero-filled', () => {
+  const r = computeStats(freshDb(), { range: 'month', anchor: '2026-06-15' });
+  eq(r.totals.income, 0, 'income 0');
+  eq(r.series.length, 30, 'series trotzdem 30');
+  eq(r.series[0].balance, 0, 'bucket 0');
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);
