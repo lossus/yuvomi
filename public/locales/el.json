@@ -37,7 +37,8 @@
         "errorTimeout": "Η σύνδεση διήρκεσε πολύ. Παρακαλώ δοκιμάστε ξανά.",
         "requiredFields": "Συμπληρώστε όλα τα υποχρεωτικά πεδία.",
         "invalidInput": "Μη έγκυρη είσοδος.",
-        "togglePasswordVisibility": "Εμφάνιση/απόκρυψη κωδικού"
+        "togglePasswordVisibility": "Εμφάνιση/απόκρυψη κωδικού",
+        "errorOfflineMutation": "Οι αλλαγές δεν είναι δυνατές εκτός σύνδεσης. Συνδεθείτε ξανά."
     },
     "nav": {
         "dashboard": "Επισκόπηση",
@@ -1662,7 +1663,8 @@
         "skip": "Skip"
     },
     "offline": {
-        "banner": "Offline – reconnecting…"
+        "banner": "Offline – reconnecting…",
+        "staleData": "Εκτός σύνδεσης – τελευταία ενημέρωση: {{time}}"
     },
     "emptyHint": {
         "recipes": "Δημιουργήστε συνταγές και συνδέστε τις με τον προγραμματισμό γευμάτων.",

@@ -37,7 +37,8 @@
         "errorTimeout": "La connexion a pris trop de temps. Veuillez réessayer.",
         "requiredFields": "Veuillez remplir tous les champs obligatoires.",
         "invalidInput": "Saisie invalide.",
-        "togglePasswordVisibility": "Afficher/masquer le mot de passe"
+        "togglePasswordVisibility": "Afficher/masquer le mot de passe",
+        "errorOfflineMutation": "Les modifications sont impossibles hors ligne. Veuillez vous reconnecter."
     },
     "nav": {
         "dashboard": "Accueil",
@@ -1662,7 +1663,8 @@
         "skip": "Skip"
     },
     "offline": {
-        "banner": "Offline – reconnecting…"
+        "banner": "Offline – reconnecting…",
+        "staleData": "Hors ligne – état : {{time}}"
     },
     "emptyHint": {
         "recipes": "Créez des recettes et associez-les à votre planification des repas.",

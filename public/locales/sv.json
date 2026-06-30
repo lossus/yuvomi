@@ -37,7 +37,8 @@
         "errorTimeout": "Anslutningen tog för lång tid. Försök igen.",
         "requiredFields": "Fyll i alla obligatoriska fält.",
         "invalidInput": "Ogiltig inmatning.",
-        "togglePasswordVisibility": "Visa/dölj lösenord"
+        "togglePasswordVisibility": "Visa/dölj lösenord",
+        "errorOfflineMutation": "Ändringar går inte att göra offline. Anslut igen."
     },
     "nav": {
         "dashboard": "Översikt",
@@ -1662,7 +1663,8 @@
         "skip": "Skippa"
     },
     "offline": {
-        "banner": "Offline – återansluter…"
+        "banner": "Offline – återansluter…",
+        "staleData": "Offline – senast uppdaterad: {{time}}"
     },
     "emptyHint": {
         "recipes": "Skapa recept och koppla dem till din måltidsplanering.",

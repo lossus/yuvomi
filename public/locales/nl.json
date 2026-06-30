@@ -37,7 +37,8 @@
         "errorTimeout": "De verbinding duurde te lang. Probeer het opnieuw.",
         "requiredFields": "Vul alle verplichte velden in.",
         "invalidInput": "Ongeldige invoer.",
-        "togglePasswordVisibility": "Wachtwoord tonen/verbergen"
+        "togglePasswordVisibility": "Wachtwoord tonen/verbergen",
+        "errorOfflineMutation": "Wijzigingen zijn offline niet mogelijk. Maak opnieuw verbinding."
     },
     "nav": {
         "dashboard": "Overzicht",
@@ -1662,7 +1663,8 @@
         "skip": "Overslaan"
     },
     "offline": {
-        "banner": "Offline – opnieuw verbinden…"
+        "banner": "Offline – opnieuw verbinden…",
+        "staleData": "Offline – stand: {{time}}"
     },
     "shortcuts": {
         "search": "Zoeken openen",

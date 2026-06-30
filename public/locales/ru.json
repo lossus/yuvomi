@@ -37,7 +37,8 @@
         "errorTimeout": "Соединение заняло слишком много времени. Попробуйте снова.",
         "requiredFields": "Заполните все обязательные поля.",
         "invalidInput": "Недопустимый ввод.",
-        "togglePasswordVisibility": "Показать/скрыть пароль"
+        "togglePasswordVisibility": "Показать/скрыть пароль",
+        "errorOfflineMutation": "Изменения недоступны офлайн. Подключитесь снова."
     },
     "nav": {
         "dashboard": "Обзор",
@@ -1662,7 +1663,8 @@
         "skip": "Skip"
     },
     "offline": {
-        "banner": "Offline – reconnecting…"
+        "banner": "Offline – reconnecting…",
+        "staleData": "Офлайн — по состоянию на: {{time}}"
     },
     "emptyHint": {
         "recipes": "Создавайте рецепты и связывайте их с вашим планом питания.",

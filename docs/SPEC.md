@@ -1225,7 +1225,7 @@ modules/
 - Escape untrusted values with `esc()` from `/utils/html.js`.
 - Do not use external CDNs or bypass authentication/CSRF/CSP.
 - Prefer `/api.js` for Yuvomi REST calls. It prefixes `/api/v1`, sends session credentials, refreshes CSRF tokens, and uses non-cached fetches for user data.
-- External backend services used by browser-side modules should be reverse-proxied under a same-origin `/api/...` path when they return dynamic data. The service worker bypasses `/api/` entirely; other same-origin GET paths can fall through to app-shell caching and may serve stale responses unless the service-worker routing is extended.
+- External backend services used by browser-side modules should be reverse-proxied under a same-origin `/api/...` path when they return dynamic data. The service worker network-first-caches a small **read-only GET whitelist** of `/api/v1/*` data paths (calendar, tasks, shopping, contacts, dashboard) for offline viewing; all other `/api/` requests — mutations, `/auth/*`, and non-whitelisted GETs — are passed straight to the network and never cached.
 
 ---
 
@@ -1437,6 +1437,7 @@ Additive CSS file loaded globally after `layout.css`. Implements a Liquid Glass 
 - **Global search overlay:** Full-text search across tasks, calendar events, notes, contacts, and shopping items. Results are grouped by module and trigger deep-link navigation: contacts via `?open=<id>` (opens edit modal directly), calendar events via `?open=<id>`, notes via `?open=<id>`, shopping items via `?list=<id>&highlight=<id>` (activates the correct list tab and scrolls the item into view). Activated from the search bar in the More-Sheet.
 - **PWA install prompt:** Appears only after 2 user interactions. Dismiss window 7 days; interaction counter resets after dismiss.
 - **PWA offline and update contract (v0.71.34):** Service-worker shell, page, locale, and asset caches are keyed to the package release so every published UI revision installs fresh cache namespaces. The early `/lang-init.js` locale/direction bootstrap is part of the offline shell. When the network is unreachable and `index.html` is not cached, the worker serves `/offline.html` with a reload button.
+- **Read-only offline data (v0.78.8):** The service worker network-first-caches a whitelist of read-only `GET /api/v1/*` data paths (calendar, tasks, shopping, contacts, dashboard) in a release-keyed `oikos-api-<version>` cache, so the last-seen data stays viewable offline. Mutations, `/auth/*`, and non-whitelisted GETs are never cached; state-changing requests that fail offline surface a clear "changes aren't possible while offline" message instead of a raw network error. The calendar shows a subtle "Offline – as of: {time}" banner (from the cached `x-cached-at` timestamp) when served from cache. The API cache is wiped on logout and session expiry (`CLEAR_API_CACHE` message) so a second user on the same device cannot see the previous user's cached data, and old `oikos-api-*` caches are purged on every SW update.
 - **User-selected note colors (v0.71.34):** note titles, content, creator metadata, and fallback avatars choose black or white ink from WCAG relative luminance instead of a brightness heuristic; supporting text remains fully opaque so every built-in note color meets AA contrast.
 
 ### Breakpoints

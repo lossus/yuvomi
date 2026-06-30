@@ -37,7 +37,8 @@
         "errorTimeout": "La connessione ha impiegato troppo tempo. Riprova.",
         "requiredFields": "Compila tutti i campi obbligatori.",
         "invalidInput": "Input non valido.",
-        "togglePasswordVisibility": "Mostra/nascondi password"
+        "togglePasswordVisibility": "Mostra/nascondi password",
+        "errorOfflineMutation": "Le modifiche non sono possibili offline. Riconnettiti."
     },
     "nav": {
         "dashboard": "Panoramica",
@@ -1662,7 +1663,8 @@
         "skip": "Skip"
     },
     "offline": {
-        "banner": "Offline – reconnecting…"
+        "banner": "Offline – reconnecting…",
+        "staleData": "Offline – aggiornato al: {{time}}"
     },
     "emptyHint": {
         "recipes": "Crea ricette e collegale al tuo piano pasti.",

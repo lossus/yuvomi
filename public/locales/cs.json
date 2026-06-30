@@ -37,7 +37,8 @@
         "errorTimeout": "Připojení trvalo příliš dlouho. Zkuste to prosím znovu.",
         "requiredFields": "Vyplňte prosím všechna povinná pole.",
         "invalidInput": "Neplatný vstup.",
-        "togglePasswordVisibility": "Zobrazit/skrýt heslo"
+        "togglePasswordVisibility": "Zobrazit/skrýt heslo",
+        "errorOfflineMutation": "Změny nejsou offline možné. Připojte se prosím znovu."
     },
     "nav": {
         "dashboard": "Přehled",
@@ -1562,7 +1563,8 @@
         "recipes": "Přidejte recepty a propojte je s plánováním jídel."
     },
     "offline": {
-        "banner": "Offline – obnovování připojení…"
+        "banner": "Offline – obnovování připojení…",
+        "staleData": "Offline – stav: {{time}}"
     },
     "onboarding": {
         "step1Title": "Vítejte v {{name}}",

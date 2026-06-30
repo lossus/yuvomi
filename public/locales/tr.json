@@ -37,7 +37,8 @@
         "errorTimeout": "Bağlantı çok uzun sürdü. Lütfen tekrar deneyin.",
         "requiredFields": "Lütfen tüm zorunlu alanları doldurun.",
         "invalidInput": "Geçersiz giriş.",
-        "togglePasswordVisibility": "Şifreyi göster/gizle"
+        "togglePasswordVisibility": "Şifreyi göster/gizle",
+        "errorOfflineMutation": "Çevrimdışıyken değişiklik yapılamaz. Lütfen yeniden bağlanın."
     },
     "nav": {
         "dashboard": "Genel Bakış",
@@ -1662,7 +1663,8 @@
         "skip": "Skip"
     },
     "offline": {
-        "banner": "Offline – reconnecting…"
+        "banner": "Offline – reconnecting…",
+        "staleData": "Çevrimdışı – son güncelleme: {{time}}"
     },
     "emptyHint": {
         "recipes": "Tarifler oluşturun ve yemek planlayıcınıza bağlayın.",

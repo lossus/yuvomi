@@ -7,19 +7,28 @@
  *   APP_SHELL (HTML + kritische JS/CSS): Cache-First (frisch vorgeladen via install)
  *   PAGE_MODULES (Seiten-JS): Cache-First (frisch vorgeladen via install)
  *   ASSETS (Bilder, Icons): Cache-First, lazily gecacht, bei SW-Update geleert
- *   API: Immer Netzwerk (kein Caching von Nutzerdaten)
+ *   API: Network-First für eine Read-only-GET-Whitelist (Kalender, Tasks, …)
+ *        → offline letzter Stand sichtbar; Mutationen/Auth immer direkt ans Netz.
+ *        Cache wird bei Logout/Session-Ende geleert (CLEAR_API_CACHE-Message).
  *
  * Nach SW-Update: alle Requests gehen einmalig cache-bypassed ans Netz
  *   → bypassCacheUntil (in-memory + Cache API für SW-Restart-Robustheit)
  */
 
-const APP_RELEASE   = '0.78.7';
+const APP_RELEASE   = '0.78.8';
 const SHELL_CACHE   = `oikos-shell-${APP_RELEASE}`;
 const PAGES_CACHE   = `oikos-pages-${APP_RELEASE}`;
 const LOCALES_CACHE = `oikos-locales-${APP_RELEASE}`;
 const ASSETS_CACHE  = `oikos-assets-${APP_RELEASE}`;
+// API-Cache bewusst NICHT in ALL_CACHES: er wird bei jedem SW-Update neu benannt
+// (Version im Namen) und bei Logout/Session-Ende gezielt geleert.
+const API_CACHE     = `oikos-api-${APP_RELEASE}`;
 const BYPASS_CACHE  = 'oikos-bypass-flag';
 const ALL_CACHES    = [SHELL_CACHE, PAGES_CACHE, LOCALES_CACHE, ASSETS_CACHE];
+
+// GET-API-Pfade (nach /api/v1), die für Read-only-Offline gecacht werden dürfen.
+// NUR Lese-Endpunkte — niemals /auth/* oder Mutationen. Prefix-Match.
+const API_CACHE_WHITELIST = ['/calendar', '/tasks', '/shopping', '/contacts', '/dashboard'];
 
 // App-Shell: sofort benötigt für ersten Render
 const APP_SHELL = [
@@ -180,7 +189,9 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((keys) =>
       Promise.all(
         keys
-          .filter((key) => !ALL_CACHES.includes(key))
+          // Versions-Caches der laufenden Release behalten; alles andere entfernen —
+          // inklusive alter oikos-api-*-Caches der Vorversionen (Cache-Invalidierung).
+          .filter((key) => !ALL_CACHES.includes(key) && key !== API_CACHE)
           .map((key) => caches.delete(key))
       )
     )
@@ -218,7 +229,23 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(request.url);
 
   if (!url.protocol.startsWith('http')) return;
-  if (url.pathname.startsWith('/api/')) return;
+
+  // API-Requests: nur GET-Whitelist read-only offline-cachen. Alles andere
+  // (Mutationen, /auth/*, Nicht-Whitelist) unangetastet ans Netz durchreichen.
+  if (url.pathname.startsWith('/api/')) {
+    if (request.method === 'GET' && isCacheableApiGet(url.pathname)) {
+      event.respondWith(
+        (_bypassInitDone ? Promise.resolve() : _bypassInit).then(() => {
+          // Im Bypass-Fenster (nach SW-Update) API-Requests nicht anfassen:
+          // frisch ans Netz, weder aus Cache bedienen noch hineinschreiben.
+          if (Date.now() < bypassCacheUntil) return fetch(request);
+          return networkFirstApi(request);
+        })
+      );
+    }
+    return;
+  }
+
   if (request.method !== 'GET') return;
 
   // Erste Fetch-Events nach SW-Start: auf Cache-API-Initialisierung warten,
@@ -316,6 +343,39 @@ async function networkFirst(request, cacheName) {
 }
 
 // --------------------------------------------------------
+// Strategie: Network-First für GET-API (Read-only-Offline)
+// Erfolg → Antwort klonen, x-cached-at-Header ergänzen, in API_CACHE legen.
+// Netzfehler → Cache-Fallback, sonst 503-JSON {error:'offline'}.
+// --------------------------------------------------------
+async function networkFirstApi(request) {
+  try {
+    const response = await fetch(request);
+    // Nur erfolgreiche, gleichoriginäre (basic) Antworten cachen.
+    if (response.ok && response.type === 'basic') {
+      const cache   = await caches.open(API_CACHE);
+      const cloned  = response.clone();
+      const headers = new Headers(cloned.headers);
+      headers.set('x-cached-at', String(Date.now()));
+      const body = await cloned.blob();
+      await cache.put(request, new Response(body, {
+        status: cloned.status,
+        statusText: cloned.statusText,
+        headers,
+      }));
+    }
+    return response;
+  } catch {
+    const cache  = await caches.open(API_CACHE);
+    const cached = await cache.match(request);
+    if (cached) return cached;
+    return new Response(JSON.stringify({ error: 'offline' }), {
+      status: 503,
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    });
+  }
+}
+
+// --------------------------------------------------------
 // Strategie: Cache-First (für Shell, Pages, Assets)
 // --------------------------------------------------------
 async function cacheFirst(request, cacheName) {
@@ -345,6 +405,23 @@ function isMutableAppResource(pathname) {
     || pathname === '/manifest.json'
     || /\.(css|js|json|html)$/i.test(pathname);
 }
+
+// Prüft, ob ein API-Pfad (inkl. /api/v1-Prefix) zur Read-only-Offline-Whitelist
+// gehört. Query-Strings sind nicht Teil von pathname → reiner Pfad-Prefix-Match.
+function isCacheableApiGet(pathname) {
+  if (!pathname.startsWith('/api/v1')) return false;
+  const rest = pathname.slice('/api/v1'.length);
+  return API_CACHE_WHITELIST.some((p) => rest === p || rest.startsWith(`${p}/`));
+}
+
+// --------------------------------------------------------
+// Nachrichten vom Client: API-Cache leeren (Logout/Session-Ende)
+// --------------------------------------------------------
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'CLEAR_API_CACHE') {
+    event.waitUntil(caches.delete(API_CACHE));
+  }
+});
 
 // --------------------------------------------------------
 // Web Push

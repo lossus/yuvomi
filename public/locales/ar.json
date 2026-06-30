@@ -37,7 +37,8 @@
         "errorTimeout": "استغرق الاتصال وقتاً طويلاً. يرجى المحاولة مجدداً.",
         "requiredFields": "يرجى ملء جميع الحقول المطلوبة.",
         "invalidInput": "إدخال غير صالح.",
-        "togglePasswordVisibility": "إظهار/إخفاء كلمة المرور"
+        "togglePasswordVisibility": "إظهار/إخفاء كلمة المرور",
+        "errorOfflineMutation": "لا يمكن إجراء تغييرات دون اتصال. يرجى إعادة الاتصال."
     },
     "nav": {
         "dashboard": "لوحة التحكم",
@@ -1662,7 +1663,8 @@
         "skip": "Skip"
     },
     "offline": {
-        "banner": "Offline – reconnecting…"
+        "banner": "Offline – reconnecting…",
+        "staleData": "غير متصل – آخر تحديث: {{time}}"
     },
     "emptyHint": {
         "recipes": "أنشئ وصفات واربطها بمخطط الوجبات.",

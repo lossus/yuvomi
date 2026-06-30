@@ -37,7 +37,8 @@
         "errorTimeout": "接続に時間がかかりすぎました。もう一度お試しください。",
         "requiredFields": "必須項目をすべて入力してください。",
         "invalidInput": "無効な入力です。",
-        "togglePasswordVisibility": "パスワードを表示/非表示"
+        "togglePasswordVisibility": "パスワードを表示/非表示",
+        "errorOfflineMutation": "オフラインでは変更できません。再接続してください。"
     },
     "nav": {
         "dashboard": "ダッシュボード",
@@ -1662,7 +1663,8 @@
         "skip": "Skip"
     },
     "offline": {
-        "banner": "Offline – reconnecting…"
+        "banner": "Offline – reconnecting…",
+        "staleData": "オフライン – 最終更新: {{time}}"
     },
     "emptyHint": {
         "recipes": "レシピを作成して、食事プランに関連付けましょう。",

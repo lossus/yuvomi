@@ -5,6 +5,7 @@
  */
 
 import { api, auth } from '/api.js';
+import { clearApiCache } from '/sw-register.js';
 import { initI18n, getLocale, t } from '/i18n.js';
 import { esc } from '/utils/html.js';
 import { init as initReminders, stop as stopReminders } from '/reminders.js';
@@ -2033,6 +2034,9 @@ function showToast(message, type = 'default', duration = 3000, onUndo = null) {
 // --------------------------------------------------------
 
 function friendlyError(err) {
+  // Offline-Mutation (ApiError status 0): spezifische Meldung — auch wenn
+  // navigator.onLine fälschlich true meldet (Netz weg, aber kein offline-Event).
+  if (err?.status === 0) return t('common.errorOfflineMutation');
   if (!navigator.onLine) return t('common.errorOffline');
   const status = err?.status ?? err?.response?.status;
   if (status === 403) return t('common.errorForbidden');
@@ -2083,6 +2087,9 @@ window.addEventListener('popstate', (e) => {
 // Session abgelaufen
 window.addEventListener('auth:expired', () => {
   currentUser = null;
+  // Offline-API-Cache leeren: Session-Ende → keine gecachten Daten zurücklassen,
+  // die der nächste Nutzer am selben Gerät offline sehen könnte.
+  clearApiCache();
   stopThirdPartyModulePolling();
   stopReminders();
   stopPush();

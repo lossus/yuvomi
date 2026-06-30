@@ -1,8 +1,10 @@
 /**
  * Modul: API-Client
  * Zweck: Fetch-Wrapper mit Session-Auth, einheitlicher Fehlerbehandlung und JSON-Parsing
- * Abhängigkeiten: keine
+ * Abhängigkeiten: sw-register (clearApiCache bei Logout)
  */
+
+import { clearApiCache } from '/sw-register.js';
 
 const API_BASE = '/api/v1';
 
@@ -33,16 +35,25 @@ async function apiFetch(path, options = {}, _retried = false) {
   const stateChanging = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(method);
   const { headers: optionHeaders = {}, ...fetchOptions } = options;
 
-  const response = await fetch(url, {
-    credentials: 'same-origin',
-    cache: 'no-store',
-    ...fetchOptions,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(stateChanging ? { 'X-CSRF-Token': getCsrfToken() } : {}),
-      ...optionHeaders,
-    },
-  });
+  let response;
+  try {
+    response = await fetch(url, {
+      credentials: 'same-origin',
+      cache: 'no-store',
+      ...fetchOptions,
+      headers: {
+        'Content-Type': 'application/json',
+        ...(stateChanging ? { 'X-CSRF-Token': getCsrfToken() } : {}),
+        ...optionHeaders,
+      },
+    });
+  } catch (err) {
+    // Offline/Netzfehler bei state-changing Requests (POST/PUT/PATCH/DELETE):
+    // klaren ApiError werfen statt nacktem TypeError, damit die UI eine
+    // verständliche „offline"-Meldung zeigen kann (read-only Offline-Modus).
+    if (stateChanging) throw new ApiError('offline', 0);
+    throw err;
+  }
 
   if (response.status === 401) {
     // Beim Login-Endpunkt bedeutet 401 "falsche Zugangsdaten", nicht "Session abgelaufen".
@@ -144,7 +155,13 @@ const api = {
 
 const auth = {
   login: (username, password) => api.post('/auth/login', { username, password }),
-  logout: () => api.post('/auth/logout'),
+  logout: async () => {
+    const res = await api.post('/auth/logout');
+    // API-Cache leeren, damit am selben Gerät kein Nutzer die offline
+    // gecachten Daten des vorigen sieht.
+    clearApiCache();
+    return res;
+  },
   me: () => api.get('/auth/me'),
   setup: (username, display_name, password) => api.post('/auth/setup', { username, display_name, password }),
   getUsers: () => api.get('/auth/users'),

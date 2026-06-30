@@ -37,7 +37,8 @@
         "errorTimeout": "Kết nối quá lâu. Vui lòng thử lại.",
         "requiredFields": "Vui lòng điền tất cả các trường bắt buộc.",
         "invalidInput": "Đầu vào không hợp lệ.",
-        "togglePasswordVisibility": "Hiện/ẩn mật khẩu"
+        "togglePasswordVisibility": "Hiện/ẩn mật khẩu",
+        "errorOfflineMutation": "Không thể thay đổi khi ngoại tuyến. Vui lòng kết nối lại."
     },
     "nav": {
         "dashboard": "Tổng quan",
@@ -1662,7 +1663,8 @@
         "skip": "Bỏ qua"
     },
     "offline": {
-        "banner": "Ngoại tuyến – đang kết nối lại…"
+        "banner": "Ngoại tuyến – đang kết nối lại…",
+        "staleData": "Ngoại tuyến – cập nhật lúc: {{time}}"
     },
     "shortcuts": {
         "search": "Mở tìm kiếm",

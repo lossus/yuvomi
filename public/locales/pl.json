@@ -37,7 +37,8 @@
         "errorTimeout": "Połączenie trwało zbyt długo. Spróbuj ponownie.",
         "requiredFields": "Wypełnij wszystkie wymagane pola.",
         "invalidInput": "Nieprawidłowe dane.",
-        "togglePasswordVisibility": "Pokaż/ukryj hasło"
+        "togglePasswordVisibility": "Pokaż/ukryj hasło",
+        "errorOfflineMutation": "Zmiany nie są możliwe w trybie offline. Połącz się ponownie."
     },
     "nav": {
         "dashboard": "Pulpit",
@@ -1662,7 +1663,8 @@
         "skip": "Pomiń"
     },
     "offline": {
-        "banner": "Offline – przywracanie połączenia…"
+        "banner": "Offline – przywracanie połączenia…",
+        "staleData": "Offline – stan z: {{time}}"
     },
     "emptyHint": {
         "tasks": "Stuknij +, aby utworzyć pierwsze zadanie. Przesuń kartę w lewo, aby usunąć.",

@@ -381,6 +381,7 @@ let state = {
   documentUploadBackend: 'local',
   layerHolidays: true,     // toggle for public holiday layer
   layerSchool:   true,     // toggle for school holiday layer
+  offlineSince:  null,     // Date des letzten Cache-Stands, wenn offline bedient
 };
 let _container = null;
 
@@ -798,9 +799,10 @@ function renderTaskChip(task) {
 // --------------------------------------------------------
 
 async function loadRange(from, to) {
+  const calPath = `/calendar?from=${from}&to=${to}`;
   try {
     const [evRes, taskRes, holRes] = await Promise.all([
-      api.get(`/calendar?from=${from}&to=${to}`),
+      api.get(calPath),
       api.get('/tasks?include_future=1').catch((err) => {
         console.warn('[Calendar] Tasks-Fetch fehlgeschlagen:', err);
         return { data: [] };
@@ -810,15 +812,40 @@ async function loadRange(from, to) {
     state.events   = evRes.data;
     state.tasks    = filterTasksForCalendar(taskRes.data ?? []);
     state.holidays = holRes.data ?? [];
+    // Offline-Stand: wenn der Browser offline ist, kamen die Daten aus dem
+    // Service-Worker-Cache. Den Cache-Zeitstempel (x-cached-at) als „Stand" lesen.
+    state.offlineSince = navigator.onLine ? null : await getCachedAt(calPath);
   } catch (err) {
     console.error('[Calendar] loadRange Fehler:', err);
     state.events   = [];
     state.tasks    = [];
     state.holidays = [];
+    state.offlineSince = null;
     window.oikos?.showToast(t('calendar.loadError'), 'danger');
   }
   state.rangeFrom = from;
   state.rangeTo   = to;
+}
+
+/**
+ * Liest den x-cached-at-Zeitstempel einer offline bedienten API-Antwort aus dem
+ * Service-Worker-API-Cache. Findet den Cache versionsunabhängig per Prefix.
+ * @returns {Promise<Date|null>}
+ */
+async function getCachedAt(path) {
+  if (typeof caches === 'undefined') return null;
+  try {
+    const names    = await caches.keys();
+    const apiCache = names.find((n) => n.startsWith('oikos-api-'));
+    if (!apiCache) return null;
+    const cache = await caches.open(apiCache);
+    const res   = await cache.match(`/api/v1${path}`);
+    const ts    = res?.headers.get('x-cached-at');
+    const ms    = ts ? Number(ts) : NaN;
+    return Number.isFinite(ms) ? new Date(ms) : null;
+  } catch {
+    return null;
+  }
 }
 
 async function loadUsers() {
@@ -1075,6 +1102,38 @@ async function reloadForView() {
 // Ansicht-Dispatcher
 // --------------------------------------------------------
 
+// Dezenter Offline-Hinweis oberhalb der Toolbar: zeigt den letzten Cache-Stand,
+// wenn der Kalender offline aus dem Service-Worker-Cache bedient wurde.
+function updateOfflineNotice() {
+  const page = _container?.querySelector('#calendar-page');
+  if (!page) return;
+  const existing = page.querySelector('#cal-offline-notice');
+
+  if (!state.offlineSince) {
+    existing?.remove();
+    return;
+  }
+
+  const stamp = `${formatPreferredDate(state.offlineSince)} ${formatTime(state.offlineSince)}`.trim();
+  const label = t('offline.staleData', { time: stamp });
+
+  if (existing) {
+    const span = existing.querySelector('.cal-offline-notice__text');
+    if (span) span.textContent = label;
+    return;
+  }
+
+  const toolbar = page.querySelector('#cal-toolbar');
+  const html = `
+    <div class="cal-offline-notice" id="cal-offline-notice" role="status">
+      <i data-lucide="cloud-off" class="icon-sm" aria-hidden="true"></i>
+      <span class="cal-offline-notice__text">${esc(label)}</span>
+    </div>`;
+  if (toolbar) toolbar.insertAdjacentHTML('beforebegin', html);
+  else page.insertAdjacentHTML('afterbegin', html);
+  if (window.lucide) lucide.createIcons({ el: page.querySelector('#cal-offline-notice') });
+}
+
 function renderView() {
   const body = _container.querySelector('#cal-body');
   if (!body) return;
@@ -1092,6 +1151,7 @@ function renderView() {
     _dayIndex.active = false;
   }
   if (window.lucide) lucide.createIcons({ el: body });
+  updateOfflineNotice();
 }
 
 // --------------------------------------------------------

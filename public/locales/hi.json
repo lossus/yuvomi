@@ -37,7 +37,8 @@
         "errorTimeout": "कनेक्शन बहुत देर से हुआ। कृपया पुनः प्रयास करें।",
         "requiredFields": "कृपया सभी आवश्यक फ़ील्ड भरें.",
         "invalidInput": "अमान्य इनपुट.",
-        "togglePasswordVisibility": "पासवर्ड दिखाएं/छिपाएं"
+        "togglePasswordVisibility": "पासवर्ड दिखाएं/छिपाएं",
+        "errorOfflineMutation": "ऑफ़लाइन रहते हुए बदलाव संभव नहीं हैं। कृपया दोबारा कनेक्ट करें।"
     },
     "nav": {
         "dashboard": "डैशबोर्ड",
@@ -1662,7 +1663,8 @@
         "skip": "Skip"
     },
     "offline": {
-        "banner": "Offline – reconnecting…"
+        "banner": "Offline – reconnecting…",
+        "staleData": "ऑफ़लाइन – अंतिम अपडेट: {{time}}"
     },
     "emptyHint": {
         "recipes": "रेसिपी बनाएं और उन्हें अपने भोजन योजनाकार से जोड़ें।",

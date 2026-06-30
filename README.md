@@ -183,7 +183,7 @@ Each module is independent. Use what fits, skip what doesn't.
 ## Design & technology
 
 - **Disciplined Liquid Glass UI** — readable work surfaces, subtle translucent navigation, spring animations, and module-tinted overlays — built in pure CSS, no framework
-- **PWA** — installable on any device, works offline, refreshes release-bound caches reliably, and stays responsive from phone to desktop with a persistent five-destination mobile bar, configurable favorites, and tuned touch targets
+- **PWA** — installable on any device, works offline (read-only access to your last-seen calendar, tasks, shopping, contacts, and dashboard data), refreshes release-bound caches reliably, and stays responsive from phone to desktop with a persistent five-destination mobile bar, configurable favorites, and tuned touch targets
 - **Privacy first** — fully self-hosted, optional SQLCipher AES-256 database encryption (enabled in the recommended Docker setup), zero telemetry
 - **SSO / OpenID Connect** — optional single sign-on via any OIDC provider (Authentik, Keycloak, Google, Microsoft Entra) configured with four env vars; Authorization Code + PKCE flow
 - **Self-service password reset** — optional SMTP email lets users reset a forgotten password themselves via a time-limited emailed link; anti-enumeration by design

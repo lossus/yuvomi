@@ -37,7 +37,8 @@
         "errorTimeout": "La conexión tardó demasiado. Por favor, inténtalo de nuevo.",
         "requiredFields": "Completa todos los campos obligatorios.",
         "invalidInput": "Entrada no válida.",
-        "togglePasswordVisibility": "Mostrar/ocultar contraseña"
+        "togglePasswordVisibility": "Mostrar/ocultar contraseña",
+        "errorOfflineMutation": "No se pueden hacer cambios sin conexión. Vuelve a conectarte."
     },
     "nav": {
         "dashboard": "Inicio",
@@ -1662,7 +1663,8 @@
         "skip": "Skip"
     },
     "offline": {
-        "banner": "Offline – reconnecting…"
+        "banner": "Offline – reconnecting…",
+        "staleData": "Sin conexión: datos del {{time}}"
     },
     "emptyHint": {
         "recipes": "Crea recetas y vincúlalas con tu planificador de comidas.",

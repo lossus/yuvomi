@@ -37,7 +37,8 @@
         "errorTimeout": "A ligação demorou demasiado. Por favor, tente novamente.",
         "requiredFields": "Preencha todos os campos obrigatórios.",
         "invalidInput": "Entrada inválida.",
-        "togglePasswordVisibility": "Mostrar/ocultar senha"
+        "togglePasswordVisibility": "Mostrar/ocultar senha",
+        "errorOfflineMutation": "Não é possível fazer alterações offline. Reconecte-se."
     },
     "nav": {
         "dashboard": "Painel",
@@ -1662,7 +1663,8 @@
         "skip": "Skip"
     },
     "offline": {
-        "banner": "Offline – reconnecting…"
+        "banner": "Offline – reconnecting…",
+        "staleData": "Offline – dados de: {{time}}"
     },
     "emptyHint": {
         "recipes": "Crie receitas e vincule-as ao seu planejador de refeições.",

@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.78.8] - 2026-06-30
+
+### Added
+- **Read-only offline support:** the service worker now network-first-caches a whitelist of read-only `GET /api/v1/*` data paths (calendar, tasks, shopping, contacts, dashboard) in a release-keyed `oikos-api-<version>` cache, so the last-seen data stays viewable when offline. The calendar shows a subtle "Offline – as of: {time}" banner (from the cached `x-cached-at` timestamp) when served from cache. (Discussion #388)
+
+### Changed
+- **Service worker API handling:** mutations, `/auth/*`, and non-whitelisted GET requests are passed straight to the network and never cached; state-changing requests that fail offline now surface a clear "changes aren't possible while offline" message instead of a raw network error.
+
+### Security
+- **Offline cache isolation:** the offline API cache is wiped on logout and session expiry so a second user on the same device cannot see the previous user's cached data, and stale `oikos-api-*` caches from prior versions are purged on every service-worker update.
+
 ## [0.78.7] - 2026-06-30
 
 ### Changed

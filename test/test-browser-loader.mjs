@@ -7,6 +7,9 @@
  */
 
 const STUBS = {
+  '/sw-register.js': `
+    export function clearApiCache() {}
+  `,
   '/api.js': `
     export const api = {
       get: async () => ({ data: null }),

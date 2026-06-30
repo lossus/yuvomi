@@ -37,7 +37,8 @@
         "errorTimeout": "Die Verbindung hat zu lange gedauert. Bitte erneut versuchen.",
         "requiredFields": "Bitte alle Pflichtfelder ausfüllen.",
         "invalidInput": "Ungültige Eingabe.",
-        "togglePasswordVisibility": "Passwort anzeigen/verbergen"
+        "togglePasswordVisibility": "Passwort anzeigen/verbergen",
+        "errorOfflineMutation": "Änderungen sind offline nicht möglich. Bitte erneut verbinden."
     },
     "nav": {
         "dashboard": "Übersicht",
@@ -1662,7 +1663,8 @@
         "skip": "Überspringen"
     },
     "offline": {
-        "banner": "Offline – Verbindung wird wiederhergestellt…"
+        "banner": "Offline – Verbindung wird wiederhergestellt…",
+        "staleData": "Offline – Stand: {{time}}"
     },
     "emptyHint": {
         "tasks": "Tippe auf + um deine erste Aufgabe zu erstellen. Wische eine Karte nach links zum Löschen.",

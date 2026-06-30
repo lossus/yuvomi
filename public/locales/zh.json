@@ -37,7 +37,8 @@
         "errorTimeout": "连接超时。请重试。",
         "requiredFields": "请填写所有必填字段。",
         "invalidInput": "输入无效。",
-        "togglePasswordVisibility": "显示/隐藏密码"
+        "togglePasswordVisibility": "显示/隐藏密码",
+        "errorOfflineMutation": "离线时无法进行更改。请重新连接。"
     },
     "nav": {
         "dashboard": "概览",
@@ -1662,7 +1663,8 @@
         "skip": "Skip"
     },
     "offline": {
-        "banner": "Offline – reconnecting…"
+        "banner": "Offline – reconnecting…",
+        "staleData": "离线 – 数据截至：{{time}}"
     },
     "emptyHint": {
         "recipes": "创建食谱并将其关联到你的膳食计划。",

@@ -89,7 +89,7 @@
   <oikos-install-prompt></oikos-install-prompt>
   <script type="module" src="/components/oikos-install-prompt.js"></script>
 
-  <!-- Service Worker registrieren -->
-  <script src="/sw-register.js" defer></script>
+  <!-- Service Worker registrieren (ES-Modul: exportiert clearApiCache) -->
+  <script type="module" src="/sw-register.js"></script>
 </body>
 </html>

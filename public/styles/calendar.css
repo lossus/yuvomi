@@ -10,6 +10,22 @@
 .calendar-page { --module-accent: var(--module-calendar); }
 
 /* --------------------------------------------------------
+ * Offline-Hinweis (Read-only-Offline: letzter Cache-Stand)
+ * -------------------------------------------------------- */
+.cal-offline-notice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--color-warning-light);
+  color: var(--color-warning);
+  font-size: var(--text-xs);
+}
+.cal-offline-notice i { flex: 0 0 auto; }
+
+/* --------------------------------------------------------
  * Seiten-Layout
  * -------------------------------------------------------- */
 .calendar-page {
