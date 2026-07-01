@@ -11,6 +11,8 @@ import { esc } from '/utils/html.js';
 import { init as initReminders, stop as stopReminders } from '/reminders.js';
 import { initPush, stopPush } from '/push.js';
 import { isKitchenRoute, getLastKitchenRoute } from '/utils/kitchen-tabs.js';
+import { getLastHealthRoute, HEALTH_ROUTES } from '/utils/health-tabs.js';
+import { activityType } from '/utils/health-activity.js';
 import { buildHelpRows } from '/utils/help.js';
 import { NAV_ICONS } from '/nav-icons.js';
 import { SETTINGS_LEAVES } from '/settings/registry.js';
@@ -52,6 +54,15 @@ const SETTINGS_ROUTES = [
 ];
 
 ROUTES.push(...SETTINGS_ROUTES);
+
+// Gesundheit ist — wie Settings — eine Sektion mit einer Wurzel (/health) und je
+// einer exakten Route pro Sub-Tab. Alle Routen laden dasselbe Seitenmodul; die
+// Soft-Navigation zwischen den Tabs läuft über dessen update()-Funktion.
+const HEALTH_PAGE_ROUTES = HEALTH_ROUTES.map((path) => ({
+  path, page: '/pages/health.js', requiresAuth: true, module: 'health',
+}));
+
+ROUTES.push(...HEALTH_PAGE_ROUTES);
 
 // --------------------------------------------------------
 // Standalone-Modus: Dynamische theme-color Anpassung
@@ -170,7 +181,7 @@ let _setupRequired = false;
 // --------------------------------------------------------
 
 const ROUTE_ORDER = ['/', '/calendar', '/tasks', '/meals', '/recipes', '/shopping',
-                     '/birthdays', '/notes', '/contacts', '/budget', '/documents', '/housekeeping', '/settings'];
+                     '/birthdays', '/notes', '/contacts', '/budget', '/documents', '/housekeeping', '/health', '/settings'];
 
 const MOBILE_FAVORITE_COUNT = 3;
 
@@ -193,6 +204,9 @@ const APP_VERSION_STORAGE_KEY = 'yuvomi-app-version';
 // gilt als gleiche Sektion (keine seitliche Seitentransition).
 function topLevelSection(path) {
   if (typeof path === 'string' && path.startsWith('/settings')) return '/settings';
+  // /health/* Sub-Tabs teilen sich eine Sektion (Soft-Nav zwischen Tabs, keine
+  // seitliche Seitentransition) — analog zu den Settings-Blättern.
+  if (typeof path === 'string' && path.startsWith('/health')) return '/health';
   return path ?? '/';
 }
 
@@ -233,6 +247,7 @@ function setAppVersion(version) {
 
 function routeTitle(path) {
   if (typeof path === 'string' && path.startsWith('/settings')) return t('nav.settings');
+  if (typeof path === 'string' && path.startsWith('/health')) return t('nav.health');
   const map = {
     '/': t('dashboard.title'),
     '/tasks': t('nav.tasks'),
@@ -1033,6 +1048,7 @@ const SHORTCUTS = [
   { key: 'g c', description: () => t('shortcuts.goCal'),   action: () => navigate('/calendar') },
   { key: 'g s', description: () => t('shortcuts.goShop'),  action: () => navigate('/shopping') },
   { key: 'g n', description: () => t('shortcuts.goNotes'),   action: () => navigate('/notes')              },
+  { key: 'g h', description: () => t('shortcuts.goHealth'),  action: () => navigate(getLastHealthRoute())  },
   { key: 'g k',   description: () => t('shortcuts.goKitchen'), action: () => navigate(getLastKitchenRoute()) },
   { key: 'g k m', description: () => t('shortcuts.goKitchen'), action: () => navigate('/meals')             },
   { key: 'g k r', description: () => t('shortcuts.goKitchen'), action: () => navigate('/recipes')           },
@@ -1316,8 +1332,9 @@ function initSearch(container) {
  */
 function renderSearchResults(container, data, onClose) {
   container.replaceChildren();
-  const { tasks = [], events = [], notes = [], contacts = [], items = [] } = data;
-  const total = tasks.length + events.length + notes.length + contacts.length + items.length;
+  const { tasks = [], events = [], notes = [], contacts = [], items = [], meds = [], activities = [] } = data;
+  const total = tasks.length + events.length + notes.length + contacts.length + items.length
+    + meds.length + activities.length;
 
   if (total === 0) {
     const empty = document.createElement('p');
@@ -1327,7 +1344,13 @@ function renderSearchResults(container, data, onClose) {
     return;
   }
 
-  function makeSection(labelKey, items, routeFn) {
+  // Aktivitätstyp lokalisieren (Preset via labelKey, Freitext unverändert).
+  const activityLabel = (item) => {
+    const preset = activityType(item.title);
+    return preset ? t(preset.labelKey) : item.title;
+  };
+
+  function makeSection(labelKey, items, routeFn, labelFn) {
     if (!items.length) return;
     const section = document.createElement('div');
     section.className = 'search-section';
@@ -1340,7 +1363,7 @@ function renderSearchResults(container, data, onClose) {
       btn.className = 'search-result';
       const title = document.createElement('span');
       title.className = 'search-result__title';
-      title.textContent = item.title;
+      title.textContent = labelFn ? labelFn(item) : item.title;
       btn.appendChild(title);
       btn.addEventListener('click', () => {
         onClose();
@@ -1356,6 +1379,8 @@ function renderSearchResults(container, data, onClose) {
   makeSection('nav.notes',    notes,    (i) => `/notes?open=${i.id}`);
   makeSection('nav.contacts', contacts, (i) => `/contacts?open=${i.id}`);
   makeSection('nav.shopping', items,    (i) => `/shopping?list=${i.list_id}&highlight=${i.id}`);
+  makeSection('health.tabs.meds',     meds,       () => '/health/meds');
+  makeSection('health.tabs.activity', activities, () => '/health/activity', activityLabel);
 }
 
 function navItems() {
@@ -1380,6 +1405,7 @@ function navItems() {
     { path: '/budget',    label: t('nav.budget'),    icon: 'wallet',           module: 'budget',      section: NAV_SECTION.home },
     { path: '/documents', label: t('nav.documents'), icon: 'folder-lock',      module: 'documents',   section: NAV_SECTION.home },
     { path: '/housekeeping', label: t('nav.housekeeping'), icon: 'paintbrush', module: 'housekeeping', section: NAV_SECTION.home },
+    { path: '/health',    label: t('nav.health'),    icon: 'heart-pulse',      module: 'health',      section: NAV_SECTION.home },
     // Settings ist am Ende gepinnt (siehe unten).
     { path: '/settings',  navHref: '/settings?view=domains', label: t('nav.settings'),  icon: 'settings',         module: 'settings',    section: NAV_SECTION.home },
   ];

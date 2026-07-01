@@ -71,7 +71,8 @@
         "sectionPlan": "Plan",
         "sectionHome": "Home",
         "help": "Help",
-        "sectionCustomModules": "Custom modules"
+        "sectionCustomModules": "Custom modules",
+        "health": "Health"
     },
     "dashboard": {
         "title": "Overview",
@@ -1687,7 +1688,8 @@
         "goCal": "Calendar",
         "goShop": "Shopping list",
         "goNotes": "Notes",
-        "goKitchen": "Kitchen"
+        "goKitchen": "Kitchen",
+        "goHealth": "Health"
     },
     "emptyHint": {
         "tasks": "Tap + to create your first task. Swipe a card left to delete.",
@@ -2284,5 +2286,332 @@
         "logoSearchError": "Logos could not be loaded.",
         "logoSourceWebsite": "From website",
         "useLogo": "Use this logo"
+    },
+    "health": {
+        "tabs": {
+            "overview": "Overview",
+            "vitals": "Vitals",
+            "meds": "Medications",
+            "labs": "Lab values",
+            "activity": "Activity"
+        },
+        "overview": {
+            "title": "Overview",
+            "emptyTitle": "Nothing here yet",
+            "emptyDesc": "Your health overview appears here.",
+            "personsLabel": "Select person",
+            "loadError": "Couldn't load the overview",
+            "loadErrorDesc": "Please try again.",
+            "retry": "Try again",
+            "dueToday": {
+                "title": "Due today"
+            },
+            "adherence": {
+                "title": "Adherence",
+                "noData": "No intake data yet",
+                "period": "Last {{days}} days",
+                "streakLabel": "day streak"
+            },
+            "vitals": {
+                "title": "Latest vitals"
+            },
+            "quick": {
+                "title": "Quick add",
+                "vital": "Vital",
+                "activity": "Activity",
+                "meds": "Medications"
+            },
+            "reminders": {
+                "title": "Upcoming reminders",
+                "empty": "No more doses today"
+            }
+        },
+        "vitals": {
+            "title": "Vitals",
+            "emptyTitle": "No measurements yet",
+            "emptyDesc": "Blood pressure, blood sugar and weight appear here.",
+            "add": "Record measurement",
+            "addShort": "Record",
+            "personsLabel": "Person",
+            "you": "You",
+            "chartTitle": "Trend",
+            "prevPeriod": "Previous period",
+            "nextPeriod": "Next period",
+            "noData": "No measurements in the selected period.",
+            "noValue": "No value yet",
+            "loadError": "Measurements could not be loaded.",
+            "loadErrorDesc": "Please try again later.",
+            "retry": "Try again",
+            "saved": "Measurement saved.",
+            "saveError": "Measurement could not be saved.",
+            "invalidValue": "Please enter valid values.",
+            "range": {
+                "week": "Week",
+                "month": "Month",
+                "year": "Year"
+            },
+            "metric": {
+                "bp": "Blood pressure",
+                "glucose": "Blood glucose",
+                "weight": "Weight",
+                "spo2": "Oxygen saturation",
+                "temp": "Temperature"
+            },
+            "channel": {
+                "systolic": "Systolic",
+                "diastolic": "Diastolic",
+                "pulse": "Pulse"
+            },
+            "field": {
+                "type": "Type",
+                "value": "Value",
+                "unit": "Unit",
+                "measuredAt": "Measured on",
+                "note": "Note",
+                "visibility": "Visibility",
+                "systolic": "Systolic",
+                "diastolic": "Diastolic",
+                "pulse": "Pulse"
+            },
+            "visibility": {
+                "private": "Private",
+                "family": "Family"
+            }
+        },
+        "meds": {
+            "title": "Medications",
+            "emptyTitle": "No medications yet",
+            "emptyDesc": "Medications with schedules and reminders appear here.",
+            "add": "Add medication",
+            "addShort": "Add",
+            "edit": "Edit medication",
+            "loadError": "Medications could not be loaded.",
+            "loadErrorDesc": "Please try again later.",
+            "retry": "Try again",
+            "saved": "Medication saved.",
+            "saveError": "Medication could not be saved.",
+            "deleted": "Medication deleted.",
+            "deleteError": "Medication could not be deleted.",
+            "deleteConfirm": "Really delete this medication? Its schedule and history will be removed too.",
+            "doseSaved": "Entry updated.",
+            "doseError": "Entry could not be saved.",
+            "nameRequired": "Name is required.",
+            "noMeds": "No medications yet.",
+            "personsLabel": "Person",
+            "take": "Taken",
+            "skip": "Skip",
+            "dueToday": {
+                "title": "Due today",
+                "empty": "Nothing due today."
+            },
+            "adherence": {
+                "title": "Adherence",
+                "period": "Last {{days}} days",
+                "noData": "No planned doses in this period yet.",
+                "summary": "{{taken}} of {{planned}} taken"
+            },
+            "status": {
+                "taken": "Taken",
+                "skipped": "Skipped",
+                "pending": "Open"
+            },
+            "badge": {
+                "prn": "As needed",
+                "inactive": "Inactive"
+            },
+            "stock": {
+                "label": "Stock",
+                "low": "Refill",
+                "out": "Empty"
+            },
+            "field": {
+                "name": "Name",
+                "dosageText": "Dosage",
+                "form": "Form",
+                "stockQty": "Stock",
+                "stockUnit": "Unit",
+                "refillThreshold": "Refill threshold",
+                "note": "Note",
+                "visibility": "Visibility",
+                "active": "Active",
+                "prn": "As needed (PRN)"
+            },
+            "schedule": {
+                "title": "Schedule",
+                "add": "Add time slot",
+                "time": "Time",
+                "dose": "Dose",
+                "days": "Weekdays",
+                "daily": "Daily",
+                "none": "No time slots yet.",
+                "delete": "Delete time slot",
+                "newHint": "Save the medication first, then you can add time slots.",
+                "timeRequired": "Time is required."
+            },
+            "weekday": {
+                "mon": "Mon",
+                "tue": "Tue",
+                "wed": "Wed",
+                "thu": "Thu",
+                "fri": "Fri",
+                "sat": "Sat",
+                "sun": "Sun"
+            },
+            "visibility": {
+                "private": "Private",
+                "family": "Family"
+            }
+        },
+        "labs": {
+            "title": "Lab values",
+            "emptyTitle": "No lab results yet",
+            "emptyDesc": "Lab reports with reference ranges appear here.",
+            "loadError": "Lab values could not be loaded.",
+            "loadErrorDesc": "Please try again later.",
+            "retry": "Try again",
+            "personsLabel": "Person",
+            "reportsTitle": "Reports",
+            "add": "Add report",
+            "addShort": "Add",
+            "edit": "Edit",
+            "noReports": "No reports yet.",
+            "analyteCount": "{{count}} analytes",
+            "abnormalBadge": "{{count}} abnormal",
+            "selectHint": "Select a report to see its analytes.",
+            "noAnalytes": "No analytes recorded for this report yet.",
+            "dateRequired": "Report date is required.",
+            "saved": "Report saved.",
+            "saveError": "Report could not be saved.",
+            "deleted": "Report deleted.",
+            "deleteError": "Report could not be deleted.",
+            "deleteConfirm": "Really delete this report? All analytes will be deleted too.",
+            "col": {
+                "analyte": "Analyte",
+                "value": "Value",
+                "reference": "Reference",
+                "flag": "Flag"
+            },
+            "flag": {
+                "low": "Low",
+                "normal": "Normal",
+                "high": "High"
+            },
+            "trend": {
+                "title": "Trend",
+                "analyte": "Analyte",
+                "tooFew": "At least two reports are needed to show a trend.",
+                "unit": "Unit: {{unit}}"
+            },
+            "field": {
+                "reportDate": "Report date",
+                "labName": "Lab",
+                "visibility": "Visibility",
+                "note": "Note"
+            },
+            "visibility": {
+                "private": "Private",
+                "family": "Family"
+            },
+            "results": {
+                "title": "Analytes",
+                "newHint": "Save the report, then you can add analytes.",
+                "none": "No analytes yet.",
+                "analyte": "Analyte",
+                "value": "Value",
+                "unit": "Unit",
+                "refLow": "Reference min",
+                "refHigh": "Reference max",
+                "add": "Add analyte",
+                "delete": "Delete analyte",
+                "flagPreview": "Flag:",
+                "analyteRequired": "Analyte name is required.",
+                "valueRequired": "Please enter a valid value."
+            }
+        },
+        "activity": {
+            "title": "Activity",
+            "emptyTitle": "No activities yet",
+            "emptyDesc": "Your workouts appear here.",
+            "personsLabel": "Person",
+            "prevWeek": "Previous week",
+            "nextWeek": "Next week",
+            "add": "Log activity",
+            "addShort": "Log",
+            "edit": "Edit",
+            "chartTitle": "Duration per weekday",
+            "noData": "No activities this week.",
+            "noEntries": "No activities this week yet.",
+            "logTitle": "Training log",
+            "loadError": "Activities could not be loaded.",
+            "loadErrorDesc": "Please try again later.",
+            "retry": "Try again",
+            "saved": "Activity saved.",
+            "saveError": "Activity could not be saved.",
+            "deleted": "Activity deleted.",
+            "deleteError": "Activity could not be deleted.",
+            "deleteConfirm": "Really delete this activity?",
+            "invalid": "Please enter valid values.",
+            "totals": {
+                "count": "Activities",
+                "duration": "Total duration",
+                "distance": "Total distance",
+                "calories": "Calories"
+            },
+            "unit": {
+                "min": "{{value}} min",
+                "km": "{{value}} km",
+                "kcal": "{{value}} kcal"
+            },
+            "weekday": {
+                "mon": "Mon",
+                "tue": "Tue",
+                "wed": "Wed",
+                "thu": "Thu",
+                "fri": "Fri",
+                "sat": "Sat",
+                "sun": "Sun"
+            },
+            "type": {
+                "running": "Running",
+                "cycling": "Cycling",
+                "swimming": "Swimming",
+                "strength": "Strength",
+                "yoga": "Yoga",
+                "walking": "Walking",
+                "other": "Other",
+                "custom": "Custom…"
+            },
+            "field": {
+                "type": "Type",
+                "typePlaceholder": "Select type",
+                "customType": "Custom type",
+                "performedAt": "Performed on",
+                "duration": "Duration (min)",
+                "distance": "Distance (km)",
+                "calories": "Calories (kcal)",
+                "intensity": "Intensity",
+                "visibility": "Visibility",
+                "note": "Note"
+            },
+            "visibility": {
+                "private": "Private",
+                "family": "Family"
+            },
+            "col": {
+                "day": "Day"
+            }
+        },
+        "export": {
+            "title": "Export (CSV)",
+            "rangeFrom": "From",
+            "rangeTo": "To",
+            "vitals": "Vitals",
+            "activities": "Activities",
+            "labs": "Lab results",
+            "medsLogs": "Dose log",
+            "hint": "Downloads the selected date range as a CSV file."
+        },
+        "disclaimer": "For personal record-keeping only. Not a substitute for professional medical advice, diagnosis or treatment.",
+        "readOnlyBanner": "You are viewing {{name}}’s data — read-only."
     }
 }

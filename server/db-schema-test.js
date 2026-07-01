@@ -666,6 +666,84 @@ const MIGRATIONS_SQL = {
       ON meals(recurrence_template_id, date)
       WHERE recurrence_template_id IS NOT NULL;
   `,
+  // Health module — only the tables the search index reads from are mirrored here.
+  65: `
+    CREATE TABLE IF NOT EXISTS medications (
+      id               INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id          INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      name             TEXT    NOT NULL,
+      dosage_text      TEXT,
+      form             TEXT,
+      active           INTEGER NOT NULL DEFAULT 1 CHECK(active IN (0, 1)),
+      prn              INTEGER NOT NULL DEFAULT 0 CHECK(prn IN (0, 1)),
+      stock_qty        REAL,
+      stock_unit       TEXT,
+      refill_threshold REAL,
+      note             TEXT,
+      visibility       TEXT    NOT NULL DEFAULT 'private'
+                               CHECK(visibility IN ('private', 'family')),
+      created_at       TEXT    NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+      updated_at       TEXT    NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS health_activities (
+      id           INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id      INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      type         TEXT    NOT NULL,
+      duration_min REAL,
+      distance_km  REAL,
+      intensity    TEXT,
+      calories     REAL,
+      performed_at TEXT    NOT NULL,
+      note         TEXT,
+      visibility   TEXT    NOT NULL DEFAULT 'private'
+                           CHECK(visibility IN ('private', 'family')),
+      created_at   TEXT    NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+      updated_at   TEXT    NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+    );
+
+    CREATE TRIGGER IF NOT EXISTS trg_medications_updated_at
+      AFTER UPDATE ON medications FOR EACH ROW
+      BEGIN UPDATE medications SET updated_at = strftime('%Y-%m-%dT%H:%M:%SZ', 'now') WHERE id = OLD.id; END;
+    CREATE TRIGGER IF NOT EXISTS trg_health_activities_updated_at
+      AFTER UPDATE ON health_activities FOR EACH ROW
+      BEGIN UPDATE health_activities SET updated_at = strftime('%Y-%m-%dT%H:%M:%SZ', 'now') WHERE id = OLD.id; END;
+  `,
+  66: `
+    -- ---- medications ----
+    CREATE TRIGGER trg_search_meds_ai AFTER INSERT ON medications BEGIN
+      INSERT INTO search_index (entity, entity_id, title, body)
+      VALUES ('medication', NEW.id, COALESCE(NEW.name, ''), COALESCE(NEW.dosage_text, ''));
+    END;
+    CREATE TRIGGER trg_search_meds_ad AFTER DELETE ON medications BEGIN
+      DELETE FROM search_index WHERE entity = 'medication' AND entity_id = OLD.id;
+    END;
+    CREATE TRIGGER trg_search_meds_au AFTER UPDATE ON medications BEGIN
+      DELETE FROM search_index WHERE entity = 'medication' AND entity_id = OLD.id;
+      INSERT INTO search_index (entity, entity_id, title, body)
+      VALUES ('medication', NEW.id, COALESCE(NEW.name, ''), COALESCE(NEW.dosage_text, ''));
+    END;
+
+    -- ---- health_activities ----
+    CREATE TRIGGER trg_search_activities_ai AFTER INSERT ON health_activities BEGIN
+      INSERT INTO search_index (entity, entity_id, title, body)
+      VALUES ('activity', NEW.id, COALESCE(NEW.type, ''), COALESCE(NEW.note, ''));
+    END;
+    CREATE TRIGGER trg_search_activities_ad AFTER DELETE ON health_activities BEGIN
+      DELETE FROM search_index WHERE entity = 'activity' AND entity_id = OLD.id;
+    END;
+    CREATE TRIGGER trg_search_activities_au AFTER UPDATE ON health_activities BEGIN
+      DELETE FROM search_index WHERE entity = 'activity' AND entity_id = OLD.id;
+      INSERT INTO search_index (entity, entity_id, title, body)
+      VALUES ('activity', NEW.id, COALESCE(NEW.type, ''), COALESCE(NEW.note, ''));
+    END;
+
+    -- Backfill from existing rows.
+    INSERT INTO search_index (entity, entity_id, title, body)
+      SELECT 'medication', id, COALESCE(name, ''), COALESCE(dosage_text, '') FROM medications;
+    INSERT INTO search_index (entity, entity_id, title, body)
+      SELECT 'activity', id, COALESCE(type, ''), COALESCE(note, '') FROM health_activities;
+  `,
 };
 
 export { MIGRATIONS_SQL };

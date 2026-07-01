@@ -24,6 +24,7 @@ import * as holidays from './services/holidays.js';
 import { startScheduler as startBackupScheduler } from './services/backup-scheduler.js';
 import { startScheduler as startSplitExpenseScheduler } from './services/split-expenses-scheduler.js';
 import { startScheduler as startPushScheduler } from './services/push-scheduler.js';
+import { startScheduler as startMedicationScheduler } from './services/medication-scheduler.js';
 import dashboardRouter from './routes/dashboard.js';
 import tasksRouter from './routes/tasks.js';
 import shoppingRouter from './routes/shopping.js';
@@ -50,6 +51,7 @@ import modulesRouter from './routes/modules.js';
 import pushRouter from './routes/push.js';
 import emailRouter from './routes/email.js';
 import notificationsRouter from './routes/notifications.js';
+import healthRouter from './routes/health.js';
 
 const log     = createLogger('Server');
 const logSync = createLogger('Sync');
@@ -356,6 +358,7 @@ app.use('/api/v1/modules', modulesRouter);
 app.use('/api/v1/push', pushRouter);
 app.use('/api/v1/email', emailRouter);
 app.use('/api/v1/notifications', notificationsRouter);
+app.use('/api/v1/health', healthRouter);
 
 // --------------------------------------------------------
 // Health-Check (für Docker)
@@ -439,6 +442,7 @@ app.listen(PORT, () => {
   startBackupScheduler();
   startSplitExpenseScheduler();
   startPushScheduler();
+  startMedicationScheduler();
 });
 
 export default app;

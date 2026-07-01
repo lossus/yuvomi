@@ -18,7 +18,7 @@ website_url: "https://yuvomi.cloud/"
 # URL where the full source code of the program can be downloaded
 source_code_url: "https://github.com/ulsklyc/yuvomi"
 # description of what the software does, shorter than 250 characters, sentence case
-description: "Family planner with shared tasks, shopping lists, recurring meal planning, calendar sync (Google & iCloud), budget tracking, notes, and contacts. PWA with offline support."
+description: "Family planner with shared tasks, shopping lists, recurring meal planning, calendar sync (Google & iCloud), budget tracking, notes, contacts, and per-member health tracking. PWA with offline support."
 # list of license identifiers, see https://github.com/awesome-selfhosted/awesome-selfhosted-data/blob/master/licenses.yml for the full list of licenses
 licenses:
   - MIT

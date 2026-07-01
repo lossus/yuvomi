@@ -24,14 +24,18 @@ export function buildMatchQuery(q) {
 }
 
 /**
- * Führt die Suche aus und liefert dieselbe Ergebnis-Form wie zuvor:
- * { tasks, events, notes, contacts, items }.
+ * Führt die Suche aus und liefert dieselbe Ergebnis-Form wie zuvor, erweitert
+ * um Gesundheitsdaten: { tasks, events, notes, contacts, items, meds, activities }.
  * Pro Entität wird der FTS-Treffer auf die Quelltabelle zurückgejoined,
  * um exakt die alten Felder, Besitzer-Filter und Sortierung zu erhalten.
+ * Gesundheitsdaten sind sensibel: nur eigene Zeilen ODER visibility='family'
+ * sind sichtbar (spiegelt das Lese-Scoping der Health-List-Routen).
  */
 export function runSearch(database, q, userId) {
   const match = buildMatchQuery(q);
-  if (!match) return { tasks: [], events: [], notes: [], contacts: [], items: [] };
+  if (!match) {
+    return { tasks: [], events: [], notes: [], contacts: [], items: [], meds: [], activities: [] };
+  }
   const limit = SEARCH_LIMIT;
 
   const tasks = database.prepare(`
@@ -84,5 +88,27 @@ export function runSearch(database, q, userId) {
     LIMIT @limit
   `).all({ match, limit });
 
-  return { tasks, events, notes, contacts, items };
+  // Health: Medikamente — Treffer auf Name/Dosistext, Sichtbarkeits-Scoping.
+  const meds = database.prepare(`
+    SELECT m.id, m.name AS title, m.dosage_text, m.active
+    FROM search_index s
+    JOIN medications m ON m.id = s.entity_id
+    WHERE s.entity = 'medication' AND s.search_index MATCH @match
+      AND (m.user_id = @userId OR m.visibility = 'family')
+    ORDER BY m.active DESC, m.name ASC
+    LIMIT @limit
+  `).all({ match, userId, limit });
+
+  // Health: Aktivitäten — Treffer auf Typ/Notiz, Sichtbarkeits-Scoping.
+  const activities = database.prepare(`
+    SELECT a.id, a.type AS title, a.note, a.performed_at
+    FROM search_index s
+    JOIN health_activities a ON a.id = s.entity_id
+    WHERE s.entity = 'activity' AND s.search_index MATCH @match
+      AND (a.user_id = @userId OR a.visibility = 'family')
+    ORDER BY a.performed_at DESC
+    LIMIT @limit
+  `).all({ match, userId, limit });
+
+  return { tasks, events, notes, contacts, items, meds, activities };
 }

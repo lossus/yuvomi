@@ -101,6 +101,10 @@ const STUBS = {
       const d = date instanceof Date ? date : new Date(String(date) + 'T00:00:00');
       return \`\${d.getFullYear()}-\${pad(d.getMonth() + 1)}-\${pad(d.getDate())}\`;
     };
+    export const parseLocalDateKey = (dateKey) => {
+      const [y, m, dd] = String(dateKey).split('-').map(Number);
+      return new Date(y, (m || 1) - 1, dd || 1);
+    };
     export const addLocalDays = (dateStr, days) => {
       const d = new Date(String(dateStr) + 'T00:00:00');
       d.setDate(d.getDate() + days);

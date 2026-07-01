@@ -1,7 +1,7 @@
 name: Yuvomi
 website_url: "https://yuvomi.cloud/"
 source_code_url: "https://github.com/ulsklyc/yuvomi"
-description: "Family planner with shared tasks, shopping lists, recurring meal planning, calendar sync (Google Calendar, CalDAV/CardDAV), budget tracking, split expenses, notes, contacts, and housekeeping. PWA with offline support."
+description: "Family planner with shared tasks, shopping lists, recurring meal planning, calendar sync (Google Calendar, CalDAV/CardDAV), budget tracking, split expenses, notes, contacts, housekeeping, and per-member health tracking. PWA with offline support."
 licenses:
   - MIT
 platforms:

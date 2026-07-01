@@ -917,6 +917,113 @@ like `apple_app_password` and Google OAuth tokens; encryption-at-rest is via the
 | key | TEXT | PRIMARY KEY |
 | value | TEXT | NOT NULL |
 
+### Health (migration 65)
+
+The Health module stores personal medical data per family member across seven tables. Every
+owner-scoped table carries `user_id` (the owning member) and a `visibility` of `private` (owner
+only) or `family` (all members). Nested tables (schedules, logs, results) inherit visibility from
+their parent record. Health data is sensitive — encryption-at-rest via the optional
+`DB_ENCRYPTION_KEY` (SQLCipher) is strongly recommended. Yuvomi is **not** a medical device and
+makes **no diagnostic claims**; reference ranges and flags are neutral, user-supplied values.
+
+**`health_vitals`** — one row per measurement.
+
+| Column | Type | Constraint |
+|--------|------|-----------|
+| user_id | INTEGER | FK → Users (CASCADE delete), NOT NULL |
+| type | TEXT | NOT NULL — `bp` \| `glucose` \| `weight` \| `pulse` \| `spo2` \| `temp` \| custom slug |
+| value_num | REAL | primary value; for `bp` = systolic |
+| value_num2 | REAL | `bp` diastolic |
+| value_num3 | REAL | `bp` optional pulse |
+| unit | TEXT | |
+| measured_at | TEXT | NOT NULL |
+| note | TEXT | |
+| visibility | TEXT | `private` \| `family`, default `private` |
+| created_at / updated_at | TEXT | ISO 8601, default now (updated_at via trigger) |
+
+**`medications`** — medication master data.
+
+| Column | Type | Constraint |
+|--------|------|-----------|
+| user_id | INTEGER | FK → Users (CASCADE delete), NOT NULL |
+| name | TEXT | NOT NULL |
+| dosage_text | TEXT | free-text dose |
+| form | TEXT | `pill` \| `liquid` \| `injection` \| … |
+| active | INTEGER | 0/1, default 1 |
+| prn | INTEGER | 0/1 "as needed", default 0 |
+| stock_qty / stock_unit | REAL / TEXT | on-hand stock for refill alerts |
+| refill_threshold | REAL | warn when stock drops below |
+| note | TEXT | |
+| visibility | TEXT | `private` \| `family`, default `private` |
+| created_at / updated_at | TEXT | ISO 8601, default now |
+
+**`medication_schedules`** — one medication : many time slots.
+
+| Column | Type | Constraint |
+|--------|------|-----------|
+| medication_id | INTEGER | FK → medications (CASCADE delete), NOT NULL |
+| time_of_day | TEXT | `HH:MM` local, NOT NULL |
+| days_mask | INTEGER | weekday bitmask Mon=bit0…Sun=bit6, NULL = daily |
+| dose_qty | REAL | |
+| start_date / end_date | TEXT | optional window |
+| active | INTEGER | 0/1, default 1 |
+| created_at / updated_at | TEXT | ISO 8601, default now |
+
+**`medication_logs`** — dose events.
+
+| Column | Type | Constraint |
+|--------|------|-----------|
+| medication_id | INTEGER | FK → medications (CASCADE delete), NOT NULL |
+| schedule_id | INTEGER | FK → medication_schedules (SET NULL); NULL for ad-hoc/PRN |
+| scheduled_at | TEXT | planned time |
+| status | TEXT | `taken` \| `skipped` \| `pending`, default `pending` |
+| taken_at | TEXT | |
+| dose_qty | REAL | |
+| note | TEXT | |
+| created_at | TEXT | ISO 8601, default now |
+
+**`health_lab_reports`** — lab report header.
+
+| Column | Type | Constraint |
+|--------|------|-----------|
+| user_id | INTEGER | FK → Users (CASCADE delete), NOT NULL |
+| report_date | TEXT | NOT NULL |
+| lab_name | TEXT | |
+| note | TEXT | |
+| visibility | TEXT | `private` \| `family`, default `private` |
+| created_at / updated_at | TEXT | ISO 8601, default now |
+
+**`health_lab_results`** — analyte values per report.
+
+| Column | Type | Constraint |
+|--------|------|-----------|
+| report_id | INTEGER | FK → health_lab_reports (CASCADE delete), NOT NULL |
+| analyte | TEXT | NOT NULL |
+| value_num | REAL | |
+| unit | TEXT | |
+| ref_low / ref_high | REAL | reference range |
+| flag | TEXT | `low` \| `normal` \| `high`; derived from value + range when unset |
+| created_at | TEXT | ISO 8601, default now |
+
+**`health_activities`** — training / activity log.
+
+| Column | Type | Constraint |
+|--------|------|-----------|
+| user_id | INTEGER | FK → Users (CASCADE delete), NOT NULL |
+| type | TEXT | NOT NULL — preset slug (`running`, `cycling`, …) or custom |
+| duration_min / distance_km / calories | REAL | |
+| intensity | TEXT | |
+| performed_at | TEXT | NOT NULL |
+| note | TEXT | |
+| visibility | TEXT | `private` \| `family`, default `private` |
+| created_at / updated_at | TEXT | ISO 8601, default now |
+
+Medication reminders reuse the existing push/notification-channel layer (no dedicated reminder
+table): `server/services/medication-scheduler.js` turns due schedule slots into `pending` logs and
+fans out via Web Push and Gotify/ntfy channels. Medications (`name`, `dosage_text`) and activities
+(`type`, `note`) are indexed in the FTS5 `search_index` (migration 66) with the same
+owner-or-`family` visibility scoping applied at query time.
+
 ---
 
 ## Modules
@@ -1077,6 +1184,20 @@ Module for managing household staff workflows. Navigation uses violet accent the
 - **Dashboard integration:** housekeeping widgets show today's open sessions, upcoming chores, and a recent-visits strip with inline edit access
 - **Document folder:** a "Hausreinigung" folder in Documents is auto-created on first worker creation; receipts can be linked to individual work sessions
 - **API:** `GET /api/v1/housekeeping/visits/:id` returns a single work session with worker name, task list, and linked document
+
+### Health (`/health`)
+
+One page module with five deep-link routes (pattern like Settings, not like the Kitchen cluster), sharing a sub-tab bar: Overview (`/health`), Vitals (`/health/vitals`), Medications (`/health/meds`), Labs (`/health/labs`), Activity (`/health/activity`). Toggleable like any module; disabled → router redirects to the dashboard. Health data is sensitive — enable `DB_ENCRYPTION_KEY` (SQLCipher). **Not a medical device; no diagnostic claims.**
+
+- **Per-member scoping:** a person switcher (chip row) filters to one family member; each row is `private` (owner only) or `family` (all members). Editing is limited to the owner's own view; foreign members show family-visible rows read-only.
+- **Vitals:** capture blood pressure (sys/dia/pulse), glucose, weight, pulse, optional SpO₂/temperature; per-metric cards with last value + delta; native SVG trend charts with selectable range.
+- **Medications:** medication list (name, dose, form, active/PRN), schedule editor (time slots + weekday mask + dose), "due today" view with take/skip, 7-day adherence bar, and stock/refill warnings. Reminders are delivered through the existing push/notification-channel layer (`server/services/medication-scheduler.js`) — no separate reminder table.
+- **Labs:** reports with multiple analytes (value, unit, reference low/high); `low`/`normal`/`high` flag derived from value + range and colour-coded via tokens; per-analyte trend chart with a reference band; neutral medical disclaimer.
+- **Activity:** training log (preset or custom type, duration, optional distance/intensity/calories, note); weekly summary cards and a native SVG bar chart per weekday.
+- **Overview:** aggregated landing view — due-today medications with inline take/skip, latest vitals cards (deep-link to the Vitals tab), adherence rate + streak, quick-capture buttons, upcoming reminders, and a **CSV export** bar (one download per area — vitals, activities, labs, medication logs — with optional date range).
+- **Search & shortcuts:** medications and activities appear in global search (FTS5) with the same visibility scoping and deep-link to the Meds/Activity tab; the `g h` keyboard shortcut jumps to the last-visited Health tab.
+- **Accessibility:** sub-tab bar and person/range chip rows expose `role="tablist"`/`tab` with arrow-key navigation and roving tabindex; SVG charts carry `role="img"` + `aria-label`; take/skip/save actions announce via the polite/assertive live regions; modals trap focus and restore it on close.
+- **API:** `GET/POST/PATCH/DELETE /api/v1/health/{vitals,medications,labs,activities}` (+ nested `…/medications/:id/schedules|logs`, `…/logs/:id/take|skip`, lab results) and `GET /api/v1/health/export/{vitals,activities,labs,meds-logs}` (text/csv). All handlers apply `user_id` scoping and `visibility` filtering.
 
 ### First-run setup (`/setup`) (v0.58.0)
 

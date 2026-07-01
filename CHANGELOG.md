@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.83.0] - 2026-07-01
+
+### Added
+- **New Health module** (`/health`) — a private, per-member health tracker with five tabs: Overview, Vitals, Medications, Lab results, and Activity. Every entry belongs to a family member with `private`/`family` visibility, and the whole module can be disabled like any other.
+- **Vitals** — record blood pressure (systolic/diastolic/pulse), glucose, weight, SpO₂ and temperature, with per-metric cards showing the latest value and a native SVG trend chart (week/month/year) plus a screen-reader data table.
+- **Medications** — medication list with dosage, form and active/as-needed flags, a schedule editor (times + weekday mask + dose), a "due today" list with taken/skipped logging, a 7-day adherence rate, and stock/refill warnings. Dose reminders are delivered through the existing push and notification channels.
+- **Lab results** — structured reports with multiple analytes, reference ranges, automatic low/normal/high flags, and a per-analyte trend chart with a shaded reference band.
+- **Activity** — training log (type preset or free text, duration, distance, intensity, calories) with a weekly summary and a native SVG bar chart.
+- **Overview** — today's due doses with inline take/skip, adherence rate and streak, latest-vitals cards, upcoming reminders, quick-capture shortcuts, and CSV export per area over any date range.
+- **Health entries in global search** — medications and activities are indexed and deep-link back to their tab.
+- **Medical disclaimer** in the overview and capture modals — Yuvomi is for personal record-keeping only and makes no diagnostic claims. Health data is sensitive; database encryption (`DB_ENCRYPTION_KEY`, SQLCipher) is recommended.
+
 ## [0.82.0] - 2026-07-01
 
 ### Added

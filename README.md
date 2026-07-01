@@ -44,7 +44,7 @@
 <div align="center">
   <table>
     <tr>
-      <td align="center"><b>14</b><br><sub>modules</sub></td>
+      <td align="center"><b>15</b><br><sub>modules</sub></td>
       <td align="center"><sub>·</sub></td>
       <td align="center"><b>20</b><br><sub>languages</sub></td>
       <td align="center"><sub>·</sub></td>
@@ -167,6 +167,7 @@ Each module is independent. Use what fits, skip what doesn't.
 | ![documents](https://raw.githubusercontent.com/ulsklyc/yuvomi/main/docs/icons/documents.png) | **Documents** | Upload and organize family files. Folders, tags, per-document visibility controls, in-browser preview, drag-and-drop. New files, including calendar attachments, can optionally use WebDAV storage; Paperless-ngx and Papra (DMS) linking and uploads are supported. |
 | ![budget](https://raw.githubusercontent.com/ulsklyc/yuvomi/main/docs/icons/budget.png) | **Budget** | Income, expenses, recurring entries, trend charts, a statistics tab with weekly/monthly/yearly aggregates and category donut, CSV export over any date range, loans, shared expenses, and subscription tracking with renewals, budgets, currencies, alerts, and analytics. |
 | ![housekeeping](https://raw.githubusercontent.com/ulsklyc/yuvomi/main/docs/icons/housekeeping.png) | **Housekeeping** | Manage household staff — schedules, check-in/out, daily or hourly billing, chores, supply requests. |
+| ![health](https://raw.githubusercontent.com/ulsklyc/yuvomi/main/docs/icons/health.png) | **Health** | Per-member health tracking: vitals (blood pressure, glucose, weight, pulse) with trend charts, medications with schedules, dose logging, adherence and refill alerts (reminders via the existing push/notification channels), lab results with reference ranges, and activity logs. CSV export per area and `private`/`family` visibility per entry. Not a medical device — no diagnostic claims. Health data is sensitive; enable database encryption (`DB_ENCRYPTION_KEY`, SQLCipher). |
 | ![notes](https://raw.githubusercontent.com/ulsklyc/yuvomi/main/docs/icons/notes.png) | **Notes & Contacts** | Colored sticky notes with Markdown. Contact directory with CardDAV sync. |
 | ![birthdays](https://raw.githubusercontent.com/ulsklyc/yuvomi/main/docs/icons/birthdays.png) | **Birthdays** | Birthday tracker with automatic calendar events, age display, and custom reminders. |
 | ![family](https://raw.githubusercontent.com/ulsklyc/yuvomi/main/docs/icons/family.png) | **Family** | Member profiles with roles, photos, phone, email, and birthday — synced to Contacts and Birthdays. |

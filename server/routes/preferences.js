@@ -46,10 +46,10 @@ const VALID_WIDGET_SIZES = ['1x1', '1x2', '1x3', '1x4', '2x1', '2x2', '2x3', '2x
 const TOGGLEABLE_MODULES = [
   'tasks', 'calendar', 'meals', 'recipes', 'shopping',
   'birthdays', 'notes', 'contacts', 'budget', 'documents',
-  'housekeeping',
+  'housekeeping', 'health',
 ];
-const MODULE_ORDER_RE = /^(dashboard|tasks|calendar|meals|recipes|shopping|birthdays|notes|contacts|budget|documents|housekeeping|third-party-[a-z0-9][a-z0-9-]{1,62}[a-z0-9])$/;
-const MOBILE_NAV_ORDER_RE = /^(tasks|calendar|kitchen|meals|recipes|shopping|birthdays|notes|contacts|budget|documents|housekeeping|third-party-[a-z0-9][a-z0-9-]{1,62}[a-z0-9])$/;
+const MODULE_ORDER_RE = /^(dashboard|tasks|calendar|meals|recipes|shopping|birthdays|notes|contacts|budget|documents|housekeeping|health|third-party-[a-z0-9][a-z0-9-]{1,62}[a-z0-9])$/;
+const MOBILE_NAV_ORDER_RE = /^(tasks|calendar|kitchen|meals|recipes|shopping|birthdays|notes|contacts|budget|documents|housekeeping|health|third-party-[a-z0-9][a-z0-9-]{1,62}[a-z0-9])$/;
 const KITCHEN_NAV_IDS = new Set(['kitchen', 'meals', 'recipes', 'shopping']);
 
 function defaultWidgetSize(id) {
