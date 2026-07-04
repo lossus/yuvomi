@@ -16,6 +16,7 @@ import { t, formatDate, formatTime, getLocale } from '/i18n.js';
 import { esc } from '/utils/html.js';
 import { toLocalDateKey, parseLocalDateKey, addLocalDays } from '/utils/date.js';
 import { openModal, closeModal, confirmModal } from '/components/modal.js';
+import { createPageFab, setPageFabAction } from '/utils/fab.js';
 import { computeVitalSeries, VITAL_METRICS, vitalMetric } from '/utils/health-vitals.js';
 import {
   computeDueDoses, computeAdherence, refillState,
@@ -143,6 +144,33 @@ function showPanel(activeRoute) {
   });
 }
 
+// Routen-basierter Kontext-FAB: die Primäraktion folgt der aktiven Health-Route.
+// Auf der Übersicht (keine Erstellen-Aktion) ausgeblendet.
+let _fab = null;
+
+function updateHealthFab(activeRoute) {
+  if (!_fab) return;
+  // Gating spiegelt die früheren Inline-„Hinzufügen"-Buttons: Erstellen nur in
+  // der eigenen Ansicht (isOwn*View), in fremden (read-only) Ansichten kein FAB.
+  switch (activeRoute) {
+    case '/health/vitals':
+      setPageFabAction(_fab, { hidden: !isOwnView(), label: t('health.vitals.add'), onClick: () => openVitalModal() }); break;
+    case '/health/meds':
+      setPageFabAction(_fab, { hidden: !isOwnMedsView(), label: t('health.meds.add'), onClick: () => openMedModal(null) }); break;
+    case '/health/labs':
+      setPageFabAction(_fab, { hidden: !isOwnLabsView(), label: t('health.labs.add'), onClick: () => openLabModal(null) }); break;
+    case '/health/activity':
+      setPageFabAction(_fab, { hidden: !isOwnActivityView(), label: t('health.activity.add'), onClick: () => openActivityModal(null) }); break;
+    default:
+      setPageFabAction(_fab, { hidden: true });
+  }
+}
+
+// FAB nach Panel-Mount / Personenwechsel neu bewerten (personId steht dann fest).
+function refreshHealthFab() {
+  updateHealthFab(normalizeHealthPath(window.location.pathname));
+}
+
 export async function render(container, ctx = {}) {
   _container = container;
   vitals.meId = ctx.user?.id ?? vitals.meId;
@@ -170,9 +198,13 @@ export async function render(container, ctx = {}) {
     </div>
   `);
 
+  _fab = createPageFab({ id: 'health-fab' });
+  container.querySelector('.health-page').appendChild(_fab);
+
   if (window.lucide) window.lucide.createIcons({ el: container });
   showPanel(activeRoute);
   renderHealthTabsBar(container, activeRoute);
+  updateHealthFab(activeRoute);
   maybeMountOverview(activeRoute);
   maybeMountVitals(activeRoute);
   maybeMountMeds(activeRoute);
@@ -191,6 +223,7 @@ export async function update({ path, user } = {}) {
   showPanel(activeRoute);
   _container.querySelector('.sub-tabs-bar')?.remove();
   renderHealthTabsBar(_container, activeRoute);
+  updateHealthFab(activeRoute);
   maybeMountOverview(activeRoute);
   maybeMountVitals(activeRoute);
   maybeMountMeds(activeRoute);
@@ -276,17 +309,13 @@ function renderVitalsShell() {
           <button type="button" class="health-vitals__range${r === vitals.range ? ' is-active' : ''}"
             data-range="${r}" role="tab" aria-selected="${r === vitals.range}">${esc(t(RANGE_LABELS[r]))}</button>`).join('')}
       </div>
-      ${isOwnView() ? `
-        <button type="button" class="btn btn--primary health-vitals__add" data-action="vitals-add">
-          <i data-lucide="plus" class="icon-md" aria-hidden="true"></i>
-          <span>${esc(t('health.vitals.addShort'))}</span>
-        </button>` : ''}
     </div>
     <div class="health-vitals__cards" id="health-vitals-cards"></div>
     <div class="health-vitals__detail" id="health-vitals-detail"></div>
   `);
   if (window.lucide) window.lucide.createIcons({ el: vitals.root });
   wireVitals();
+  refreshHealthFab();
   renderCards();
   renderDetail();
 }
@@ -392,8 +421,6 @@ function wireVitals() {
       renderVitalsShell();
     }));
 
-  vitals.root.querySelector('[data-action="vitals-add"]')
-    ?.addEventListener('click', () => openVitalModal());
 }
 
 async function switchPerson() {
@@ -933,11 +960,6 @@ function renderMedsShell() {
     ${readOnlyBannerMarkup(meds.members, meds.personId, isOwnMedsView())}
     <div class="health-meds__toolbar">
       <h3 class="health-meds__section-title u-toolbar-title">${esc(t('health.meds.dueToday.title'))}</h3>
-      ${isOwnMedsView() ? `
-        <button type="button" class="btn btn--primary health-meds__add" data-action="med-add">
-          <i data-lucide="plus" class="icon-md" aria-hidden="true"></i>
-          <span>${esc(t('health.meds.addShort'))}</span>
-        </button>` : ''}
     </div>
     <div class="health-meds__due">${dueTodayMarkup()}</div>
     <div class="health-meds__adherence-wrap">${adherenceMarkup()}</div>
@@ -946,6 +968,7 @@ function renderMedsShell() {
   `);
   if (window.lucide) window.lucide.createIcons({ el: meds.root });
   wireMeds();
+  refreshHealthFab();
 }
 
 function dueTodayMarkup() {
@@ -1069,7 +1092,6 @@ function wireMeds() {
       switchMedsPerson();
     }));
 
-  meds.root.querySelector('[data-action="med-add"]')?.addEventListener('click', () => openMedModal(null));
 
   meds.root.querySelectorAll('[data-med-edit]').forEach((card) =>
     card.addEventListener('click', () => {
@@ -1525,17 +1547,13 @@ function renderLabsShell() {
     ${readOnlyBannerMarkup(labs.members, labs.personId, isOwnLabsView())}
     <div class="health-labs__toolbar">
       <h3 class="health-labs__section-title u-toolbar-title">${esc(t('health.labs.reportsTitle'))}</h3>
-      ${isOwnLabsView() ? `
-        <button type="button" class="btn btn--primary health-labs__add" data-action="lab-add">
-          <i data-lucide="plus" class="icon-md" aria-hidden="true"></i>
-          <span>${esc(t('health.labs.addShort'))}</span>
-        </button>` : ''}
     </div>
     <div class="health-labs__list" id="health-labs-list">${labReportListMarkup()}</div>
     <div class="health-labs__detail" id="health-labs-detail">${labDetailMarkup()}</div>
   `);
   if (window.lucide) window.lucide.createIcons({ el: labs.root });
   wireLabs();
+  refreshHealthFab();
 }
 
 function labReportListMarkup() {
@@ -1782,7 +1800,6 @@ function wireLabs() {
       switchLabsPerson();
     }));
 
-  labs.root.querySelector('[data-action="lab-add"]')?.addEventListener('click', () => openLabModal(null));
 
   labs.root.querySelectorAll('.health-lab-card').forEach((card) =>
     card.addEventListener('click', () => {
@@ -2225,11 +2242,6 @@ function renderActivityShell() {
         <span class="health-activity__period">${esc(`${formatDate(summary.from)} – ${formatDate(summary.to)}`)}</span>
         <button class="btn btn--icon" data-step="1" aria-label="${esc(t('health.activity.nextWeek'))}"><i data-lucide="chevron-right" aria-hidden="true"></i></button>
       </div>
-      ${isOwnActivityView() ? `
-        <button type="button" class="btn btn--primary health-activity__add" data-action="activity-add">
-          <i data-lucide="plus" class="icon-md" aria-hidden="true"></i>
-          <span>${esc(t('health.activity.addShort'))}</span>
-        </button>` : ''}
     </div>
     <div class="health-activity__summary">${activityStatsMarkup(totals)}</div>
     <div class="health-activity__chart">${activityChartMarkup(summary)}</div>
@@ -2237,6 +2249,7 @@ function renderActivityShell() {
   `);
   if (window.lucide) window.lucide.createIcons({ el: activity.root });
   wireActivity();
+  refreshHealthFab();
 }
 
 function activityStatsMarkup(totals) {
@@ -2368,7 +2381,6 @@ function wireActivity() {
       renderActivityShell();
     }));
 
-  activity.root.querySelector('[data-action="activity-add"]')?.addEventListener('click', () => openActivityModal(null));
 
   activity.root.querySelectorAll('[data-activity-edit]').forEach((btn) =>
     btn.addEventListener('click', () => {

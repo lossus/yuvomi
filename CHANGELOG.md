@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.94.0] - 2026-07-04
+
+### Added
+- **Keyboard navigation for tab bars** — the Rewards, Housekeeping, and Calendar (month/week/day/agenda) view switchers now support arrow keys, Home/End, roving tabindex, and full `role="tablist"` ARIA from one shared helper, so every in-page tab surface is keyboard- and screen-reader-navigable.
+
+### Changed
+- **Consistent create action across modules** — the "new" action is now a single context-aware floating button (FAB) in Health, Rewards, and Housekeeping. It follows the active tab/section and respects permissions (only your own health entries; admin-only reward and bonus actions) and hides where no create action applies. Redundant inline "add" buttons were removed so the create affordance sits in one predictable place; the `n` keyboard shortcut now works wherever a FAB is shown. Subscriptions keeps Budget's existing context-aware button.
+- **Rewards visuals aligned with the shared design** — reward empty states now use the app-wide `.empty-state` grammar, and the points progress bar animates via transform (the same convention as the Budget, Dashboard, and Tasks bars) instead of a module-specific variant.
+
+### Fixed
+- **Off-contract responsive breakpoints** — two 1px-off / non-canonical breakpoints (Tasks, Subscriptions) now follow the project's canonical breakpoint contract.
+
 ## [0.93.0] - 2026-07-04
 
 ### Added

@@ -9,6 +9,8 @@ import { t, formatDate, formatTime, getLocale } from '/i18n.js';
 import { esc } from '/utils/html.js';
 import { renderSkeletonList } from '/utils/skeleton.js';
 import { openModal, closeModal, confirmModal } from '/components/modal.js';
+import { createPageFab, setPageFabAction } from '/utils/fab.js';
+import { wireTablist } from '/utils/tablist.js';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
@@ -122,13 +124,32 @@ async function loadData() {
 }
 
 function renderTabButton(tab, icon, label) {
-  const current = state.tab === tab ? ' aria-current="page"' : '';
+  const on = state.tab === tab;
   return `
-    <button class="housekeeping-tab sub-tab" type="button" data-housekeeping-tab="${esc(tab)}"${current}>
+    <button class="housekeeping-tab sub-tab${on ? ' sub-tab--active' : ''}" type="button" role="tab"
+            data-tab-id="${esc(tab)}" aria-controls="housekeeping-content"
+            aria-selected="${on ? 'true' : 'false'}"${on ? ' aria-current="page"' : ''} tabindex="${on ? '0' : '-1'}">
       <i class="sub-tab__icon" data-lucide="${esc(icon)}" aria-hidden="true"></i>
       <span class="sub-tab__label">${esc(label)}</span>
     </button>
   `;
+}
+
+// Kontext-FAB: folgt dem aktiven Tab. Nur „Personal" hat eine Modal-Erstellung;
+// „Aufgaben" nutzt ein dauerhaftes Inline-Formular, „Übersicht"/„Berichte" haben
+// keine Erstellen-Aktion → FAB dort ausgeblendet.
+let fab = null;
+
+function updateHousekeepingFab() {
+  if (!fab) return;
+  if (state.tab === 'staff') {
+    setPageFabAction(fab, {
+      label: t('housekeeping.addWorker'),
+      onClick: () => openStaffModal(null, document.querySelector('#housekeeping-content')),
+    });
+  } else {
+    setPageFabAction(fab, { hidden: true });
+  }
 }
 
 function renderShell(container) {
@@ -137,7 +158,7 @@ function renderShell(container) {
     <section class="housekeeping-page" aria-labelledby="housekeeping-title">
       <header class="page-toolbar housekeeping-toolbar">
         <h1 class="page-toolbar__title" id="housekeeping-title">${esc(t('housekeeping.title'))}</h1>
-        <nav class="housekeeping-tabs" aria-label="${esc(t('housekeeping.bottomNav'))}">
+        <nav class="housekeeping-tabs" role="tablist" aria-label="${esc(t('housekeeping.bottomNav'))}">
           ${renderTabButton('dashboard', 'layout-dashboard', t('housekeeping.dashboard'))}
           ${renderTabButton('tasks', 'list-checks', t('housekeeping.tasks'))}
           ${renderTabButton('reports', 'file-text', t('housekeeping.reports'))}
@@ -148,11 +169,12 @@ function renderShell(container) {
     </section>
   `);
 
-  container.querySelectorAll('[data-housekeeping-tab]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      state.tab = btn.dataset.housekeepingTab;
-      renderCurrentTab(container);
-    });
+  fab = createPageFab({ id: 'housekeeping-fab' });
+  container.querySelector('.housekeeping-page').appendChild(fab);
+
+  wireTablist(container.querySelector('.housekeeping-tabs'), {
+    activeId: state.tab,
+    onChange: (id) => { state.tab = id; renderCurrentTab(container); },
   });
   renderCurrentTab(container);
 }
@@ -161,16 +183,11 @@ function renderCurrentTab(container) {
   const content = container.querySelector('#housekeeping-content');
   if (!content) return;
   content.replaceChildren();
-  container.querySelectorAll('[data-housekeeping-tab]').forEach((btn) => {
-    const active = btn.dataset.housekeepingTab === state.tab;
-    btn.classList.toggle('sub-tab--active', active);
-    if (active) btn.setAttribute('aria-current', 'page');
-    else btn.removeAttribute('aria-current');
-  });
   if (state.tab === 'tasks') renderTasks(content);
   else if (state.tab === 'reports') renderReports(content);
   else if (state.tab === 'staff') renderStaff(content);
   else renderDashboard(content);
+  updateHousekeepingFab();
   if (window.lucide) window.lucide.createIcons({ el: container });
 }
 
@@ -603,10 +620,6 @@ function renderStaff(content) {
     <section class="housekeeping-card">
       <div class="housekeeping-section-heading">
         <h2>${esc(t('housekeeping.staffTitle'))}</h2>
-        <button class="btn btn--secondary" type="button" id="housekeeping-new-worker">
-          <i data-lucide="plus" aria-hidden="true"></i>
-          <span>${esc(t('housekeeping.addWorker'))}</span>
-        </button>
       </div>
       <div class="housekeeping-staff-list">
         ${workerRows || `<p class="housekeeping-muted">${esc(t('housekeeping.noWorkers'))}</p>`}
@@ -615,9 +628,6 @@ function renderStaff(content) {
     ${state.selectedStaffId ? renderStaffVisitLog() : ''}
   `);
 
-  content.querySelector('#housekeeping-new-worker')?.addEventListener('click', () => {
-    openStaffModal(null, content);
-  });
   content.querySelectorAll('[data-select-worker]').forEach((row) => {
     const select = async () => {
       state.selectedStaffId = row.dataset.selectWorker;

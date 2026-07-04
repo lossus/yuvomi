@@ -10,6 +10,8 @@ import { api } from '/api.js';
 import { t, formatDate, getLocale } from '/i18n.js';
 import { esc } from '/utils/html.js';
 import { openModal, closeModal, confirmModal } from '/components/modal.js';
+import { createPageFab, setPageFabAction } from '/utils/fab.js';
+import { wireTablist } from '/utils/tablist.js';
 import { renderSkeletonList } from '/utils/skeleton.js';
 
 const TABS = ['overview', 'catalog', 'ledger'];
@@ -93,10 +95,10 @@ function avatar(member, size = 40) {
 
 function emptyState(icon, title, body, action = '') {
   return `
-    <div class="rw-empty">
-      <div class="rw-empty__icon"><i data-lucide="${esc(icon)}" aria-hidden="true"></i></div>
-      <p class="rw-empty__title">${esc(title)}</p>
-      <p class="rw-empty__body">${esc(body)}</p>
+    <div class="empty-state">
+      <i data-lucide="${esc(icon)}" class="empty-state__icon" aria-hidden="true"></i>
+      <div class="empty-state__title">${esc(title)}</div>
+      <div class="empty-state__description">${esc(body)}</div>
       ${action}
     </div>`;
 }
@@ -148,13 +150,29 @@ function balanceOf(userId) {
 // --------------------------------------------------------
 
 function tabButton(tab, icon, label) {
-  const current = state.tab === tab ? ' aria-current="page"' : '';
-  const active = state.tab === tab ? ' sub-tab--active' : '';
+  const on = state.tab === tab;
   return `
-    <button class="rw-tab sub-tab${active}" type="button" data-rw-tab="${esc(tab)}"${current}>
+    <button class="rw-tab sub-tab${on ? ' sub-tab--active' : ''}" type="button" role="tab"
+            data-tab-id="${esc(tab)}" aria-controls="rewards-content"
+            aria-selected="${on ? 'true' : 'false'}"${on ? ' aria-current="page"' : ''} tabindex="${on ? '0' : '-1'}">
       <i class="sub-tab__icon" data-lucide="${esc(icon)}" aria-hidden="true"></i>
       <span class="sub-tab__label">${esc(label)}</span>
     </button>`;
+}
+
+// Kontext-FAB: eine Primäraktion unten rechts, die dem aktiven Tab folgt.
+let fab = null;
+
+// FAB-Aktion je Tab setzen (nur Admins erstellen; sonst ausgeblendet).
+function updateRewardsFab() {
+  if (!fab) return;
+  if (state.tab === 'catalog' && isAdmin()) {
+    setPageFabAction(fab, { label: t('rewards.addReward'), onClick: () => openRewardModal(null) });
+  } else if (state.tab === 'ledger' && isAdmin()) {
+    setPageFabAction(fab, { label: t('rewards.grantBonus'), onClick: () => openBonusModal() });
+  } else {
+    setPageFabAction(fab, { hidden: true });
+  }
 }
 
 function renderShell(container) {
@@ -163,7 +181,7 @@ function renderShell(container) {
     <div class="rewards-page">
       <header class="page-toolbar rewards-toolbar">
         <h1 class="page-toolbar__title" id="rewards-title">${esc(t('rewards.title'))}</h1>
-        <nav class="rewards-tabs" aria-label="${esc(t('rewards.title'))}">
+        <nav class="rewards-tabs" role="tablist" aria-label="${esc(t('rewards.title'))}">
           ${tabButton('overview', 'trophy', t('rewards.tabOverview'))}
           ${tabButton('catalog', 'gift', t('rewards.tabCatalog'))}
           ${tabButton('ledger', 'history', t('rewards.tabLedger'))}
@@ -172,18 +190,13 @@ function renderShell(container) {
       <div class="rewards-content" id="rewards-content"></div>
     </div>`);
 
-  container.querySelectorAll('[data-rw-tab]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      if (state.tab === btn.dataset.rwTab) return;
-      state.tab = btn.dataset.rwTab;
-      container.querySelectorAll('[data-rw-tab]').forEach((b) => {
-        const on = b.dataset.rwTab === state.tab;
-        b.classList.toggle('sub-tab--active', on);
-        if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
-      });
-      renderCurrentTab(container);
-    });
+  wireTablist(container.querySelector('.rewards-tabs'), {
+    activeId: state.tab,
+    onChange: (id) => { state.tab = id; renderCurrentTab(container); },
   });
+  fab = createPageFab({ id: 'rewards-fab' });
+  container.querySelector('.rewards-page').appendChild(fab);
+  updateRewardsFab();
   icons(container);
 }
 
@@ -205,6 +218,7 @@ async function renderCurrentTab(container) {
     el.insertAdjacentHTML('beforeend', emptyState('alert-triangle', t('common.error'), t('rewards.loadError')));
     icons(el);
   }
+  updateRewardsFab();
 }
 
 // --------------------------------------------------------
@@ -260,7 +274,7 @@ function renderStandingRow(member) {
       </button>
       <div class="rw-standing__progress">
         ${hint ? `
-          <div class="rw-progress__track"><div class="rw-progress__fill" style="width:${hint.pct}%"></div></div>
+          <div class="rw-progress__track"><div class="rw-progress__fill" style="--rw-progress:${Math.max(0, Math.min(1, hint.pct / 100))}"></div></div>
           <p class="rw-progress__label">${esc(hint.label)}</p>`
         : `<p class="rw-progress__label rw-progress__label--muted">${esc(t('rewards.noRewardsYet'))}</p>`}
       </div>
@@ -328,7 +342,7 @@ function renderOverview(el) {
   const list = balances();
   if (!list.length) {
     const action = isAdmin()
-      ? `<button class="btn btn--primary rw-manage-participants" type="button"><i data-lucide="user-plus" aria-hidden="true"></i>${esc(t('rewards.manageParticipants'))}</button>`
+      ? `<button class="btn btn--primary empty-state__cta rw-manage-participants" type="button"><i data-lucide="user-plus" aria-hidden="true"></i>${esc(t('rewards.manageParticipants'))}</button>`
       : '';
     el.insertAdjacentHTML('beforeend',
       `<div class="rewards-content__inner">${emptyState('trophy', t('rewards.emptyOverviewTitle'), isAdmin() ? t('rewards.emptyOverviewAdmin') : t('rewards.emptyOverviewMember'), action)}</div>`);
@@ -421,11 +435,10 @@ function renderCatalog(el) {
   const header = isAdmin() ? `
     <div class="rw-section__head">
       <h2 class="rw-section__title"><i data-lucide="gift" aria-hidden="true"></i>${esc(t('rewards.tabCatalog'))}</h2>
-      <button class="btn btn--primary btn--sm rw-add-reward" type="button"><i data-lucide="plus" aria-hidden="true"></i>${esc(t('rewards.addReward'))}</button>
     </div>` : '';
   if (!items.length) {
     const action = isAdmin()
-      ? `<button class="btn btn--primary rw-add-reward" type="button"><i data-lucide="plus" aria-hidden="true"></i>${esc(t('rewards.addReward'))}</button>`
+      ? `<button class="btn btn--primary empty-state__cta rw-add-reward" type="button"><i data-lucide="plus" aria-hidden="true"></i>${esc(t('rewards.addReward'))}</button>`
       : '';
     el.insertAdjacentHTML('beforeend',
       `<div class="rewards-content__inner">${emptyState('gift', t('rewards.emptyCatalogTitle'), isAdmin() ? t('rewards.emptyCatalogAdmin') : t('rewards.emptyCatalogMember'), action)}</div>`);
@@ -467,7 +480,8 @@ function renderLedger(el) {
     .concat(balances().map((b) => ({ id: b.id, label: b.display_name })))
     .map((c) => `<button class="rw-chip${(state.ledgerFilter ?? null) === c.id ? ' rw-chip--active' : ''}" type="button" data-filter="${c.id ?? ''}">${esc(c.label)}</button>`)
     .join('');
-  const adminBar = isAdmin() ? `<button class="btn btn--primary btn--sm rw-add-bonus" type="button"><i data-lucide="sparkles" aria-hidden="true"></i>${esc(t('rewards.grantBonus'))}</button>` : '';
+  // Bonus vergeben läuft über den Kontext-FAB (Ledger-Tab, Admin); kein Inline-Button.
+  const adminBar = '';
 
   const rows = state.ledger.map((row) => {
     const positive = row.delta > 0;
@@ -501,7 +515,6 @@ function renderLedger(el) {
     await loadLedger();
     renderLedger(el);
   }));
-  el.querySelector('.rw-add-bonus')?.addEventListener('click', openBonusModal);
   icons(el);
 }
 

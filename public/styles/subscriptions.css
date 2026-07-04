@@ -749,7 +749,7 @@
   font-size: var(--text-xs);
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1023px) {
   .subscriptions-toolbar {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }

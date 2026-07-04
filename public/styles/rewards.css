@@ -193,12 +193,17 @@
   overflow: hidden;
 }
 .rw-progress__fill {
+  width: 100%;
   height: 100%;
   border-radius: inherit;
   background: linear-gradient(90deg,
     color-mix(in srgb, var(--module-accent) 78%, white),
     var(--module-accent));
-  transition: width 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  /* scaleX statt width animieren — projektweite Konvention (budget/dashboard/tasks-Bars),
+   * vom frontend-audit erzwungen; --rw-progress (0–1) wird inline gesetzt. */
+  transform-origin: left center;
+  transform: scaleX(var(--rw-progress, 0));
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 .rw-progress__label { margin: 0; font-size: var(--text-xs); color: var(--color-text-secondary); }
 .rw-progress__label--muted { color: var(--color-text-tertiary); }
@@ -346,28 +351,8 @@
 /* --------------------------------------------------------
    Leerzustände
    -------------------------------------------------------- */
-.rw-empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: var(--space-3);
-  padding: var(--space-12) var(--space-6);
-}
-.rw-empty__icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 56px;
-  height: 56px;
-  border-radius: var(--radius-full);
-  background: color-mix(in srgb, var(--module-accent) 10%, var(--color-surface-2));
-  color: var(--module-accent);
-}
-.rw-empty__icon i { width: 26px; height: 26px; }
-.rw-empty__title { margin: 0; font-weight: 600; font-size: var(--text-lg); color: var(--color-text-primary); }
-.rw-empty__body { margin: 0; max-width: 42ch; color: var(--color-text-secondary); }
-.rw-empty .btn { margin-top: var(--space-2); }
+/* Leerzustände nutzen die geteilte .empty-state-Grammatik (layout.css) — keine
+ * modul-eigene Variante mehr. */
 
 /* --------------------------------------------------------
    Modal-Bausteine

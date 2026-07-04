@@ -15,12 +15,14 @@ import { getReadableTextColor } from '/utils/color.js';
 import { refresh as refreshReminders } from '/reminders.js';
 import { parseRemindAtAsUtc } from '/utils/reminder-offset.js';
 import { renderUserMultiSelect, getSelectedUserIds, bindUserMultiSelect, renderAvatarStack } from '/components/user-multi-select.js';
+import { wireTablist } from '/utils/tablist.js';
 
 // --------------------------------------------------------
 // Konstanten
 // --------------------------------------------------------
 
 const VIEWS      = ['month', 'week', 'day', 'agenda'];
+let viewTabs = null; // wireTablist-Controller der View-Umschaltung (Sync aus switchToDayView)
 const VIEW_LABELS = () => ({
   month: t('calendar.viewMonth'),
   week:  t('calendar.viewWeek'),
@@ -983,10 +985,11 @@ function renderToolbar() {
     </div>
     <div class="page-toolbar__actions">
       ${holidayToggleHtml}
-      <div class="cal-toolbar__views">
+      <div class="cal-toolbar__views" role="tablist" aria-label="${t('nav.calendar')}">
         ${VIEWS.map((v) => `
           <button class="cal-toolbar__view-btn ${v === state.view ? 'cal-toolbar__view-btn--active' : ''}"
-                  data-view="${v}">${VIEW_LABELS()[v]}</button>
+                  role="tab" data-tab-id="${v}" aria-selected="${v === state.view ? 'true' : 'false'}"
+                  tabindex="${v === state.view ? '0' : '-1'}">${VIEW_LABELS()[v]}</button>
         `).join('')}
       </div>
       <button class="btn btn--primary btn--icon toolbar-new-btn" id="cal-add" aria-label="${t('calendar.addEvent')}">
@@ -1020,18 +1023,16 @@ function renderToolbar() {
     });
   });
 
-  bar.querySelectorAll('[data-view]').forEach((btn) => {
-    btn.addEventListener('click', async () => {
-      if (btn.dataset.view === state.view) return;
-      state.view = btn.dataset.view;
-      setSavedCalendarView(state.view);
-      bar.querySelectorAll('[data-view]').forEach((b) =>
-        b.classList.toggle('cal-toolbar__view-btn--active', b.dataset.view === state.view)
-      );
+  viewTabs = wireTablist(bar.querySelector('.cal-toolbar__views'), {
+    activeId: state.view,
+    activeClass: 'cal-toolbar__view-btn--active',
+    onChange: async (view) => {
+      state.view = view;
+      setSavedCalendarView(view);
       await reloadForView();
       updateLabel();
       renderView();
-    });
+    },
   });
 }
 
@@ -1089,9 +1090,7 @@ async function switchToDayView(date) {
   state.cursor = date;
   state.view = 'day';
   setSavedCalendarView('day');
-  _container.querySelectorAll('[data-view]').forEach((b) =>
-    b.classList.toggle('cal-toolbar__view-btn--active', b.dataset.view === 'day')
-  );
+  viewTabs?.sync('day');
   await reloadForView();
   updateLabel();
   renderView();

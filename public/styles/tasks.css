@@ -471,7 +471,7 @@
 
 /* Auf Mobile trägt die Kategorie-Section-Überschrift die Kategorie bereits —
  * das Inline-Label je Zeile ist dort redundant und kostet Platz. */
-@media (max-width: 639px) {
+@media (max-width: 640px) {
   .task-card .task-card__meta .task-card__category {
     display: none;
   }
