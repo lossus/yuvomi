@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.93.0] - 2026-07-04
+
+### Added
+- **Rewards module ("Belohnungen")** — a new points-and-rewards system. Tasks can now carry a point value; completing a task credits its assigned members (or the person acting on a shared kiosk tablet when no one is assigned). A household reward catalog lets members redeem points for **parent-approved** rewards, with **opt-in participation per member**, manual bonus points, and a full, auditable point ledger where every balance is the sum of its transactions. Includes a per-member standings view, an in-context first-run setup checklist for parents, keyboard/screen-reader access, and animated balance plus toast feedback. All 23 UI languages and the OpenAPI spec cover the new `/api/v1/rewards` endpoints.
+
 ## [0.92.3] - 2026-07-04
 
 ### Added

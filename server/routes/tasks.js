@@ -8,6 +8,7 @@ import { createLogger } from '../logger.js';
 import express from 'express';
 import * as db from '../db.js';
 import { nextOccurrenceAfter } from '../services/recurrence.js';
+import { syncTaskRewards } from '../services/rewards.js';
 import * as v from '../middleware/validate.js';
 
 const log = createLogger('Tasks');
@@ -22,6 +23,14 @@ const VALID_PRIORITIES = ['none', 'low', 'medium', 'high', 'urgent'];
 const VALID_STATUSES   = ['open', 'in_progress', 'done', 'archived'];
 const VALID_CATEGORIES = ['household', 'school', 'shopping', 'repair',
                           'health', 'finance', 'leisure', 'misc'];
+const MAX_POINTS = 10000;
+
+/** Punktewert einer Aufgabe auf eine nichtnegative Ganzzahl normalisieren. */
+function clampPoints(val) {
+  const n = Math.trunc(Number(val));
+  if (!Number.isFinite(n) || n <= 0) return 0;
+  return Math.min(n, MAX_POINTS);
+}
 
 // --------------------------------------------------------
 // Hilfsfunktionen
@@ -103,6 +112,7 @@ function validateTaskInput(body, isCreate = true) {
     v.date(body.due_date,   'due_date'),
     v.time(body.due_time,   'due_time'),
     v.rrule(body.recurrence_rule, 'recurrence_rule'),
+    v.num(body.points,      'points'),
   ]);
 }
 
@@ -209,6 +219,7 @@ router.post('/', (req, res) => {
       is_recurring    = 0,
       recurrence_rule = null,
     } = req.body;
+    const points = clampPoints(req.body.points);
 
     const userIds  = parseAssignedTo(req.body.assigned_to);
     const firstUid = userIds[0] ?? null;
@@ -226,12 +237,12 @@ router.post('/', (req, res) => {
       const result = db.get().prepare(`
         INSERT INTO tasks
           (title, description, category, priority, start_date, due_date, due_time,
-           assigned_to, created_by, parent_task_id, is_recurring, recurrence_rule)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+           assigned_to, created_by, parent_task_id, is_recurring, recurrence_rule, points)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `).run(
         title.trim(), description, category, priority,
         start_date, due_date, due_time, firstUid, req.authUserId || req.session.userId, parent_task_id,
-        is_recurring ? 1 : 0, recurrence_rule
+        is_recurring ? 1 : 0, recurrence_rule, points
       );
       setAssignments(db.get(), result.lastInsertRowid, userIds);
       return result.lastInsertRowid;
@@ -278,6 +289,7 @@ router.put('/:id', (req, res) => {
       is_recurring    = task.is_recurring,
       recurrence_rule = task.recurrence_rule,
     } = req.body;
+    const points = req.body.points !== undefined ? clampPoints(req.body.points) : task.points;
 
     const userIds  = req.body.assigned_to !== undefined
       ? parseAssignedTo(req.body.assigned_to)
@@ -290,13 +302,15 @@ router.put('/:id', (req, res) => {
         UPDATE tasks SET
           title = ?, description = ?, category = ?, priority = ?,
           status = ?, start_date = ?, due_date = ?, due_time = ?, assigned_to = ?,
-          is_recurring = ?, recurrence_rule = ?
+          is_recurring = ?, recurrence_rule = ?, points = ?
         WHERE id = ?
       `).run(title.trim(), description, category, priority,
              status, start_date, due_date, due_time, firstUid,
-             is_recurring ? 1 : 0, recurrence_rule, req.params.id);
+             is_recurring ? 1 : 0, recurrence_rule, points, req.params.id);
       setAssignments(db.get(), task.id, userIds);
       syncHousekeepingPaymentStatus(db.get(), req.params.id, status);
+      // Punkte erst nach setAssignments: die Zuständigen werden daraus abgeleitet.
+      syncTaskRewards(db.get(), task.id, task.status, status, req.authUserId || req.session.userId);
     })();
 
     const updated = db.get().prepare(`
@@ -327,13 +341,15 @@ router.patch('/:id/status', (req, res) => {
     if (!VALID_STATUSES.includes(status))
       return res.status(400).json({ error: `Invalid status. Allowed: ${VALID_STATUSES.join(', ')}`, code: 400 });
 
-    const result = db.get().prepare('UPDATE tasks SET status = ? WHERE id = ?')
-      .run(status, req.params.id);
-
-    if (result.changes === 0)
+    const prev = db.get().prepare('SELECT status FROM tasks WHERE id = ?').get(req.params.id);
+    if (!prev)
       return res.status(404).json({ error: 'Task not found.', code: 404 });
 
+    db.get().prepare('UPDATE tasks SET status = ? WHERE id = ?').run(status, req.params.id);
+
     syncHousekeepingPaymentStatus(db.get(), req.params.id, status);
+    // Punkte-Gutschrift/Storno an den Aufgaben-Statuswechsel koppeln.
+    syncTaskRewards(db.get(), Number(req.params.id), prev.status, status, req.authUserId || req.session.userId);
 
     // Wiederkehrende Aufgabe: nächste Instanz erstellen wenn erledigt
     if (status === 'done') {
@@ -351,12 +367,12 @@ router.patch('/:id/status', (req, res) => {
           db.get().transaction(() => {
             const newTask = db.get().prepare(`
               INSERT INTO tasks (title, description, category, priority, status,
-                due_date, due_time, assigned_to, created_by, is_recurring, recurrence_rule)
-              VALUES (?, ?, ?, ?, 'open', ?, ?, ?, ?, 1, ?)
+                due_date, due_time, assigned_to, created_by, is_recurring, recurrence_rule, points)
+              VALUES (?, ?, ?, ?, 'open', ?, ?, ?, ?, 1, ?, ?)
             `).run(
               task.title, task.description, task.category, task.priority,
               nextDate, task.due_time, task.assigned_to, task.created_by,
-              task.recurrence_rule
+              task.recurrence_rule, task.points
             );
             setAssignments(db.get(), newTask.lastInsertRowid, existingAssignments);
           })();

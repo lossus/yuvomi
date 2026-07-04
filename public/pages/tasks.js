@@ -333,6 +333,7 @@ function renderModalContent({ task = null, users = [], reminder = null } = {}) {
     || (!!task.priority && task.priority !== 'none')
     || (!!task.category && task.category !== 'Sonstiges')
     || !!task.start_date
+    || (Number(task.points) > 0)
   );
 
   const advancedFieldsHtml = `
@@ -358,10 +359,19 @@ function renderModalContent({ task = null, users = [], reminder = null } = {}) {
         </div>
       </div>
 
-      <div class="form-group" style="margin-top:var(--space-4)">
-        <label class="label" for="task-start-date">${t('tasks.startDateLabel')}</label>
-        <input class="input js-date-input" type="text" id="task-start-date" name="start_date"
-               value="${formatDateInput(task?.start_date)}" placeholder="${dateInputPlaceholder()}" inputmode="text">
+      <div class="modal-grid modal-grid--2" style="margin-top:var(--space-4)">
+        <div class="form-group">
+          <label class="label" for="task-start-date">${t('tasks.startDateLabel')}</label>
+          <input class="input js-date-input" type="text" id="task-start-date" name="start_date"
+                 value="${formatDateInput(task?.start_date)}" placeholder="${dateInputPlaceholder()}" inputmode="text">
+        </div>
+        <div class="form-group">
+          <label class="label" for="task-points">${t('tasks.pointsLabel')}</label>
+          <input class="input" type="number" id="task-points" name="points" inputmode="numeric"
+                 min="0" step="1" value="${Number(task?.points) > 0 ? Number(task.points) : ''}"
+                 placeholder="0">
+          <p class="task-field-hint">${t('tasks.pointsHint')}</p>
+        </div>
       </div>`;
 
   return `
@@ -644,6 +654,7 @@ async function handleFormSubmit(e, container) {
     assigned_to:     getSelectedUserIds(form, 'task_assigned'),
     is_recurring:    rrule.is_recurring ? 1 : 0,
     recurrence_rule: rrule.recurrence_rule,
+    points:          Math.max(0, Math.trunc(Number(form.points?.value)) || 0),
   };
   const dueTimeRaw = form.due_time?.value || '';
   const dueTime = parseTimeInput(dueTimeRaw);

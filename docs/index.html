@@ -75,6 +75,7 @@
       --m-documents: #1D4ED8;
       --m-housekeeping: #7C3AED;
       --m-health: #9E1E88;
+      --m-rewards: #BE4B6E;
 
       --code-bg: #1B1A22;
       --code-text: #E6E4F0;
@@ -130,6 +131,7 @@
       --m-documents: #60A5FA;
       --m-housekeeping: #C4B5FD;
       --m-health: #DB60CB;
+      --m-rewards: #E68CA6;
 
       --code-bg: #141413;
       --code-text: #E2E1DC;
@@ -154,7 +156,7 @@
         --accent-soft: #1E1040; --accent-light: #160B30; --accent-glow: rgba(167,139,250,0.22); --accent-ink: #1A1A18;
         --m-tasks: #4ADE80; --m-calendar: #A78BFA; --m-meals: #FB923C; --m-recipes: #2DD4BF;
         --m-shopping: #F472B6; --m-notes: #FCD34D; --m-contacts: #60A5FA; --m-birthdays: #FB7185;
-        --m-budget: #2DD4BF; --m-documents: #60A5FA; --m-housekeeping: #C4B5FD; --m-health: #DB60CB;
+        --m-budget: #2DD4BF; --m-documents: #60A5FA; --m-housekeeping: #C4B5FD; --m-health: #DB60CB; --m-rewards: #E68CA6;
         --code-bg: #141413; --code-text: #E2E1DC; --code-comment: #7A786F;
         --shadow-sm: 0 1px 3px rgba(0,0,0,0.30); --shadow-md: 0 4px 12px rgba(0,0,0,0.38);
         --shadow-lg: 0 12px 30px rgba(0,0,0,0.48); --shadow-xl: 0 22px 60px rgba(0,0,0,0.60);
@@ -564,7 +566,7 @@
     <span class="sep dt">·</span>
     <span data-t="proof_mit">MIT licensed</span>
     <span class="sep">·</span>
-    <span><b>v0.92.2</b></span>
+    <span><b>v0.93.0</b></span>
   </div>
 </div>
 
@@ -726,7 +728,7 @@
   <div class="wrap">
     <div class="sec-head center reveal">
       <p class="eyebrow" data-t="more_label">And there's more</p>
-      <h2 class="sec-title" data-t="more_title">One app, fifteen modules</h2>
+      <h2 class="sec-title" data-t="more_title">One app, sixteen modules</h2>
       <p class="sec-desc" data-t="more_desc">Each module is independent. Use what fits your family, skip what doesn't.</p>
     </div>
     <div class="mod-grid">
@@ -753,6 +755,10 @@
       <div class="mod-card reveal d2" style="--m: var(--m-health)">
         <div class="mod-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.49 4.04 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/></svg></div>
         <h3 data-t="m_health_t">Health</h3><p data-t="m_health_d">Track vitals, medications with reminders, lab results and activity per family member — private or shared. Not a medical device.</p>
+      </div>
+      <div class="mod-card reveal d2" style="--m: var(--m-rewards)">
+        <div class="mod-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg></div>
+        <h3 data-t="m_rewards_t">Rewards</h3><p data-t="m_rewards_d">Give tasks point values; finishing them credits the assigned members. A reward catalog with parent-approved redemptions, opt-in per member, bonus points and a full point ledger.</p>
       </div>
       <div class="mod-card reveal d2" style="--m: var(--m-recipes)">
         <div class="mod-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-7 7c0 2.4 1.2 4.5 3 5.7V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.3c1.8-1.2 3-3.3 3-5.7a7 7 0 0 0-7-7z"/><line x1="9" y1="22" x2="15" y2="22"/></svg></div>
@@ -913,7 +919,7 @@ cp .env.example .env  <span class="c"># set SESSION_SECRET and DB_ENCRYPTION_KEY
       </div>
     </div>
     <div class="foot-bottom">
-      <span><span id="gh-stars-footer" data-gh-stars>★ 826 · </span><b>v0.92.2</b> · July 2026</span>
+      <span><span id="gh-stars-footer" data-gh-stars>★ 826 · </span><b>v0.93.0</b> · July 2026</span>
       <span data-t="foot_madewith">Self-hosted · Privacy-first · Open source</span>
     </div>
   </div>
@@ -955,13 +961,14 @@ cp .env.example .env  <span class="c"># set SESSION_SECRET and DB_ENCRYPTION_KEY
       f_budget_l1:'23 currencies, recurring entries, weekly/monthly/yearly statistics', f_budget_l2:'Split expenses with automatic debt simplification', f_budget_l3:'Subscription tracker with renewals, budgets & alerts',
       f_shop_k:'Shopping', f_shop_t:'The list everyone actually checks.', f_shop_d:'One shared shopping list for the whole family — organized by aisle, updating in real time.',
       f_shop_l1:'Aisle categories & swipe gestures', f_shop_l2:'Add a whole meal plan in one tap', f_shop_l3:'Touch-safe quick add on mobile',
-      more_label:"And there's more", more_title:'One app, fifteen modules', more_desc:"Each module is independent. Use what fits your family, skip what doesn't.",
+      more_label:"And there's more", more_title:'One app, sixteen modules', more_desc:"Each module is independent. Use what fits your family, skip what doesn't.",
       m_docs_t:'Documents', m_docs_d:'Family files with previews, visibility controls and storage badges. New uploads and calendar attachments can use WebDAV; Paperless-ngx and Papra DMS integration is optional.',
       m_notes_t:'Notes', m_notes_d:'Colored sticky notes with Markdown. Perfect for recipes, family memos and quick reminders.',
       m_contacts_t:'Contacts', m_contacts_d:'Shared family directory with CardDAV sync, vCard import/export and multi-account support.',
       m_bday_t:'Birthdays', m_bday_d:'Birthday tracker with automatic annual calendar events, age display and custom reminders.',
       m_house_t:'Housekeeping', m_house_d:'Manage household staff — schedules, check-in/out, daily or hourly billing, chores and supplies.',
       m_health_t:'Health', m_health_d:'Track vitals, medications with reminders, lab results and activity per family member — private or shared. Not a medical device.',
+      m_rewards_t:'Rewards', m_rewards_d:'Give tasks point values; finishing them credits the assigned members. A reward catalog with parent-approved redemptions, opt-in per member, bonus points and a full point ledger.',
       m_recipes_t:'Recipes', m_recipes_d:'Create, duplicate and scale reusable recipes. Pre-fill meal slots or save any meal as a recipe.',
       m_rem_t:'Reminders', m_rem_d:'Time-based notifications on tasks and calendar events, with an in-app badge so nothing slips, plus opt-in push notifications that reach you even when the app is closed.',
       m_backup_t:'Backup & SSO', m_backup_d:'Scheduled backups with pre-restore rollback, optional WebDAV cloud upload (Nextcloud, ownCloud, Hetzner, etc.), plus single sign-on via any OIDC provider.',
@@ -1023,13 +1030,14 @@ cp .env.example .env  <span class="c"># set SESSION_SECRET and DB_ENCRYPTION_KEY
       f_budget_l1:'23 Währungen, wiederkehrende Einträge, Wochen-/Monats-/Jahresstatistik', f_budget_l2:'Geteilte Ausgaben mit automatischer Schulden-Vereinfachung', f_budget_l3:'Abo-Tracker mit Verlängerungen, Budgets & Erinnerungen',
       f_shop_k:'Einkauf', f_shop_t:'Die Liste, die alle wirklich nutzen.', f_shop_d:'Eine gemeinsame Einkaufsliste für die ganze Familie — nach Gang sortiert, in Echtzeit aktualisiert.',
       f_shop_l1:'Gang-Kategorien & Wisch-Gesten', f_shop_l2:'Ganzen Mahlzeitenplan per Tipp hinzufügen', f_shop_l3:'Touch-sicheres Schnell-Hinzufügen mobil',
-      more_label:'Und da ist noch mehr', more_title:'Eine App, fünfzehn Module', more_desc:'Jedes Modul ist eigenständig. Nutzt, was zu eurer Familie passt, lasst den Rest weg.',
+      more_label:'Und da ist noch mehr', more_title:'Eine App, sechzehn Module', more_desc:'Jedes Modul ist eigenständig. Nutzt, was zu eurer Familie passt, lasst den Rest weg.',
       m_docs_t:'Dokumente', m_docs_d:'Familiendateien mit Vorschau, Sichtbarkeitsregeln und Speicher-Badges. Neue Uploads und Kalenderanh\u00e4nge k\u00f6nnen WebDAV nutzen; Paperless-ngx und Papra als DMS sind optional.',
       m_notes_t:'Notizen', m_notes_d:'Farbige Haftnotizen mit Markdown. Perfekt für Rezepte, Familien-Memos und schnelle Erinnerungen.',
       m_contacts_t:'Kontakte', m_contacts_d:'Gemeinsames Familienverzeichnis mit CardDAV-Sync, vCard-Import/-Export und Multi-Account-Support.',
       m_bday_t:'Geburtstage', m_bday_d:'Geburtstags-Tracker mit automatischen jährlichen Kalendereinträgen, Altersanzeige und Erinnerungen.',
       m_house_t:'Haushaltshilfe', m_house_d:'Haushaltspersonal verwalten — Pläne, Ein-/Ausstempeln, Tages- oder Stundenabrechnung, Chores und Bedarf.',
       m_health_t:'Gesundheit', m_health_d:'Vitalwerte, Medikamente mit Erinnerungen, Laborwerte und Aktivität je Familienmitglied — privat oder geteilt. Kein Medizinprodukt.',
+      m_rewards_t:'Belohnungen', m_rewards_d:'Aufgaben können Punkte tragen; beim Erledigen werden sie den zuständigen Mitgliedern gutgeschrieben. Prämien-Katalog mit Eltern-Freigabe, opt-in je Mitglied, Bonuspunkte und ein vollständiges Punkte-Ledger.',
       m_recipes_t:'Rezepte', m_recipes_d:'Wiederverwendbare Rezepte erstellen, duplizieren und skalieren. Mahlzeiten vorausfüllen oder als Rezept speichern.',
       m_rem_t:'Erinnerungen', m_rem_d:'Zeitbasierte Benachrichtigungen für Aufgaben und Termine, mit In-App-Badge, damit nichts durchrutscht, plus optionale Push-Benachrichtigungen, die dich auch bei geschlossener App erreichen.',
       m_backup_t:'Backup & SSO', m_backup_d:'Geplante Backups mit Vor-Wiederherstellungs-Rollback, optionalem WebDAV-Cloud-Upload (Nextcloud, ownCloud, Hetzner\xa0usw.) und Single Sign-On \xfcber jeden OIDC-Provider.',

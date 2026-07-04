@@ -38,6 +38,7 @@ Every table: `id INTEGER PRIMARY KEY`, `created_at TEXT`, `updated_at TEXT` (ISO
 | is_recurring | INTEGER | 0/1 |
 | recurrence_rule | TEXT | iCal RRULE |
 | parent_task_id | INTEGER | FK → Tasks (max 2 levels) |
+| points | INTEGER | NOT NULL DEFAULT 0 — reward points credited to assigned members on completion (Rewards module, migration v69) |
 
 Recurring tasks keep only one open instance: the next instance is created on completion, not on a schedule. When an overdue recurring task is marked done, its next due date catches up to the next occurrence at or after today (skipping missed periods) instead of advancing a single interval from the old — possibly still overdue — due date.
 
@@ -49,6 +50,53 @@ Join table for multi-person task assignment (migration v32). Existing `assigned_
 | task_id | INTEGER | FK → Tasks (CASCADE delete), NOT NULL |
 | user_id | INTEGER | FK → Users (CASCADE delete), NOT NULL |
 | PRIMARY KEY | | (task_id, user_id) |
+
+### Rewards (migration v70)
+
+Points-and-rewards system. A member earns a task's `points` when the task is marked done (awarded to its assigned members; if unassigned, to the acting user — useful for a wall-mounted kiosk tablet on a single account). Participation is **opt-in per member**; redemptions require **parent/admin approval**. A member's balance is always `SUM(delta)` over `reward_ledger` — there is no separately stored balance that could drift. Point award is idempotent (partial unique index) and reversed when a task leaves the `done` state.
+
+**Reward Participants** — who takes part (opt-in).
+
+| Column | Type | Constraint |
+|--------|------|-----------|
+| user_id | INTEGER | PRIMARY KEY, FK → Users (CASCADE delete) |
+| enabled | INTEGER | 0/1, default 1 |
+
+**Reward Catalog** — household-wide rewards (parent/admin managed).
+
+| Column | Type | Constraint |
+|--------|------|-----------|
+| name | TEXT | NOT NULL |
+| cost | INTEGER | NOT NULL — point price |
+| icon | TEXT | optional emoji |
+| description | TEXT | |
+| is_active | INTEGER | 0/1, default 1 |
+| sort_order | INTEGER | NOT NULL DEFAULT 0 |
+| created_by | INTEGER | FK → Users (SET NULL) |
+
+**Reward Redemptions** — approval flow. Requesting reserves the points via a `redeem` ledger entry; rejecting or cancelling books them back with a `reversal`. Name/icon/cost are snapshotted so later catalog edits don't rewrite history.
+
+| Column | Type | Constraint |
+|--------|------|-----------|
+| user_id | INTEGER | FK → Users (CASCADE delete), NOT NULL |
+| catalog_id | INTEGER | FK → Reward Catalog (SET NULL), nullable |
+| reward_name / reward_icon / cost | TEXT / TEXT / INTEGER | snapshot at request time |
+| status | TEXT | pending / fulfilled / rejected / cancelled |
+| note | TEXT | optional member note |
+| requested_by / decided_by | INTEGER | FK → Users (SET NULL) |
+| decided_at | TEXT | ISO timestamp, nullable |
+
+**Reward Ledger** — the single source of truth. Every earn / bonus / redeem / adjust / reversal is one immutable, auditable row.
+
+| Column | Type | Constraint |
+|--------|------|-----------|
+| user_id | INTEGER | FK → Users (CASCADE delete), NOT NULL |
+| delta | INTEGER | NOT NULL — positive = earned/bonus, negative = redeemed/correction |
+| type | TEXT | earn / bonus / redeem / adjust / reversal |
+| reason | TEXT | e.g. the task title or reward name |
+| task_id | INTEGER | FK → Tasks (SET NULL), nullable — partial UNIQUE `(task_id, user_id) WHERE type='earn'` |
+| redemption_id | INTEGER | FK → Reward Redemptions (SET NULL), nullable |
+| created_by | INTEGER | FK → Users (SET NULL) |
 
 ### Shopping Lists
 | Column | Type | Constraint |
