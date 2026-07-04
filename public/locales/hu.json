@@ -2306,319 +2306,319 @@
             "title": "Áttekintés",
             "emptyTitle": "Még nincs itt semmi",
             "emptyDesc": "Az egészségügyi áttekintésed itt jelenik meg.",
-            "personsLabel": "Person auswählen",
-            "loadError": "Übersicht konnte nicht geladen werden",
-            "loadErrorDesc": "Bitte versuche es erneut.",
-            "retry": "Erneut versuchen",
+            "personsLabel": "Személy kiválasztása",
+            "loadError": "Az áttekintés nem tölthető be",
+            "loadErrorDesc": "Kérjük, próbáld újra.",
+            "retry": "Újrapróbálkozás",
             "dueToday": {
-                "title": "Heute fällig"
+                "title": "Mai teendők"
             },
             "adherence": {
-                "title": "Einnahmetreue",
-                "noData": "Noch keine Einnahmedaten",
-                "period": "Letzte {{days}} Tage",
-                "streakLabel": "Tage in Folge"
+                "title": "Szedési fegyelem",
+                "noData": "Még nincsenek szedési adatok",
+                "period": "Utolsó {{days}} nap",
+                "streakLabel": "Nap egymás után"
             },
             "vitals": {
-                "title": "Letzte Vitalwerte"
+                "title": "Legutóbbi vitális értékek"
             },
             "quick": {
-                "title": "Schnell erfassen",
-                "vital": "Vitalwert",
-                "activity": "Aktivität",
-                "meds": "Medikamente"
+                "title": "Gyors rögzítés",
+                "vital": "Vitális érték",
+                "activity": "Tevékenység",
+                "meds": "Gyógyszerek"
             },
             "reminders": {
-                "title": "Nächste Erinnerungen",
-                "empty": "Heute keine weiteren Einnahmen"
+                "title": "Következő emlékeztetők",
+                "empty": "Ma nincs több bevétel"
             }
         },
         "vitals": {
             "title": "Vitálértékek",
             "emptyTitle": "Még nincs mérés",
             "emptyDesc": "A vérnyomás, vércukor és testsúly itt jelenik meg.",
-            "add": "Messwert erfassen",
-            "addShort": "Erfassen",
-            "personsLabel": "Person",
-            "you": "Ich",
-            "chartTitle": "Verlauf",
-            "prevPeriod": "Vorheriger Zeitraum",
-            "nextPeriod": "Nächster Zeitraum",
-            "noData": "Keine Messwerte im gewählten Zeitraum.",
-            "noValue": "Noch kein Wert",
-            "loadError": "Messwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Messwert gespeichert.",
-            "saveError": "Messwert konnte nicht gespeichert werden.",
-            "invalidValue": "Bitte gültige Werte eingeben.",
+            "add": "Mérés rögzítése",
+            "addShort": "Rögzítés",
+            "personsLabel": "Személy",
+            "you": "Én",
+            "chartTitle": "Alakulás",
+            "prevPeriod": "Előző időszak",
+            "nextPeriod": "Következő időszak",
+            "noData": "Nincs mérés a kiválasztott időszakban.",
+            "noValue": "Még nincs érték",
+            "loadError": "A mérések nem tölthetők be.",
+            "loadErrorDesc": "Kérjük, próbáld újra később.",
+            "retry": "Újrapróbálkozás",
+            "saved": "Mérés mentve.",
+            "saveError": "A mérés nem menthető.",
+            "invalidValue": "Adj meg érvényes értékeket.",
             "range": {
-                "week": "Woche",
-                "month": "Monat",
-                "year": "Jahr"
+                "week": "Hét",
+                "month": "Hónap",
+                "year": "Év"
             },
             "metric": {
-                "bp": "Blutdruck",
-                "glucose": "Blutzucker",
-                "weight": "Gewicht",
-                "spo2": "Sauerstoffsättigung",
-                "temp": "Temperatur"
+                "bp": "Vérnyomás",
+                "glucose": "Vércukor",
+                "weight": "Testsúly",
+                "spo2": "Oxigéntelítettség",
+                "temp": "Hőmérséklet"
             },
             "channel": {
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
-                "pulse": "Puls"
+                "systolic": "Szisztolés",
+                "diastolic": "Diasztolés",
+                "pulse": "Pulzus"
             },
             "field": {
-                "type": "Art",
-                "value": "Wert",
-                "unit": "Einheit",
-                "measuredAt": "Gemessen am",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
-                "pulse": "Puls"
+                "type": "Típus",
+                "value": "Érték",
+                "unit": "Mértékegység",
+                "measuredAt": "Mérés dátuma",
+                "note": "Megjegyzés",
+                "visibility": "Láthatóság",
+                "systolic": "Szisztolés",
+                "diastolic": "Diasztolés",
+                "pulse": "Pulzus"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Privát",
+                "family": "Család"
             }
         },
         "meds": {
             "title": "Gyógyszerek",
             "emptyTitle": "Még nincs gyógyszer",
             "emptyDesc": "A gyógyszerek ütemezéssel és emlékeztetőkkel itt jelennek meg.",
-            "add": "Medikament hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Medikament bearbeiten",
-            "loadError": "Medikamente konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Medikament gespeichert.",
-            "saveError": "Medikament konnte nicht gespeichert werden.",
-            "deleted": "Medikament gelöscht.",
-            "deleteError": "Medikament konnte nicht gelöscht werden.",
-            "deleteConfirm": "Dieses Medikament wirklich löschen? Einnahmeplan und Verlauf werden mitgelöscht.",
-            "doseSaved": "Eintrag aktualisiert.",
-            "doseError": "Eintrag konnte nicht gespeichert werden.",
-            "nameRequired": "Name ist erforderlich.",
-            "noMeds": "Noch keine Medikamente.",
-            "personsLabel": "Person",
-            "take": "Genommen",
-            "skip": "Überspringen",
+            "add": "Gyógyszer hozzáadása",
+            "addShort": "Hozzáadás",
+            "edit": "Gyógyszer szerkesztése",
+            "loadError": "A gyógyszerek nem tölthetők be.",
+            "loadErrorDesc": "Kérjük, próbáld újra később.",
+            "retry": "Újrapróbálkozás",
+            "saved": "Gyógyszer mentve.",
+            "saveError": "A gyógyszer nem menthető.",
+            "deleted": "Gyógyszer törölve.",
+            "deleteError": "A gyógyszer nem törölhető.",
+            "deleteConfirm": "Biztosan törlöd ezt a gyógyszert? A szedési terv és az előzmények is törlődnek.",
+            "doseSaved": "Bejegyzés frissítve.",
+            "doseError": "A bejegyzés nem menthető.",
+            "nameRequired": "A név kötelező.",
+            "noMeds": "Még nincsenek gyógyszerek.",
+            "personsLabel": "Személy",
+            "take": "Bevéve",
+            "skip": "Kihagyás",
             "dueToday": {
-                "title": "Heute fällig",
-                "empty": "Heute ist nichts fällig."
+                "title": "Mai teendők",
+                "empty": "Ma nincs teendő."
             },
             "adherence": {
-                "title": "Therapietreue",
-                "period": "Letzte {{days}} Tage",
-                "noData": "Noch keine geplanten Dosen im Zeitraum.",
-                "summary": "{{taken}} von {{planned}} genommen"
+                "title": "Terápiahűség",
+                "period": "Utolsó {{days}} nap",
+                "noData": "Az időszakban még nincsenek tervezett adagok.",
+                "summary": "{{planned}} adagból {{taken}} bevéve"
             },
             "status": {
-                "taken": "Genommen",
-                "skipped": "Übersprungen",
-                "pending": "Offen"
+                "taken": "Bevéve",
+                "skipped": "Kihagyva",
+                "pending": "Függőben"
             },
             "badge": {
-                "prn": "Bei Bedarf",
-                "inactive": "Inaktiv"
+                "prn": "Szükség szerint",
+                "inactive": "Inaktív"
             },
             "stock": {
-                "label": "Bestand",
-                "low": "Nachfüllen",
-                "out": "Leer"
+                "label": "Készlet",
+                "low": "Feltöltés",
+                "out": "Elfogyott"
             },
             "field": {
-                "name": "Name",
-                "dosageText": "Dosis",
-                "form": "Form",
-                "stockQty": "Bestand",
-                "stockUnit": "Einheit",
-                "refillThreshold": "Nachfüll-Schwelle",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
-                "active": "Aktiv",
-                "prn": "Bei Bedarf (PRN)"
+                "name": "Név",
+                "dosageText": "Adag",
+                "form": "Forma",
+                "stockQty": "Készlet",
+                "stockUnit": "Mértékegység",
+                "refillThreshold": "Feltöltési küszöb",
+                "note": "Megjegyzés",
+                "visibility": "Láthatóság",
+                "active": "Aktív",
+                "prn": "Szükség szerint (PRN)"
             },
             "schedule": {
-                "title": "Einnahmeplan",
-                "add": "Zeitfenster hinzufügen",
-                "time": "Uhrzeit",
-                "dose": "Dosis",
-                "days": "Wochentage",
-                "daily": "Täglich",
-                "none": "Noch keine Zeitfenster.",
-                "delete": "Zeitfenster löschen",
-                "newHint": "Speichere das Medikament, dann kannst du Zeitfenster hinzufügen.",
-                "timeRequired": "Uhrzeit ist erforderlich."
+                "title": "Szedési terv",
+                "add": "Időpont hozzáadása",
+                "time": "Időpont",
+                "dose": "Adag",
+                "days": "Hét napjai",
+                "daily": "Naponta",
+                "none": "Még nincsenek időpontok.",
+                "delete": "Időpont törlése",
+                "newHint": "Mentsd el a gyógyszert, hogy időpontokat adhass hozzá.",
+                "timeRequired": "Az időpont kötelező."
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
-                "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "mon": "H",
+                "tue": "K",
+                "wed": "Sze",
+                "thu": "Cs",
+                "fri": "P",
+                "sat": "Szo",
+                "sun": "V"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Privát",
+                "family": "Család"
             }
         },
         "labs": {
             "title": "Laborértékek",
             "emptyTitle": "Még nincs eredmény",
             "emptyDesc": "A laborleletek referenciatartományokkal itt jelennek meg.",
-            "loadError": "Laborwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "personsLabel": "Person",
-            "reportsTitle": "Befunde",
-            "add": "Befund hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Bearbeiten",
-            "noReports": "Noch keine Befunde.",
-            "analyteCount": "{{count}} Analyten",
-            "abnormalBadge": "{{count}} auffällig",
-            "selectHint": "Wähle einen Befund, um die Analyten zu sehen.",
-            "noAnalytes": "Für diesen Befund sind noch keine Analyten erfasst.",
-            "dateRequired": "Befunddatum ist erforderlich.",
-            "saved": "Befund gespeichert.",
-            "saveError": "Befund konnte nicht gespeichert werden.",
-            "deleted": "Befund gelöscht.",
-            "deleteError": "Befund konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diesen Befund wirklich löschen? Alle Analyten werden mitgelöscht.",
+            "loadError": "A laborértékek nem tölthetők be.",
+            "loadErrorDesc": "Kérjük, próbáld újra később.",
+            "retry": "Újrapróbálkozás",
+            "personsLabel": "Személy",
+            "reportsTitle": "Leletek",
+            "add": "Lelet hozzáadása",
+            "addShort": "Hozzáadás",
+            "edit": "Szerkesztés",
+            "noReports": "Még nincsenek leletek.",
+            "analyteCount": "{{count}} paraméter",
+            "abnormalBadge": "{{count}} eltérő",
+            "selectHint": "Válassz egy leletet a paraméterek megtekintéséhez.",
+            "noAnalytes": "Ehhez a lelethez még nincsenek rögzítve paraméterek.",
+            "dateRequired": "A lelet dátuma kötelező.",
+            "saved": "Lelet mentve.",
+            "saveError": "A lelet nem menthető.",
+            "deleted": "Lelet törölve.",
+            "deleteError": "A lelet nem törölhető.",
+            "deleteConfirm": "Biztosan törlöd ezt a leletet? Az összes paraméter is törlődik.",
             "col": {
-                "analyte": "Analyt",
-                "value": "Wert",
-                "reference": "Referenz",
-                "flag": "Bewertung"
+                "analyte": "Paraméter",
+                "value": "Érték",
+                "reference": "Referencia",
+                "flag": "Értékelés"
             },
             "flag": {
-                "low": "Niedrig",
-                "normal": "Normal",
-                "high": "Hoch"
+                "low": "Alacsony",
+                "normal": "Normál",
+                "high": "Magas"
             },
             "trend": {
-                "title": "Verlauf",
-                "analyte": "Analyt",
-                "tooFew": "Mindestens zwei Befunde nötig, um einen Verlauf zu zeigen.",
-                "unit": "Einheit: {{unit}}"
+                "title": "Alakulás",
+                "analyte": "Paraméter",
+                "tooFew": "Legalább két lelet szükséges az alakulás megjelenítéséhez.",
+                "unit": "Mértékegység: {{unit}}"
             },
             "field": {
-                "reportDate": "Befunddatum",
+                "reportDate": "Lelet dátuma",
                 "labName": "Labor",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "visibility": "Láthatóság",
+                "note": "Megjegyzés"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Privát",
+                "family": "Család"
             },
             "results": {
-                "title": "Analyten",
-                "newHint": "Speichere den Befund, dann kannst du Analyten hinzufügen.",
-                "none": "Noch keine Analyten.",
-                "analyte": "Analyt",
-                "value": "Wert",
-                "unit": "Einheit",
-                "refLow": "Referenz min.",
-                "refHigh": "Referenz max.",
-                "add": "Analyt hinzufügen",
-                "delete": "Analyt löschen",
-                "flagPreview": "Bewertung:",
-                "analyteRequired": "Analyt-Name ist erforderlich.",
-                "valueRequired": "Bitte einen gültigen Wert eingeben."
+                "title": "Paraméterek",
+                "newHint": "Mentsd el a leletet, hogy paramétereket adhass hozzá.",
+                "none": "Még nincsenek paraméterek.",
+                "analyte": "Paraméter",
+                "value": "Érték",
+                "unit": "Mértékegység",
+                "refLow": "Ref. min.",
+                "refHigh": "Ref. max.",
+                "add": "Paraméter hozzáadása",
+                "delete": "Paraméter törlése",
+                "flagPreview": "Értékelés:",
+                "analyteRequired": "A paraméter neve kötelező.",
+                "valueRequired": "Adj meg érvényes értéket."
             }
         },
         "activity": {
             "title": "Tevékenység",
             "emptyTitle": "Még nincs tevékenység",
             "emptyDesc": "Az edzéseid itt jelennek meg.",
-            "personsLabel": "Person",
-            "prevWeek": "Vorherige Woche",
-            "nextWeek": "Nächste Woche",
-            "add": "Einheit erfassen",
-            "addShort": "Erfassen",
-            "edit": "Bearbeiten",
-            "chartTitle": "Dauer je Wochentag",
-            "noData": "Keine Einheiten in dieser Woche.",
-            "noEntries": "Noch keine Einheiten in dieser Woche.",
-            "logTitle": "Trainings-Log",
-            "loadError": "Aktivitäten konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Einheit gespeichert.",
-            "saveError": "Einheit konnte nicht gespeichert werden.",
-            "deleted": "Einheit gelöscht.",
-            "deleteError": "Einheit konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diese Einheit wirklich löschen?",
-            "invalid": "Bitte gültige Werte eingeben.",
+            "personsLabel": "Személy",
+            "prevWeek": "Előző hét",
+            "nextWeek": "Következő hét",
+            "add": "Edzés rögzítése",
+            "addShort": "Rögzítés",
+            "edit": "Szerkesztés",
+            "chartTitle": "Időtartam a hét napjai szerint",
+            "noData": "Nincs edzés ezen a héten.",
+            "noEntries": "Még nincs edzés ezen a héten.",
+            "logTitle": "Edzésnapló",
+            "loadError": "A tevékenységek nem tölthetők be.",
+            "loadErrorDesc": "Kérjük, próbáld újra később.",
+            "retry": "Újrapróbálkozás",
+            "saved": "Edzés mentve.",
+            "saveError": "Az edzés nem menthető.",
+            "deleted": "Edzés törölve.",
+            "deleteError": "Az edzés nem törölhető.",
+            "deleteConfirm": "Biztosan törlöd ezt az edzést?",
+            "invalid": "Adj meg érvényes értékeket.",
             "totals": {
-                "count": "Einheiten",
-                "duration": "Gesamt-Dauer",
-                "distance": "Gesamt-Distanz",
-                "calories": "Kalorien"
+                "count": "Edzések",
+                "duration": "Összes időtartam",
+                "distance": "Összes távolság",
+                "calories": "Kalória"
             },
             "unit": {
-                "min": "{{value}} Min",
+                "min": "{{value}} perc",
                 "km": "{{value}} km",
                 "kcal": "{{value}} kcal"
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
-                "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "mon": "H",
+                "tue": "K",
+                "wed": "Sze",
+                "thu": "Cs",
+                "fri": "P",
+                "sat": "Szo",
+                "sun": "V"
             },
             "type": {
-                "running": "Laufen",
-                "cycling": "Radfahren",
-                "swimming": "Schwimmen",
-                "strength": "Kraft",
-                "yoga": "Yoga",
-                "walking": "Gehen",
-                "other": "Sonstiges",
-                "custom": "Eigene…"
+                "running": "Futás",
+                "cycling": "Kerékpározás",
+                "swimming": "Úszás",
+                "strength": "Erősítés",
+                "yoga": "Jóga",
+                "walking": "Séta",
+                "other": "Egyéb",
+                "custom": "Egyéni…"
             },
             "field": {
-                "type": "Art",
-                "typePlaceholder": "Art wählen",
-                "customType": "Eigene Art",
-                "performedAt": "Durchgeführt am",
-                "duration": "Dauer (Min)",
-                "distance": "Distanz (km)",
-                "calories": "Kalorien (kcal)",
-                "intensity": "Intensität",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "type": "Típus",
+                "typePlaceholder": "Válassz típust",
+                "customType": "Egyéni típus",
+                "performedAt": "Elvégzés dátuma",
+                "duration": "Időtartam (perc)",
+                "distance": "Távolság (km)",
+                "calories": "Kalória (kcal)",
+                "intensity": "Intenzitás",
+                "visibility": "Láthatóság",
+                "note": "Megjegyzés"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Privát",
+                "family": "Család"
             },
             "col": {
-                "day": "Tag"
+                "day": "Nap"
             }
         },
         "export": {
-            "title": "Export (CSV)",
-            "rangeFrom": "Von",
-            "rangeTo": "Bis",
-            "vitals": "Vitalwerte",
-            "activities": "Aktivitäten",
-            "labs": "Laborwerte",
-            "medsLogs": "Einnahmeprotokoll",
-            "hint": "Lädt die Daten des gewählten Zeitraums als CSV-Datei herunter."
+            "title": "Exportálás (CSV)",
+            "rangeFrom": "Ettől",
+            "rangeTo": "Eddig",
+            "vitals": "Vitális értékek",
+            "activities": "Tevékenységek",
+            "labs": "Laborértékek",
+            "medsLogs": "Bevételi napló",
+            "hint": "Letölti a kiválasztott időszak adatait CSV-fájlként."
         },
-        "disclaimer": "Nur zur persönlichen Dokumentation. Kein Ersatz für ärztliche Beratung, Diagnose oder Behandlung.",
-        "readOnlyBanner": "Du siehst die Daten von {{name}} — nur Lesen."
+        "disclaimer": "Csak személyes dokumentációhoz. Nem helyettesíti az orvosi tanácsadást, diagnózist vagy kezelést.",
+        "readOnlyBanner": "{{name}} adatait látod – csak olvasható."
     }
 }

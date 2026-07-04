@@ -2306,319 +2306,319 @@
             "title": "अवलोकन",
             "emptyTitle": "यहाँ अभी कुछ नहीं है",
             "emptyDesc": "आपका स्वास्थ्य अवलोकन यहाँ दिखाई देगा।",
-            "personsLabel": "Person auswählen",
-            "loadError": "Übersicht konnte nicht geladen werden",
-            "loadErrorDesc": "Bitte versuche es erneut.",
-            "retry": "Erneut versuchen",
+            "personsLabel": "व्यक्ति चुनें",
+            "loadError": "अवलोकन लोड नहीं हो सका",
+            "loadErrorDesc": "कृपया पुनः प्रयास करें।",
+            "retry": "पुनः प्रयास करें",
             "dueToday": {
-                "title": "Heute fällig"
+                "title": "आज देय"
             },
             "adherence": {
-                "title": "Einnahmetreue",
-                "noData": "Noch keine Einnahmedaten",
-                "period": "Letzte {{days}} Tage",
-                "streakLabel": "Tage in Folge"
+                "title": "सेवन अनुपालन",
+                "noData": "अभी तक कोई सेवन डेटा नहीं",
+                "period": "पिछले {{days}} दिन",
+                "streakLabel": "लगातार दिन"
             },
             "vitals": {
-                "title": "Letzte Vitalwerte"
+                "title": "नवीनतम महत्वपूर्ण मान"
             },
             "quick": {
-                "title": "Schnell erfassen",
-                "vital": "Vitalwert",
-                "activity": "Aktivität",
-                "meds": "Medikamente"
+                "title": "त्वरित प्रविष्टि",
+                "vital": "महत्वपूर्ण मान",
+                "activity": "गतिविधि",
+                "meds": "दवाइयाँ"
             },
             "reminders": {
-                "title": "Nächste Erinnerungen",
-                "empty": "Heute keine weiteren Einnahmen"
+                "title": "अगली याद-दिलावनी",
+                "empty": "आज कोई और सेवन नहीं"
             }
         },
         "vitals": {
             "title": "महत्वपूर्ण मान",
             "emptyTitle": "अभी कोई माप नहीं",
             "emptyDesc": "रक्तचाप, रक्त शर्करा और वज़न यहाँ दिखाई देंगे।",
-            "add": "Messwert erfassen",
-            "addShort": "Erfassen",
-            "personsLabel": "Person",
-            "you": "Ich",
-            "chartTitle": "Verlauf",
-            "prevPeriod": "Vorheriger Zeitraum",
-            "nextPeriod": "Nächster Zeitraum",
-            "noData": "Keine Messwerte im gewählten Zeitraum.",
-            "noValue": "Noch kein Wert",
-            "loadError": "Messwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Messwert gespeichert.",
-            "saveError": "Messwert konnte nicht gespeichert werden.",
-            "invalidValue": "Bitte gültige Werte eingeben.",
+            "add": "मापन दर्ज करें",
+            "addShort": "दर्ज करें",
+            "personsLabel": "व्यक्ति",
+            "you": "मैं",
+            "chartTitle": "प्रवृत्ति",
+            "prevPeriod": "पिछली अवधि",
+            "nextPeriod": "अगली अवधि",
+            "noData": "चयनित अवधि में कोई मापन नहीं।",
+            "noValue": "अभी तक कोई मान नहीं",
+            "loadError": "मापन लोड नहीं हो सके।",
+            "loadErrorDesc": "कृपया बाद में पुनः प्रयास करें।",
+            "retry": "पुनः प्रयास करें",
+            "saved": "मापन सहेजा गया।",
+            "saveError": "मापन सहेजा नहीं जा सका।",
+            "invalidValue": "कृपया मान्य मान दर्ज करें।",
             "range": {
-                "week": "Woche",
-                "month": "Monat",
-                "year": "Jahr"
+                "week": "सप्ताह",
+                "month": "माह",
+                "year": "वर्ष"
             },
             "metric": {
-                "bp": "Blutdruck",
-                "glucose": "Blutzucker",
-                "weight": "Gewicht",
-                "spo2": "Sauerstoffsättigung",
-                "temp": "Temperatur"
+                "bp": "रक्तचाप",
+                "glucose": "रक्त शर्करा",
+                "weight": "वज़न",
+                "spo2": "ऑक्सीजन संतृप्ति",
+                "temp": "तापमान"
             },
             "channel": {
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
-                "pulse": "Puls"
+                "systolic": "सिस्टोलिक",
+                "diastolic": "डायस्टोलिक",
+                "pulse": "नाड़ी"
             },
             "field": {
-                "type": "Art",
-                "value": "Wert",
-                "unit": "Einheit",
-                "measuredAt": "Gemessen am",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
-                "pulse": "Puls"
+                "type": "प्रकार",
+                "value": "मान",
+                "unit": "इकाई",
+                "measuredAt": "मापन तिथि",
+                "note": "टिप्पणी",
+                "visibility": "दृश्यता",
+                "systolic": "सिस्टोलिक",
+                "diastolic": "डायस्टोलिक",
+                "pulse": "नाड़ी"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "निजी",
+                "family": "परिवार"
             }
         },
         "meds": {
             "title": "दवाइयाँ",
             "emptyTitle": "अभी कोई दवा नहीं",
             "emptyDesc": "शेड्यूल और रिमाइंडर वाली दवाइयाँ यहाँ दिखाई देंगी।",
-            "add": "Medikament hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Medikament bearbeiten",
-            "loadError": "Medikamente konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Medikament gespeichert.",
-            "saveError": "Medikament konnte nicht gespeichert werden.",
-            "deleted": "Medikament gelöscht.",
-            "deleteError": "Medikament konnte nicht gelöscht werden.",
-            "deleteConfirm": "Dieses Medikament wirklich löschen? Einnahmeplan und Verlauf werden mitgelöscht.",
-            "doseSaved": "Eintrag aktualisiert.",
-            "doseError": "Eintrag konnte nicht gespeichert werden.",
-            "nameRequired": "Name ist erforderlich.",
-            "noMeds": "Noch keine Medikamente.",
-            "personsLabel": "Person",
-            "take": "Genommen",
-            "skip": "Überspringen",
+            "add": "दवा जोड़ें",
+            "addShort": "जोड़ें",
+            "edit": "दवा संपादित करें",
+            "loadError": "दवाइयाँ लोड नहीं हो सकीं।",
+            "loadErrorDesc": "कृपया बाद में पुनः प्रयास करें।",
+            "retry": "पुनः प्रयास करें",
+            "saved": "दवा सहेजी गई।",
+            "saveError": "दवा सहेजी नहीं जा सकी।",
+            "deleted": "दवा हटाई गई।",
+            "deleteError": "दवा हटाई नहीं जा सकी।",
+            "deleteConfirm": "क्या वाकई यह दवा हटानी है? सेवन योजना और इतिहास भी हट जाएंगे।",
+            "doseSaved": "प्रविष्टि अपडेट की गई।",
+            "doseError": "प्रविष्टि सहेजी नहीं जा सकी।",
+            "nameRequired": "नाम आवश्यक है।",
+            "noMeds": "अभी तक कोई दवा नहीं।",
+            "personsLabel": "व्यक्ति",
+            "take": "ली गई",
+            "skip": "छोड़ें",
             "dueToday": {
-                "title": "Heute fällig",
-                "empty": "Heute ist nichts fällig."
+                "title": "आज देय",
+                "empty": "आज कुछ भी देय नहीं है।"
             },
             "adherence": {
-                "title": "Therapietreue",
-                "period": "Letzte {{days}} Tage",
-                "noData": "Noch keine geplanten Dosen im Zeitraum.",
-                "summary": "{{taken}} von {{planned}} genommen"
+                "title": "उपचार अनुपालन",
+                "period": "पिछले {{days}} दिन",
+                "noData": "इस अवधि में अभी तक कोई नियोजित खुराक नहीं।",
+                "summary": "{{planned}} में से {{taken}} ली गई"
             },
             "status": {
-                "taken": "Genommen",
-                "skipped": "Übersprungen",
-                "pending": "Offen"
+                "taken": "ली गई",
+                "skipped": "छोड़ी गई",
+                "pending": "लंबित"
             },
             "badge": {
-                "prn": "Bei Bedarf",
-                "inactive": "Inaktiv"
+                "prn": "आवश्यकता पड़ने पर",
+                "inactive": "निष्क्रिय"
             },
             "stock": {
-                "label": "Bestand",
-                "low": "Nachfüllen",
-                "out": "Leer"
+                "label": "स्टॉक",
+                "low": "पुनः भरें",
+                "out": "खत्म"
             },
             "field": {
-                "name": "Name",
-                "dosageText": "Dosis",
-                "form": "Form",
-                "stockQty": "Bestand",
-                "stockUnit": "Einheit",
-                "refillThreshold": "Nachfüll-Schwelle",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
-                "active": "Aktiv",
-                "prn": "Bei Bedarf (PRN)"
+                "name": "नाम",
+                "dosageText": "खुराक",
+                "form": "रूप",
+                "stockQty": "स्टॉक",
+                "stockUnit": "इकाई",
+                "refillThreshold": "पुनःपूर्ति सीमा",
+                "note": "टिप्पणी",
+                "visibility": "दृश्यता",
+                "active": "सक्रिय",
+                "prn": "आवश्यकता पड़ने पर (PRN)"
             },
             "schedule": {
-                "title": "Einnahmeplan",
-                "add": "Zeitfenster hinzufügen",
-                "time": "Uhrzeit",
-                "dose": "Dosis",
-                "days": "Wochentage",
-                "daily": "Täglich",
-                "none": "Noch keine Zeitfenster.",
-                "delete": "Zeitfenster löschen",
-                "newHint": "Speichere das Medikament, dann kannst du Zeitfenster hinzufügen.",
-                "timeRequired": "Uhrzeit ist erforderlich."
+                "title": "सेवन योजना",
+                "add": "समय जोड़ें",
+                "time": "समय",
+                "dose": "खुराक",
+                "days": "सप्ताह के दिन",
+                "daily": "प्रतिदिन",
+                "none": "अभी तक कोई समय नहीं।",
+                "delete": "समय हटाएं",
+                "newHint": "समय जोड़ने के लिए दवा सहेजें।",
+                "timeRequired": "समय आवश्यक है।"
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
-                "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "mon": "सोम",
+                "tue": "मंगल",
+                "wed": "बुध",
+                "thu": "गुरु",
+                "fri": "शुक्र",
+                "sat": "शनि",
+                "sun": "रवि"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "निजी",
+                "family": "परिवार"
             }
         },
         "labs": {
             "title": "लैब मान",
             "emptyTitle": "अभी कोई परिणाम नहीं",
             "emptyDesc": "संदर्भ श्रेणियों वाली लैब रिपोर्ट यहाँ दिखाई देंगी।",
-            "loadError": "Laborwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "personsLabel": "Person",
-            "reportsTitle": "Befunde",
-            "add": "Befund hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Bearbeiten",
-            "noReports": "Noch keine Befunde.",
-            "analyteCount": "{{count}} Analyten",
-            "abnormalBadge": "{{count}} auffällig",
-            "selectHint": "Wähle einen Befund, um die Analyten zu sehen.",
-            "noAnalytes": "Für diesen Befund sind noch keine Analyten erfasst.",
-            "dateRequired": "Befunddatum ist erforderlich.",
-            "saved": "Befund gespeichert.",
-            "saveError": "Befund konnte nicht gespeichert werden.",
-            "deleted": "Befund gelöscht.",
-            "deleteError": "Befund konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diesen Befund wirklich löschen? Alle Analyten werden mitgelöscht.",
+            "loadError": "प्रयोगशाला मान लोड नहीं हो सके।",
+            "loadErrorDesc": "कृपया बाद में पुनः प्रयास करें।",
+            "retry": "पुनः प्रयास करें",
+            "personsLabel": "व्यक्ति",
+            "reportsTitle": "रिपोर्ट",
+            "add": "रिपोर्ट जोड़ें",
+            "addShort": "जोड़ें",
+            "edit": "संपादित करें",
+            "noReports": "अभी तक कोई रिपोर्ट नहीं।",
+            "analyteCount": "{{count}} पैरामीटर",
+            "abnormalBadge": "{{count}} असामान्य",
+            "selectHint": "पैरामीटर देखने के लिए एक रिपोर्ट चुनें।",
+            "noAnalytes": "इस रिपोर्ट के लिए अभी तक कोई पैरामीटर दर्ज नहीं है।",
+            "dateRequired": "रिपोर्ट तिथि आवश्यक है।",
+            "saved": "रिपोर्ट सहेजी गई।",
+            "saveError": "रिपोर्ट सहेजी नहीं जा सकी।",
+            "deleted": "रिपोर्ट हटाई गई।",
+            "deleteError": "रिपोर्ट हटाई नहीं जा सकी।",
+            "deleteConfirm": "क्या वाकई यह रिपोर्ट हटानी है? सभी पैरामीटर भी हट जाएंगे।",
             "col": {
-                "analyte": "Analyt",
-                "value": "Wert",
-                "reference": "Referenz",
-                "flag": "Bewertung"
+                "analyte": "पैरामीटर",
+                "value": "मान",
+                "reference": "संदर्भ",
+                "flag": "मूल्यांकन"
             },
             "flag": {
-                "low": "Niedrig",
-                "normal": "Normal",
-                "high": "Hoch"
+                "low": "कम",
+                "normal": "सामान्य",
+                "high": "अधिक"
             },
             "trend": {
-                "title": "Verlauf",
-                "analyte": "Analyt",
-                "tooFew": "Mindestens zwei Befunde nötig, um einen Verlauf zu zeigen.",
-                "unit": "Einheit: {{unit}}"
+                "title": "प्रवृत्ति",
+                "analyte": "पैरामीटर",
+                "tooFew": "प्रवृत्ति दिखाने के लिए कम से कम दो रिपोर्ट आवश्यक हैं।",
+                "unit": "इकाई: {{unit}}"
             },
             "field": {
-                "reportDate": "Befunddatum",
-                "labName": "Labor",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "reportDate": "रिपोर्ट तिथि",
+                "labName": "प्रयोगशाला",
+                "visibility": "दृश्यता",
+                "note": "टिप्पणी"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "निजी",
+                "family": "परिवार"
             },
             "results": {
-                "title": "Analyten",
-                "newHint": "Speichere den Befund, dann kannst du Analyten hinzufügen.",
-                "none": "Noch keine Analyten.",
-                "analyte": "Analyt",
-                "value": "Wert",
-                "unit": "Einheit",
-                "refLow": "Referenz min.",
-                "refHigh": "Referenz max.",
-                "add": "Analyt hinzufügen",
-                "delete": "Analyt löschen",
-                "flagPreview": "Bewertung:",
-                "analyteRequired": "Analyt-Name ist erforderlich.",
-                "valueRequired": "Bitte einen gültigen Wert eingeben."
+                "title": "पैरामीटर",
+                "newHint": "पैरामीटर जोड़ने के लिए रिपोर्ट सहेजें।",
+                "none": "अभी तक कोई पैरामीटर नहीं।",
+                "analyte": "पैरामीटर",
+                "value": "मान",
+                "unit": "इकाई",
+                "refLow": "संदर्भ न्यून.",
+                "refHigh": "संदर्भ अधि.",
+                "add": "पैरामीटर जोड़ें",
+                "delete": "पैरामीटर हटाएं",
+                "flagPreview": "मूल्यांकन:",
+                "analyteRequired": "पैरामीटर नाम आवश्यक है।",
+                "valueRequired": "कृपया एक मान्य मान दर्ज करें।"
             }
         },
         "activity": {
             "title": "गतिविधि",
             "emptyTitle": "अभी कोई गतिविधि नहीं",
             "emptyDesc": "आपके वर्कआउट यहाँ दिखाई देंगे।",
-            "personsLabel": "Person",
-            "prevWeek": "Vorherige Woche",
-            "nextWeek": "Nächste Woche",
-            "add": "Einheit erfassen",
-            "addShort": "Erfassen",
-            "edit": "Bearbeiten",
-            "chartTitle": "Dauer je Wochentag",
-            "noData": "Keine Einheiten in dieser Woche.",
-            "noEntries": "Noch keine Einheiten in dieser Woche.",
-            "logTitle": "Trainings-Log",
-            "loadError": "Aktivitäten konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Einheit gespeichert.",
-            "saveError": "Einheit konnte nicht gespeichert werden.",
-            "deleted": "Einheit gelöscht.",
-            "deleteError": "Einheit konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diese Einheit wirklich löschen?",
-            "invalid": "Bitte gültige Werte eingeben.",
+            "personsLabel": "व्यक्ति",
+            "prevWeek": "पिछला सप्ताह",
+            "nextWeek": "अगला सप्ताह",
+            "add": "सत्र दर्ज करें",
+            "addShort": "दर्ज करें",
+            "edit": "संपादित करें",
+            "chartTitle": "सप्ताह के दिन के अनुसार अवधि",
+            "noData": "इस सप्ताह कोई सत्र नहीं।",
+            "noEntries": "इस सप्ताह अभी तक कोई सत्र नहीं।",
+            "logTitle": "प्रशिक्षण लॉग",
+            "loadError": "गतिविधियाँ लोड नहीं हो सकीं।",
+            "loadErrorDesc": "कृपया बाद में पुनः प्रयास करें।",
+            "retry": "पुनः प्रयास करें",
+            "saved": "सत्र सहेजा गया।",
+            "saveError": "सत्र सहेजा नहीं जा सका।",
+            "deleted": "सत्र हटाया गया।",
+            "deleteError": "सत्र हटाया नहीं जा सका।",
+            "deleteConfirm": "क्या वाकई यह सत्र हटाना है?",
+            "invalid": "कृपया मान्य मान दर्ज करें।",
             "totals": {
-                "count": "Einheiten",
-                "duration": "Gesamt-Dauer",
-                "distance": "Gesamt-Distanz",
-                "calories": "Kalorien"
+                "count": "सत्र",
+                "duration": "कुल अवधि",
+                "distance": "कुल दूरी",
+                "calories": "कैलोरी"
             },
             "unit": {
-                "min": "{{value}} Min",
-                "km": "{{value}} km",
-                "kcal": "{{value}} kcal"
+                "min": "{{value}} मिनट",
+                "km": "{{value}} किमी",
+                "kcal": "{{value}} किलो कैलोरी"
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
-                "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "mon": "सोम",
+                "tue": "मंगल",
+                "wed": "बुध",
+                "thu": "गुरु",
+                "fri": "शुक्र",
+                "sat": "शनि",
+                "sun": "रवि"
             },
             "type": {
-                "running": "Laufen",
-                "cycling": "Radfahren",
-                "swimming": "Schwimmen",
-                "strength": "Kraft",
-                "yoga": "Yoga",
-                "walking": "Gehen",
-                "other": "Sonstiges",
-                "custom": "Eigene…"
+                "running": "दौड़ना",
+                "cycling": "साइकिलिंग",
+                "swimming": "तैराकी",
+                "strength": "शक्ति",
+                "yoga": "योग",
+                "walking": "पैदल चलना",
+                "other": "अन्य",
+                "custom": "कस्टम…"
             },
             "field": {
-                "type": "Art",
-                "typePlaceholder": "Art wählen",
-                "customType": "Eigene Art",
-                "performedAt": "Durchgeführt am",
-                "duration": "Dauer (Min)",
-                "distance": "Distanz (km)",
-                "calories": "Kalorien (kcal)",
-                "intensity": "Intensität",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "type": "प्रकार",
+                "typePlaceholder": "प्रकार चुनें",
+                "customType": "कस्टम प्रकार",
+                "performedAt": "निष्पादन तिथि",
+                "duration": "अवधि (मिनट)",
+                "distance": "दूरी (किमी)",
+                "calories": "कैलोरी (किलो कैलोरी)",
+                "intensity": "तीव्रता",
+                "visibility": "दृश्यता",
+                "note": "टिप्पणी"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "निजी",
+                "family": "परिवार"
             },
             "col": {
-                "day": "Tag"
+                "day": "दिन"
             }
         },
         "export": {
-            "title": "Export (CSV)",
-            "rangeFrom": "Von",
-            "rangeTo": "Bis",
-            "vitals": "Vitalwerte",
-            "activities": "Aktivitäten",
-            "labs": "Laborwerte",
-            "medsLogs": "Einnahmeprotokoll",
-            "hint": "Lädt die Daten des gewählten Zeitraums als CSV-Datei herunter."
+            "title": "निर्यात (CSV)",
+            "rangeFrom": "से",
+            "rangeTo": "तक",
+            "vitals": "महत्वपूर्ण मान",
+            "activities": "गतिविधियाँ",
+            "labs": "प्रयोगशाला मान",
+            "medsLogs": "सेवन लॉग",
+            "hint": "चयनित अवधि का डेटा CSV फ़ाइल के रूप में डाउनलोड करता है।"
         },
-        "disclaimer": "Nur zur persönlichen Dokumentation. Kein Ersatz für ärztliche Beratung, Diagnose oder Behandlung.",
-        "readOnlyBanner": "Du siehst die Daten von {{name}} — nur Lesen."
+        "disclaimer": "केवल व्यक्तिगत दस्तावेज़ीकरण हेतु। यह चिकित्सकीय परामर्श, निदान या उपचार का विकल्प नहीं है।",
+        "readOnlyBanner": "आप {{name}} का डेटा देख रहे हैं — केवल पढ़ने योग्य।"
     }
 }

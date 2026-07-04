@@ -2306,319 +2306,319 @@
             "title": "Επισκόπηση",
             "emptyTitle": "Δεν υπάρχει τίποτα ακόμη",
             "emptyDesc": "Η επισκόπηση υγείας σας εμφανίζεται εδώ.",
-            "personsLabel": "Person auswählen",
-            "loadError": "Übersicht konnte nicht geladen werden",
-            "loadErrorDesc": "Bitte versuche es erneut.",
-            "retry": "Erneut versuchen",
+            "personsLabel": "Επιλογή ατόμου",
+            "loadError": "Δεν ήταν δυνατή η φόρτωση της επισκόπησης",
+            "loadErrorDesc": "Δοκιμάστε ξανά.",
+            "retry": "Δοκιμή ξανά",
             "dueToday": {
-                "title": "Heute fällig"
+                "title": "Για σήμερα"
             },
             "adherence": {
-                "title": "Einnahmetreue",
-                "noData": "Noch keine Einnahmedaten",
-                "period": "Letzte {{days}} Tage",
-                "streakLabel": "Tage in Folge"
+                "title": "Συμμόρφωση",
+                "noData": "Δεν υπάρχουν ακόμη δεδομένα λήψης",
+                "period": "Τελευταίες {{days}} ημέρες",
+                "streakLabel": "Συνεχόμενες ημέρες"
             },
             "vitals": {
-                "title": "Letzte Vitalwerte"
+                "title": "Πρόσφατα ζωτικά σημεία"
             },
             "quick": {
-                "title": "Schnell erfassen",
-                "vital": "Vitalwert",
-                "activity": "Aktivität",
-                "meds": "Medikamente"
+                "title": "Γρήγορη καταχώριση",
+                "vital": "Ζωτικό σημείο",
+                "activity": "Δραστηριότητα",
+                "meds": "Φάρμακα"
             },
             "reminders": {
-                "title": "Nächste Erinnerungen",
-                "empty": "Heute keine weiteren Einnahmen"
+                "title": "Επόμενες υπενθυμίσεις",
+                "empty": "Καμία άλλη λήψη για σήμερα"
             }
         },
         "vitals": {
             "title": "Ζωτικά σημεία",
             "emptyTitle": "Καμία μέτρηση ακόμη",
             "emptyDesc": "Πίεση, σάκχαρο και βάρος εμφανίζονται εδώ.",
-            "add": "Messwert erfassen",
-            "addShort": "Erfassen",
-            "personsLabel": "Person",
-            "you": "Ich",
-            "chartTitle": "Verlauf",
-            "prevPeriod": "Vorheriger Zeitraum",
-            "nextPeriod": "Nächster Zeitraum",
-            "noData": "Keine Messwerte im gewählten Zeitraum.",
-            "noValue": "Noch kein Wert",
-            "loadError": "Messwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Messwert gespeichert.",
-            "saveError": "Messwert konnte nicht gespeichert werden.",
-            "invalidValue": "Bitte gültige Werte eingeben.",
+            "add": "Καταχώριση μέτρησης",
+            "addShort": "Καταχώριση",
+            "personsLabel": "Άτομο",
+            "you": "Εγώ",
+            "chartTitle": "Πορεία",
+            "prevPeriod": "Προηγούμενη περίοδος",
+            "nextPeriod": "Επόμενη περίοδος",
+            "noData": "Καμία μέτρηση στην επιλεγμένη περίοδο.",
+            "noValue": "Καμία τιμή ακόμη",
+            "loadError": "Δεν ήταν δυνατή η φόρτωση των μετρήσεων.",
+            "loadErrorDesc": "Δοκιμάστε ξανά αργότερα.",
+            "retry": "Δοκιμή ξανά",
+            "saved": "Η μέτρηση αποθηκεύτηκε.",
+            "saveError": "Δεν ήταν δυνατή η αποθήκευση της μέτρησης.",
+            "invalidValue": "Εισαγάγετε έγκυρες τιμές.",
             "range": {
-                "week": "Woche",
-                "month": "Monat",
-                "year": "Jahr"
+                "week": "Εβδομάδα",
+                "month": "Μήνας",
+                "year": "Έτος"
             },
             "metric": {
-                "bp": "Blutdruck",
-                "glucose": "Blutzucker",
-                "weight": "Gewicht",
-                "spo2": "Sauerstoffsättigung",
-                "temp": "Temperatur"
+                "bp": "Αρτηριακή πίεση",
+                "glucose": "Σάκχαρο αίματος",
+                "weight": "Βάρος",
+                "spo2": "Κορεσμός οξυγόνου",
+                "temp": "Θερμοκρασία"
             },
             "channel": {
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
-                "pulse": "Puls"
+                "systolic": "Συστολική",
+                "diastolic": "Διαστολική",
+                "pulse": "Σφυγμός"
             },
             "field": {
-                "type": "Art",
-                "value": "Wert",
-                "unit": "Einheit",
-                "measuredAt": "Gemessen am",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
-                "pulse": "Puls"
+                "type": "Τύπος",
+                "value": "Τιμή",
+                "unit": "Μονάδα",
+                "measuredAt": "Μετρήθηκε στις",
+                "note": "Σημείωση",
+                "visibility": "Ορατότητα",
+                "systolic": "Συστολική",
+                "diastolic": "Διαστολική",
+                "pulse": "Σφυγμός"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Ιδιωτικό",
+                "family": "Οικογένεια"
             }
         },
         "meds": {
             "title": "Φάρμακα",
             "emptyTitle": "Κανένα φάρμακο ακόμη",
             "emptyDesc": "Φάρμακα με πρόγραμμα και υπενθυμίσεις εμφανίζονται εδώ.",
-            "add": "Medikament hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Medikament bearbeiten",
-            "loadError": "Medikamente konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Medikament gespeichert.",
-            "saveError": "Medikament konnte nicht gespeichert werden.",
-            "deleted": "Medikament gelöscht.",
-            "deleteError": "Medikament konnte nicht gelöscht werden.",
-            "deleteConfirm": "Dieses Medikament wirklich löschen? Einnahmeplan und Verlauf werden mitgelöscht.",
-            "doseSaved": "Eintrag aktualisiert.",
-            "doseError": "Eintrag konnte nicht gespeichert werden.",
-            "nameRequired": "Name ist erforderlich.",
-            "noMeds": "Noch keine Medikamente.",
-            "personsLabel": "Person",
-            "take": "Genommen",
-            "skip": "Überspringen",
+            "add": "Προσθήκη φαρμάκου",
+            "addShort": "Προσθήκη",
+            "edit": "Επεξεργασία φαρμάκου",
+            "loadError": "Δεν ήταν δυνατή η φόρτωση των φαρμάκων.",
+            "loadErrorDesc": "Δοκιμάστε ξανά αργότερα.",
+            "retry": "Δοκιμή ξανά",
+            "saved": "Το φάρμακο αποθηκεύτηκε.",
+            "saveError": "Δεν ήταν δυνατή η αποθήκευση του φαρμάκου.",
+            "deleted": "Το φάρμακο διαγράφηκε.",
+            "deleteError": "Δεν ήταν δυνατή η διαγραφή του φαρμάκου.",
+            "deleteConfirm": "Διαγραφή αυτού του φαρμάκου; Θα διαγραφούν επίσης το πρόγραμμα λήψης και το ιστορικό.",
+            "doseSaved": "Η καταχώριση ενημερώθηκε.",
+            "doseError": "Δεν ήταν δυνατή η αποθήκευση της καταχώρισης.",
+            "nameRequired": "Το όνομα είναι υποχρεωτικό.",
+            "noMeds": "Δεν υπάρχουν ακόμη φάρμακα.",
+            "personsLabel": "Άτομο",
+            "take": "Ελήφθη",
+            "skip": "Παράλειψη",
             "dueToday": {
-                "title": "Heute fällig",
-                "empty": "Heute ist nichts fällig."
+                "title": "Για σήμερα",
+                "empty": "Δεν υπάρχει τίποτα για σήμερα."
             },
             "adherence": {
-                "title": "Therapietreue",
-                "period": "Letzte {{days}} Tage",
-                "noData": "Noch keine geplanten Dosen im Zeitraum.",
-                "summary": "{{taken}} von {{planned}} genommen"
+                "title": "Συμμόρφωση στη θεραπεία",
+                "period": "Τελευταίες {{days}} ημέρες",
+                "noData": "Δεν υπάρχουν ακόμη προγραμματισμένες δόσεις στην περίοδο.",
+                "summary": "Ελήφθησαν {{taken}} από {{planned}}"
             },
             "status": {
-                "taken": "Genommen",
-                "skipped": "Übersprungen",
-                "pending": "Offen"
+                "taken": "Ελήφθη",
+                "skipped": "Παραλείφθηκε",
+                "pending": "Εκκρεμεί"
             },
             "badge": {
-                "prn": "Bei Bedarf",
-                "inactive": "Inaktiv"
+                "prn": "Όταν χρειάζεται",
+                "inactive": "Ανενεργό"
             },
             "stock": {
-                "label": "Bestand",
-                "low": "Nachfüllen",
-                "out": "Leer"
+                "label": "Απόθεμα",
+                "low": "Αναπλήρωση",
+                "out": "Εξαντλήθηκε"
             },
             "field": {
-                "name": "Name",
-                "dosageText": "Dosis",
-                "form": "Form",
-                "stockQty": "Bestand",
-                "stockUnit": "Einheit",
-                "refillThreshold": "Nachfüll-Schwelle",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
-                "active": "Aktiv",
-                "prn": "Bei Bedarf (PRN)"
+                "name": "Όνομα",
+                "dosageText": "Δόση",
+                "form": "Μορφή",
+                "stockQty": "Απόθεμα",
+                "stockUnit": "Μονάδα",
+                "refillThreshold": "Όριο αναπλήρωσης",
+                "note": "Σημείωση",
+                "visibility": "Ορατότητα",
+                "active": "Ενεργό",
+                "prn": "Όταν χρειάζεται (PRN)"
             },
             "schedule": {
-                "title": "Einnahmeplan",
-                "add": "Zeitfenster hinzufügen",
-                "time": "Uhrzeit",
-                "dose": "Dosis",
-                "days": "Wochentage",
-                "daily": "Täglich",
-                "none": "Noch keine Zeitfenster.",
-                "delete": "Zeitfenster löschen",
-                "newHint": "Speichere das Medikament, dann kannst du Zeitfenster hinzufügen.",
-                "timeRequired": "Uhrzeit ist erforderlich."
+                "title": "Πρόγραμμα λήψης",
+                "add": "Προσθήκη ώρας",
+                "time": "Ώρα",
+                "dose": "Δόση",
+                "days": "Ημέρες εβδομάδας",
+                "daily": "Καθημερινά",
+                "none": "Δεν υπάρχουν ακόμη ώρες.",
+                "delete": "Διαγραφή ώρας",
+                "newHint": "Αποθηκεύστε το φάρμακο για να προσθέσετε ώρες.",
+                "timeRequired": "Η ώρα είναι υποχρεωτική."
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
-                "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "mon": "Δε",
+                "tue": "Τρ",
+                "wed": "Τε",
+                "thu": "Πε",
+                "fri": "Πα",
+                "sat": "Σα",
+                "sun": "Κυ"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Ιδιωτικό",
+                "family": "Οικογένεια"
             }
         },
         "labs": {
             "title": "Εργαστηριακά",
             "emptyTitle": "Κανένα αποτέλεσμα ακόμη",
             "emptyDesc": "Εργαστηριακές εξετάσεις με τιμές αναφοράς εμφανίζονται εδώ.",
-            "loadError": "Laborwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "personsLabel": "Person",
-            "reportsTitle": "Befunde",
-            "add": "Befund hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Bearbeiten",
-            "noReports": "Noch keine Befunde.",
-            "analyteCount": "{{count}} Analyten",
-            "abnormalBadge": "{{count}} auffällig",
-            "selectHint": "Wähle einen Befund, um die Analyten zu sehen.",
-            "noAnalytes": "Für diesen Befund sind noch keine Analyten erfasst.",
-            "dateRequired": "Befunddatum ist erforderlich.",
-            "saved": "Befund gespeichert.",
-            "saveError": "Befund konnte nicht gespeichert werden.",
-            "deleted": "Befund gelöscht.",
-            "deleteError": "Befund konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diesen Befund wirklich löschen? Alle Analyten werden mitgelöscht.",
+            "loadError": "Δεν ήταν δυνατή η φόρτωση των εργαστηριακών τιμών.",
+            "loadErrorDesc": "Δοκιμάστε ξανά αργότερα.",
+            "retry": "Δοκιμή ξανά",
+            "personsLabel": "Άτομο",
+            "reportsTitle": "Αποτελέσματα",
+            "add": "Προσθήκη αποτελέσματος",
+            "addShort": "Προσθήκη",
+            "edit": "Επεξεργασία",
+            "noReports": "Δεν υπάρχουν ακόμη αποτελέσματα.",
+            "analyteCount": "{{count}} αναλυτές",
+            "abnormalBadge": "{{count}} μη φυσιολογικά",
+            "selectHint": "Επιλέξτε ένα αποτέλεσμα για να δείτε τους αναλυτές.",
+            "noAnalytes": "Για αυτό το αποτέλεσμα δεν έχουν καταχωριστεί ακόμη αναλυτές.",
+            "dateRequired": "Η ημερομηνία αποτελέσματος είναι υποχρεωτική.",
+            "saved": "Το αποτέλεσμα αποθηκεύτηκε.",
+            "saveError": "Δεν ήταν δυνατή η αποθήκευση του αποτελέσματος.",
+            "deleted": "Το αποτέλεσμα διαγράφηκε.",
+            "deleteError": "Δεν ήταν δυνατή η διαγραφή του αποτελέσματος.",
+            "deleteConfirm": "Διαγραφή αυτού του αποτελέσματος; Θα διαγραφούν επίσης όλοι οι αναλυτές.",
             "col": {
-                "analyte": "Analyt",
-                "value": "Wert",
-                "reference": "Referenz",
-                "flag": "Bewertung"
+                "analyte": "Αναλυτής",
+                "value": "Τιμή",
+                "reference": "Αναφορά",
+                "flag": "Αξιολόγηση"
             },
             "flag": {
-                "low": "Niedrig",
-                "normal": "Normal",
-                "high": "Hoch"
+                "low": "Χαμηλό",
+                "normal": "Φυσιολογικό",
+                "high": "Υψηλό"
             },
             "trend": {
-                "title": "Verlauf",
-                "analyte": "Analyt",
-                "tooFew": "Mindestens zwei Befunde nötig, um einen Verlauf zu zeigen.",
-                "unit": "Einheit: {{unit}}"
+                "title": "Πορεία",
+                "analyte": "Αναλυτής",
+                "tooFew": "Χρειάζονται τουλάχιστον δύο αποτελέσματα για την προβολή πορείας.",
+                "unit": "Μονάδα: {{unit}}"
             },
             "field": {
-                "reportDate": "Befunddatum",
-                "labName": "Labor",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "reportDate": "Ημερομηνία αποτελέσματος",
+                "labName": "Εργαστήριο",
+                "visibility": "Ορατότητα",
+                "note": "Σημείωση"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Ιδιωτικό",
+                "family": "Οικογένεια"
             },
             "results": {
-                "title": "Analyten",
-                "newHint": "Speichere den Befund, dann kannst du Analyten hinzufügen.",
-                "none": "Noch keine Analyten.",
-                "analyte": "Analyt",
-                "value": "Wert",
-                "unit": "Einheit",
-                "refLow": "Referenz min.",
-                "refHigh": "Referenz max.",
-                "add": "Analyt hinzufügen",
-                "delete": "Analyt löschen",
-                "flagPreview": "Bewertung:",
-                "analyteRequired": "Analyt-Name ist erforderlich.",
-                "valueRequired": "Bitte einen gültigen Wert eingeben."
+                "title": "Αναλυτές",
+                "newHint": "Αποθηκεύστε το αποτέλεσμα για να προσθέσετε αναλυτές.",
+                "none": "Δεν υπάρχουν ακόμη αναλυτές.",
+                "analyte": "Αναλυτής",
+                "value": "Τιμή",
+                "unit": "Μονάδα",
+                "refLow": "Αναφ. ελάχ.",
+                "refHigh": "Αναφ. μέγ.",
+                "add": "Προσθήκη αναλυτή",
+                "delete": "Διαγραφή αναλυτή",
+                "flagPreview": "Αξιολόγηση:",
+                "analyteRequired": "Το όνομα του αναλυτή είναι υποχρεωτικό.",
+                "valueRequired": "Εισαγάγετε μια έγκυρη τιμή."
             }
         },
         "activity": {
             "title": "Δραστηριότητα",
             "emptyTitle": "Καμία δραστηριότητα ακόμη",
             "emptyDesc": "Οι προπονήσεις σας εμφανίζονται εδώ.",
-            "personsLabel": "Person",
-            "prevWeek": "Vorherige Woche",
-            "nextWeek": "Nächste Woche",
-            "add": "Einheit erfassen",
-            "addShort": "Erfassen",
-            "edit": "Bearbeiten",
-            "chartTitle": "Dauer je Wochentag",
-            "noData": "Keine Einheiten in dieser Woche.",
-            "noEntries": "Noch keine Einheiten in dieser Woche.",
-            "logTitle": "Trainings-Log",
-            "loadError": "Aktivitäten konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Einheit gespeichert.",
-            "saveError": "Einheit konnte nicht gespeichert werden.",
-            "deleted": "Einheit gelöscht.",
-            "deleteError": "Einheit konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diese Einheit wirklich löschen?",
-            "invalid": "Bitte gültige Werte eingeben.",
+            "personsLabel": "Άτομο",
+            "prevWeek": "Προηγούμενη εβδομάδα",
+            "nextWeek": "Επόμενη εβδομάδα",
+            "add": "Καταχώριση προπόνησης",
+            "addShort": "Καταχώριση",
+            "edit": "Επεξεργασία",
+            "chartTitle": "Διάρκεια ανά ημέρα εβδομάδας",
+            "noData": "Καμία προπόνηση αυτή την εβδομάδα.",
+            "noEntries": "Δεν υπάρχουν ακόμη προπονήσεις αυτή την εβδομάδα.",
+            "logTitle": "Ημερολόγιο προπονήσεων",
+            "loadError": "Δεν ήταν δυνατή η φόρτωση των δραστηριοτήτων.",
+            "loadErrorDesc": "Δοκιμάστε ξανά αργότερα.",
+            "retry": "Δοκιμή ξανά",
+            "saved": "Η προπόνηση αποθηκεύτηκε.",
+            "saveError": "Δεν ήταν δυνατή η αποθήκευση της προπόνησης.",
+            "deleted": "Η προπόνηση διαγράφηκε.",
+            "deleteError": "Δεν ήταν δυνατή η διαγραφή της προπόνησης.",
+            "deleteConfirm": "Διαγραφή αυτής της προπόνησης;",
+            "invalid": "Εισαγάγετε έγκυρες τιμές.",
             "totals": {
-                "count": "Einheiten",
-                "duration": "Gesamt-Dauer",
-                "distance": "Gesamt-Distanz",
-                "calories": "Kalorien"
+                "count": "Προπονήσεις",
+                "duration": "Συνολική διάρκεια",
+                "distance": "Συνολική απόσταση",
+                "calories": "Θερμίδες"
             },
             "unit": {
-                "min": "{{value}} Min",
-                "km": "{{value}} km",
+                "min": "{{value}} λεπτά",
+                "km": "{{value}} χλμ",
                 "kcal": "{{value}} kcal"
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
-                "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "mon": "Δε",
+                "tue": "Τρ",
+                "wed": "Τε",
+                "thu": "Πε",
+                "fri": "Πα",
+                "sat": "Σα",
+                "sun": "Κυ"
             },
             "type": {
-                "running": "Laufen",
-                "cycling": "Radfahren",
-                "swimming": "Schwimmen",
-                "strength": "Kraft",
-                "yoga": "Yoga",
-                "walking": "Gehen",
-                "other": "Sonstiges",
-                "custom": "Eigene…"
+                "running": "Τρέξιμο",
+                "cycling": "Ποδηλασία",
+                "swimming": "Κολύμβηση",
+                "strength": "Ενδυνάμωση",
+                "yoga": "Γιόγκα",
+                "walking": "Περπάτημα",
+                "other": "Άλλο",
+                "custom": "Προσαρμοσμένο…"
             },
             "field": {
-                "type": "Art",
-                "typePlaceholder": "Art wählen",
-                "customType": "Eigene Art",
-                "performedAt": "Durchgeführt am",
-                "duration": "Dauer (Min)",
-                "distance": "Distanz (km)",
-                "calories": "Kalorien (kcal)",
-                "intensity": "Intensität",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "type": "Τύπος",
+                "typePlaceholder": "Επιλογή τύπου",
+                "customType": "Προσαρμοσμένος τύπος",
+                "performedAt": "Πραγματοποιήθηκε στις",
+                "duration": "Διάρκεια (λεπτά)",
+                "distance": "Απόσταση (χλμ)",
+                "calories": "Θερμίδες (kcal)",
+                "intensity": "Ένταση",
+                "visibility": "Ορατότητα",
+                "note": "Σημείωση"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Ιδιωτικό",
+                "family": "Οικογένεια"
             },
             "col": {
-                "day": "Tag"
+                "day": "Ημέρα"
             }
         },
         "export": {
-            "title": "Export (CSV)",
-            "rangeFrom": "Von",
-            "rangeTo": "Bis",
-            "vitals": "Vitalwerte",
-            "activities": "Aktivitäten",
-            "labs": "Laborwerte",
-            "medsLogs": "Einnahmeprotokoll",
-            "hint": "Lädt die Daten des gewählten Zeitraums als CSV-Datei herunter."
+            "title": "Εξαγωγή (CSV)",
+            "rangeFrom": "Από",
+            "rangeTo": "Έως",
+            "vitals": "Ζωτικά σημεία",
+            "activities": "Δραστηριότητες",
+            "labs": "Εργαστηριακές τιμές",
+            "medsLogs": "Αρχείο λήψεων",
+            "hint": "Λαμβάνει τα δεδομένα της επιλεγμένης περιόδου ως αρχείο CSV."
         },
-        "disclaimer": "Nur zur persönlichen Dokumentation. Kein Ersatz für ärztliche Beratung, Diagnose oder Behandlung.",
-        "readOnlyBanner": "Du siehst die Daten von {{name}} — nur Lesen."
+        "disclaimer": "Μόνο για προσωπική τεκμηρίωση. Δεν υποκαθιστά ιατρική συμβουλή, διάγνωση ή θεραπεία.",
+        "readOnlyBanner": "Βλέπετε τα δεδομένα του/της {{name}} — μόνο για ανάγνωση."
     }
 }

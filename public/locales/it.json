@@ -2306,319 +2306,319 @@
             "title": "Panoramica",
             "emptyTitle": "Ancora niente qui",
             "emptyDesc": "La tua panoramica sulla salute appare qui.",
-            "personsLabel": "Person auswählen",
-            "loadError": "Übersicht konnte nicht geladen werden",
-            "loadErrorDesc": "Bitte versuche es erneut.",
-            "retry": "Erneut versuchen",
+            "personsLabel": "Seleziona persona",
+            "loadError": "Impossibile caricare la panoramica",
+            "loadErrorDesc": "Riprova.",
+            "retry": "Riprova",
             "dueToday": {
-                "title": "Heute fällig"
+                "title": "In scadenza oggi"
             },
             "adherence": {
-                "title": "Einnahmetreue",
-                "noData": "Noch keine Einnahmedaten",
-                "period": "Letzte {{days}} Tage",
-                "streakLabel": "Tage in Folge"
+                "title": "Aderenza",
+                "noData": "Ancora nessun dato sulle assunzioni",
+                "period": "Ultimi {{days}} giorni",
+                "streakLabel": "Giorni consecutivi"
             },
             "vitals": {
-                "title": "Letzte Vitalwerte"
+                "title": "Ultimi parametri vitali"
             },
             "quick": {
-                "title": "Schnell erfassen",
-                "vital": "Vitalwert",
-                "activity": "Aktivität",
-                "meds": "Medikamente"
+                "title": "Registrazione rapida",
+                "vital": "Parametro vitale",
+                "activity": "Attività",
+                "meds": "Farmaci"
             },
             "reminders": {
-                "title": "Nächste Erinnerungen",
-                "empty": "Heute keine weiteren Einnahmen"
+                "title": "Prossimi promemoria",
+                "empty": "Nessun'altra assunzione oggi"
             }
         },
         "vitals": {
             "title": "Parametri vitali",
             "emptyTitle": "Nessuna misurazione",
             "emptyDesc": "Pressione, glicemia e peso appaiono qui.",
-            "add": "Messwert erfassen",
-            "addShort": "Erfassen",
-            "personsLabel": "Person",
-            "you": "Ich",
-            "chartTitle": "Verlauf",
-            "prevPeriod": "Vorheriger Zeitraum",
-            "nextPeriod": "Nächster Zeitraum",
-            "noData": "Keine Messwerte im gewählten Zeitraum.",
-            "noValue": "Noch kein Wert",
-            "loadError": "Messwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Messwert gespeichert.",
-            "saveError": "Messwert konnte nicht gespeichert werden.",
-            "invalidValue": "Bitte gültige Werte eingeben.",
+            "add": "Registra misurazione",
+            "addShort": "Registra",
+            "personsLabel": "Persona",
+            "you": "Io",
+            "chartTitle": "Andamento",
+            "prevPeriod": "Periodo precedente",
+            "nextPeriod": "Periodo successivo",
+            "noData": "Nessuna misurazione nel periodo selezionato.",
+            "noValue": "Ancora nessun valore",
+            "loadError": "Impossibile caricare le misurazioni.",
+            "loadErrorDesc": "Riprova più tardi.",
+            "retry": "Riprova",
+            "saved": "Misurazione salvata.",
+            "saveError": "Impossibile salvare la misurazione.",
+            "invalidValue": "Inserisci valori validi.",
             "range": {
-                "week": "Woche",
-                "month": "Monat",
-                "year": "Jahr"
+                "week": "Settimana",
+                "month": "Mese",
+                "year": "Anno"
             },
             "metric": {
-                "bp": "Blutdruck",
-                "glucose": "Blutzucker",
-                "weight": "Gewicht",
-                "spo2": "Sauerstoffsättigung",
-                "temp": "Temperatur"
+                "bp": "Pressione arteriosa",
+                "glucose": "Glicemia",
+                "weight": "Peso",
+                "spo2": "Saturazione di ossigeno",
+                "temp": "Temperatura"
             },
             "channel": {
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
-                "pulse": "Puls"
+                "systolic": "Sistolica",
+                "diastolic": "Diastolica",
+                "pulse": "Battito"
             },
             "field": {
-                "type": "Art",
-                "value": "Wert",
-                "unit": "Einheit",
-                "measuredAt": "Gemessen am",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
-                "pulse": "Puls"
+                "type": "Tipo",
+                "value": "Valore",
+                "unit": "Unità",
+                "measuredAt": "Misurato il",
+                "note": "Nota",
+                "visibility": "Visibilità",
+                "systolic": "Sistolica",
+                "diastolic": "Diastolica",
+                "pulse": "Battito"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Privato",
+                "family": "Famiglia"
             }
         },
         "meds": {
             "title": "Farmaci",
             "emptyTitle": "Nessun farmaco",
             "emptyDesc": "I farmaci con orari e promemoria appaiono qui.",
-            "add": "Medikament hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Medikament bearbeiten",
-            "loadError": "Medikamente konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Medikament gespeichert.",
-            "saveError": "Medikament konnte nicht gespeichert werden.",
-            "deleted": "Medikament gelöscht.",
-            "deleteError": "Medikament konnte nicht gelöscht werden.",
-            "deleteConfirm": "Dieses Medikament wirklich löschen? Einnahmeplan und Verlauf werden mitgelöscht.",
-            "doseSaved": "Eintrag aktualisiert.",
-            "doseError": "Eintrag konnte nicht gespeichert werden.",
-            "nameRequired": "Name ist erforderlich.",
-            "noMeds": "Noch keine Medikamente.",
-            "personsLabel": "Person",
-            "take": "Genommen",
-            "skip": "Überspringen",
+            "add": "Aggiungi farmaco",
+            "addShort": "Aggiungi",
+            "edit": "Modifica farmaco",
+            "loadError": "Impossibile caricare i farmaci.",
+            "loadErrorDesc": "Riprova più tardi.",
+            "retry": "Riprova",
+            "saved": "Farmaco salvato.",
+            "saveError": "Impossibile salvare il farmaco.",
+            "deleted": "Farmaco eliminato.",
+            "deleteError": "Impossibile eliminare il farmaco.",
+            "deleteConfirm": "Eliminare davvero questo farmaco? Verranno eliminati anche il piano di assunzione e lo storico.",
+            "doseSaved": "Voce aggiornata.",
+            "doseError": "Impossibile salvare la voce.",
+            "nameRequired": "Il nome è obbligatorio.",
+            "noMeds": "Ancora nessun farmaco.",
+            "personsLabel": "Persona",
+            "take": "Assunto",
+            "skip": "Salta",
             "dueToday": {
-                "title": "Heute fällig",
-                "empty": "Heute ist nichts fällig."
+                "title": "In scadenza oggi",
+                "empty": "Oggi non c'è nulla in scadenza."
             },
             "adherence": {
-                "title": "Therapietreue",
-                "period": "Letzte {{days}} Tage",
-                "noData": "Noch keine geplanten Dosen im Zeitraum.",
-                "summary": "{{taken}} von {{planned}} genommen"
+                "title": "Aderenza terapeutica",
+                "period": "Ultimi {{days}} giorni",
+                "noData": "Ancora nessuna dose pianificata nel periodo.",
+                "summary": "{{taken}} su {{planned}} assunte"
             },
             "status": {
-                "taken": "Genommen",
-                "skipped": "Übersprungen",
-                "pending": "Offen"
+                "taken": "Assunto",
+                "skipped": "Saltato",
+                "pending": "In sospeso"
             },
             "badge": {
-                "prn": "Bei Bedarf",
-                "inactive": "Inaktiv"
+                "prn": "Al bisogno",
+                "inactive": "Inattivo"
             },
             "stock": {
-                "label": "Bestand",
-                "low": "Nachfüllen",
-                "out": "Leer"
+                "label": "Scorta",
+                "low": "Da riordinare",
+                "out": "Esaurito"
             },
             "field": {
-                "name": "Name",
-                "dosageText": "Dosis",
-                "form": "Form",
-                "stockQty": "Bestand",
-                "stockUnit": "Einheit",
-                "refillThreshold": "Nachfüll-Schwelle",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
-                "active": "Aktiv",
-                "prn": "Bei Bedarf (PRN)"
+                "name": "Nome",
+                "dosageText": "Dose",
+                "form": "Forma",
+                "stockQty": "Scorta",
+                "stockUnit": "Unità",
+                "refillThreshold": "Soglia di riordino",
+                "note": "Nota",
+                "visibility": "Visibilità",
+                "active": "Attivo",
+                "prn": "Al bisogno (PRN)"
             },
             "schedule": {
-                "title": "Einnahmeplan",
-                "add": "Zeitfenster hinzufügen",
-                "time": "Uhrzeit",
-                "dose": "Dosis",
-                "days": "Wochentage",
-                "daily": "Täglich",
-                "none": "Noch keine Zeitfenster.",
-                "delete": "Zeitfenster löschen",
-                "newHint": "Speichere das Medikament, dann kannst du Zeitfenster hinzufügen.",
-                "timeRequired": "Uhrzeit ist erforderlich."
+                "title": "Piano di assunzione",
+                "add": "Aggiungi fascia oraria",
+                "time": "Ora",
+                "dose": "Dose",
+                "days": "Giorni della settimana",
+                "daily": "Ogni giorno",
+                "none": "Ancora nessuna fascia oraria.",
+                "delete": "Elimina fascia oraria",
+                "newHint": "Salva il farmaco per poter aggiungere le fasce orarie.",
+                "timeRequired": "L'ora è obbligatoria."
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
-                "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "mon": "Lun",
+                "tue": "Mar",
+                "wed": "Mer",
+                "thu": "Gio",
+                "fri": "Ven",
+                "sat": "Sab",
+                "sun": "Dom"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Privato",
+                "family": "Famiglia"
             }
         },
         "labs": {
             "title": "Esami",
             "emptyTitle": "Nessun risultato",
             "emptyDesc": "I referti con intervalli di riferimento appaiono qui.",
-            "loadError": "Laborwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "personsLabel": "Person",
-            "reportsTitle": "Befunde",
-            "add": "Befund hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Bearbeiten",
-            "noReports": "Noch keine Befunde.",
-            "analyteCount": "{{count}} Analyten",
-            "abnormalBadge": "{{count}} auffällig",
-            "selectHint": "Wähle einen Befund, um die Analyten zu sehen.",
-            "noAnalytes": "Für diesen Befund sind noch keine Analyten erfasst.",
-            "dateRequired": "Befunddatum ist erforderlich.",
-            "saved": "Befund gespeichert.",
-            "saveError": "Befund konnte nicht gespeichert werden.",
-            "deleted": "Befund gelöscht.",
-            "deleteError": "Befund konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diesen Befund wirklich löschen? Alle Analyten werden mitgelöscht.",
+            "loadError": "Impossibile caricare gli esami di laboratorio.",
+            "loadErrorDesc": "Riprova più tardi.",
+            "retry": "Riprova",
+            "personsLabel": "Persona",
+            "reportsTitle": "Referti",
+            "add": "Aggiungi referto",
+            "addShort": "Aggiungi",
+            "edit": "Modifica",
+            "noReports": "Ancora nessun referto.",
+            "analyteCount": "{{count}} analiti",
+            "abnormalBadge": "{{count}} anomali",
+            "selectHint": "Seleziona un referto per vedere gli analiti.",
+            "noAnalytes": "Per questo referto non sono ancora stati registrati analiti.",
+            "dateRequired": "La data del referto è obbligatoria.",
+            "saved": "Referto salvato.",
+            "saveError": "Impossibile salvare il referto.",
+            "deleted": "Referto eliminato.",
+            "deleteError": "Impossibile eliminare il referto.",
+            "deleteConfirm": "Eliminare davvero questo referto? Verranno eliminati anche tutti gli analiti.",
             "col": {
-                "analyte": "Analyt",
-                "value": "Wert",
-                "reference": "Referenz",
-                "flag": "Bewertung"
+                "analyte": "Analita",
+                "value": "Valore",
+                "reference": "Riferimento",
+                "flag": "Valutazione"
             },
             "flag": {
-                "low": "Niedrig",
-                "normal": "Normal",
-                "high": "Hoch"
+                "low": "Basso",
+                "normal": "Normale",
+                "high": "Alto"
             },
             "trend": {
-                "title": "Verlauf",
-                "analyte": "Analyt",
-                "tooFew": "Mindestens zwei Befunde nötig, um einen Verlauf zu zeigen.",
-                "unit": "Einheit: {{unit}}"
+                "title": "Andamento",
+                "analyte": "Analita",
+                "tooFew": "Sono necessari almeno due referti per mostrare un andamento.",
+                "unit": "Unità: {{unit}}"
             },
             "field": {
-                "reportDate": "Befunddatum",
-                "labName": "Labor",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "reportDate": "Data del referto",
+                "labName": "Laboratorio",
+                "visibility": "Visibilità",
+                "note": "Nota"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Privato",
+                "family": "Famiglia"
             },
             "results": {
-                "title": "Analyten",
-                "newHint": "Speichere den Befund, dann kannst du Analyten hinzufügen.",
-                "none": "Noch keine Analyten.",
-                "analyte": "Analyt",
-                "value": "Wert",
-                "unit": "Einheit",
-                "refLow": "Referenz min.",
-                "refHigh": "Referenz max.",
-                "add": "Analyt hinzufügen",
-                "delete": "Analyt löschen",
-                "flagPreview": "Bewertung:",
-                "analyteRequired": "Analyt-Name ist erforderlich.",
-                "valueRequired": "Bitte einen gültigen Wert eingeben."
+                "title": "Analiti",
+                "newHint": "Salva il referto per poter aggiungere gli analiti.",
+                "none": "Ancora nessun analita.",
+                "analyte": "Analita",
+                "value": "Valore",
+                "unit": "Unità",
+                "refLow": "Rif. min.",
+                "refHigh": "Rif. max.",
+                "add": "Aggiungi analita",
+                "delete": "Elimina analita",
+                "flagPreview": "Valutazione:",
+                "analyteRequired": "Il nome dell'analita è obbligatorio.",
+                "valueRequired": "Inserisci un valore valido."
             }
         },
         "activity": {
             "title": "Attività",
             "emptyTitle": "Nessuna attività",
             "emptyDesc": "I tuoi allenamenti appaiono qui.",
-            "personsLabel": "Person",
-            "prevWeek": "Vorherige Woche",
-            "nextWeek": "Nächste Woche",
-            "add": "Einheit erfassen",
-            "addShort": "Erfassen",
-            "edit": "Bearbeiten",
-            "chartTitle": "Dauer je Wochentag",
-            "noData": "Keine Einheiten in dieser Woche.",
-            "noEntries": "Noch keine Einheiten in dieser Woche.",
-            "logTitle": "Trainings-Log",
-            "loadError": "Aktivitäten konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Einheit gespeichert.",
-            "saveError": "Einheit konnte nicht gespeichert werden.",
-            "deleted": "Einheit gelöscht.",
-            "deleteError": "Einheit konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diese Einheit wirklich löschen?",
-            "invalid": "Bitte gültige Werte eingeben.",
+            "personsLabel": "Persona",
+            "prevWeek": "Settimana precedente",
+            "nextWeek": "Settimana successiva",
+            "add": "Registra sessione",
+            "addShort": "Registra",
+            "edit": "Modifica",
+            "chartTitle": "Durata per giorno della settimana",
+            "noData": "Nessuna sessione questa settimana.",
+            "noEntries": "Ancora nessuna sessione questa settimana.",
+            "logTitle": "Diario allenamenti",
+            "loadError": "Impossibile caricare le attività.",
+            "loadErrorDesc": "Riprova più tardi.",
+            "retry": "Riprova",
+            "saved": "Sessione salvata.",
+            "saveError": "Impossibile salvare la sessione.",
+            "deleted": "Sessione eliminata.",
+            "deleteError": "Impossibile eliminare la sessione.",
+            "deleteConfirm": "Eliminare davvero questa sessione?",
+            "invalid": "Inserisci valori validi.",
             "totals": {
-                "count": "Einheiten",
-                "duration": "Gesamt-Dauer",
-                "distance": "Gesamt-Distanz",
-                "calories": "Kalorien"
+                "count": "Sessioni",
+                "duration": "Durata totale",
+                "distance": "Distanza totale",
+                "calories": "Calorie"
             },
             "unit": {
-                "min": "{{value}} Min",
+                "min": "{{value}} min",
                 "km": "{{value}} km",
                 "kcal": "{{value}} kcal"
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
-                "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "mon": "Lun",
+                "tue": "Mar",
+                "wed": "Mer",
+                "thu": "Gio",
+                "fri": "Ven",
+                "sat": "Sab",
+                "sun": "Dom"
             },
             "type": {
-                "running": "Laufen",
-                "cycling": "Radfahren",
-                "swimming": "Schwimmen",
-                "strength": "Kraft",
+                "running": "Corsa",
+                "cycling": "Ciclismo",
+                "swimming": "Nuoto",
+                "strength": "Forza",
                 "yoga": "Yoga",
-                "walking": "Gehen",
-                "other": "Sonstiges",
-                "custom": "Eigene…"
+                "walking": "Camminata",
+                "other": "Altro",
+                "custom": "Personalizzato…"
             },
             "field": {
-                "type": "Art",
-                "typePlaceholder": "Art wählen",
-                "customType": "Eigene Art",
-                "performedAt": "Durchgeführt am",
-                "duration": "Dauer (Min)",
-                "distance": "Distanz (km)",
-                "calories": "Kalorien (kcal)",
-                "intensity": "Intensität",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "type": "Tipo",
+                "typePlaceholder": "Scegli un tipo",
+                "customType": "Tipo personalizzato",
+                "performedAt": "Svolto il",
+                "duration": "Durata (min)",
+                "distance": "Distanza (km)",
+                "calories": "Calorie (kcal)",
+                "intensity": "Intensità",
+                "visibility": "Visibilità",
+                "note": "Nota"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Privato",
+                "family": "Famiglia"
             },
             "col": {
-                "day": "Tag"
+                "day": "Giorno"
             }
         },
         "export": {
-            "title": "Export (CSV)",
-            "rangeFrom": "Von",
-            "rangeTo": "Bis",
-            "vitals": "Vitalwerte",
-            "activities": "Aktivitäten",
-            "labs": "Laborwerte",
-            "medsLogs": "Einnahmeprotokoll",
-            "hint": "Lädt die Daten des gewählten Zeitraums als CSV-Datei herunter."
+            "title": "Esporta (CSV)",
+            "rangeFrom": "Da",
+            "rangeTo": "A",
+            "vitals": "Parametri vitali",
+            "activities": "Attività",
+            "labs": "Esami di laboratorio",
+            "medsLogs": "Registro assunzioni",
+            "hint": "Scarica i dati del periodo selezionato come file CSV."
         },
-        "disclaimer": "Nur zur persönlichen Dokumentation. Kein Ersatz für ärztliche Beratung, Diagnose oder Behandlung.",
-        "readOnlyBanner": "Du siehst die Daten von {{name}} — nur Lesen."
+        "disclaimer": "Solo per documentazione personale. Non sostituisce la consulenza, la diagnosi o il trattamento medico.",
+        "readOnlyBanner": "Stai visualizzando i dati di {{name}} — sola lettura."
     }
 }

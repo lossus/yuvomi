@@ -2306,319 +2306,319 @@
             "title": "Resumen",
             "emptyTitle": "Aún no hay nada",
             "emptyDesc": "Tu resumen de salud aparece aquí.",
-            "personsLabel": "Person auswählen",
-            "loadError": "Übersicht konnte nicht geladen werden",
-            "loadErrorDesc": "Bitte versuche es erneut.",
-            "retry": "Erneut versuchen",
+            "personsLabel": "Seleccionar persona",
+            "loadError": "No se pudo cargar el resumen",
+            "loadErrorDesc": "Inténtalo de nuevo.",
+            "retry": "Reintentar",
             "dueToday": {
-                "title": "Heute fällig"
+                "title": "Para hoy"
             },
             "adherence": {
-                "title": "Einnahmetreue",
-                "noData": "Noch keine Einnahmedaten",
-                "period": "Letzte {{days}} Tage",
-                "streakLabel": "Tage in Folge"
+                "title": "Adherencia",
+                "noData": "Aún no hay datos de tomas",
+                "period": "Últimos {{days}} días",
+                "streakLabel": "Días seguidos"
             },
             "vitals": {
-                "title": "Letzte Vitalwerte"
+                "title": "Últimas constantes"
             },
             "quick": {
-                "title": "Schnell erfassen",
-                "vital": "Vitalwert",
-                "activity": "Aktivität",
-                "meds": "Medikamente"
+                "title": "Registro rápido",
+                "vital": "Constante",
+                "activity": "Actividad",
+                "meds": "Medicamentos"
             },
             "reminders": {
-                "title": "Nächste Erinnerungen",
-                "empty": "Heute keine weiteren Einnahmen"
+                "title": "Próximos recordatorios",
+                "empty": "Hoy no hay más tomas"
             }
         },
         "vitals": {
             "title": "Constantes",
             "emptyTitle": "Sin mediciones",
             "emptyDesc": "La tensión, la glucosa y el peso aparecen aquí.",
-            "add": "Messwert erfassen",
-            "addShort": "Erfassen",
-            "personsLabel": "Person",
-            "you": "Ich",
-            "chartTitle": "Verlauf",
-            "prevPeriod": "Vorheriger Zeitraum",
-            "nextPeriod": "Nächster Zeitraum",
-            "noData": "Keine Messwerte im gewählten Zeitraum.",
-            "noValue": "Noch kein Wert",
-            "loadError": "Messwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Messwert gespeichert.",
-            "saveError": "Messwert konnte nicht gespeichert werden.",
-            "invalidValue": "Bitte gültige Werte eingeben.",
+            "add": "Registrar medición",
+            "addShort": "Registrar",
+            "personsLabel": "Persona",
+            "you": "Yo",
+            "chartTitle": "Evolución",
+            "prevPeriod": "Periodo anterior",
+            "nextPeriod": "Periodo siguiente",
+            "noData": "No hay mediciones en el periodo seleccionado.",
+            "noValue": "Aún sin valor",
+            "loadError": "No se pudieron cargar las mediciones.",
+            "loadErrorDesc": "Inténtalo de nuevo más tarde.",
+            "retry": "Reintentar",
+            "saved": "Medición guardada.",
+            "saveError": "No se pudo guardar la medición.",
+            "invalidValue": "Introduce valores válidos.",
             "range": {
-                "week": "Woche",
-                "month": "Monat",
-                "year": "Jahr"
+                "week": "Semana",
+                "month": "Mes",
+                "year": "Año"
             },
             "metric": {
-                "bp": "Blutdruck",
-                "glucose": "Blutzucker",
-                "weight": "Gewicht",
-                "spo2": "Sauerstoffsättigung",
-                "temp": "Temperatur"
+                "bp": "Tensión arterial",
+                "glucose": "Glucosa",
+                "weight": "Peso",
+                "spo2": "Saturación de oxígeno",
+                "temp": "Temperatura"
             },
             "channel": {
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
-                "pulse": "Puls"
+                "systolic": "Sistólica",
+                "diastolic": "Diastólica",
+                "pulse": "Pulso"
             },
             "field": {
-                "type": "Art",
-                "value": "Wert",
-                "unit": "Einheit",
-                "measuredAt": "Gemessen am",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
-                "pulse": "Puls"
+                "type": "Tipo",
+                "value": "Valor",
+                "unit": "Unidad",
+                "measuredAt": "Medido el",
+                "note": "Nota",
+                "visibility": "Visibilidad",
+                "systolic": "Sistólica",
+                "diastolic": "Diastólica",
+                "pulse": "Pulso"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Privado",
+                "family": "Familia"
             }
         },
         "meds": {
             "title": "Medicamentos",
             "emptyTitle": "Sin medicamentos",
             "emptyDesc": "Los medicamentos con pautas y recordatorios aparecen aquí.",
-            "add": "Medikament hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Medikament bearbeiten",
-            "loadError": "Medikamente konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Medikament gespeichert.",
-            "saveError": "Medikament konnte nicht gespeichert werden.",
-            "deleted": "Medikament gelöscht.",
-            "deleteError": "Medikament konnte nicht gelöscht werden.",
-            "deleteConfirm": "Dieses Medikament wirklich löschen? Einnahmeplan und Verlauf werden mitgelöscht.",
-            "doseSaved": "Eintrag aktualisiert.",
-            "doseError": "Eintrag konnte nicht gespeichert werden.",
-            "nameRequired": "Name ist erforderlich.",
-            "noMeds": "Noch keine Medikamente.",
-            "personsLabel": "Person",
-            "take": "Genommen",
-            "skip": "Überspringen",
+            "add": "Añadir medicamento",
+            "addShort": "Añadir",
+            "edit": "Editar medicamento",
+            "loadError": "No se pudieron cargar los medicamentos.",
+            "loadErrorDesc": "Inténtalo de nuevo más tarde.",
+            "retry": "Reintentar",
+            "saved": "Medicamento guardado.",
+            "saveError": "No se pudo guardar el medicamento.",
+            "deleted": "Medicamento eliminado.",
+            "deleteError": "No se pudo eliminar el medicamento.",
+            "deleteConfirm": "¿Eliminar este medicamento? También se eliminarán la pauta y el historial.",
+            "doseSaved": "Registro actualizado.",
+            "doseError": "No se pudo guardar el registro.",
+            "nameRequired": "El nombre es obligatorio.",
+            "noMeds": "Aún no hay medicamentos.",
+            "personsLabel": "Persona",
+            "take": "Tomado",
+            "skip": "Omitir",
             "dueToday": {
-                "title": "Heute fällig",
-                "empty": "Heute ist nichts fällig."
+                "title": "Para hoy",
+                "empty": "Hoy no hay nada pendiente."
             },
             "adherence": {
-                "title": "Therapietreue",
-                "period": "Letzte {{days}} Tage",
-                "noData": "Noch keine geplanten Dosen im Zeitraum.",
-                "summary": "{{taken}} von {{planned}} genommen"
+                "title": "Adherencia al tratamiento",
+                "period": "Últimos {{days}} días",
+                "noData": "Aún no hay dosis planificadas en el periodo.",
+                "summary": "{{taken}} de {{planned}} tomadas"
             },
             "status": {
-                "taken": "Genommen",
-                "skipped": "Übersprungen",
-                "pending": "Offen"
+                "taken": "Tomado",
+                "skipped": "Omitido",
+                "pending": "Pendiente"
             },
             "badge": {
-                "prn": "Bei Bedarf",
-                "inactive": "Inaktiv"
+                "prn": "Según necesidad",
+                "inactive": "Inactivo"
             },
             "stock": {
-                "label": "Bestand",
-                "low": "Nachfüllen",
-                "out": "Leer"
+                "label": "Existencias",
+                "low": "Reponer",
+                "out": "Agotado"
             },
             "field": {
-                "name": "Name",
+                "name": "Nombre",
                 "dosageText": "Dosis",
-                "form": "Form",
-                "stockQty": "Bestand",
-                "stockUnit": "Einheit",
-                "refillThreshold": "Nachfüll-Schwelle",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
-                "active": "Aktiv",
-                "prn": "Bei Bedarf (PRN)"
+                "form": "Forma",
+                "stockQty": "Existencias",
+                "stockUnit": "Unidad",
+                "refillThreshold": "Umbral de reposición",
+                "note": "Nota",
+                "visibility": "Visibilidad",
+                "active": "Activo",
+                "prn": "Según necesidad (PRN)"
             },
             "schedule": {
-                "title": "Einnahmeplan",
-                "add": "Zeitfenster hinzufügen",
-                "time": "Uhrzeit",
+                "title": "Pauta de tomas",
+                "add": "Añadir franja horaria",
+                "time": "Hora",
                 "dose": "Dosis",
-                "days": "Wochentage",
-                "daily": "Täglich",
-                "none": "Noch keine Zeitfenster.",
-                "delete": "Zeitfenster löschen",
-                "newHint": "Speichere das Medikament, dann kannst du Zeitfenster hinzufügen.",
-                "timeRequired": "Uhrzeit ist erforderlich."
+                "days": "Días de la semana",
+                "daily": "A diario",
+                "none": "Aún no hay franjas horarias.",
+                "delete": "Eliminar franja horaria",
+                "newHint": "Guarda el medicamento para poder añadir franjas horarias.",
+                "timeRequired": "La hora es obligatoria."
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
+                "mon": "Lu",
+                "tue": "Ma",
                 "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "thu": "Ju",
+                "fri": "Vi",
+                "sat": "Sá",
+                "sun": "Do"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Privado",
+                "family": "Familia"
             }
         },
         "labs": {
             "title": "Analíticas",
             "emptyTitle": "Sin resultados",
             "emptyDesc": "Los informes con valores de referencia aparecen aquí.",
-            "loadError": "Laborwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "personsLabel": "Person",
-            "reportsTitle": "Befunde",
-            "add": "Befund hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Bearbeiten",
-            "noReports": "Noch keine Befunde.",
-            "analyteCount": "{{count}} Analyten",
-            "abnormalBadge": "{{count}} auffällig",
-            "selectHint": "Wähle einen Befund, um die Analyten zu sehen.",
-            "noAnalytes": "Für diesen Befund sind noch keine Analyten erfasst.",
-            "dateRequired": "Befunddatum ist erforderlich.",
-            "saved": "Befund gespeichert.",
-            "saveError": "Befund konnte nicht gespeichert werden.",
-            "deleted": "Befund gelöscht.",
-            "deleteError": "Befund konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diesen Befund wirklich löschen? Alle Analyten werden mitgelöscht.",
+            "loadError": "No se pudieron cargar los análisis.",
+            "loadErrorDesc": "Inténtalo de nuevo más tarde.",
+            "retry": "Reintentar",
+            "personsLabel": "Persona",
+            "reportsTitle": "Informes",
+            "add": "Añadir informe",
+            "addShort": "Añadir",
+            "edit": "Editar",
+            "noReports": "Aún no hay informes.",
+            "analyteCount": "{{count}} parámetros",
+            "abnormalBadge": "{{count}} anómalos",
+            "selectHint": "Selecciona un informe para ver los parámetros.",
+            "noAnalytes": "Este informe aún no tiene parámetros registrados.",
+            "dateRequired": "La fecha del informe es obligatoria.",
+            "saved": "Informe guardado.",
+            "saveError": "No se pudo guardar el informe.",
+            "deleted": "Informe eliminado.",
+            "deleteError": "No se pudo eliminar el informe.",
+            "deleteConfirm": "¿Eliminar este informe? También se eliminarán todos los parámetros.",
             "col": {
-                "analyte": "Analyt",
-                "value": "Wert",
-                "reference": "Referenz",
-                "flag": "Bewertung"
+                "analyte": "Parámetro",
+                "value": "Valor",
+                "reference": "Referencia",
+                "flag": "Evaluación"
             },
             "flag": {
-                "low": "Niedrig",
+                "low": "Bajo",
                 "normal": "Normal",
-                "high": "Hoch"
+                "high": "Alto"
             },
             "trend": {
-                "title": "Verlauf",
-                "analyte": "Analyt",
-                "tooFew": "Mindestens zwei Befunde nötig, um einen Verlauf zu zeigen.",
-                "unit": "Einheit: {{unit}}"
+                "title": "Evolución",
+                "analyte": "Parámetro",
+                "tooFew": "Se necesitan al menos dos informes para mostrar una evolución.",
+                "unit": "Unidad: {{unit}}"
             },
             "field": {
-                "reportDate": "Befunddatum",
-                "labName": "Labor",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "reportDate": "Fecha del informe",
+                "labName": "Laboratorio",
+                "visibility": "Visibilidad",
+                "note": "Nota"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Privado",
+                "family": "Familia"
             },
             "results": {
-                "title": "Analyten",
-                "newHint": "Speichere den Befund, dann kannst du Analyten hinzufügen.",
-                "none": "Noch keine Analyten.",
-                "analyte": "Analyt",
-                "value": "Wert",
-                "unit": "Einheit",
-                "refLow": "Referenz min.",
-                "refHigh": "Referenz max.",
-                "add": "Analyt hinzufügen",
-                "delete": "Analyt löschen",
-                "flagPreview": "Bewertung:",
-                "analyteRequired": "Analyt-Name ist erforderlich.",
-                "valueRequired": "Bitte einen gültigen Wert eingeben."
+                "title": "Parámetros",
+                "newHint": "Guarda el informe para poder añadir parámetros.",
+                "none": "Aún no hay parámetros.",
+                "analyte": "Parámetro",
+                "value": "Valor",
+                "unit": "Unidad",
+                "refLow": "Ref. mín.",
+                "refHigh": "Ref. máx.",
+                "add": "Añadir parámetro",
+                "delete": "Eliminar parámetro",
+                "flagPreview": "Evaluación:",
+                "analyteRequired": "El nombre del parámetro es obligatorio.",
+                "valueRequired": "Introduce un valor válido."
             }
         },
         "activity": {
             "title": "Actividad",
             "emptyTitle": "Sin actividades",
             "emptyDesc": "Tus entrenamientos aparecen aquí.",
-            "personsLabel": "Person",
-            "prevWeek": "Vorherige Woche",
-            "nextWeek": "Nächste Woche",
-            "add": "Einheit erfassen",
-            "addShort": "Erfassen",
-            "edit": "Bearbeiten",
-            "chartTitle": "Dauer je Wochentag",
-            "noData": "Keine Einheiten in dieser Woche.",
-            "noEntries": "Noch keine Einheiten in dieser Woche.",
-            "logTitle": "Trainings-Log",
-            "loadError": "Aktivitäten konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Einheit gespeichert.",
-            "saveError": "Einheit konnte nicht gespeichert werden.",
-            "deleted": "Einheit gelöscht.",
-            "deleteError": "Einheit konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diese Einheit wirklich löschen?",
-            "invalid": "Bitte gültige Werte eingeben.",
+            "personsLabel": "Persona",
+            "prevWeek": "Semana anterior",
+            "nextWeek": "Semana siguiente",
+            "add": "Registrar sesión",
+            "addShort": "Registrar",
+            "edit": "Editar",
+            "chartTitle": "Duración por día de la semana",
+            "noData": "No hay sesiones esta semana.",
+            "noEntries": "Aún no hay sesiones esta semana.",
+            "logTitle": "Registro de entrenamiento",
+            "loadError": "No se pudieron cargar las actividades.",
+            "loadErrorDesc": "Inténtalo de nuevo más tarde.",
+            "retry": "Reintentar",
+            "saved": "Sesión guardada.",
+            "saveError": "No se pudo guardar la sesión.",
+            "deleted": "Sesión eliminada.",
+            "deleteError": "No se pudo eliminar la sesión.",
+            "deleteConfirm": "¿Eliminar esta sesión?",
+            "invalid": "Introduce valores válidos.",
             "totals": {
-                "count": "Einheiten",
-                "duration": "Gesamt-Dauer",
-                "distance": "Gesamt-Distanz",
-                "calories": "Kalorien"
+                "count": "Sesiones",
+                "duration": "Duración total",
+                "distance": "Distancia total",
+                "calories": "Calorías"
             },
             "unit": {
-                "min": "{{value}} Min",
+                "min": "{{value}} min",
                 "km": "{{value}} km",
                 "kcal": "{{value}} kcal"
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
+                "mon": "Lu",
+                "tue": "Ma",
                 "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "thu": "Ju",
+                "fri": "Vi",
+                "sat": "Sá",
+                "sun": "Do"
             },
             "type": {
-                "running": "Laufen",
-                "cycling": "Radfahren",
-                "swimming": "Schwimmen",
-                "strength": "Kraft",
+                "running": "Correr",
+                "cycling": "Ciclismo",
+                "swimming": "Natación",
+                "strength": "Fuerza",
                 "yoga": "Yoga",
-                "walking": "Gehen",
-                "other": "Sonstiges",
-                "custom": "Eigene…"
+                "walking": "Caminar",
+                "other": "Otro",
+                "custom": "Personalizado…"
             },
             "field": {
-                "type": "Art",
-                "typePlaceholder": "Art wählen",
-                "customType": "Eigene Art",
-                "performedAt": "Durchgeführt am",
-                "duration": "Dauer (Min)",
-                "distance": "Distanz (km)",
-                "calories": "Kalorien (kcal)",
-                "intensity": "Intensität",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "type": "Tipo",
+                "typePlaceholder": "Elige un tipo",
+                "customType": "Tipo personalizado",
+                "performedAt": "Realizado el",
+                "duration": "Duración (min)",
+                "distance": "Distancia (km)",
+                "calories": "Calorías (kcal)",
+                "intensity": "Intensidad",
+                "visibility": "Visibilidad",
+                "note": "Nota"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Privado",
+                "family": "Familia"
             },
             "col": {
-                "day": "Tag"
+                "day": "Día"
             }
         },
         "export": {
-            "title": "Export (CSV)",
-            "rangeFrom": "Von",
-            "rangeTo": "Bis",
-            "vitals": "Vitalwerte",
-            "activities": "Aktivitäten",
-            "labs": "Laborwerte",
-            "medsLogs": "Einnahmeprotokoll",
-            "hint": "Lädt die Daten des gewählten Zeitraums als CSV-Datei herunter."
+            "title": "Exportar (CSV)",
+            "rangeFrom": "Desde",
+            "rangeTo": "Hasta",
+            "vitals": "Constantes",
+            "activities": "Actividades",
+            "labs": "Análisis",
+            "medsLogs": "Registro de tomas",
+            "hint": "Descarga los datos del periodo seleccionado como archivo CSV."
         },
-        "disclaimer": "Nur zur persönlichen Dokumentation. Kein Ersatz für ärztliche Beratung, Diagnose oder Behandlung.",
-        "readOnlyBanner": "Du siehst die Daten von {{name}} — nur Lesen."
+        "disclaimer": "Solo para documentación personal. No sustituye el consejo, el diagnóstico ni el tratamiento médico.",
+        "readOnlyBanner": "Estás viendo los datos de {{name}}: solo lectura."
     }
 }

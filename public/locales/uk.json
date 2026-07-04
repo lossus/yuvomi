@@ -2306,319 +2306,319 @@
             "title": "Огляд",
             "emptyTitle": "Тут поки нічого немає",
             "emptyDesc": "Ваш огляд здоровʼя зʼявиться тут.",
-            "personsLabel": "Person auswählen",
-            "loadError": "Übersicht konnte nicht geladen werden",
-            "loadErrorDesc": "Bitte versuche es erneut.",
-            "retry": "Erneut versuchen",
+            "personsLabel": "Вибрати людину",
+            "loadError": "Не вдалося завантажити огляд",
+            "loadErrorDesc": "Будь ласка, спробуйте ще раз.",
+            "retry": "Повторити",
             "dueToday": {
-                "title": "Heute fällig"
+                "title": "На сьогодні"
             },
             "adherence": {
-                "title": "Einnahmetreue",
-                "noData": "Noch keine Einnahmedaten",
-                "period": "Letzte {{days}} Tage",
-                "streakLabel": "Tage in Folge"
+                "title": "Дотримання прийому",
+                "noData": "Поки немає даних про прийом",
+                "period": "Останні {{days}} днів",
+                "streakLabel": "Днів поспіль"
             },
             "vitals": {
-                "title": "Letzte Vitalwerte"
+                "title": "Останні показники"
             },
             "quick": {
-                "title": "Schnell erfassen",
-                "vital": "Vitalwert",
-                "activity": "Aktivität",
-                "meds": "Medikamente"
+                "title": "Швидке введення",
+                "vital": "Показник",
+                "activity": "Активність",
+                "meds": "Ліки"
             },
             "reminders": {
-                "title": "Nächste Erinnerungen",
-                "empty": "Heute keine weiteren Einnahmen"
+                "title": "Наступні нагадування",
+                "empty": "На сьогодні прийомів більше немає"
             }
         },
         "vitals": {
             "title": "Показники",
             "emptyTitle": "Ще немає вимірювань",
             "emptyDesc": "Тиск, цукор і вага зʼявляться тут.",
-            "add": "Messwert erfassen",
-            "addShort": "Erfassen",
-            "personsLabel": "Person",
-            "you": "Ich",
-            "chartTitle": "Verlauf",
-            "prevPeriod": "Vorheriger Zeitraum",
-            "nextPeriod": "Nächster Zeitraum",
-            "noData": "Keine Messwerte im gewählten Zeitraum.",
-            "noValue": "Noch kein Wert",
-            "loadError": "Messwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Messwert gespeichert.",
-            "saveError": "Messwert konnte nicht gespeichert werden.",
-            "invalidValue": "Bitte gültige Werte eingeben.",
+            "add": "Додати вимірювання",
+            "addShort": "Додати",
+            "personsLabel": "Людина",
+            "you": "Я",
+            "chartTitle": "Динаміка",
+            "prevPeriod": "Попередній період",
+            "nextPeriod": "Наступний період",
+            "noData": "Немає вимірювань за вибраний період.",
+            "noValue": "Поки немає значення",
+            "loadError": "Не вдалося завантажити вимірювання.",
+            "loadErrorDesc": "Будь ласка, спробуйте пізніше.",
+            "retry": "Повторити",
+            "saved": "Вимірювання збережено.",
+            "saveError": "Не вдалося зберегти вимірювання.",
+            "invalidValue": "Введіть коректні значення.",
             "range": {
-                "week": "Woche",
-                "month": "Monat",
-                "year": "Jahr"
+                "week": "Тиждень",
+                "month": "Місяць",
+                "year": "Рік"
             },
             "metric": {
-                "bp": "Blutdruck",
-                "glucose": "Blutzucker",
-                "weight": "Gewicht",
-                "spo2": "Sauerstoffsättigung",
-                "temp": "Temperatur"
+                "bp": "Артеріальний тиск",
+                "glucose": "Цукор у крові",
+                "weight": "Вага",
+                "spo2": "Насичення киснем",
+                "temp": "Температура"
             },
             "channel": {
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
-                "pulse": "Puls"
+                "systolic": "Систолічний",
+                "diastolic": "Діастолічний",
+                "pulse": "Пульс"
             },
             "field": {
-                "type": "Art",
-                "value": "Wert",
-                "unit": "Einheit",
-                "measuredAt": "Gemessen am",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
-                "pulse": "Puls"
+                "type": "Тип",
+                "value": "Значення",
+                "unit": "Одиниця",
+                "measuredAt": "Виміряно",
+                "note": "Нотатка",
+                "visibility": "Видимість",
+                "systolic": "Систолічний",
+                "diastolic": "Діастолічний",
+                "pulse": "Пульс"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Приватне",
+                "family": "Родина"
             }
         },
         "meds": {
             "title": "Ліки",
             "emptyTitle": "Ще немає ліків",
             "emptyDesc": "Ліки з розкладом і нагадуваннями зʼявляться тут.",
-            "add": "Medikament hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Medikament bearbeiten",
-            "loadError": "Medikamente konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Medikament gespeichert.",
-            "saveError": "Medikament konnte nicht gespeichert werden.",
-            "deleted": "Medikament gelöscht.",
-            "deleteError": "Medikament konnte nicht gelöscht werden.",
-            "deleteConfirm": "Dieses Medikament wirklich löschen? Einnahmeplan und Verlauf werden mitgelöscht.",
-            "doseSaved": "Eintrag aktualisiert.",
-            "doseError": "Eintrag konnte nicht gespeichert werden.",
-            "nameRequired": "Name ist erforderlich.",
-            "noMeds": "Noch keine Medikamente.",
-            "personsLabel": "Person",
-            "take": "Genommen",
-            "skip": "Überspringen",
+            "add": "Додати ліки",
+            "addShort": "Додати",
+            "edit": "Редагувати ліки",
+            "loadError": "Не вдалося завантажити ліки.",
+            "loadErrorDesc": "Будь ласка, спробуйте пізніше.",
+            "retry": "Повторити",
+            "saved": "Ліки збережено.",
+            "saveError": "Не вдалося зберегти ліки.",
+            "deleted": "Ліки видалено.",
+            "deleteError": "Не вдалося видалити ліки.",
+            "deleteConfirm": "Справді видалити ці ліки? Графік прийому та історію також буде видалено.",
+            "doseSaved": "Запис оновлено.",
+            "doseError": "Не вдалося зберегти запис.",
+            "nameRequired": "Назва обов’язкова.",
+            "noMeds": "Поки немає ліків.",
+            "personsLabel": "Людина",
+            "take": "Прийнято",
+            "skip": "Пропустити",
             "dueToday": {
-                "title": "Heute fällig",
-                "empty": "Heute ist nichts fällig."
+                "title": "На сьогодні",
+                "empty": "На сьогодні нічого немає."
             },
             "adherence": {
-                "title": "Therapietreue",
-                "period": "Letzte {{days}} Tage",
-                "noData": "Noch keine geplanten Dosen im Zeitraum.",
-                "summary": "{{taken}} von {{planned}} genommen"
+                "title": "Дотримання терапії",
+                "period": "Останні {{days}} днів",
+                "noData": "За період поки немає запланованих доз.",
+                "summary": "Прийнято {{taken}} з {{planned}}"
             },
             "status": {
-                "taken": "Genommen",
-                "skipped": "Übersprungen",
-                "pending": "Offen"
+                "taken": "Прийнято",
+                "skipped": "Пропущено",
+                "pending": "Очікує"
             },
             "badge": {
-                "prn": "Bei Bedarf",
-                "inactive": "Inaktiv"
+                "prn": "За потреби",
+                "inactive": "Неактивно"
             },
             "stock": {
-                "label": "Bestand",
-                "low": "Nachfüllen",
-                "out": "Leer"
+                "label": "Запас",
+                "low": "Поповнити",
+                "out": "Закінчилося"
             },
             "field": {
-                "name": "Name",
-                "dosageText": "Dosis",
-                "form": "Form",
-                "stockQty": "Bestand",
-                "stockUnit": "Einheit",
-                "refillThreshold": "Nachfüll-Schwelle",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
-                "active": "Aktiv",
-                "prn": "Bei Bedarf (PRN)"
+                "name": "Назва",
+                "dosageText": "Доза",
+                "form": "Форма",
+                "stockQty": "Запас",
+                "stockUnit": "Одиниця",
+                "refillThreshold": "Поріг поповнення",
+                "note": "Нотатка",
+                "visibility": "Видимість",
+                "active": "Активно",
+                "prn": "За потреби (PRN)"
             },
             "schedule": {
-                "title": "Einnahmeplan",
-                "add": "Zeitfenster hinzufügen",
-                "time": "Uhrzeit",
-                "dose": "Dosis",
-                "days": "Wochentage",
-                "daily": "Täglich",
-                "none": "Noch keine Zeitfenster.",
-                "delete": "Zeitfenster löschen",
-                "newHint": "Speichere das Medikament, dann kannst du Zeitfenster hinzufügen.",
-                "timeRequired": "Uhrzeit ist erforderlich."
+                "title": "Графік прийому",
+                "add": "Додати час",
+                "time": "Час",
+                "dose": "Доза",
+                "days": "Дні тижня",
+                "daily": "Щодня",
+                "none": "Поки немає часу прийому.",
+                "delete": "Видалити час",
+                "newHint": "Збережіть ліки, щоб додати час прийому.",
+                "timeRequired": "Час обов’язковий."
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
-                "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "mon": "Пн",
+                "tue": "Вт",
+                "wed": "Ср",
+                "thu": "Чт",
+                "fri": "Пт",
+                "sat": "Сб",
+                "sun": "Нд"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Приватне",
+                "family": "Родина"
             }
         },
         "labs": {
             "title": "Аналізи",
             "emptyTitle": "Ще немає результатів",
             "emptyDesc": "Результати аналізів з референсними діапазонами зʼявляться тут.",
-            "loadError": "Laborwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "personsLabel": "Person",
-            "reportsTitle": "Befunde",
-            "add": "Befund hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Bearbeiten",
-            "noReports": "Noch keine Befunde.",
-            "analyteCount": "{{count}} Analyten",
-            "abnormalBadge": "{{count}} auffällig",
-            "selectHint": "Wähle einen Befund, um die Analyten zu sehen.",
-            "noAnalytes": "Für diesen Befund sind noch keine Analyten erfasst.",
-            "dateRequired": "Befunddatum ist erforderlich.",
-            "saved": "Befund gespeichert.",
-            "saveError": "Befund konnte nicht gespeichert werden.",
-            "deleted": "Befund gelöscht.",
-            "deleteError": "Befund konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diesen Befund wirklich löschen? Alle Analyten werden mitgelöscht.",
+            "loadError": "Не вдалося завантажити лабораторні показники.",
+            "loadErrorDesc": "Будь ласка, спробуйте пізніше.",
+            "retry": "Повторити",
+            "personsLabel": "Людина",
+            "reportsTitle": "Результати",
+            "add": "Додати результат",
+            "addShort": "Додати",
+            "edit": "Редагувати",
+            "noReports": "Поки немає результатів.",
+            "analyteCount": "Показників: {{count}}",
+            "abnormalBadge": "{{count}} відхилень",
+            "selectHint": "Виберіть результат, щоб побачити показники.",
+            "noAnalytes": "Для цього результату ще не додано показників.",
+            "dateRequired": "Дата результату обов’язкова.",
+            "saved": "Результат збережено.",
+            "saveError": "Не вдалося зберегти результат.",
+            "deleted": "Результат видалено.",
+            "deleteError": "Не вдалося видалити результат.",
+            "deleteConfirm": "Справді видалити цей результат? Усі показники також буде видалено.",
             "col": {
-                "analyte": "Analyt",
-                "value": "Wert",
-                "reference": "Referenz",
-                "flag": "Bewertung"
+                "analyte": "Показник",
+                "value": "Значення",
+                "reference": "Референс",
+                "flag": "Оцінка"
             },
             "flag": {
-                "low": "Niedrig",
-                "normal": "Normal",
-                "high": "Hoch"
+                "low": "Низький",
+                "normal": "Норма",
+                "high": "Високий"
             },
             "trend": {
-                "title": "Verlauf",
-                "analyte": "Analyt",
-                "tooFew": "Mindestens zwei Befunde nötig, um einen Verlauf zu zeigen.",
-                "unit": "Einheit: {{unit}}"
+                "title": "Динаміка",
+                "analyte": "Показник",
+                "tooFew": "Для відображення динаміки потрібно щонайменше два результати.",
+                "unit": "Одиниця: {{unit}}"
             },
             "field": {
-                "reportDate": "Befunddatum",
-                "labName": "Labor",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "reportDate": "Дата результату",
+                "labName": "Лабораторія",
+                "visibility": "Видимість",
+                "note": "Нотатка"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Приватне",
+                "family": "Родина"
             },
             "results": {
-                "title": "Analyten",
-                "newHint": "Speichere den Befund, dann kannst du Analyten hinzufügen.",
-                "none": "Noch keine Analyten.",
-                "analyte": "Analyt",
-                "value": "Wert",
-                "unit": "Einheit",
-                "refLow": "Referenz min.",
-                "refHigh": "Referenz max.",
-                "add": "Analyt hinzufügen",
-                "delete": "Analyt löschen",
-                "flagPreview": "Bewertung:",
-                "analyteRequired": "Analyt-Name ist erforderlich.",
-                "valueRequired": "Bitte einen gültigen Wert eingeben."
+                "title": "Показники",
+                "newHint": "Збережіть результат, щоб додати показники.",
+                "none": "Поки немає показників.",
+                "analyte": "Показник",
+                "value": "Значення",
+                "unit": "Одиниця",
+                "refLow": "Референс мін.",
+                "refHigh": "Референс макс.",
+                "add": "Додати показник",
+                "delete": "Видалити показник",
+                "flagPreview": "Оцінка:",
+                "analyteRequired": "Назва показника обов’язкова.",
+                "valueRequired": "Введіть коректне значення."
             }
         },
         "activity": {
             "title": "Активність",
             "emptyTitle": "Ще немає активностей",
             "emptyDesc": "Ваші тренування зʼявляться тут.",
-            "personsLabel": "Person",
-            "prevWeek": "Vorherige Woche",
-            "nextWeek": "Nächste Woche",
-            "add": "Einheit erfassen",
-            "addShort": "Erfassen",
-            "edit": "Bearbeiten",
-            "chartTitle": "Dauer je Wochentag",
-            "noData": "Keine Einheiten in dieser Woche.",
-            "noEntries": "Noch keine Einheiten in dieser Woche.",
-            "logTitle": "Trainings-Log",
-            "loadError": "Aktivitäten konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Einheit gespeichert.",
-            "saveError": "Einheit konnte nicht gespeichert werden.",
-            "deleted": "Einheit gelöscht.",
-            "deleteError": "Einheit konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diese Einheit wirklich löschen?",
-            "invalid": "Bitte gültige Werte eingeben.",
+            "personsLabel": "Людина",
+            "prevWeek": "Попередній тиждень",
+            "nextWeek": "Наступний тиждень",
+            "add": "Додати тренування",
+            "addShort": "Додати",
+            "edit": "Редагувати",
+            "chartTitle": "Тривалість за днями тижня",
+            "noData": "Цього тижня тренувань немає.",
+            "noEntries": "Цього тижня поки немає тренувань.",
+            "logTitle": "Журнал тренувань",
+            "loadError": "Не вдалося завантажити активності.",
+            "loadErrorDesc": "Будь ласка, спробуйте пізніше.",
+            "retry": "Повторити",
+            "saved": "Тренування збережено.",
+            "saveError": "Не вдалося зберегти тренування.",
+            "deleted": "Тренування видалено.",
+            "deleteError": "Не вдалося видалити тренування.",
+            "deleteConfirm": "Справді видалити це тренування?",
+            "invalid": "Введіть коректні значення.",
             "totals": {
-                "count": "Einheiten",
-                "duration": "Gesamt-Dauer",
-                "distance": "Gesamt-Distanz",
-                "calories": "Kalorien"
+                "count": "Тренування",
+                "duration": "Загальна тривалість",
+                "distance": "Загальна дистанція",
+                "calories": "Калорії"
             },
             "unit": {
-                "min": "{{value}} Min",
-                "km": "{{value}} km",
-                "kcal": "{{value}} kcal"
+                "min": "{{value}} хв",
+                "km": "{{value}} км",
+                "kcal": "{{value}} ккал"
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
-                "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "mon": "Пн",
+                "tue": "Вт",
+                "wed": "Ср",
+                "thu": "Чт",
+                "fri": "Пт",
+                "sat": "Сб",
+                "sun": "Нд"
             },
             "type": {
-                "running": "Laufen",
-                "cycling": "Radfahren",
-                "swimming": "Schwimmen",
-                "strength": "Kraft",
-                "yoga": "Yoga",
-                "walking": "Gehen",
-                "other": "Sonstiges",
-                "custom": "Eigene…"
+                "running": "Біг",
+                "cycling": "Велосипед",
+                "swimming": "Плавання",
+                "strength": "Силове",
+                "yoga": "Йога",
+                "walking": "Ходьба",
+                "other": "Інше",
+                "custom": "Власне…"
             },
             "field": {
-                "type": "Art",
-                "typePlaceholder": "Art wählen",
-                "customType": "Eigene Art",
-                "performedAt": "Durchgeführt am",
-                "duration": "Dauer (Min)",
-                "distance": "Distanz (km)",
-                "calories": "Kalorien (kcal)",
-                "intensity": "Intensität",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "type": "Тип",
+                "typePlaceholder": "Виберіть тип",
+                "customType": "Власний тип",
+                "performedAt": "Виконано",
+                "duration": "Тривалість (хв)",
+                "distance": "Дистанція (км)",
+                "calories": "Калорії (ккал)",
+                "intensity": "Інтенсивність",
+                "visibility": "Видимість",
+                "note": "Нотатка"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Приватне",
+                "family": "Родина"
             },
             "col": {
-                "day": "Tag"
+                "day": "День"
             }
         },
         "export": {
-            "title": "Export (CSV)",
-            "rangeFrom": "Von",
-            "rangeTo": "Bis",
-            "vitals": "Vitalwerte",
-            "activities": "Aktivitäten",
-            "labs": "Laborwerte",
-            "medsLogs": "Einnahmeprotokoll",
-            "hint": "Lädt die Daten des gewählten Zeitraums als CSV-Datei herunter."
+            "title": "Експорт (CSV)",
+            "rangeFrom": "З",
+            "rangeTo": "По",
+            "vitals": "Показники",
+            "activities": "Активності",
+            "labs": "Лабораторні показники",
+            "medsLogs": "Журнал прийому",
+            "hint": "Завантажує дані вибраного періоду у вигляді файлу CSV."
         },
-        "disclaimer": "Nur zur persönlichen Dokumentation. Kein Ersatz für ärztliche Beratung, Diagnose oder Behandlung.",
-        "readOnlyBanner": "Du siehst die Daten von {{name}} — nur Lesen."
+        "disclaimer": "Лише для особистого обліку. Не замінює медичну консультацію, діагностику чи лікування.",
+        "readOnlyBanner": "Ви переглядаєте дані {{name}} — лише читання."
     }
 }

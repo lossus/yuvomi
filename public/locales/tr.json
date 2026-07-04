@@ -2306,319 +2306,319 @@
             "title": "Genel bakış",
             "emptyTitle": "Henüz bir şey yok",
             "emptyDesc": "Sağlık genel bakışın burada görünür.",
-            "personsLabel": "Person auswählen",
-            "loadError": "Übersicht konnte nicht geladen werden",
-            "loadErrorDesc": "Bitte versuche es erneut.",
-            "retry": "Erneut versuchen",
+            "personsLabel": "Kişi seç",
+            "loadError": "Genel bakış yüklenemedi",
+            "loadErrorDesc": "Lütfen tekrar deneyin.",
+            "retry": "Tekrar dene",
             "dueToday": {
-                "title": "Heute fällig"
+                "title": "Bugün yapılacak"
             },
             "adherence": {
-                "title": "Einnahmetreue",
-                "noData": "Noch keine Einnahmedaten",
-                "period": "Letzte {{days}} Tage",
-                "streakLabel": "Tage in Folge"
+                "title": "Kullanım uyumu",
+                "noData": "Henüz kullanım verisi yok",
+                "period": "Son {{days}} gün",
+                "streakLabel": "Ardışık gün"
             },
             "vitals": {
-                "title": "Letzte Vitalwerte"
+                "title": "Son yaşamsal değerler"
             },
             "quick": {
-                "title": "Schnell erfassen",
-                "vital": "Vitalwert",
-                "activity": "Aktivität",
-                "meds": "Medikamente"
+                "title": "Hızlı kayıt",
+                "vital": "Yaşamsal değer",
+                "activity": "Aktivite",
+                "meds": "İlaçlar"
             },
             "reminders": {
-                "title": "Nächste Erinnerungen",
-                "empty": "Heute keine weiteren Einnahmen"
+                "title": "Sonraki hatırlatmalar",
+                "empty": "Bugün başka kullanım yok"
             }
         },
         "vitals": {
             "title": "Yaşamsal değerler",
             "emptyTitle": "Henüz ölçüm yok",
             "emptyDesc": "Tansiyon, kan şekeri ve kilo burada görünür.",
-            "add": "Messwert erfassen",
-            "addShort": "Erfassen",
-            "personsLabel": "Person",
-            "you": "Ich",
-            "chartTitle": "Verlauf",
-            "prevPeriod": "Vorheriger Zeitraum",
-            "nextPeriod": "Nächster Zeitraum",
-            "noData": "Keine Messwerte im gewählten Zeitraum.",
-            "noValue": "Noch kein Wert",
-            "loadError": "Messwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Messwert gespeichert.",
-            "saveError": "Messwert konnte nicht gespeichert werden.",
-            "invalidValue": "Bitte gültige Werte eingeben.",
+            "add": "Ölçüm kaydet",
+            "addShort": "Kaydet",
+            "personsLabel": "Kişi",
+            "you": "Ben",
+            "chartTitle": "Seyir",
+            "prevPeriod": "Önceki dönem",
+            "nextPeriod": "Sonraki dönem",
+            "noData": "Seçilen dönemde ölçüm yok.",
+            "noValue": "Henüz değer yok",
+            "loadError": "Ölçümler yüklenemedi.",
+            "loadErrorDesc": "Lütfen daha sonra tekrar deneyin.",
+            "retry": "Tekrar dene",
+            "saved": "Ölçüm kaydedildi.",
+            "saveError": "Ölçüm kaydedilemedi.",
+            "invalidValue": "Lütfen geçerli değerler girin.",
             "range": {
-                "week": "Woche",
-                "month": "Monat",
-                "year": "Jahr"
+                "week": "Hafta",
+                "month": "Ay",
+                "year": "Yıl"
             },
             "metric": {
-                "bp": "Blutdruck",
-                "glucose": "Blutzucker",
-                "weight": "Gewicht",
-                "spo2": "Sauerstoffsättigung",
-                "temp": "Temperatur"
+                "bp": "Kan basıncı",
+                "glucose": "Kan şekeri",
+                "weight": "Kilo",
+                "spo2": "Oksijen satürasyonu",
+                "temp": "Sıcaklık"
             },
             "channel": {
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
-                "pulse": "Puls"
+                "systolic": "Sistolik",
+                "diastolic": "Diyastolik",
+                "pulse": "Nabız"
             },
             "field": {
-                "type": "Art",
-                "value": "Wert",
-                "unit": "Einheit",
-                "measuredAt": "Gemessen am",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
-                "pulse": "Puls"
+                "type": "Tür",
+                "value": "Değer",
+                "unit": "Birim",
+                "measuredAt": "Ölçüm tarihi",
+                "note": "Not",
+                "visibility": "Görünürlük",
+                "systolic": "Sistolik",
+                "diastolic": "Diyastolik",
+                "pulse": "Nabız"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Özel",
+                "family": "Aile"
             }
         },
         "meds": {
             "title": "İlaçlar",
             "emptyTitle": "Henüz ilaç yok",
             "emptyDesc": "Program ve hatırlatmalı ilaçlar burada görünür.",
-            "add": "Medikament hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Medikament bearbeiten",
-            "loadError": "Medikamente konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Medikament gespeichert.",
-            "saveError": "Medikament konnte nicht gespeichert werden.",
-            "deleted": "Medikament gelöscht.",
-            "deleteError": "Medikament konnte nicht gelöscht werden.",
-            "deleteConfirm": "Dieses Medikament wirklich löschen? Einnahmeplan und Verlauf werden mitgelöscht.",
-            "doseSaved": "Eintrag aktualisiert.",
-            "doseError": "Eintrag konnte nicht gespeichert werden.",
-            "nameRequired": "Name ist erforderlich.",
-            "noMeds": "Noch keine Medikamente.",
-            "personsLabel": "Person",
-            "take": "Genommen",
-            "skip": "Überspringen",
+            "add": "İlaç ekle",
+            "addShort": "Ekle",
+            "edit": "İlacı düzenle",
+            "loadError": "İlaçlar yüklenemedi.",
+            "loadErrorDesc": "Lütfen daha sonra tekrar deneyin.",
+            "retry": "Tekrar dene",
+            "saved": "İlaç kaydedildi.",
+            "saveError": "İlaç kaydedilemedi.",
+            "deleted": "İlaç silindi.",
+            "deleteError": "İlaç silinemedi.",
+            "deleteConfirm": "Bu ilaç gerçekten silinsin mi? Kullanım planı ve geçmiş de silinir.",
+            "doseSaved": "Kayıt güncellendi.",
+            "doseError": "Kayıt kaydedilemedi.",
+            "nameRequired": "Ad zorunludur.",
+            "noMeds": "Henüz ilaç yok.",
+            "personsLabel": "Kişi",
+            "take": "Alındı",
+            "skip": "Atla",
             "dueToday": {
-                "title": "Heute fällig",
-                "empty": "Heute ist nichts fällig."
+                "title": "Bugün yapılacak",
+                "empty": "Bugün yapılacak bir şey yok."
             },
             "adherence": {
-                "title": "Therapietreue",
-                "period": "Letzte {{days}} Tage",
-                "noData": "Noch keine geplanten Dosen im Zeitraum.",
-                "summary": "{{taken}} von {{planned}} genommen"
+                "title": "Tedavi uyumu",
+                "period": "Son {{days}} gün",
+                "noData": "Bu dönemde henüz planlanmış doz yok.",
+                "summary": "{{planned}} dozdan {{taken}} tanesi alındı"
             },
             "status": {
-                "taken": "Genommen",
-                "skipped": "Übersprungen",
-                "pending": "Offen"
+                "taken": "Alındı",
+                "skipped": "Atlandı",
+                "pending": "Bekliyor"
             },
             "badge": {
-                "prn": "Bei Bedarf",
-                "inactive": "Inaktiv"
+                "prn": "Gerektiğinde",
+                "inactive": "Pasif"
             },
             "stock": {
-                "label": "Bestand",
-                "low": "Nachfüllen",
-                "out": "Leer"
+                "label": "Stok",
+                "low": "Yenile",
+                "out": "Bitti"
             },
             "field": {
-                "name": "Name",
-                "dosageText": "Dosis",
+                "name": "Ad",
+                "dosageText": "Doz",
                 "form": "Form",
-                "stockQty": "Bestand",
-                "stockUnit": "Einheit",
-                "refillThreshold": "Nachfüll-Schwelle",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
-                "active": "Aktiv",
-                "prn": "Bei Bedarf (PRN)"
+                "stockQty": "Stok",
+                "stockUnit": "Birim",
+                "refillThreshold": "Yenileme eşiği",
+                "note": "Not",
+                "visibility": "Görünürlük",
+                "active": "Aktif",
+                "prn": "Gerektiğinde (PRN)"
             },
             "schedule": {
-                "title": "Einnahmeplan",
-                "add": "Zeitfenster hinzufügen",
-                "time": "Uhrzeit",
-                "dose": "Dosis",
-                "days": "Wochentage",
-                "daily": "Täglich",
-                "none": "Noch keine Zeitfenster.",
-                "delete": "Zeitfenster löschen",
-                "newHint": "Speichere das Medikament, dann kannst du Zeitfenster hinzufügen.",
-                "timeRequired": "Uhrzeit ist erforderlich."
+                "title": "Kullanım planı",
+                "add": "Saat ekle",
+                "time": "Saat",
+                "dose": "Doz",
+                "days": "Hafta günleri",
+                "daily": "Her gün",
+                "none": "Henüz saat yok.",
+                "delete": "Saati sil",
+                "newHint": "Saat ekleyebilmek için ilacı kaydedin.",
+                "timeRequired": "Saat zorunludur."
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
-                "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "mon": "Pzt",
+                "tue": "Sal",
+                "wed": "Çar",
+                "thu": "Per",
+                "fri": "Cum",
+                "sat": "Cmt",
+                "sun": "Paz"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Özel",
+                "family": "Aile"
             }
         },
         "labs": {
             "title": "Laboratuvar",
             "emptyTitle": "Henüz sonuç yok",
             "emptyDesc": "Referans aralıklı lab raporları burada görünür.",
-            "loadError": "Laborwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "personsLabel": "Person",
-            "reportsTitle": "Befunde",
-            "add": "Befund hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Bearbeiten",
-            "noReports": "Noch keine Befunde.",
-            "analyteCount": "{{count}} Analyten",
-            "abnormalBadge": "{{count}} auffällig",
-            "selectHint": "Wähle einen Befund, um die Analyten zu sehen.",
-            "noAnalytes": "Für diesen Befund sind noch keine Analyten erfasst.",
-            "dateRequired": "Befunddatum ist erforderlich.",
-            "saved": "Befund gespeichert.",
-            "saveError": "Befund konnte nicht gespeichert werden.",
-            "deleted": "Befund gelöscht.",
-            "deleteError": "Befund konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diesen Befund wirklich löschen? Alle Analyten werden mitgelöscht.",
+            "loadError": "Laboratuvar değerleri yüklenemedi.",
+            "loadErrorDesc": "Lütfen daha sonra tekrar deneyin.",
+            "retry": "Tekrar dene",
+            "personsLabel": "Kişi",
+            "reportsTitle": "Sonuçlar",
+            "add": "Sonuç ekle",
+            "addShort": "Ekle",
+            "edit": "Düzenle",
+            "noReports": "Henüz sonuç yok.",
+            "analyteCount": "{{count}} parametre",
+            "abnormalBadge": "{{count}} anormal",
+            "selectHint": "Parametreleri görmek için bir sonuç seçin.",
+            "noAnalytes": "Bu sonuç için henüz parametre kaydedilmedi.",
+            "dateRequired": "Sonuç tarihi zorunludur.",
+            "saved": "Sonuç kaydedildi.",
+            "saveError": "Sonuç kaydedilemedi.",
+            "deleted": "Sonuç silindi.",
+            "deleteError": "Sonuç silinemedi.",
+            "deleteConfirm": "Bu sonuç gerçekten silinsin mi? Tüm parametreler de silinir.",
             "col": {
-                "analyte": "Analyt",
-                "value": "Wert",
-                "reference": "Referenz",
-                "flag": "Bewertung"
+                "analyte": "Parametre",
+                "value": "Değer",
+                "reference": "Referans",
+                "flag": "Değerlendirme"
             },
             "flag": {
-                "low": "Niedrig",
+                "low": "Düşük",
                 "normal": "Normal",
-                "high": "Hoch"
+                "high": "Yüksek"
             },
             "trend": {
-                "title": "Verlauf",
-                "analyte": "Analyt",
-                "tooFew": "Mindestens zwei Befunde nötig, um einen Verlauf zu zeigen.",
-                "unit": "Einheit: {{unit}}"
+                "title": "Seyir",
+                "analyte": "Parametre",
+                "tooFew": "Seyir göstermek için en az iki sonuç gerekir.",
+                "unit": "Birim: {{unit}}"
             },
             "field": {
-                "reportDate": "Befunddatum",
-                "labName": "Labor",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "reportDate": "Sonuç tarihi",
+                "labName": "Laboratuvar",
+                "visibility": "Görünürlük",
+                "note": "Not"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Özel",
+                "family": "Aile"
             },
             "results": {
-                "title": "Analyten",
-                "newHint": "Speichere den Befund, dann kannst du Analyten hinzufügen.",
-                "none": "Noch keine Analyten.",
-                "analyte": "Analyt",
-                "value": "Wert",
-                "unit": "Einheit",
-                "refLow": "Referenz min.",
-                "refHigh": "Referenz max.",
-                "add": "Analyt hinzufügen",
-                "delete": "Analyt löschen",
-                "flagPreview": "Bewertung:",
-                "analyteRequired": "Analyt-Name ist erforderlich.",
-                "valueRequired": "Bitte einen gültigen Wert eingeben."
+                "title": "Parametreler",
+                "newHint": "Parametre ekleyebilmek için sonucu kaydedin.",
+                "none": "Henüz parametre yok.",
+                "analyte": "Parametre",
+                "value": "Değer",
+                "unit": "Birim",
+                "refLow": "Ref. min.",
+                "refHigh": "Ref. maks.",
+                "add": "Parametre ekle",
+                "delete": "Parametreyi sil",
+                "flagPreview": "Değerlendirme:",
+                "analyteRequired": "Parametre adı zorunludur.",
+                "valueRequired": "Lütfen geçerli bir değer girin."
             }
         },
         "activity": {
             "title": "Aktivite",
             "emptyTitle": "Henüz aktivite yok",
             "emptyDesc": "Antrenmanların burada görünür.",
-            "personsLabel": "Person",
-            "prevWeek": "Vorherige Woche",
-            "nextWeek": "Nächste Woche",
-            "add": "Einheit erfassen",
-            "addShort": "Erfassen",
-            "edit": "Bearbeiten",
-            "chartTitle": "Dauer je Wochentag",
-            "noData": "Keine Einheiten in dieser Woche.",
-            "noEntries": "Noch keine Einheiten in dieser Woche.",
-            "logTitle": "Trainings-Log",
-            "loadError": "Aktivitäten konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Einheit gespeichert.",
-            "saveError": "Einheit konnte nicht gespeichert werden.",
-            "deleted": "Einheit gelöscht.",
-            "deleteError": "Einheit konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diese Einheit wirklich löschen?",
-            "invalid": "Bitte gültige Werte eingeben.",
+            "personsLabel": "Kişi",
+            "prevWeek": "Önceki hafta",
+            "nextWeek": "Sonraki hafta",
+            "add": "Antrenman kaydet",
+            "addShort": "Kaydet",
+            "edit": "Düzenle",
+            "chartTitle": "Hafta gününe göre süre",
+            "noData": "Bu hafta antrenman yok.",
+            "noEntries": "Bu hafta henüz antrenman yok.",
+            "logTitle": "Antrenman günlüğü",
+            "loadError": "Aktiviteler yüklenemedi.",
+            "loadErrorDesc": "Lütfen daha sonra tekrar deneyin.",
+            "retry": "Tekrar dene",
+            "saved": "Antrenman kaydedildi.",
+            "saveError": "Antrenman kaydedilemedi.",
+            "deleted": "Antrenman silindi.",
+            "deleteError": "Antrenman silinemedi.",
+            "deleteConfirm": "Bu antrenman gerçekten silinsin mi?",
+            "invalid": "Lütfen geçerli değerler girin.",
             "totals": {
-                "count": "Einheiten",
-                "duration": "Gesamt-Dauer",
-                "distance": "Gesamt-Distanz",
-                "calories": "Kalorien"
+                "count": "Antrenmanlar",
+                "duration": "Toplam süre",
+                "distance": "Toplam mesafe",
+                "calories": "Kalori"
             },
             "unit": {
-                "min": "{{value}} Min",
+                "min": "{{value}} dk",
                 "km": "{{value}} km",
                 "kcal": "{{value}} kcal"
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
-                "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "mon": "Pzt",
+                "tue": "Sal",
+                "wed": "Çar",
+                "thu": "Per",
+                "fri": "Cum",
+                "sat": "Cmt",
+                "sun": "Paz"
             },
             "type": {
-                "running": "Laufen",
-                "cycling": "Radfahren",
-                "swimming": "Schwimmen",
-                "strength": "Kraft",
+                "running": "Koşu",
+                "cycling": "Bisiklet",
+                "swimming": "Yüzme",
+                "strength": "Kuvvet",
                 "yoga": "Yoga",
-                "walking": "Gehen",
-                "other": "Sonstiges",
-                "custom": "Eigene…"
+                "walking": "Yürüyüş",
+                "other": "Diğer",
+                "custom": "Özel…"
             },
             "field": {
-                "type": "Art",
-                "typePlaceholder": "Art wählen",
-                "customType": "Eigene Art",
-                "performedAt": "Durchgeführt am",
-                "duration": "Dauer (Min)",
-                "distance": "Distanz (km)",
-                "calories": "Kalorien (kcal)",
-                "intensity": "Intensität",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "type": "Tür",
+                "typePlaceholder": "Tür seç",
+                "customType": "Özel tür",
+                "performedAt": "Yapılış tarihi",
+                "duration": "Süre (dk)",
+                "distance": "Mesafe (km)",
+                "calories": "Kalori (kcal)",
+                "intensity": "Yoğunluk",
+                "visibility": "Görünürlük",
+                "note": "Not"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Özel",
+                "family": "Aile"
             },
             "col": {
-                "day": "Tag"
+                "day": "Gün"
             }
         },
         "export": {
-            "title": "Export (CSV)",
-            "rangeFrom": "Von",
-            "rangeTo": "Bis",
-            "vitals": "Vitalwerte",
-            "activities": "Aktivitäten",
-            "labs": "Laborwerte",
-            "medsLogs": "Einnahmeprotokoll",
-            "hint": "Lädt die Daten des gewählten Zeitraums als CSV-Datei herunter."
+            "title": "Dışa aktar (CSV)",
+            "rangeFrom": "Başlangıç",
+            "rangeTo": "Bitiş",
+            "vitals": "Yaşamsal değerler",
+            "activities": "Aktiviteler",
+            "labs": "Laboratuvar değerleri",
+            "medsLogs": "Kullanım kaydı",
+            "hint": "Seçilen dönemin verilerini CSV dosyası olarak indirir."
         },
-        "disclaimer": "Nur zur persönlichen Dokumentation. Kein Ersatz für ärztliche Beratung, Diagnose oder Behandlung.",
-        "readOnlyBanner": "Du siehst die Daten von {{name}} — nur Lesen."
+        "disclaimer": "Yalnızca kişisel kayıt içindir. Tıbbi danışmanlık, teşhis veya tedavinin yerini tutmaz.",
+        "readOnlyBanner": "{{name}} adlı kişinin verilerini görüntülüyorsunuz — yalnızca okuma."
     }
 }

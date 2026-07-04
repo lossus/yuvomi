@@ -2306,319 +2306,319 @@
             "title": "Przegląd",
             "emptyTitle": "Jeszcze nic tu nie ma",
             "emptyDesc": "Twój przegląd zdrowia pojawi się tutaj.",
-            "personsLabel": "Person auswählen",
-            "loadError": "Übersicht konnte nicht geladen werden",
-            "loadErrorDesc": "Bitte versuche es erneut.",
-            "retry": "Erneut versuchen",
+            "personsLabel": "Wybierz osobę",
+            "loadError": "Nie udało się załadować przeglądu",
+            "loadErrorDesc": "Spróbuj ponownie.",
+            "retry": "Spróbuj ponownie",
             "dueToday": {
-                "title": "Heute fällig"
+                "title": "Na dziś"
             },
             "adherence": {
-                "title": "Einnahmetreue",
-                "noData": "Noch keine Einnahmedaten",
-                "period": "Letzte {{days}} Tage",
-                "streakLabel": "Tage in Folge"
+                "title": "Przestrzeganie zaleceń",
+                "noData": "Brak danych o przyjmowaniu",
+                "period": "Ostatnie {{days}} dni",
+                "streakLabel": "Dni z rzędu"
             },
             "vitals": {
-                "title": "Letzte Vitalwerte"
+                "title": "Ostatnie parametry życiowe"
             },
             "quick": {
-                "title": "Schnell erfassen",
-                "vital": "Vitalwert",
-                "activity": "Aktivität",
-                "meds": "Medikamente"
+                "title": "Szybki zapis",
+                "vital": "Parametr życiowy",
+                "activity": "Aktywność",
+                "meds": "Leki"
             },
             "reminders": {
-                "title": "Nächste Erinnerungen",
-                "empty": "Heute keine weiteren Einnahmen"
+                "title": "Kolejne przypomnienia",
+                "empty": "Brak kolejnych dawek na dziś"
             }
         },
         "vitals": {
             "title": "Parametry życiowe",
             "emptyTitle": "Brak pomiarów",
             "emptyDesc": "Ciśnienie, poziom cukru i waga pojawią się tutaj.",
-            "add": "Messwert erfassen",
-            "addShort": "Erfassen",
-            "personsLabel": "Person",
-            "you": "Ich",
-            "chartTitle": "Verlauf",
-            "prevPeriod": "Vorheriger Zeitraum",
-            "nextPeriod": "Nächster Zeitraum",
-            "noData": "Keine Messwerte im gewählten Zeitraum.",
-            "noValue": "Noch kein Wert",
-            "loadError": "Messwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Messwert gespeichert.",
-            "saveError": "Messwert konnte nicht gespeichert werden.",
-            "invalidValue": "Bitte gültige Werte eingeben.",
+            "add": "Zapisz pomiar",
+            "addShort": "Zapisz",
+            "personsLabel": "Osoba",
+            "you": "Ja",
+            "chartTitle": "Przebieg",
+            "prevPeriod": "Poprzedni okres",
+            "nextPeriod": "Następny okres",
+            "noData": "Brak pomiarów w wybranym okresie.",
+            "noValue": "Brak wartości",
+            "loadError": "Nie udało się załadować pomiarów.",
+            "loadErrorDesc": "Spróbuj ponownie później.",
+            "retry": "Spróbuj ponownie",
+            "saved": "Pomiar zapisany.",
+            "saveError": "Nie udało się zapisać pomiaru.",
+            "invalidValue": "Wprowadź prawidłowe wartości.",
             "range": {
-                "week": "Woche",
-                "month": "Monat",
-                "year": "Jahr"
+                "week": "Tydzień",
+                "month": "Miesiąc",
+                "year": "Rok"
             },
             "metric": {
-                "bp": "Blutdruck",
-                "glucose": "Blutzucker",
-                "weight": "Gewicht",
-                "spo2": "Sauerstoffsättigung",
-                "temp": "Temperatur"
+                "bp": "Ciśnienie krwi",
+                "glucose": "Poziom cukru",
+                "weight": "Waga",
+                "spo2": "Saturacja tlenem",
+                "temp": "Temperatura"
             },
             "channel": {
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
-                "pulse": "Puls"
+                "systolic": "Skurczowe",
+                "diastolic": "Rozkurczowe",
+                "pulse": "Tętno"
             },
             "field": {
-                "type": "Art",
-                "value": "Wert",
-                "unit": "Einheit",
-                "measuredAt": "Gemessen am",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
-                "pulse": "Puls"
+                "type": "Rodzaj",
+                "value": "Wartość",
+                "unit": "Jednostka",
+                "measuredAt": "Zmierzono dnia",
+                "note": "Notatka",
+                "visibility": "Widoczność",
+                "systolic": "Skurczowe",
+                "diastolic": "Rozkurczowe",
+                "pulse": "Tętno"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Prywatne",
+                "family": "Rodzina"
             }
         },
         "meds": {
             "title": "Leki",
             "emptyTitle": "Brak leków",
             "emptyDesc": "Leki z harmonogramem i przypomnieniami pojawią się tutaj.",
-            "add": "Medikament hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Medikament bearbeiten",
-            "loadError": "Medikamente konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Medikament gespeichert.",
-            "saveError": "Medikament konnte nicht gespeichert werden.",
-            "deleted": "Medikament gelöscht.",
-            "deleteError": "Medikament konnte nicht gelöscht werden.",
-            "deleteConfirm": "Dieses Medikament wirklich löschen? Einnahmeplan und Verlauf werden mitgelöscht.",
-            "doseSaved": "Eintrag aktualisiert.",
-            "doseError": "Eintrag konnte nicht gespeichert werden.",
-            "nameRequired": "Name ist erforderlich.",
-            "noMeds": "Noch keine Medikamente.",
-            "personsLabel": "Person",
-            "take": "Genommen",
-            "skip": "Überspringen",
+            "add": "Dodaj lek",
+            "addShort": "Dodaj",
+            "edit": "Edytuj lek",
+            "loadError": "Nie udało się załadować leków.",
+            "loadErrorDesc": "Spróbuj ponownie później.",
+            "retry": "Spróbuj ponownie",
+            "saved": "Lek zapisany.",
+            "saveError": "Nie udało się zapisać leku.",
+            "deleted": "Lek usunięty.",
+            "deleteError": "Nie udało się usunąć leku.",
+            "deleteConfirm": "Na pewno usunąć ten lek? Plan przyjmowania i historia również zostaną usunięte.",
+            "doseSaved": "Wpis zaktualizowany.",
+            "doseError": "Nie udało się zapisać wpisu.",
+            "nameRequired": "Nazwa jest wymagana.",
+            "noMeds": "Brak leków.",
+            "personsLabel": "Osoba",
+            "take": "Przyjęto",
+            "skip": "Pomiń",
             "dueToday": {
-                "title": "Heute fällig",
-                "empty": "Heute ist nichts fällig."
+                "title": "Na dziś",
+                "empty": "Nic na dziś."
             },
             "adherence": {
-                "title": "Therapietreue",
-                "period": "Letzte {{days}} Tage",
-                "noData": "Noch keine geplanten Dosen im Zeitraum.",
-                "summary": "{{taken}} von {{planned}} genommen"
+                "title": "Przestrzeganie terapii",
+                "period": "Ostatnie {{days}} dni",
+                "noData": "Brak zaplanowanych dawek w tym okresie.",
+                "summary": "Przyjęto {{taken}} z {{planned}}"
             },
             "status": {
-                "taken": "Genommen",
-                "skipped": "Übersprungen",
-                "pending": "Offen"
+                "taken": "Przyjęto",
+                "skipped": "Pominięto",
+                "pending": "Oczekuje"
             },
             "badge": {
-                "prn": "Bei Bedarf",
-                "inactive": "Inaktiv"
+                "prn": "W razie potrzeby",
+                "inactive": "Nieaktywny"
             },
             "stock": {
-                "label": "Bestand",
-                "low": "Nachfüllen",
-                "out": "Leer"
+                "label": "Zapas",
+                "low": "Uzupełnij",
+                "out": "Brak"
             },
             "field": {
-                "name": "Name",
-                "dosageText": "Dosis",
-                "form": "Form",
-                "stockQty": "Bestand",
-                "stockUnit": "Einheit",
-                "refillThreshold": "Nachfüll-Schwelle",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
-                "active": "Aktiv",
-                "prn": "Bei Bedarf (PRN)"
+                "name": "Nazwa",
+                "dosageText": "Dawka",
+                "form": "Postać",
+                "stockQty": "Zapas",
+                "stockUnit": "Jednostka",
+                "refillThreshold": "Próg uzupełnienia",
+                "note": "Notatka",
+                "visibility": "Widoczność",
+                "active": "Aktywny",
+                "prn": "W razie potrzeby (PRN)"
             },
             "schedule": {
-                "title": "Einnahmeplan",
-                "add": "Zeitfenster hinzufügen",
-                "time": "Uhrzeit",
-                "dose": "Dosis",
-                "days": "Wochentage",
-                "daily": "Täglich",
-                "none": "Noch keine Zeitfenster.",
-                "delete": "Zeitfenster löschen",
-                "newHint": "Speichere das Medikament, dann kannst du Zeitfenster hinzufügen.",
-                "timeRequired": "Uhrzeit ist erforderlich."
+                "title": "Plan przyjmowania",
+                "add": "Dodaj porę",
+                "time": "Godzina",
+                "dose": "Dawka",
+                "days": "Dni tygodnia",
+                "daily": "Codziennie",
+                "none": "Brak pór.",
+                "delete": "Usuń porę",
+                "newHint": "Zapisz lek, aby móc dodać pory.",
+                "timeRequired": "Godzina jest wymagana."
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
-                "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "mon": "Pn",
+                "tue": "Wt",
+                "wed": "Śr",
+                "thu": "Cz",
+                "fri": "Pt",
+                "sat": "So",
+                "sun": "Nd"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Prywatne",
+                "family": "Rodzina"
             }
         },
         "labs": {
             "title": "Wyniki badań",
             "emptyTitle": "Brak wyników",
             "emptyDesc": "Wyniki badań z zakresami referencyjnymi pojawią się tutaj.",
-            "loadError": "Laborwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "personsLabel": "Person",
-            "reportsTitle": "Befunde",
-            "add": "Befund hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Bearbeiten",
-            "noReports": "Noch keine Befunde.",
-            "analyteCount": "{{count}} Analyten",
-            "abnormalBadge": "{{count}} auffällig",
-            "selectHint": "Wähle einen Befund, um die Analyten zu sehen.",
-            "noAnalytes": "Für diesen Befund sind noch keine Analyten erfasst.",
-            "dateRequired": "Befunddatum ist erforderlich.",
-            "saved": "Befund gespeichert.",
-            "saveError": "Befund konnte nicht gespeichert werden.",
-            "deleted": "Befund gelöscht.",
-            "deleteError": "Befund konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diesen Befund wirklich löschen? Alle Analyten werden mitgelöscht.",
+            "loadError": "Nie udało się załadować wyników laboratoryjnych.",
+            "loadErrorDesc": "Spróbuj ponownie później.",
+            "retry": "Spróbuj ponownie",
+            "personsLabel": "Osoba",
+            "reportsTitle": "Wyniki",
+            "add": "Dodaj wynik",
+            "addShort": "Dodaj",
+            "edit": "Edytuj",
+            "noReports": "Brak wyników.",
+            "analyteCount": "Analitów: {{count}}",
+            "abnormalBadge": "{{count}} nieprawidłowych",
+            "selectHint": "Wybierz wynik, aby zobaczyć anality.",
+            "noAnalytes": "Do tego wyniku nie dodano jeszcze żadnych analitów.",
+            "dateRequired": "Data wyniku jest wymagana.",
+            "saved": "Wynik zapisany.",
+            "saveError": "Nie udało się zapisać wyniku.",
+            "deleted": "Wynik usunięty.",
+            "deleteError": "Nie udało się usunąć wyniku.",
+            "deleteConfirm": "Na pewno usunąć ten wynik? Wszystkie anality również zostaną usunięte.",
             "col": {
-                "analyte": "Analyt",
-                "value": "Wert",
-                "reference": "Referenz",
-                "flag": "Bewertung"
+                "analyte": "Analit",
+                "value": "Wartość",
+                "reference": "Zakres referencyjny",
+                "flag": "Ocena"
             },
             "flag": {
-                "low": "Niedrig",
-                "normal": "Normal",
-                "high": "Hoch"
+                "low": "Niski",
+                "normal": "Prawidłowy",
+                "high": "Wysoki"
             },
             "trend": {
-                "title": "Verlauf",
-                "analyte": "Analyt",
-                "tooFew": "Mindestens zwei Befunde nötig, um einen Verlauf zu zeigen.",
-                "unit": "Einheit: {{unit}}"
+                "title": "Przebieg",
+                "analyte": "Analit",
+                "tooFew": "Do pokazania przebiegu potrzebne są co najmniej dwa wyniki.",
+                "unit": "Jednostka: {{unit}}"
             },
             "field": {
-                "reportDate": "Befunddatum",
-                "labName": "Labor",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "reportDate": "Data wyniku",
+                "labName": "Laboratorium",
+                "visibility": "Widoczność",
+                "note": "Notatka"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Prywatne",
+                "family": "Rodzina"
             },
             "results": {
-                "title": "Analyten",
-                "newHint": "Speichere den Befund, dann kannst du Analyten hinzufügen.",
-                "none": "Noch keine Analyten.",
-                "analyte": "Analyt",
-                "value": "Wert",
-                "unit": "Einheit",
-                "refLow": "Referenz min.",
-                "refHigh": "Referenz max.",
-                "add": "Analyt hinzufügen",
-                "delete": "Analyt löschen",
-                "flagPreview": "Bewertung:",
-                "analyteRequired": "Analyt-Name ist erforderlich.",
-                "valueRequired": "Bitte einen gültigen Wert eingeben."
+                "title": "Anality",
+                "newHint": "Zapisz wynik, aby móc dodać anality.",
+                "none": "Brak analitów.",
+                "analyte": "Analit",
+                "value": "Wartość",
+                "unit": "Jednostka",
+                "refLow": "Ref. min.",
+                "refHigh": "Ref. maks.",
+                "add": "Dodaj analit",
+                "delete": "Usuń analit",
+                "flagPreview": "Ocena:",
+                "analyteRequired": "Nazwa analitu jest wymagana.",
+                "valueRequired": "Wprowadź prawidłową wartość."
             }
         },
         "activity": {
             "title": "Aktywność",
             "emptyTitle": "Brak aktywności",
             "emptyDesc": "Twoje treningi pojawią się tutaj.",
-            "personsLabel": "Person",
-            "prevWeek": "Vorherige Woche",
-            "nextWeek": "Nächste Woche",
-            "add": "Einheit erfassen",
-            "addShort": "Erfassen",
-            "edit": "Bearbeiten",
-            "chartTitle": "Dauer je Wochentag",
-            "noData": "Keine Einheiten in dieser Woche.",
-            "noEntries": "Noch keine Einheiten in dieser Woche.",
-            "logTitle": "Trainings-Log",
-            "loadError": "Aktivitäten konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Einheit gespeichert.",
-            "saveError": "Einheit konnte nicht gespeichert werden.",
-            "deleted": "Einheit gelöscht.",
-            "deleteError": "Einheit konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diese Einheit wirklich löschen?",
-            "invalid": "Bitte gültige Werte eingeben.",
+            "personsLabel": "Osoba",
+            "prevWeek": "Poprzedni tydzień",
+            "nextWeek": "Następny tydzień",
+            "add": "Zapisz trening",
+            "addShort": "Zapisz",
+            "edit": "Edytuj",
+            "chartTitle": "Czas trwania wg dnia tygodnia",
+            "noData": "Brak treningów w tym tygodniu.",
+            "noEntries": "Brak treningów w tym tygodniu.",
+            "logTitle": "Dziennik treningów",
+            "loadError": "Nie udało się załadować aktywności.",
+            "loadErrorDesc": "Spróbuj ponownie później.",
+            "retry": "Spróbuj ponownie",
+            "saved": "Trening zapisany.",
+            "saveError": "Nie udało się zapisać treningu.",
+            "deleted": "Trening usunięty.",
+            "deleteError": "Nie udało się usunąć treningu.",
+            "deleteConfirm": "Na pewno usunąć ten trening?",
+            "invalid": "Wprowadź prawidłowe wartości.",
             "totals": {
-                "count": "Einheiten",
-                "duration": "Gesamt-Dauer",
-                "distance": "Gesamt-Distanz",
-                "calories": "Kalorien"
+                "count": "Treningi",
+                "duration": "Łączny czas",
+                "distance": "Łączny dystans",
+                "calories": "Kalorie"
             },
             "unit": {
-                "min": "{{value}} Min",
+                "min": "{{value}} min",
                 "km": "{{value}} km",
                 "kcal": "{{value}} kcal"
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
-                "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "mon": "Pn",
+                "tue": "Wt",
+                "wed": "Śr",
+                "thu": "Cz",
+                "fri": "Pt",
+                "sat": "So",
+                "sun": "Nd"
             },
             "type": {
-                "running": "Laufen",
-                "cycling": "Radfahren",
-                "swimming": "Schwimmen",
-                "strength": "Kraft",
-                "yoga": "Yoga",
-                "walking": "Gehen",
-                "other": "Sonstiges",
-                "custom": "Eigene…"
+                "running": "Bieganie",
+                "cycling": "Jazda na rowerze",
+                "swimming": "Pływanie",
+                "strength": "Siła",
+                "yoga": "Joga",
+                "walking": "Chodzenie",
+                "other": "Inne",
+                "custom": "Własne…"
             },
             "field": {
-                "type": "Art",
-                "typePlaceholder": "Art wählen",
-                "customType": "Eigene Art",
-                "performedAt": "Durchgeführt am",
-                "duration": "Dauer (Min)",
-                "distance": "Distanz (km)",
-                "calories": "Kalorien (kcal)",
-                "intensity": "Intensität",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "type": "Rodzaj",
+                "typePlaceholder": "Wybierz rodzaj",
+                "customType": "Własny rodzaj",
+                "performedAt": "Wykonano dnia",
+                "duration": "Czas trwania (min)",
+                "distance": "Dystans (km)",
+                "calories": "Kalorie (kcal)",
+                "intensity": "Intensywność",
+                "visibility": "Widoczność",
+                "note": "Notatka"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Prywatne",
+                "family": "Rodzina"
             },
             "col": {
-                "day": "Tag"
+                "day": "Dzień"
             }
         },
         "export": {
-            "title": "Export (CSV)",
-            "rangeFrom": "Von",
-            "rangeTo": "Bis",
-            "vitals": "Vitalwerte",
-            "activities": "Aktivitäten",
-            "labs": "Laborwerte",
-            "medsLogs": "Einnahmeprotokoll",
-            "hint": "Lädt die Daten des gewählten Zeitraums als CSV-Datei herunter."
+            "title": "Eksport (CSV)",
+            "rangeFrom": "Od",
+            "rangeTo": "Do",
+            "vitals": "Parametry życiowe",
+            "activities": "Aktywności",
+            "labs": "Wyniki laboratoryjne",
+            "medsLogs": "Rejestr przyjmowania",
+            "hint": "Pobiera dane wybranego okresu jako plik CSV."
         },
-        "disclaimer": "Nur zur persönlichen Dokumentation. Kein Ersatz für ärztliche Beratung, Diagnose oder Behandlung.",
-        "readOnlyBanner": "Du siehst die Daten von {{name}} — nur Lesen."
+        "disclaimer": "Wyłącznie do dokumentacji osobistej. Nie zastępuje porady, diagnozy ani leczenia lekarskiego.",
+        "readOnlyBanner": "Przeglądasz dane osoby {{name}} — tylko do odczytu."
     }
 }

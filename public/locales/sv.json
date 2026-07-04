@@ -2306,233 +2306,233 @@
             "title": "Översikt",
             "emptyTitle": "Inget här ännu",
             "emptyDesc": "Din hälsoöversikt visas här.",
-            "personsLabel": "Person auswählen",
-            "loadError": "Übersicht konnte nicht geladen werden",
-            "loadErrorDesc": "Bitte versuche es erneut.",
-            "retry": "Erneut versuchen",
+            "personsLabel": "Välj person",
+            "loadError": "Översikten kunde inte laddas",
+            "loadErrorDesc": "Försök igen.",
+            "retry": "Försök igen",
             "dueToday": {
-                "title": "Heute fällig"
+                "title": "Att göra idag"
             },
             "adherence": {
-                "title": "Einnahmetreue",
-                "noData": "Noch keine Einnahmedaten",
-                "period": "Letzte {{days}} Tage",
-                "streakLabel": "Tage in Folge"
+                "title": "Följsamhet",
+                "noData": "Inga intagsdata ännu",
+                "period": "Senaste {{days}} dagarna",
+                "streakLabel": "Dagar i rad"
             },
             "vitals": {
-                "title": "Letzte Vitalwerte"
+                "title": "Senaste vitalvärden"
             },
             "quick": {
-                "title": "Schnell erfassen",
-                "vital": "Vitalwert",
-                "activity": "Aktivität",
-                "meds": "Medikamente"
+                "title": "Snabbregistrering",
+                "vital": "Vitalvärde",
+                "activity": "Aktivitet",
+                "meds": "Mediciner"
             },
             "reminders": {
-                "title": "Nächste Erinnerungen",
-                "empty": "Heute keine weiteren Einnahmen"
+                "title": "Nästa påminnelser",
+                "empty": "Inga fler intag idag"
             }
         },
         "vitals": {
             "title": "Vitalvärden",
             "emptyTitle": "Inga mätvärden ännu",
             "emptyDesc": "Blodtryck, blodsocker och vikt visas här.",
-            "add": "Messwert erfassen",
-            "addShort": "Erfassen",
+            "add": "Registrera mätvärde",
+            "addShort": "Registrera",
             "personsLabel": "Person",
-            "you": "Ich",
-            "chartTitle": "Verlauf",
-            "prevPeriod": "Vorheriger Zeitraum",
-            "nextPeriod": "Nächster Zeitraum",
-            "noData": "Keine Messwerte im gewählten Zeitraum.",
-            "noValue": "Noch kein Wert",
-            "loadError": "Messwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Messwert gespeichert.",
-            "saveError": "Messwert konnte nicht gespeichert werden.",
-            "invalidValue": "Bitte gültige Werte eingeben.",
+            "you": "Jag",
+            "chartTitle": "Förlopp",
+            "prevPeriod": "Föregående period",
+            "nextPeriod": "Nästa period",
+            "noData": "Inga mätvärden under vald period.",
+            "noValue": "Inget värde ännu",
+            "loadError": "Mätvärdena kunde inte laddas.",
+            "loadErrorDesc": "Försök igen senare.",
+            "retry": "Försök igen",
+            "saved": "Mätvärde sparat.",
+            "saveError": "Mätvärdet kunde inte sparas.",
+            "invalidValue": "Ange giltiga värden.",
             "range": {
-                "week": "Woche",
-                "month": "Monat",
-                "year": "Jahr"
+                "week": "Vecka",
+                "month": "Månad",
+                "year": "År"
             },
             "metric": {
-                "bp": "Blutdruck",
-                "glucose": "Blutzucker",
-                "weight": "Gewicht",
-                "spo2": "Sauerstoffsättigung",
+                "bp": "Blodtryck",
+                "glucose": "Blodsocker",
+                "weight": "Vikt",
+                "spo2": "Syremättnad",
                 "temp": "Temperatur"
             },
             "channel": {
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
+                "systolic": "Systoliskt",
+                "diastolic": "Diastoliskt",
                 "pulse": "Puls"
             },
             "field": {
-                "type": "Art",
-                "value": "Wert",
-                "unit": "Einheit",
-                "measuredAt": "Gemessen am",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
+                "type": "Typ",
+                "value": "Värde",
+                "unit": "Enhet",
+                "measuredAt": "Mätt den",
+                "note": "Anteckning",
+                "visibility": "Synlighet",
+                "systolic": "Systoliskt",
+                "diastolic": "Diastoliskt",
                 "pulse": "Puls"
             },
             "visibility": {
                 "private": "Privat",
-                "family": "Familie"
+                "family": "Familj"
             }
         },
         "meds": {
             "title": "Mediciner",
             "emptyTitle": "Inga mediciner ännu",
             "emptyDesc": "Mediciner med schema och påminnelser visas här.",
-            "add": "Medikament hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Medikament bearbeiten",
-            "loadError": "Medikamente konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Medikament gespeichert.",
-            "saveError": "Medikament konnte nicht gespeichert werden.",
-            "deleted": "Medikament gelöscht.",
-            "deleteError": "Medikament konnte nicht gelöscht werden.",
-            "deleteConfirm": "Dieses Medikament wirklich löschen? Einnahmeplan und Verlauf werden mitgelöscht.",
-            "doseSaved": "Eintrag aktualisiert.",
-            "doseError": "Eintrag konnte nicht gespeichert werden.",
-            "nameRequired": "Name ist erforderlich.",
-            "noMeds": "Noch keine Medikamente.",
+            "add": "Lägg till medicin",
+            "addShort": "Lägg till",
+            "edit": "Redigera medicin",
+            "loadError": "Medicinerna kunde inte laddas.",
+            "loadErrorDesc": "Försök igen senare.",
+            "retry": "Försök igen",
+            "saved": "Medicin sparad.",
+            "saveError": "Medicinen kunde inte sparas.",
+            "deleted": "Medicin borttagen.",
+            "deleteError": "Medicinen kunde inte tas bort.",
+            "deleteConfirm": "Vill du verkligen ta bort denna medicin? Intagsschemat och historiken tas också bort.",
+            "doseSaved": "Post uppdaterad.",
+            "doseError": "Posten kunde inte sparas.",
+            "nameRequired": "Namn krävs.",
+            "noMeds": "Inga mediciner ännu.",
             "personsLabel": "Person",
-            "take": "Genommen",
-            "skip": "Überspringen",
+            "take": "Taget",
+            "skip": "Hoppa över",
             "dueToday": {
-                "title": "Heute fällig",
-                "empty": "Heute ist nichts fällig."
+                "title": "Att göra idag",
+                "empty": "Inget att göra idag."
             },
             "adherence": {
-                "title": "Therapietreue",
-                "period": "Letzte {{days}} Tage",
-                "noData": "Noch keine geplanten Dosen im Zeitraum.",
-                "summary": "{{taken}} von {{planned}} genommen"
+                "title": "Behandlingsföljsamhet",
+                "period": "Senaste {{days}} dagarna",
+                "noData": "Inga planerade doser under perioden ännu.",
+                "summary": "{{taken}} av {{planned}} tagna"
             },
             "status": {
-                "taken": "Genommen",
-                "skipped": "Übersprungen",
-                "pending": "Offen"
+                "taken": "Taget",
+                "skipped": "Överhoppat",
+                "pending": "Väntar"
             },
             "badge": {
-                "prn": "Bei Bedarf",
+                "prn": "Vid behov",
                 "inactive": "Inaktiv"
             },
             "stock": {
-                "label": "Bestand",
-                "low": "Nachfüllen",
-                "out": "Leer"
+                "label": "Lager",
+                "low": "Fyll på",
+                "out": "Slut"
             },
             "field": {
-                "name": "Name",
-                "dosageText": "Dosis",
+                "name": "Namn",
+                "dosageText": "Dos",
                 "form": "Form",
-                "stockQty": "Bestand",
-                "stockUnit": "Einheit",
-                "refillThreshold": "Nachfüll-Schwelle",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
+                "stockQty": "Lager",
+                "stockUnit": "Enhet",
+                "refillThreshold": "Påfyllningsgräns",
+                "note": "Anteckning",
+                "visibility": "Synlighet",
                 "active": "Aktiv",
-                "prn": "Bei Bedarf (PRN)"
+                "prn": "Vid behov (PRN)"
             },
             "schedule": {
-                "title": "Einnahmeplan",
-                "add": "Zeitfenster hinzufügen",
-                "time": "Uhrzeit",
-                "dose": "Dosis",
-                "days": "Wochentage",
-                "daily": "Täglich",
-                "none": "Noch keine Zeitfenster.",
-                "delete": "Zeitfenster löschen",
-                "newHint": "Speichere das Medikament, dann kannst du Zeitfenster hinzufügen.",
-                "timeRequired": "Uhrzeit ist erforderlich."
+                "title": "Intagsschema",
+                "add": "Lägg till tidpunkt",
+                "time": "Tid",
+                "dose": "Dos",
+                "days": "Veckodagar",
+                "daily": "Dagligen",
+                "none": "Inga tidpunkter ännu.",
+                "delete": "Ta bort tidpunkt",
+                "newHint": "Spara medicinen för att kunna lägga till tidpunkter.",
+                "timeRequired": "Tid krävs."
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
-                "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "mon": "Mån",
+                "tue": "Tis",
+                "wed": "Ons",
+                "thu": "Tor",
+                "fri": "Fre",
+                "sat": "Lör",
+                "sun": "Sön"
             },
             "visibility": {
                 "private": "Privat",
-                "family": "Familie"
+                "family": "Familj"
             }
         },
         "labs": {
             "title": "Provsvar",
             "emptyTitle": "Inga provsvar ännu",
             "emptyDesc": "Provsvar med referensintervall visas här.",
-            "loadError": "Laborwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
+            "loadError": "Labbvärdena kunde inte laddas.",
+            "loadErrorDesc": "Försök igen senare.",
+            "retry": "Försök igen",
             "personsLabel": "Person",
-            "reportsTitle": "Befunde",
-            "add": "Befund hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Bearbeiten",
-            "noReports": "Noch keine Befunde.",
-            "analyteCount": "{{count}} Analyten",
-            "abnormalBadge": "{{count}} auffällig",
-            "selectHint": "Wähle einen Befund, um die Analyten zu sehen.",
-            "noAnalytes": "Für diesen Befund sind noch keine Analyten erfasst.",
-            "dateRequired": "Befunddatum ist erforderlich.",
-            "saved": "Befund gespeichert.",
-            "saveError": "Befund konnte nicht gespeichert werden.",
-            "deleted": "Befund gelöscht.",
-            "deleteError": "Befund konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diesen Befund wirklich löschen? Alle Analyten werden mitgelöscht.",
+            "reportsTitle": "Provsvar",
+            "add": "Lägg till provsvar",
+            "addShort": "Lägg till",
+            "edit": "Redigera",
+            "noReports": "Inga provsvar ännu.",
+            "analyteCount": "{{count}} analyter",
+            "abnormalBadge": "{{count}} avvikande",
+            "selectHint": "Välj ett provsvar för att se analyterna.",
+            "noAnalytes": "Inga analyter har registrerats för detta provsvar ännu.",
+            "dateRequired": "Provsvarsdatum krävs.",
+            "saved": "Provsvar sparat.",
+            "saveError": "Provsvaret kunde inte sparas.",
+            "deleted": "Provsvar borttaget.",
+            "deleteError": "Provsvaret kunde inte tas bort.",
+            "deleteConfirm": "Vill du verkligen ta bort detta provsvar? Alla analyter tas också bort.",
             "col": {
                 "analyte": "Analyt",
-                "value": "Wert",
-                "reference": "Referenz",
-                "flag": "Bewertung"
+                "value": "Värde",
+                "reference": "Referens",
+                "flag": "Bedömning"
             },
             "flag": {
-                "low": "Niedrig",
-                "normal": "Normal",
-                "high": "Hoch"
+                "low": "Lågt",
+                "normal": "Normalt",
+                "high": "Högt"
             },
             "trend": {
-                "title": "Verlauf",
+                "title": "Förlopp",
                 "analyte": "Analyt",
-                "tooFew": "Mindestens zwei Befunde nötig, um einen Verlauf zu zeigen.",
-                "unit": "Einheit: {{unit}}"
+                "tooFew": "Minst två provsvar krävs för att visa ett förlopp.",
+                "unit": "Enhet: {{unit}}"
             },
             "field": {
-                "reportDate": "Befunddatum",
-                "labName": "Labor",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "reportDate": "Provsvarsdatum",
+                "labName": "Labb",
+                "visibility": "Synlighet",
+                "note": "Anteckning"
             },
             "visibility": {
                 "private": "Privat",
-                "family": "Familie"
+                "family": "Familj"
             },
             "results": {
-                "title": "Analyten",
-                "newHint": "Speichere den Befund, dann kannst du Analyten hinzufügen.",
-                "none": "Noch keine Analyten.",
+                "title": "Analyter",
+                "newHint": "Spara provsvaret för att kunna lägga till analyter.",
+                "none": "Inga analyter ännu.",
                 "analyte": "Analyt",
-                "value": "Wert",
-                "unit": "Einheit",
-                "refLow": "Referenz min.",
-                "refHigh": "Referenz max.",
-                "add": "Analyt hinzufügen",
-                "delete": "Analyt löschen",
-                "flagPreview": "Bewertung:",
-                "analyteRequired": "Analyt-Name ist erforderlich.",
-                "valueRequired": "Bitte einen gültigen Wert eingeben."
+                "value": "Värde",
+                "unit": "Enhet",
+                "refLow": "Ref. min.",
+                "refHigh": "Ref. max.",
+                "add": "Lägg till analyt",
+                "delete": "Ta bort analyt",
+                "flagPreview": "Bedömning:",
+                "analyteRequired": "Analytnamn krävs.",
+                "valueRequired": "Ange ett giltigt värde."
             }
         },
         "activity": {
@@ -2540,85 +2540,85 @@
             "emptyTitle": "Inga aktiviteter ännu",
             "emptyDesc": "Dina träningspass visas här.",
             "personsLabel": "Person",
-            "prevWeek": "Vorherige Woche",
-            "nextWeek": "Nächste Woche",
-            "add": "Einheit erfassen",
-            "addShort": "Erfassen",
-            "edit": "Bearbeiten",
-            "chartTitle": "Dauer je Wochentag",
-            "noData": "Keine Einheiten in dieser Woche.",
-            "noEntries": "Noch keine Einheiten in dieser Woche.",
-            "logTitle": "Trainings-Log",
-            "loadError": "Aktivitäten konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Einheit gespeichert.",
-            "saveError": "Einheit konnte nicht gespeichert werden.",
-            "deleted": "Einheit gelöscht.",
-            "deleteError": "Einheit konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diese Einheit wirklich löschen?",
-            "invalid": "Bitte gültige Werte eingeben.",
+            "prevWeek": "Föregående vecka",
+            "nextWeek": "Nästa vecka",
+            "add": "Registrera pass",
+            "addShort": "Registrera",
+            "edit": "Redigera",
+            "chartTitle": "Varaktighet per veckodag",
+            "noData": "Inga pass denna vecka.",
+            "noEntries": "Inga pass denna vecka ännu.",
+            "logTitle": "Träningslogg",
+            "loadError": "Aktiviteterna kunde inte laddas.",
+            "loadErrorDesc": "Försök igen senare.",
+            "retry": "Försök igen",
+            "saved": "Pass sparat.",
+            "saveError": "Passet kunde inte sparas.",
+            "deleted": "Pass borttaget.",
+            "deleteError": "Passet kunde inte tas bort.",
+            "deleteConfirm": "Vill du verkligen ta bort detta pass?",
+            "invalid": "Ange giltiga värden.",
             "totals": {
-                "count": "Einheiten",
-                "duration": "Gesamt-Dauer",
-                "distance": "Gesamt-Distanz",
-                "calories": "Kalorien"
+                "count": "Pass",
+                "duration": "Total varaktighet",
+                "distance": "Total sträcka",
+                "calories": "Kalorier"
             },
             "unit": {
-                "min": "{{value}} Min",
+                "min": "{{value}} min",
                 "km": "{{value}} km",
                 "kcal": "{{value}} kcal"
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
-                "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "mon": "Mån",
+                "tue": "Tis",
+                "wed": "Ons",
+                "thu": "Tor",
+                "fri": "Fre",
+                "sat": "Lör",
+                "sun": "Sön"
             },
             "type": {
-                "running": "Laufen",
-                "cycling": "Radfahren",
-                "swimming": "Schwimmen",
-                "strength": "Kraft",
+                "running": "Löpning",
+                "cycling": "Cykling",
+                "swimming": "Simning",
+                "strength": "Styrka",
                 "yoga": "Yoga",
-                "walking": "Gehen",
-                "other": "Sonstiges",
-                "custom": "Eigene…"
+                "walking": "Promenad",
+                "other": "Övrigt",
+                "custom": "Egen…"
             },
             "field": {
-                "type": "Art",
-                "typePlaceholder": "Art wählen",
-                "customType": "Eigene Art",
-                "performedAt": "Durchgeführt am",
-                "duration": "Dauer (Min)",
-                "distance": "Distanz (km)",
-                "calories": "Kalorien (kcal)",
-                "intensity": "Intensität",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "type": "Typ",
+                "typePlaceholder": "Välj typ",
+                "customType": "Egen typ",
+                "performedAt": "Utförd den",
+                "duration": "Varaktighet (min)",
+                "distance": "Sträcka (km)",
+                "calories": "Kalorier (kcal)",
+                "intensity": "Intensitet",
+                "visibility": "Synlighet",
+                "note": "Anteckning"
             },
             "visibility": {
                 "private": "Privat",
-                "family": "Familie"
+                "family": "Familj"
             },
             "col": {
-                "day": "Tag"
+                "day": "Dag"
             }
         },
         "export": {
-            "title": "Export (CSV)",
-            "rangeFrom": "Von",
-            "rangeTo": "Bis",
-            "vitals": "Vitalwerte",
-            "activities": "Aktivitäten",
-            "labs": "Laborwerte",
-            "medsLogs": "Einnahmeprotokoll",
-            "hint": "Lädt die Daten des gewählten Zeitraums als CSV-Datei herunter."
+            "title": "Exportera (CSV)",
+            "rangeFrom": "Från",
+            "rangeTo": "Till",
+            "vitals": "Vitalvärden",
+            "activities": "Aktiviteter",
+            "labs": "Labbvärden",
+            "medsLogs": "Intagslogg",
+            "hint": "Laddar ner data för vald period som en CSV-fil."
         },
-        "disclaimer": "Nur zur persönlichen Dokumentation. Kein Ersatz für ärztliche Beratung, Diagnose oder Behandlung.",
-        "readOnlyBanner": "Du siehst die Daten von {{name}} — nur Lesen."
+        "disclaimer": "Endast för personlig dokumentation. Ersätter inte medicinsk rådgivning, diagnos eller behandling.",
+        "readOnlyBanner": "Du ser {{name}}s data — skrivskyddat."
     }
 }

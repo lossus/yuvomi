@@ -2306,319 +2306,319 @@
             "title": "Přehled",
             "emptyTitle": "Zatím nic",
             "emptyDesc": "Váš zdravotní přehled se zobrazí zde.",
-            "personsLabel": "Person auswählen",
-            "loadError": "Übersicht konnte nicht geladen werden",
-            "loadErrorDesc": "Bitte versuche es erneut.",
-            "retry": "Erneut versuchen",
+            "personsLabel": "Vybrat osobu",
+            "loadError": "Přehled se nepodařilo načíst",
+            "loadErrorDesc": "Zkuste to prosím znovu.",
+            "retry": "Zkusit znovu",
             "dueToday": {
-                "title": "Heute fällig"
+                "title": "Dnes k vyřízení"
             },
             "adherence": {
-                "title": "Einnahmetreue",
-                "noData": "Noch keine Einnahmedaten",
-                "period": "Letzte {{days}} Tage",
-                "streakLabel": "Tage in Folge"
+                "title": "Dodržování",
+                "noData": "Zatím žádné údaje o užívání",
+                "period": "Posledních {{days}} dní",
+                "streakLabel": "Dní v řadě"
             },
             "vitals": {
-                "title": "Letzte Vitalwerte"
+                "title": "Poslední vitální hodnoty"
             },
             "quick": {
-                "title": "Schnell erfassen",
-                "vital": "Vitalwert",
-                "activity": "Aktivität",
-                "meds": "Medikamente"
+                "title": "Rychlé zadání",
+                "vital": "Vitální hodnota",
+                "activity": "Aktivita",
+                "meds": "Léky"
             },
             "reminders": {
-                "title": "Nächste Erinnerungen",
-                "empty": "Heute keine weiteren Einnahmen"
+                "title": "Další připomenutí",
+                "empty": "Dnes už žádné další užití"
             }
         },
         "vitals": {
             "title": "Vitální hodnoty",
             "emptyTitle": "Zatím žádná měření",
             "emptyDesc": "Krevní tlak, cukr a váha se zobrazí zde.",
-            "add": "Messwert erfassen",
-            "addShort": "Erfassen",
-            "personsLabel": "Person",
-            "you": "Ich",
-            "chartTitle": "Verlauf",
-            "prevPeriod": "Vorheriger Zeitraum",
-            "nextPeriod": "Nächster Zeitraum",
-            "noData": "Keine Messwerte im gewählten Zeitraum.",
-            "noValue": "Noch kein Wert",
-            "loadError": "Messwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Messwert gespeichert.",
-            "saveError": "Messwert konnte nicht gespeichert werden.",
-            "invalidValue": "Bitte gültige Werte eingeben.",
+            "add": "Zadat měření",
+            "addShort": "Zadat",
+            "personsLabel": "Osoba",
+            "you": "Já",
+            "chartTitle": "Průběh",
+            "prevPeriod": "Předchozí období",
+            "nextPeriod": "Další období",
+            "noData": "Ve zvoleném období nejsou žádná měření.",
+            "noValue": "Zatím žádná hodnota",
+            "loadError": "Měření se nepodařilo načíst.",
+            "loadErrorDesc": "Zkuste to prosím později.",
+            "retry": "Zkusit znovu",
+            "saved": "Měření uloženo.",
+            "saveError": "Měření se nepodařilo uložit.",
+            "invalidValue": "Zadejte platné hodnoty.",
             "range": {
-                "week": "Woche",
-                "month": "Monat",
-                "year": "Jahr"
+                "week": "Týden",
+                "month": "Měsíc",
+                "year": "Rok"
             },
             "metric": {
-                "bp": "Blutdruck",
-                "glucose": "Blutzucker",
-                "weight": "Gewicht",
-                "spo2": "Sauerstoffsättigung",
-                "temp": "Temperatur"
+                "bp": "Krevní tlak",
+                "glucose": "Krevní cukr",
+                "weight": "Hmotnost",
+                "spo2": "Saturace kyslíkem",
+                "temp": "Teplota"
             },
             "channel": {
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
-                "pulse": "Puls"
+                "systolic": "Systolický",
+                "diastolic": "Diastolický",
+                "pulse": "Tep"
             },
             "field": {
-                "type": "Art",
-                "value": "Wert",
-                "unit": "Einheit",
-                "measuredAt": "Gemessen am",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
-                "pulse": "Puls"
+                "type": "Typ",
+                "value": "Hodnota",
+                "unit": "Jednotka",
+                "measuredAt": "Změřeno dne",
+                "note": "Poznámka",
+                "visibility": "Viditelnost",
+                "systolic": "Systolický",
+                "diastolic": "Diastolický",
+                "pulse": "Tep"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Soukromé",
+                "family": "Rodina"
             }
         },
         "meds": {
             "title": "Léky",
             "emptyTitle": "Zatím žádné léky",
             "emptyDesc": "Léky s rozvrhem a připomínkami se zobrazí zde.",
-            "add": "Medikament hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Medikament bearbeiten",
-            "loadError": "Medikamente konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Medikament gespeichert.",
-            "saveError": "Medikament konnte nicht gespeichert werden.",
-            "deleted": "Medikament gelöscht.",
-            "deleteError": "Medikament konnte nicht gelöscht werden.",
-            "deleteConfirm": "Dieses Medikament wirklich löschen? Einnahmeplan und Verlauf werden mitgelöscht.",
-            "doseSaved": "Eintrag aktualisiert.",
-            "doseError": "Eintrag konnte nicht gespeichert werden.",
-            "nameRequired": "Name ist erforderlich.",
-            "noMeds": "Noch keine Medikamente.",
-            "personsLabel": "Person",
-            "take": "Genommen",
-            "skip": "Überspringen",
+            "add": "Přidat lék",
+            "addShort": "Přidat",
+            "edit": "Upravit lék",
+            "loadError": "Léky se nepodařilo načíst.",
+            "loadErrorDesc": "Zkuste to prosím později.",
+            "retry": "Zkusit znovu",
+            "saved": "Lék uložen.",
+            "saveError": "Lék se nepodařilo uložit.",
+            "deleted": "Lék smazán.",
+            "deleteError": "Lék se nepodařilo smazat.",
+            "deleteConfirm": "Opravdu smazat tento lék? Smaže se také plán užívání a historie.",
+            "doseSaved": "Záznam aktualizován.",
+            "doseError": "Záznam se nepodařilo uložit.",
+            "nameRequired": "Název je povinný.",
+            "noMeds": "Zatím žádné léky.",
+            "personsLabel": "Osoba",
+            "take": "Užito",
+            "skip": "Přeskočit",
             "dueToday": {
-                "title": "Heute fällig",
-                "empty": "Heute ist nichts fällig."
+                "title": "Dnes k vyřízení",
+                "empty": "Dnes není nic k vyřízení."
             },
             "adherence": {
-                "title": "Therapietreue",
-                "period": "Letzte {{days}} Tage",
-                "noData": "Noch keine geplanten Dosen im Zeitraum.",
-                "summary": "{{taken}} von {{planned}} genommen"
+                "title": "Dodržování léčby",
+                "period": "Posledních {{days}} dní",
+                "noData": "V období zatím nejsou žádné plánované dávky.",
+                "summary": "Užito {{taken}} z {{planned}}"
             },
             "status": {
-                "taken": "Genommen",
-                "skipped": "Übersprungen",
-                "pending": "Offen"
+                "taken": "Užito",
+                "skipped": "Přeskočeno",
+                "pending": "Nevyřízeno"
             },
             "badge": {
-                "prn": "Bei Bedarf",
-                "inactive": "Inaktiv"
+                "prn": "Dle potřeby",
+                "inactive": "Neaktivní"
             },
             "stock": {
-                "label": "Bestand",
-                "low": "Nachfüllen",
-                "out": "Leer"
+                "label": "Zásoba",
+                "low": "Doplnit",
+                "out": "Prázdné"
             },
             "field": {
-                "name": "Name",
-                "dosageText": "Dosis",
-                "form": "Form",
-                "stockQty": "Bestand",
-                "stockUnit": "Einheit",
-                "refillThreshold": "Nachfüll-Schwelle",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
-                "active": "Aktiv",
-                "prn": "Bei Bedarf (PRN)"
+                "name": "Název",
+                "dosageText": "Dávka",
+                "form": "Forma",
+                "stockQty": "Zásoba",
+                "stockUnit": "Jednotka",
+                "refillThreshold": "Práh pro doplnění",
+                "note": "Poznámka",
+                "visibility": "Viditelnost",
+                "active": "Aktivní",
+                "prn": "Dle potřeby (PRN)"
             },
             "schedule": {
-                "title": "Einnahmeplan",
-                "add": "Zeitfenster hinzufügen",
-                "time": "Uhrzeit",
-                "dose": "Dosis",
-                "days": "Wochentage",
-                "daily": "Täglich",
-                "none": "Noch keine Zeitfenster.",
-                "delete": "Zeitfenster löschen",
-                "newHint": "Speichere das Medikament, dann kannst du Zeitfenster hinzufügen.",
-                "timeRequired": "Uhrzeit ist erforderlich."
+                "title": "Plán užívání",
+                "add": "Přidat čas",
+                "time": "Čas",
+                "dose": "Dávka",
+                "days": "Dny v týdnu",
+                "daily": "Denně",
+                "none": "Zatím žádné časy.",
+                "delete": "Smazat čas",
+                "newHint": "Uložte lék, poté můžete přidat časy.",
+                "timeRequired": "Čas je povinný."
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
-                "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "mon": "Po",
+                "tue": "Út",
+                "wed": "St",
+                "thu": "Čt",
+                "fri": "Pá",
+                "sat": "So",
+                "sun": "Ne"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Soukromé",
+                "family": "Rodina"
             }
         },
         "labs": {
             "title": "Laboratorní hodnoty",
             "emptyTitle": "Zatím žádné výsledky",
             "emptyDesc": "Laboratorní nálezy s referenčními rozmezími se zobrazí zde.",
-            "loadError": "Laborwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "personsLabel": "Person",
-            "reportsTitle": "Befunde",
-            "add": "Befund hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Bearbeiten",
-            "noReports": "Noch keine Befunde.",
-            "analyteCount": "{{count}} Analyten",
-            "abnormalBadge": "{{count}} auffällig",
-            "selectHint": "Wähle einen Befund, um die Analyten zu sehen.",
-            "noAnalytes": "Für diesen Befund sind noch keine Analyten erfasst.",
-            "dateRequired": "Befunddatum ist erforderlich.",
-            "saved": "Befund gespeichert.",
-            "saveError": "Befund konnte nicht gespeichert werden.",
-            "deleted": "Befund gelöscht.",
-            "deleteError": "Befund konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diesen Befund wirklich löschen? Alle Analyten werden mitgelöscht.",
+            "loadError": "Laboratorní hodnoty se nepodařilo načíst.",
+            "loadErrorDesc": "Zkuste to prosím později.",
+            "retry": "Zkusit znovu",
+            "personsLabel": "Osoba",
+            "reportsTitle": "Nálezy",
+            "add": "Přidat nález",
+            "addShort": "Přidat",
+            "edit": "Upravit",
+            "noReports": "Zatím žádné nálezy.",
+            "analyteCount": "{{count}} analytů",
+            "abnormalBadge": "{{count}} mimo normu",
+            "selectHint": "Vyberte nález pro zobrazení analytů.",
+            "noAnalytes": "Pro tento nález zatím nejsou zadány žádné analyty.",
+            "dateRequired": "Datum nálezu je povinné.",
+            "saved": "Nález uložen.",
+            "saveError": "Nález se nepodařilo uložit.",
+            "deleted": "Nález smazán.",
+            "deleteError": "Nález se nepodařilo smazat.",
+            "deleteConfirm": "Opravdu smazat tento nález? Smažou se také všechny analyty.",
             "col": {
                 "analyte": "Analyt",
-                "value": "Wert",
-                "reference": "Referenz",
-                "flag": "Bewertung"
+                "value": "Hodnota",
+                "reference": "Referenční rozmezí",
+                "flag": "Hodnocení"
             },
             "flag": {
-                "low": "Niedrig",
-                "normal": "Normal",
-                "high": "Hoch"
+                "low": "Nízká",
+                "normal": "Normální",
+                "high": "Vysoká"
             },
             "trend": {
-                "title": "Verlauf",
+                "title": "Průběh",
                 "analyte": "Analyt",
-                "tooFew": "Mindestens zwei Befunde nötig, um einen Verlauf zu zeigen.",
-                "unit": "Einheit: {{unit}}"
+                "tooFew": "K zobrazení průběhu jsou potřeba alespoň dva nálezy.",
+                "unit": "Jednotka: {{unit}}"
             },
             "field": {
-                "reportDate": "Befunddatum",
-                "labName": "Labor",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "reportDate": "Datum nálezu",
+                "labName": "Laboratoř",
+                "visibility": "Viditelnost",
+                "note": "Poznámka"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Soukromé",
+                "family": "Rodina"
             },
             "results": {
-                "title": "Analyten",
-                "newHint": "Speichere den Befund, dann kannst du Analyten hinzufügen.",
-                "none": "Noch keine Analyten.",
+                "title": "Analyty",
+                "newHint": "Uložte nález, poté můžete přidat analyty.",
+                "none": "Zatím žádné analyty.",
                 "analyte": "Analyt",
-                "value": "Wert",
-                "unit": "Einheit",
-                "refLow": "Referenz min.",
-                "refHigh": "Referenz max.",
-                "add": "Analyt hinzufügen",
-                "delete": "Analyt löschen",
-                "flagPreview": "Bewertung:",
-                "analyteRequired": "Analyt-Name ist erforderlich.",
-                "valueRequired": "Bitte einen gültigen Wert eingeben."
+                "value": "Hodnota",
+                "unit": "Jednotka",
+                "refLow": "Ref. min.",
+                "refHigh": "Ref. max.",
+                "add": "Přidat analyt",
+                "delete": "Smazat analyt",
+                "flagPreview": "Hodnocení:",
+                "analyteRequired": "Název analytu je povinný.",
+                "valueRequired": "Zadejte platnou hodnotu."
             }
         },
         "activity": {
             "title": "Aktivita",
             "emptyTitle": "Zatím žádné aktivity",
             "emptyDesc": "Vaše tréninky se zobrazí zde.",
-            "personsLabel": "Person",
-            "prevWeek": "Vorherige Woche",
-            "nextWeek": "Nächste Woche",
-            "add": "Einheit erfassen",
-            "addShort": "Erfassen",
-            "edit": "Bearbeiten",
-            "chartTitle": "Dauer je Wochentag",
-            "noData": "Keine Einheiten in dieser Woche.",
-            "noEntries": "Noch keine Einheiten in dieser Woche.",
-            "logTitle": "Trainings-Log",
-            "loadError": "Aktivitäten konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Einheit gespeichert.",
-            "saveError": "Einheit konnte nicht gespeichert werden.",
-            "deleted": "Einheit gelöscht.",
-            "deleteError": "Einheit konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diese Einheit wirklich löschen?",
-            "invalid": "Bitte gültige Werte eingeben.",
+            "personsLabel": "Osoba",
+            "prevWeek": "Předchozí týden",
+            "nextWeek": "Další týden",
+            "add": "Zadat trénink",
+            "addShort": "Zadat",
+            "edit": "Upravit",
+            "chartTitle": "Doba podle dne v týdnu",
+            "noData": "Tento týden žádné tréninky.",
+            "noEntries": "Tento týden zatím žádné tréninky.",
+            "logTitle": "Deník tréninků",
+            "loadError": "Aktivity se nepodařilo načíst.",
+            "loadErrorDesc": "Zkuste to prosím později.",
+            "retry": "Zkusit znovu",
+            "saved": "Trénink uložen.",
+            "saveError": "Trénink se nepodařilo uložit.",
+            "deleted": "Trénink smazán.",
+            "deleteError": "Trénink se nepodařilo smazat.",
+            "deleteConfirm": "Opravdu smazat tento trénink?",
+            "invalid": "Zadejte platné hodnoty.",
             "totals": {
-                "count": "Einheiten",
-                "duration": "Gesamt-Dauer",
-                "distance": "Gesamt-Distanz",
-                "calories": "Kalorien"
+                "count": "Tréninky",
+                "duration": "Celková doba",
+                "distance": "Celková vzdálenost",
+                "calories": "Kalorie"
             },
             "unit": {
-                "min": "{{value}} Min",
+                "min": "{{value}} min",
                 "km": "{{value}} km",
                 "kcal": "{{value}} kcal"
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
-                "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "mon": "Po",
+                "tue": "Út",
+                "wed": "St",
+                "thu": "Čt",
+                "fri": "Pá",
+                "sat": "So",
+                "sun": "Ne"
             },
             "type": {
-                "running": "Laufen",
-                "cycling": "Radfahren",
-                "swimming": "Schwimmen",
-                "strength": "Kraft",
-                "yoga": "Yoga",
-                "walking": "Gehen",
-                "other": "Sonstiges",
-                "custom": "Eigene…"
+                "running": "Běh",
+                "cycling": "Cyklistika",
+                "swimming": "Plavání",
+                "strength": "Síla",
+                "yoga": "Jóga",
+                "walking": "Chůze",
+                "other": "Ostatní",
+                "custom": "Vlastní…"
             },
             "field": {
-                "type": "Art",
-                "typePlaceholder": "Art wählen",
-                "customType": "Eigene Art",
-                "performedAt": "Durchgeführt am",
-                "duration": "Dauer (Min)",
-                "distance": "Distanz (km)",
-                "calories": "Kalorien (kcal)",
-                "intensity": "Intensität",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "type": "Typ",
+                "typePlaceholder": "Vybrat typ",
+                "customType": "Vlastní typ",
+                "performedAt": "Provedeno dne",
+                "duration": "Doba (min)",
+                "distance": "Vzdálenost (km)",
+                "calories": "Kalorie (kcal)",
+                "intensity": "Intenzita",
+                "visibility": "Viditelnost",
+                "note": "Poznámka"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Soukromé",
+                "family": "Rodina"
             },
             "col": {
-                "day": "Tag"
+                "day": "Den"
             }
         },
         "export": {
             "title": "Export (CSV)",
-            "rangeFrom": "Von",
-            "rangeTo": "Bis",
-            "vitals": "Vitalwerte",
-            "activities": "Aktivitäten",
-            "labs": "Laborwerte",
-            "medsLogs": "Einnahmeprotokoll",
-            "hint": "Lädt die Daten des gewählten Zeitraums als CSV-Datei herunter."
+            "rangeFrom": "Od",
+            "rangeTo": "Do",
+            "vitals": "Vitální hodnoty",
+            "activities": "Aktivity",
+            "labs": "Laboratorní hodnoty",
+            "medsLogs": "Protokol užívání",
+            "hint": "Stáhne data zvoleného období jako soubor CSV."
         },
-        "disclaimer": "Nur zur persönlichen Dokumentation. Kein Ersatz für ärztliche Beratung, Diagnose oder Behandlung.",
-        "readOnlyBanner": "Du siehst die Daten von {{name}} — nur Lesen."
+        "disclaimer": "Pouze pro osobní evidenci. Nenahrazuje lékařskou konzultaci, diagnózu ani léčbu.",
+        "readOnlyBanner": "Prohlížíte data osoby {{name}} — pouze ke čtení."
     }
 }

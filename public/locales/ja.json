@@ -2306,319 +2306,319 @@
             "title": "概要",
             "emptyTitle": "まだ何もありません",
             "emptyDesc": "健康の概要がここに表示されます。",
-            "personsLabel": "Person auswählen",
-            "loadError": "Übersicht konnte nicht geladen werden",
-            "loadErrorDesc": "Bitte versuche es erneut.",
-            "retry": "Erneut versuchen",
+            "personsLabel": "人を選択",
+            "loadError": "概要を読み込めませんでした",
+            "loadErrorDesc": "もう一度お試しください。",
+            "retry": "再試行",
             "dueToday": {
-                "title": "Heute fällig"
+                "title": "今日の予定"
             },
             "adherence": {
-                "title": "Einnahmetreue",
-                "noData": "Noch keine Einnahmedaten",
-                "period": "Letzte {{days}} Tage",
-                "streakLabel": "Tage in Folge"
+                "title": "服薬遵守",
+                "noData": "服薬データはまだありません",
+                "period": "過去{{days}}日間",
+                "streakLabel": "連続日数"
             },
             "vitals": {
-                "title": "Letzte Vitalwerte"
+                "title": "最新のバイタル"
             },
             "quick": {
-                "title": "Schnell erfassen",
-                "vital": "Vitalwert",
-                "activity": "Aktivität",
-                "meds": "Medikamente"
+                "title": "クイック記録",
+                "vital": "バイタル",
+                "activity": "アクティビティ",
+                "meds": "薬"
             },
             "reminders": {
-                "title": "Nächste Erinnerungen",
-                "empty": "Heute keine weiteren Einnahmen"
+                "title": "次のリマインダー",
+                "empty": "本日の服薬はこれ以上ありません"
             }
         },
         "vitals": {
             "title": "バイタル",
             "emptyTitle": "まだ測定値がありません",
             "emptyDesc": "血圧、血糖、体重がここに表示されます。",
-            "add": "Messwert erfassen",
-            "addShort": "Erfassen",
-            "personsLabel": "Person",
-            "you": "Ich",
-            "chartTitle": "Verlauf",
-            "prevPeriod": "Vorheriger Zeitraum",
-            "nextPeriod": "Nächster Zeitraum",
-            "noData": "Keine Messwerte im gewählten Zeitraum.",
-            "noValue": "Noch kein Wert",
-            "loadError": "Messwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Messwert gespeichert.",
-            "saveError": "Messwert konnte nicht gespeichert werden.",
-            "invalidValue": "Bitte gültige Werte eingeben.",
+            "add": "測定値を記録",
+            "addShort": "記録",
+            "personsLabel": "人",
+            "you": "自分",
+            "chartTitle": "推移",
+            "prevPeriod": "前の期間",
+            "nextPeriod": "次の期間",
+            "noData": "選択した期間に測定値がありません。",
+            "noValue": "値はまだありません",
+            "loadError": "測定値を読み込めませんでした。",
+            "loadErrorDesc": "後でもう一度お試しください。",
+            "retry": "再試行",
+            "saved": "測定値を保存しました。",
+            "saveError": "測定値を保存できませんでした。",
+            "invalidValue": "有効な値を入力してください。",
             "range": {
-                "week": "Woche",
-                "month": "Monat",
-                "year": "Jahr"
+                "week": "週",
+                "month": "月",
+                "year": "年"
             },
             "metric": {
-                "bp": "Blutdruck",
-                "glucose": "Blutzucker",
-                "weight": "Gewicht",
-                "spo2": "Sauerstoffsättigung",
-                "temp": "Temperatur"
+                "bp": "血圧",
+                "glucose": "血糖値",
+                "weight": "体重",
+                "spo2": "酸素飽和度",
+                "temp": "体温"
             },
             "channel": {
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
-                "pulse": "Puls"
+                "systolic": "収縮期",
+                "diastolic": "拡張期",
+                "pulse": "脈拍"
             },
             "field": {
-                "type": "Art",
-                "value": "Wert",
-                "unit": "Einheit",
-                "measuredAt": "Gemessen am",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
-                "pulse": "Puls"
+                "type": "種類",
+                "value": "値",
+                "unit": "単位",
+                "measuredAt": "測定日",
+                "note": "メモ",
+                "visibility": "公開範囲",
+                "systolic": "収縮期",
+                "diastolic": "拡張期",
+                "pulse": "脈拍"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "非公開",
+                "family": "家族"
             }
         },
         "meds": {
             "title": "薬",
             "emptyTitle": "まだ薬がありません",
             "emptyDesc": "スケジュールとリマインダー付きの薬がここに表示されます。",
-            "add": "Medikament hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Medikament bearbeiten",
-            "loadError": "Medikamente konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Medikament gespeichert.",
-            "saveError": "Medikament konnte nicht gespeichert werden.",
-            "deleted": "Medikament gelöscht.",
-            "deleteError": "Medikament konnte nicht gelöscht werden.",
-            "deleteConfirm": "Dieses Medikament wirklich löschen? Einnahmeplan und Verlauf werden mitgelöscht.",
-            "doseSaved": "Eintrag aktualisiert.",
-            "doseError": "Eintrag konnte nicht gespeichert werden.",
-            "nameRequired": "Name ist erforderlich.",
-            "noMeds": "Noch keine Medikamente.",
-            "personsLabel": "Person",
-            "take": "Genommen",
-            "skip": "Überspringen",
+            "add": "薬を追加",
+            "addShort": "追加",
+            "edit": "薬を編集",
+            "loadError": "薬を読み込めませんでした。",
+            "loadErrorDesc": "後でもう一度お試しください。",
+            "retry": "再試行",
+            "saved": "薬を保存しました。",
+            "saveError": "薬を保存できませんでした。",
+            "deleted": "薬を削除しました。",
+            "deleteError": "薬を削除できませんでした。",
+            "deleteConfirm": "この薬を削除しますか？服薬スケジュールと履歴も削除されます。",
+            "doseSaved": "記録を更新しました。",
+            "doseError": "記録を保存できませんでした。",
+            "nameRequired": "名前は必須です。",
+            "noMeds": "薬はまだありません。",
+            "personsLabel": "人",
+            "take": "服用済み",
+            "skip": "スキップ",
             "dueToday": {
-                "title": "Heute fällig",
-                "empty": "Heute ist nichts fällig."
+                "title": "今日の予定",
+                "empty": "今日の予定はありません。"
             },
             "adherence": {
-                "title": "Therapietreue",
-                "period": "Letzte {{days}} Tage",
-                "noData": "Noch keine geplanten Dosen im Zeitraum.",
-                "summary": "{{taken}} von {{planned}} genommen"
+                "title": "治療遵守",
+                "period": "過去{{days}}日間",
+                "noData": "この期間に予定された服用はまだありません。",
+                "summary": "{{planned}}回中{{taken}}回服用"
             },
             "status": {
-                "taken": "Genommen",
-                "skipped": "Übersprungen",
-                "pending": "Offen"
+                "taken": "服用済み",
+                "skipped": "スキップ済み",
+                "pending": "未対応"
             },
             "badge": {
-                "prn": "Bei Bedarf",
-                "inactive": "Inaktiv"
+                "prn": "必要時",
+                "inactive": "無効"
             },
             "stock": {
-                "label": "Bestand",
-                "low": "Nachfüllen",
-                "out": "Leer"
+                "label": "在庫",
+                "low": "補充",
+                "out": "残りなし"
             },
             "field": {
-                "name": "Name",
-                "dosageText": "Dosis",
-                "form": "Form",
-                "stockQty": "Bestand",
-                "stockUnit": "Einheit",
-                "refillThreshold": "Nachfüll-Schwelle",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
-                "active": "Aktiv",
-                "prn": "Bei Bedarf (PRN)"
+                "name": "名前",
+                "dosageText": "用量",
+                "form": "剤形",
+                "stockQty": "在庫",
+                "stockUnit": "単位",
+                "refillThreshold": "補充のしきい値",
+                "note": "メモ",
+                "visibility": "公開範囲",
+                "active": "有効",
+                "prn": "必要時（頓用）"
             },
             "schedule": {
-                "title": "Einnahmeplan",
-                "add": "Zeitfenster hinzufügen",
-                "time": "Uhrzeit",
-                "dose": "Dosis",
-                "days": "Wochentage",
-                "daily": "Täglich",
-                "none": "Noch keine Zeitfenster.",
-                "delete": "Zeitfenster löschen",
-                "newHint": "Speichere das Medikament, dann kannst du Zeitfenster hinzufügen.",
-                "timeRequired": "Uhrzeit ist erforderlich."
+                "title": "服薬スケジュール",
+                "add": "時間帯を追加",
+                "time": "時刻",
+                "dose": "用量",
+                "days": "曜日",
+                "daily": "毎日",
+                "none": "時間帯はまだありません。",
+                "delete": "時間帯を削除",
+                "newHint": "薬を保存すると時間帯を追加できます。",
+                "timeRequired": "時刻は必須です。"
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
-                "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "mon": "月",
+                "tue": "火",
+                "wed": "水",
+                "thu": "木",
+                "fri": "金",
+                "sat": "土",
+                "sun": "日"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "非公開",
+                "family": "家族"
             }
         },
         "labs": {
             "title": "検査値",
             "emptyTitle": "まだ結果がありません",
             "emptyDesc": "基準範囲付きの検査結果がここに表示されます。",
-            "loadError": "Laborwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "personsLabel": "Person",
-            "reportsTitle": "Befunde",
-            "add": "Befund hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Bearbeiten",
-            "noReports": "Noch keine Befunde.",
-            "analyteCount": "{{count}} Analyten",
-            "abnormalBadge": "{{count}} auffällig",
-            "selectHint": "Wähle einen Befund, um die Analyten zu sehen.",
-            "noAnalytes": "Für diesen Befund sind noch keine Analyten erfasst.",
-            "dateRequired": "Befunddatum ist erforderlich.",
-            "saved": "Befund gespeichert.",
-            "saveError": "Befund konnte nicht gespeichert werden.",
-            "deleted": "Befund gelöscht.",
-            "deleteError": "Befund konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diesen Befund wirklich löschen? Alle Analyten werden mitgelöscht.",
+            "loadError": "検査値を読み込めませんでした。",
+            "loadErrorDesc": "後でもう一度お試しください。",
+            "retry": "再試行",
+            "personsLabel": "人",
+            "reportsTitle": "検査結果",
+            "add": "検査結果を追加",
+            "addShort": "追加",
+            "edit": "編集",
+            "noReports": "検査結果はまだありません。",
+            "analyteCount": "{{count}}項目",
+            "abnormalBadge": "{{count}}件の異常",
+            "selectHint": "検査結果を選択すると項目が表示されます。",
+            "noAnalytes": "この検査結果にはまだ項目が登録されていません。",
+            "dateRequired": "検査日は必須です。",
+            "saved": "検査結果を保存しました。",
+            "saveError": "検査結果を保存できませんでした。",
+            "deleted": "検査結果を削除しました。",
+            "deleteError": "検査結果を削除できませんでした。",
+            "deleteConfirm": "この検査結果を削除しますか？すべての項目も削除されます。",
             "col": {
-                "analyte": "Analyt",
-                "value": "Wert",
-                "reference": "Referenz",
-                "flag": "Bewertung"
+                "analyte": "項目",
+                "value": "値",
+                "reference": "基準値",
+                "flag": "評価"
             },
             "flag": {
-                "low": "Niedrig",
-                "normal": "Normal",
-                "high": "Hoch"
+                "low": "低い",
+                "normal": "正常",
+                "high": "高い"
             },
             "trend": {
-                "title": "Verlauf",
-                "analyte": "Analyt",
-                "tooFew": "Mindestens zwei Befunde nötig, um einen Verlauf zu zeigen.",
-                "unit": "Einheit: {{unit}}"
+                "title": "推移",
+                "analyte": "項目",
+                "tooFew": "推移を表示するには少なくとも2件の検査結果が必要です。",
+                "unit": "単位: {{unit}}"
             },
             "field": {
-                "reportDate": "Befunddatum",
-                "labName": "Labor",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "reportDate": "検査日",
+                "labName": "検査機関",
+                "visibility": "公開範囲",
+                "note": "メモ"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "非公開",
+                "family": "家族"
             },
             "results": {
-                "title": "Analyten",
-                "newHint": "Speichere den Befund, dann kannst du Analyten hinzufügen.",
-                "none": "Noch keine Analyten.",
-                "analyte": "Analyt",
-                "value": "Wert",
-                "unit": "Einheit",
-                "refLow": "Referenz min.",
-                "refHigh": "Referenz max.",
-                "add": "Analyt hinzufügen",
-                "delete": "Analyt löschen",
-                "flagPreview": "Bewertung:",
-                "analyteRequired": "Analyt-Name ist erforderlich.",
-                "valueRequired": "Bitte einen gültigen Wert eingeben."
+                "title": "項目",
+                "newHint": "検査結果を保存すると項目を追加できます。",
+                "none": "項目はまだありません。",
+                "analyte": "項目",
+                "value": "値",
+                "unit": "単位",
+                "refLow": "基準値 下限",
+                "refHigh": "基準値 上限",
+                "add": "項目を追加",
+                "delete": "項目を削除",
+                "flagPreview": "評価:",
+                "analyteRequired": "項目名は必須です。",
+                "valueRequired": "有効な値を入力してください。"
             }
         },
         "activity": {
             "title": "アクティビティ",
             "emptyTitle": "まだアクティビティがありません",
             "emptyDesc": "トレーニングがここに表示されます。",
-            "personsLabel": "Person",
-            "prevWeek": "Vorherige Woche",
-            "nextWeek": "Nächste Woche",
-            "add": "Einheit erfassen",
-            "addShort": "Erfassen",
-            "edit": "Bearbeiten",
-            "chartTitle": "Dauer je Wochentag",
-            "noData": "Keine Einheiten in dieser Woche.",
-            "noEntries": "Noch keine Einheiten in dieser Woche.",
-            "logTitle": "Trainings-Log",
-            "loadError": "Aktivitäten konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Einheit gespeichert.",
-            "saveError": "Einheit konnte nicht gespeichert werden.",
-            "deleted": "Einheit gelöscht.",
-            "deleteError": "Einheit konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diese Einheit wirklich löschen?",
-            "invalid": "Bitte gültige Werte eingeben.",
+            "personsLabel": "人",
+            "prevWeek": "前の週",
+            "nextWeek": "次の週",
+            "add": "トレーニングを記録",
+            "addShort": "記録",
+            "edit": "編集",
+            "chartTitle": "曜日ごとの時間",
+            "noData": "今週のトレーニングはありません。",
+            "noEntries": "今週のトレーニングはまだありません。",
+            "logTitle": "トレーニング記録",
+            "loadError": "アクティビティを読み込めませんでした。",
+            "loadErrorDesc": "後でもう一度お試しください。",
+            "retry": "再試行",
+            "saved": "トレーニングを保存しました。",
+            "saveError": "トレーニングを保存できませんでした。",
+            "deleted": "トレーニングを削除しました。",
+            "deleteError": "トレーニングを削除できませんでした。",
+            "deleteConfirm": "このトレーニングを削除しますか？",
+            "invalid": "有効な値を入力してください。",
             "totals": {
-                "count": "Einheiten",
-                "duration": "Gesamt-Dauer",
-                "distance": "Gesamt-Distanz",
-                "calories": "Kalorien"
+                "count": "トレーニング",
+                "duration": "合計時間",
+                "distance": "合計距離",
+                "calories": "カロリー"
             },
             "unit": {
-                "min": "{{value}} Min",
+                "min": "{{value}}分",
                 "km": "{{value}} km",
                 "kcal": "{{value}} kcal"
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
-                "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "mon": "月",
+                "tue": "火",
+                "wed": "水",
+                "thu": "木",
+                "fri": "金",
+                "sat": "土",
+                "sun": "日"
             },
             "type": {
-                "running": "Laufen",
-                "cycling": "Radfahren",
-                "swimming": "Schwimmen",
-                "strength": "Kraft",
-                "yoga": "Yoga",
-                "walking": "Gehen",
-                "other": "Sonstiges",
-                "custom": "Eigene…"
+                "running": "ランニング",
+                "cycling": "サイクリング",
+                "swimming": "水泳",
+                "strength": "筋トレ",
+                "yoga": "ヨガ",
+                "walking": "ウォーキング",
+                "other": "その他",
+                "custom": "カスタム…"
             },
             "field": {
-                "type": "Art",
-                "typePlaceholder": "Art wählen",
-                "customType": "Eigene Art",
-                "performedAt": "Durchgeführt am",
-                "duration": "Dauer (Min)",
-                "distance": "Distanz (km)",
-                "calories": "Kalorien (kcal)",
-                "intensity": "Intensität",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "type": "種類",
+                "typePlaceholder": "種類を選択",
+                "customType": "カスタムの種類",
+                "performedAt": "実施日",
+                "duration": "時間（分）",
+                "distance": "距離（km）",
+                "calories": "カロリー（kcal）",
+                "intensity": "強度",
+                "visibility": "公開範囲",
+                "note": "メモ"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "非公開",
+                "family": "家族"
             },
             "col": {
-                "day": "Tag"
+                "day": "日"
             }
         },
         "export": {
-            "title": "Export (CSV)",
-            "rangeFrom": "Von",
-            "rangeTo": "Bis",
-            "vitals": "Vitalwerte",
-            "activities": "Aktivitäten",
-            "labs": "Laborwerte",
-            "medsLogs": "Einnahmeprotokoll",
-            "hint": "Lädt die Daten des gewählten Zeitraums als CSV-Datei herunter."
+            "title": "エクスポート（CSV）",
+            "rangeFrom": "開始",
+            "rangeTo": "終了",
+            "vitals": "バイタル",
+            "activities": "アクティビティ",
+            "labs": "検査値",
+            "medsLogs": "服薬記録",
+            "hint": "選択した期間のデータをCSVファイルとしてダウンロードします。"
         },
-        "disclaimer": "Nur zur persönlichen Dokumentation. Kein Ersatz für ärztliche Beratung, Diagnose oder Behandlung.",
-        "readOnlyBanner": "Du siehst die Daten von {{name}} — nur Lesen."
+        "disclaimer": "個人的な記録のみを目的としています。医師の助言・診断・治療の代わりにはなりません。",
+        "readOnlyBanner": "{{name}}さんのデータを表示中 — 閲覧のみ。"
     }
 }

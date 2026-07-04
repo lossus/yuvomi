@@ -2306,319 +2306,319 @@
             "title": "概览",
             "emptyTitle": "这里还什么都没有",
             "emptyDesc": "您的健康概览将显示在这里。",
-            "personsLabel": "Person auswählen",
-            "loadError": "Übersicht konnte nicht geladen werden",
-            "loadErrorDesc": "Bitte versuche es erneut.",
-            "retry": "Erneut versuchen",
+            "personsLabel": "选择成员",
+            "loadError": "无法加载概览",
+            "loadErrorDesc": "请重试。",
+            "retry": "重试",
             "dueToday": {
-                "title": "Heute fällig"
+                "title": "今日待办"
             },
             "adherence": {
-                "title": "Einnahmetreue",
-                "noData": "Noch keine Einnahmedaten",
-                "period": "Letzte {{days}} Tage",
-                "streakLabel": "Tage in Folge"
+                "title": "服药依从性",
+                "noData": "暂无服药数据",
+                "period": "最近 {{days}} 天",
+                "streakLabel": "连续天数"
             },
             "vitals": {
-                "title": "Letzte Vitalwerte"
+                "title": "最新生命体征"
             },
             "quick": {
-                "title": "Schnell erfassen",
-                "vital": "Vitalwert",
-                "activity": "Aktivität",
-                "meds": "Medikamente"
+                "title": "快速记录",
+                "vital": "生命体征",
+                "activity": "活动",
+                "meds": "药物"
             },
             "reminders": {
-                "title": "Nächste Erinnerungen",
-                "empty": "Heute keine weiteren Einnahmen"
+                "title": "接下来的提醒",
+                "empty": "今日没有更多服药"
             }
         },
         "vitals": {
             "title": "生命体征",
             "emptyTitle": "还没有测量数据",
             "emptyDesc": "血压、血糖和体重将显示在这里。",
-            "add": "Messwert erfassen",
-            "addShort": "Erfassen",
-            "personsLabel": "Person",
-            "you": "Ich",
-            "chartTitle": "Verlauf",
-            "prevPeriod": "Vorheriger Zeitraum",
-            "nextPeriod": "Nächster Zeitraum",
-            "noData": "Keine Messwerte im gewählten Zeitraum.",
-            "noValue": "Noch kein Wert",
-            "loadError": "Messwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Messwert gespeichert.",
-            "saveError": "Messwert konnte nicht gespeichert werden.",
-            "invalidValue": "Bitte gültige Werte eingeben.",
+            "add": "记录测量值",
+            "addShort": "记录",
+            "personsLabel": "成员",
+            "you": "我",
+            "chartTitle": "趋势",
+            "prevPeriod": "上一时段",
+            "nextPeriod": "下一时段",
+            "noData": "所选时段内没有测量值。",
+            "noValue": "暂无数值",
+            "loadError": "无法加载测量值。",
+            "loadErrorDesc": "请稍后重试。",
+            "retry": "重试",
+            "saved": "测量值已保存。",
+            "saveError": "无法保存测量值。",
+            "invalidValue": "请输入有效的数值。",
             "range": {
-                "week": "Woche",
-                "month": "Monat",
-                "year": "Jahr"
+                "week": "周",
+                "month": "月",
+                "year": "年"
             },
             "metric": {
-                "bp": "Blutdruck",
-                "glucose": "Blutzucker",
-                "weight": "Gewicht",
-                "spo2": "Sauerstoffsättigung",
-                "temp": "Temperatur"
+                "bp": "血压",
+                "glucose": "血糖",
+                "weight": "体重",
+                "spo2": "血氧饱和度",
+                "temp": "体温"
             },
             "channel": {
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
-                "pulse": "Puls"
+                "systolic": "收缩压",
+                "diastolic": "舒张压",
+                "pulse": "脉搏"
             },
             "field": {
-                "type": "Art",
-                "value": "Wert",
-                "unit": "Einheit",
-                "measuredAt": "Gemessen am",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
-                "pulse": "Puls"
+                "type": "类型",
+                "value": "数值",
+                "unit": "单位",
+                "measuredAt": "测量日期",
+                "note": "备注",
+                "visibility": "可见性",
+                "systolic": "收缩压",
+                "diastolic": "舒张压",
+                "pulse": "脉搏"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "私密",
+                "family": "家庭"
             }
         },
         "meds": {
             "title": "药物",
             "emptyTitle": "还没有药物",
             "emptyDesc": "带用药计划和提醒的药物将显示在这里。",
-            "add": "Medikament hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Medikament bearbeiten",
-            "loadError": "Medikamente konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Medikament gespeichert.",
-            "saveError": "Medikament konnte nicht gespeichert werden.",
-            "deleted": "Medikament gelöscht.",
-            "deleteError": "Medikament konnte nicht gelöscht werden.",
-            "deleteConfirm": "Dieses Medikament wirklich löschen? Einnahmeplan und Verlauf werden mitgelöscht.",
-            "doseSaved": "Eintrag aktualisiert.",
-            "doseError": "Eintrag konnte nicht gespeichert werden.",
-            "nameRequired": "Name ist erforderlich.",
-            "noMeds": "Noch keine Medikamente.",
-            "personsLabel": "Person",
-            "take": "Genommen",
-            "skip": "Überspringen",
+            "add": "添加药物",
+            "addShort": "添加",
+            "edit": "编辑药物",
+            "loadError": "无法加载药物。",
+            "loadErrorDesc": "请稍后重试。",
+            "retry": "重试",
+            "saved": "药物已保存。",
+            "saveError": "无法保存药物。",
+            "deleted": "药物已删除。",
+            "deleteError": "无法删除药物。",
+            "deleteConfirm": "确定删除此药物吗？服药计划和历史记录也将一并删除。",
+            "doseSaved": "记录已更新。",
+            "doseError": "无法保存记录。",
+            "nameRequired": "名称为必填项。",
+            "noMeds": "暂无药物。",
+            "personsLabel": "成员",
+            "take": "已服用",
+            "skip": "跳过",
             "dueToday": {
-                "title": "Heute fällig",
-                "empty": "Heute ist nichts fällig."
+                "title": "今日待办",
+                "empty": "今日无待办。"
             },
             "adherence": {
-                "title": "Therapietreue",
-                "period": "Letzte {{days}} Tage",
-                "noData": "Noch keine geplanten Dosen im Zeitraum.",
-                "summary": "{{taken}} von {{planned}} genommen"
+                "title": "治疗依从性",
+                "period": "最近 {{days}} 天",
+                "noData": "该时段内暂无计划的剂量。",
+                "summary": "已服用 {{planned}} 次中的 {{taken}} 次"
             },
             "status": {
-                "taken": "Genommen",
-                "skipped": "Übersprungen",
-                "pending": "Offen"
+                "taken": "已服用",
+                "skipped": "已跳过",
+                "pending": "待处理"
             },
             "badge": {
-                "prn": "Bei Bedarf",
-                "inactive": "Inaktiv"
+                "prn": "按需",
+                "inactive": "已停用"
             },
             "stock": {
-                "label": "Bestand",
-                "low": "Nachfüllen",
-                "out": "Leer"
+                "label": "库存",
+                "low": "补充",
+                "out": "已用完"
             },
             "field": {
-                "name": "Name",
-                "dosageText": "Dosis",
-                "form": "Form",
-                "stockQty": "Bestand",
-                "stockUnit": "Einheit",
-                "refillThreshold": "Nachfüll-Schwelle",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
-                "active": "Aktiv",
-                "prn": "Bei Bedarf (PRN)"
+                "name": "名称",
+                "dosageText": "剂量",
+                "form": "剂型",
+                "stockQty": "库存",
+                "stockUnit": "单位",
+                "refillThreshold": "补充阈值",
+                "note": "备注",
+                "visibility": "可见性",
+                "active": "启用",
+                "prn": "按需（PRN）"
             },
             "schedule": {
-                "title": "Einnahmeplan",
-                "add": "Zeitfenster hinzufügen",
-                "time": "Uhrzeit",
-                "dose": "Dosis",
-                "days": "Wochentage",
-                "daily": "Täglich",
-                "none": "Noch keine Zeitfenster.",
-                "delete": "Zeitfenster löschen",
-                "newHint": "Speichere das Medikament, dann kannst du Zeitfenster hinzufügen.",
-                "timeRequired": "Uhrzeit ist erforderlich."
+                "title": "服药计划",
+                "add": "添加时间",
+                "time": "时间",
+                "dose": "剂量",
+                "days": "星期",
+                "daily": "每天",
+                "none": "暂无时间。",
+                "delete": "删除时间",
+                "newHint": "保存药物后即可添加时间。",
+                "timeRequired": "时间为必填项。"
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
-                "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "mon": "一",
+                "tue": "二",
+                "wed": "三",
+                "thu": "四",
+                "fri": "五",
+                "sat": "六",
+                "sun": "日"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "私密",
+                "family": "家庭"
             }
         },
         "labs": {
             "title": "化验值",
             "emptyTitle": "还没有化验结果",
             "emptyDesc": "带参考范围的化验报告将显示在这里。",
-            "loadError": "Laborwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "personsLabel": "Person",
-            "reportsTitle": "Befunde",
-            "add": "Befund hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Bearbeiten",
-            "noReports": "Noch keine Befunde.",
-            "analyteCount": "{{count}} Analyten",
-            "abnormalBadge": "{{count}} auffällig",
-            "selectHint": "Wähle einen Befund, um die Analyten zu sehen.",
-            "noAnalytes": "Für diesen Befund sind noch keine Analyten erfasst.",
-            "dateRequired": "Befunddatum ist erforderlich.",
-            "saved": "Befund gespeichert.",
-            "saveError": "Befund konnte nicht gespeichert werden.",
-            "deleted": "Befund gelöscht.",
-            "deleteError": "Befund konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diesen Befund wirklich löschen? Alle Analyten werden mitgelöscht.",
+            "loadError": "无法加载化验值。",
+            "loadErrorDesc": "请稍后重试。",
+            "retry": "重试",
+            "personsLabel": "成员",
+            "reportsTitle": "报告",
+            "add": "添加报告",
+            "addShort": "添加",
+            "edit": "编辑",
+            "noReports": "暂无报告。",
+            "analyteCount": "{{count}} 项指标",
+            "abnormalBadge": "{{count}} 项异常",
+            "selectHint": "选择一份报告以查看指标。",
+            "noAnalytes": "此报告尚未录入指标。",
+            "dateRequired": "报告日期为必填项。",
+            "saved": "报告已保存。",
+            "saveError": "无法保存报告。",
+            "deleted": "报告已删除。",
+            "deleteError": "无法删除报告。",
+            "deleteConfirm": "确定删除此报告吗？所有指标也将一并删除。",
             "col": {
-                "analyte": "Analyt",
-                "value": "Wert",
-                "reference": "Referenz",
-                "flag": "Bewertung"
+                "analyte": "指标",
+                "value": "数值",
+                "reference": "参考范围",
+                "flag": "评估"
             },
             "flag": {
-                "low": "Niedrig",
-                "normal": "Normal",
-                "high": "Hoch"
+                "low": "偏低",
+                "normal": "正常",
+                "high": "偏高"
             },
             "trend": {
-                "title": "Verlauf",
-                "analyte": "Analyt",
-                "tooFew": "Mindestens zwei Befunde nötig, um einen Verlauf zu zeigen.",
-                "unit": "Einheit: {{unit}}"
+                "title": "趋势",
+                "analyte": "指标",
+                "tooFew": "至少需要两份报告才能显示趋势。",
+                "unit": "单位：{{unit}}"
             },
             "field": {
-                "reportDate": "Befunddatum",
-                "labName": "Labor",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "reportDate": "报告日期",
+                "labName": "化验室",
+                "visibility": "可见性",
+                "note": "备注"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "私密",
+                "family": "家庭"
             },
             "results": {
-                "title": "Analyten",
-                "newHint": "Speichere den Befund, dann kannst du Analyten hinzufügen.",
-                "none": "Noch keine Analyten.",
-                "analyte": "Analyt",
-                "value": "Wert",
-                "unit": "Einheit",
-                "refLow": "Referenz min.",
-                "refHigh": "Referenz max.",
-                "add": "Analyt hinzufügen",
-                "delete": "Analyt löschen",
-                "flagPreview": "Bewertung:",
-                "analyteRequired": "Analyt-Name ist erforderlich.",
-                "valueRequired": "Bitte einen gültigen Wert eingeben."
+                "title": "指标",
+                "newHint": "保存报告后即可添加指标。",
+                "none": "暂无指标。",
+                "analyte": "指标",
+                "value": "数值",
+                "unit": "单位",
+                "refLow": "参考下限",
+                "refHigh": "参考上限",
+                "add": "添加指标",
+                "delete": "删除指标",
+                "flagPreview": "评估：",
+                "analyteRequired": "指标名称为必填项。",
+                "valueRequired": "请输入有效的数值。"
             }
         },
         "activity": {
             "title": "活动",
             "emptyTitle": "还没有活动",
             "emptyDesc": "您的锻炼将显示在这里。",
-            "personsLabel": "Person",
-            "prevWeek": "Vorherige Woche",
-            "nextWeek": "Nächste Woche",
-            "add": "Einheit erfassen",
-            "addShort": "Erfassen",
-            "edit": "Bearbeiten",
-            "chartTitle": "Dauer je Wochentag",
-            "noData": "Keine Einheiten in dieser Woche.",
-            "noEntries": "Noch keine Einheiten in dieser Woche.",
-            "logTitle": "Trainings-Log",
-            "loadError": "Aktivitäten konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Einheit gespeichert.",
-            "saveError": "Einheit konnte nicht gespeichert werden.",
-            "deleted": "Einheit gelöscht.",
-            "deleteError": "Einheit konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diese Einheit wirklich löschen?",
-            "invalid": "Bitte gültige Werte eingeben.",
+            "personsLabel": "成员",
+            "prevWeek": "上一周",
+            "nextWeek": "下一周",
+            "add": "记录训练",
+            "addShort": "记录",
+            "edit": "编辑",
+            "chartTitle": "各星期时长",
+            "noData": "本周没有训练。",
+            "noEntries": "本周暂无训练。",
+            "logTitle": "训练日志",
+            "loadError": "无法加载活动。",
+            "loadErrorDesc": "请稍后重试。",
+            "retry": "重试",
+            "saved": "训练已保存。",
+            "saveError": "无法保存训练。",
+            "deleted": "训练已删除。",
+            "deleteError": "无法删除训练。",
+            "deleteConfirm": "确定删除此训练吗？",
+            "invalid": "请输入有效的数值。",
             "totals": {
-                "count": "Einheiten",
-                "duration": "Gesamt-Dauer",
-                "distance": "Gesamt-Distanz",
-                "calories": "Kalorien"
+                "count": "训练",
+                "duration": "总时长",
+                "distance": "总距离",
+                "calories": "卡路里"
             },
             "unit": {
-                "min": "{{value}} Min",
-                "km": "{{value}} km",
-                "kcal": "{{value}} kcal"
+                "min": "{{value}} 分钟",
+                "km": "{{value}} 公里",
+                "kcal": "{{value}} 千卡"
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
-                "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "mon": "一",
+                "tue": "二",
+                "wed": "三",
+                "thu": "四",
+                "fri": "五",
+                "sat": "六",
+                "sun": "日"
             },
             "type": {
-                "running": "Laufen",
-                "cycling": "Radfahren",
-                "swimming": "Schwimmen",
-                "strength": "Kraft",
-                "yoga": "Yoga",
-                "walking": "Gehen",
-                "other": "Sonstiges",
-                "custom": "Eigene…"
+                "running": "跑步",
+                "cycling": "骑行",
+                "swimming": "游泳",
+                "strength": "力量",
+                "yoga": "瑜伽",
+                "walking": "步行",
+                "other": "其他",
+                "custom": "自定义…"
             },
             "field": {
-                "type": "Art",
-                "typePlaceholder": "Art wählen",
-                "customType": "Eigene Art",
-                "performedAt": "Durchgeführt am",
-                "duration": "Dauer (Min)",
-                "distance": "Distanz (km)",
-                "calories": "Kalorien (kcal)",
-                "intensity": "Intensität",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "type": "类型",
+                "typePlaceholder": "选择类型",
+                "customType": "自定义类型",
+                "performedAt": "进行日期",
+                "duration": "时长（分钟）",
+                "distance": "距离（公里）",
+                "calories": "卡路里（千卡）",
+                "intensity": "强度",
+                "visibility": "可见性",
+                "note": "备注"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "私密",
+                "family": "家庭"
             },
             "col": {
-                "day": "Tag"
+                "day": "日"
             }
         },
         "export": {
-            "title": "Export (CSV)",
-            "rangeFrom": "Von",
-            "rangeTo": "Bis",
-            "vitals": "Vitalwerte",
-            "activities": "Aktivitäten",
-            "labs": "Laborwerte",
-            "medsLogs": "Einnahmeprotokoll",
-            "hint": "Lädt die Daten des gewählten Zeitraums als CSV-Datei herunter."
+            "title": "导出（CSV）",
+            "rangeFrom": "起",
+            "rangeTo": "止",
+            "vitals": "生命体征",
+            "activities": "活动",
+            "labs": "化验值",
+            "medsLogs": "服药记录",
+            "hint": "将所选时段的数据下载为 CSV 文件。"
         },
-        "disclaimer": "Nur zur persönlichen Dokumentation. Kein Ersatz für ärztliche Beratung, Diagnose oder Behandlung.",
-        "readOnlyBanner": "Du siehst die Daten von {{name}} — nur Lesen."
+        "disclaimer": "仅供个人记录，不能替代医疗咨询、诊断或治疗。",
+        "readOnlyBanner": "您正在查看 {{name}} 的数据 — 仅可查看。"
     }
 }

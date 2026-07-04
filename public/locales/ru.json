@@ -2306,319 +2306,319 @@
             "title": "Обзор",
             "emptyTitle": "Здесь пока пусто",
             "emptyDesc": "Ваш обзор здоровья появится здесь.",
-            "personsLabel": "Person auswählen",
-            "loadError": "Übersicht konnte nicht geladen werden",
-            "loadErrorDesc": "Bitte versuche es erneut.",
-            "retry": "Erneut versuchen",
+            "personsLabel": "Выбрать человека",
+            "loadError": "Не удалось загрузить обзор",
+            "loadErrorDesc": "Пожалуйста, попробуйте ещё раз.",
+            "retry": "Повторить",
             "dueToday": {
-                "title": "Heute fällig"
+                "title": "На сегодня"
             },
             "adherence": {
-                "title": "Einnahmetreue",
-                "noData": "Noch keine Einnahmedaten",
-                "period": "Letzte {{days}} Tage",
-                "streakLabel": "Tage in Folge"
+                "title": "Соблюдение приёма",
+                "noData": "Пока нет данных о приёме",
+                "period": "Последние {{days}} дней",
+                "streakLabel": "Дней подряд"
             },
             "vitals": {
-                "title": "Letzte Vitalwerte"
+                "title": "Последние показатели"
             },
             "quick": {
-                "title": "Schnell erfassen",
-                "vital": "Vitalwert",
-                "activity": "Aktivität",
-                "meds": "Medikamente"
+                "title": "Быстрый ввод",
+                "vital": "Показатель",
+                "activity": "Активность",
+                "meds": "Лекарства"
             },
             "reminders": {
-                "title": "Nächste Erinnerungen",
-                "empty": "Heute keine weiteren Einnahmen"
+                "title": "Следующие напоминания",
+                "empty": "На сегодня приёмов больше нет"
             }
         },
         "vitals": {
             "title": "Показатели",
             "emptyTitle": "Пока нет измерений",
             "emptyDesc": "Давление, сахар и вес появятся здесь.",
-            "add": "Messwert erfassen",
-            "addShort": "Erfassen",
-            "personsLabel": "Person",
-            "you": "Ich",
-            "chartTitle": "Verlauf",
-            "prevPeriod": "Vorheriger Zeitraum",
-            "nextPeriod": "Nächster Zeitraum",
-            "noData": "Keine Messwerte im gewählten Zeitraum.",
-            "noValue": "Noch kein Wert",
-            "loadError": "Messwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Messwert gespeichert.",
-            "saveError": "Messwert konnte nicht gespeichert werden.",
-            "invalidValue": "Bitte gültige Werte eingeben.",
+            "add": "Добавить измерение",
+            "addShort": "Добавить",
+            "personsLabel": "Человек",
+            "you": "Я",
+            "chartTitle": "Динамика",
+            "prevPeriod": "Предыдущий период",
+            "nextPeriod": "Следующий период",
+            "noData": "Нет измерений за выбранный период.",
+            "noValue": "Пока нет значения",
+            "loadError": "Не удалось загрузить измерения.",
+            "loadErrorDesc": "Пожалуйста, попробуйте позже.",
+            "retry": "Повторить",
+            "saved": "Измерение сохранено.",
+            "saveError": "Не удалось сохранить измерение.",
+            "invalidValue": "Введите корректные значения.",
             "range": {
-                "week": "Woche",
-                "month": "Monat",
-                "year": "Jahr"
+                "week": "Неделя",
+                "month": "Месяц",
+                "year": "Год"
             },
             "metric": {
-                "bp": "Blutdruck",
-                "glucose": "Blutzucker",
-                "weight": "Gewicht",
-                "spo2": "Sauerstoffsättigung",
-                "temp": "Temperatur"
+                "bp": "Артериальное давление",
+                "glucose": "Сахар в крови",
+                "weight": "Вес",
+                "spo2": "Насыщение кислородом",
+                "temp": "Температура"
             },
             "channel": {
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
-                "pulse": "Puls"
+                "systolic": "Систолическое",
+                "diastolic": "Диастолическое",
+                "pulse": "Пульс"
             },
             "field": {
-                "type": "Art",
-                "value": "Wert",
-                "unit": "Einheit",
-                "measuredAt": "Gemessen am",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
-                "pulse": "Puls"
+                "type": "Тип",
+                "value": "Значение",
+                "unit": "Единица",
+                "measuredAt": "Измерено",
+                "note": "Заметка",
+                "visibility": "Видимость",
+                "systolic": "Систолическое",
+                "diastolic": "Диастолическое",
+                "pulse": "Пульс"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Личное",
+                "family": "Семья"
             }
         },
         "meds": {
             "title": "Лекарства",
             "emptyTitle": "Пока нет лекарств",
             "emptyDesc": "Лекарства с расписанием и напоминаниями появятся здесь.",
-            "add": "Medikament hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Medikament bearbeiten",
-            "loadError": "Medikamente konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Medikament gespeichert.",
-            "saveError": "Medikament konnte nicht gespeichert werden.",
-            "deleted": "Medikament gelöscht.",
-            "deleteError": "Medikament konnte nicht gelöscht werden.",
-            "deleteConfirm": "Dieses Medikament wirklich löschen? Einnahmeplan und Verlauf werden mitgelöscht.",
-            "doseSaved": "Eintrag aktualisiert.",
-            "doseError": "Eintrag konnte nicht gespeichert werden.",
-            "nameRequired": "Name ist erforderlich.",
-            "noMeds": "Noch keine Medikamente.",
-            "personsLabel": "Person",
-            "take": "Genommen",
-            "skip": "Überspringen",
+            "add": "Добавить лекарство",
+            "addShort": "Добавить",
+            "edit": "Изменить лекарство",
+            "loadError": "Не удалось загрузить лекарства.",
+            "loadErrorDesc": "Пожалуйста, попробуйте позже.",
+            "retry": "Повторить",
+            "saved": "Лекарство сохранено.",
+            "saveError": "Не удалось сохранить лекарство.",
+            "deleted": "Лекарство удалено.",
+            "deleteError": "Не удалось удалить лекарство.",
+            "deleteConfirm": "Действительно удалить это лекарство? График приёма и история также будут удалены.",
+            "doseSaved": "Запись обновлена.",
+            "doseError": "Не удалось сохранить запись.",
+            "nameRequired": "Название обязательно.",
+            "noMeds": "Пока нет лекарств.",
+            "personsLabel": "Человек",
+            "take": "Принято",
+            "skip": "Пропустить",
             "dueToday": {
-                "title": "Heute fällig",
-                "empty": "Heute ist nichts fällig."
+                "title": "На сегодня",
+                "empty": "На сегодня ничего нет."
             },
             "adherence": {
-                "title": "Therapietreue",
-                "period": "Letzte {{days}} Tage",
-                "noData": "Noch keine geplanten Dosen im Zeitraum.",
-                "summary": "{{taken}} von {{planned}} genommen"
+                "title": "Соблюдение терапии",
+                "period": "Последние {{days}} дней",
+                "noData": "За период пока нет запланированных доз.",
+                "summary": "Принято {{taken}} из {{planned}}"
             },
             "status": {
-                "taken": "Genommen",
-                "skipped": "Übersprungen",
-                "pending": "Offen"
+                "taken": "Принято",
+                "skipped": "Пропущено",
+                "pending": "Ожидает"
             },
             "badge": {
-                "prn": "Bei Bedarf",
-                "inactive": "Inaktiv"
+                "prn": "По потребности",
+                "inactive": "Неактивно"
             },
             "stock": {
-                "label": "Bestand",
-                "low": "Nachfüllen",
-                "out": "Leer"
+                "label": "Запас",
+                "low": "Пополнить",
+                "out": "Закончилось"
             },
             "field": {
-                "name": "Name",
-                "dosageText": "Dosis",
-                "form": "Form",
-                "stockQty": "Bestand",
-                "stockUnit": "Einheit",
-                "refillThreshold": "Nachfüll-Schwelle",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
-                "active": "Aktiv",
-                "prn": "Bei Bedarf (PRN)"
+                "name": "Название",
+                "dosageText": "Доза",
+                "form": "Форма",
+                "stockQty": "Запас",
+                "stockUnit": "Единица",
+                "refillThreshold": "Порог пополнения",
+                "note": "Заметка",
+                "visibility": "Видимость",
+                "active": "Активно",
+                "prn": "По потребности (PRN)"
             },
             "schedule": {
-                "title": "Einnahmeplan",
-                "add": "Zeitfenster hinzufügen",
-                "time": "Uhrzeit",
-                "dose": "Dosis",
-                "days": "Wochentage",
-                "daily": "Täglich",
-                "none": "Noch keine Zeitfenster.",
-                "delete": "Zeitfenster löschen",
-                "newHint": "Speichere das Medikament, dann kannst du Zeitfenster hinzufügen.",
-                "timeRequired": "Uhrzeit ist erforderlich."
+                "title": "График приёма",
+                "add": "Добавить время",
+                "time": "Время",
+                "dose": "Доза",
+                "days": "Дни недели",
+                "daily": "Ежедневно",
+                "none": "Пока нет времени приёма.",
+                "delete": "Удалить время",
+                "newHint": "Сохраните лекарство, чтобы добавить время приёма.",
+                "timeRequired": "Время обязательно."
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
-                "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "mon": "Пн",
+                "tue": "Вт",
+                "wed": "Ср",
+                "thu": "Чт",
+                "fri": "Пт",
+                "sat": "Сб",
+                "sun": "Вс"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Личное",
+                "family": "Семья"
             }
         },
         "labs": {
             "title": "Анализы",
             "emptyTitle": "Пока нет результатов",
             "emptyDesc": "Результаты анализов с референсными диапазонами появятся здесь.",
-            "loadError": "Laborwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "personsLabel": "Person",
-            "reportsTitle": "Befunde",
-            "add": "Befund hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Bearbeiten",
-            "noReports": "Noch keine Befunde.",
-            "analyteCount": "{{count}} Analyten",
-            "abnormalBadge": "{{count}} auffällig",
-            "selectHint": "Wähle einen Befund, um die Analyten zu sehen.",
-            "noAnalytes": "Für diesen Befund sind noch keine Analyten erfasst.",
-            "dateRequired": "Befunddatum ist erforderlich.",
-            "saved": "Befund gespeichert.",
-            "saveError": "Befund konnte nicht gespeichert werden.",
-            "deleted": "Befund gelöscht.",
-            "deleteError": "Befund konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diesen Befund wirklich löschen? Alle Analyten werden mitgelöscht.",
+            "loadError": "Не удалось загрузить лабораторные показатели.",
+            "loadErrorDesc": "Пожалуйста, попробуйте позже.",
+            "retry": "Повторить",
+            "personsLabel": "Человек",
+            "reportsTitle": "Результаты",
+            "add": "Добавить результат",
+            "addShort": "Добавить",
+            "edit": "Изменить",
+            "noReports": "Пока нет результатов.",
+            "analyteCount": "Показателей: {{count}}",
+            "abnormalBadge": "{{count}} отклонений",
+            "selectHint": "Выберите результат, чтобы увидеть показатели.",
+            "noAnalytes": "Для этого результата пока не добавлены показатели.",
+            "dateRequired": "Дата результата обязательна.",
+            "saved": "Результат сохранён.",
+            "saveError": "Не удалось сохранить результат.",
+            "deleted": "Результат удалён.",
+            "deleteError": "Не удалось удалить результат.",
+            "deleteConfirm": "Действительно удалить этот результат? Все показатели также будут удалены.",
             "col": {
-                "analyte": "Analyt",
-                "value": "Wert",
-                "reference": "Referenz",
-                "flag": "Bewertung"
+                "analyte": "Показатель",
+                "value": "Значение",
+                "reference": "Референс",
+                "flag": "Оценка"
             },
             "flag": {
-                "low": "Niedrig",
-                "normal": "Normal",
-                "high": "Hoch"
+                "low": "Низкий",
+                "normal": "Норма",
+                "high": "Высокий"
             },
             "trend": {
-                "title": "Verlauf",
-                "analyte": "Analyt",
-                "tooFew": "Mindestens zwei Befunde nötig, um einen Verlauf zu zeigen.",
-                "unit": "Einheit: {{unit}}"
+                "title": "Динамика",
+                "analyte": "Показатель",
+                "tooFew": "Для отображения динамики нужно не менее двух результатов.",
+                "unit": "Единица: {{unit}}"
             },
             "field": {
-                "reportDate": "Befunddatum",
-                "labName": "Labor",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "reportDate": "Дата результата",
+                "labName": "Лаборатория",
+                "visibility": "Видимость",
+                "note": "Заметка"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Личное",
+                "family": "Семья"
             },
             "results": {
-                "title": "Analyten",
-                "newHint": "Speichere den Befund, dann kannst du Analyten hinzufügen.",
-                "none": "Noch keine Analyten.",
-                "analyte": "Analyt",
-                "value": "Wert",
-                "unit": "Einheit",
-                "refLow": "Referenz min.",
-                "refHigh": "Referenz max.",
-                "add": "Analyt hinzufügen",
-                "delete": "Analyt löschen",
-                "flagPreview": "Bewertung:",
-                "analyteRequired": "Analyt-Name ist erforderlich.",
-                "valueRequired": "Bitte einen gültigen Wert eingeben."
+                "title": "Показатели",
+                "newHint": "Сохраните результат, чтобы добавить показатели.",
+                "none": "Пока нет показателей.",
+                "analyte": "Показатель",
+                "value": "Значение",
+                "unit": "Единица",
+                "refLow": "Референс мин.",
+                "refHigh": "Референс макс.",
+                "add": "Добавить показатель",
+                "delete": "Удалить показатель",
+                "flagPreview": "Оценка:",
+                "analyteRequired": "Название показателя обязательно.",
+                "valueRequired": "Введите корректное значение."
             }
         },
         "activity": {
             "title": "Активность",
             "emptyTitle": "Пока нет активности",
             "emptyDesc": "Ваши тренировки появятся здесь.",
-            "personsLabel": "Person",
-            "prevWeek": "Vorherige Woche",
-            "nextWeek": "Nächste Woche",
-            "add": "Einheit erfassen",
-            "addShort": "Erfassen",
-            "edit": "Bearbeiten",
-            "chartTitle": "Dauer je Wochentag",
-            "noData": "Keine Einheiten in dieser Woche.",
-            "noEntries": "Noch keine Einheiten in dieser Woche.",
-            "logTitle": "Trainings-Log",
-            "loadError": "Aktivitäten konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Einheit gespeichert.",
-            "saveError": "Einheit konnte nicht gespeichert werden.",
-            "deleted": "Einheit gelöscht.",
-            "deleteError": "Einheit konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diese Einheit wirklich löschen?",
-            "invalid": "Bitte gültige Werte eingeben.",
+            "personsLabel": "Человек",
+            "prevWeek": "Предыдущая неделя",
+            "nextWeek": "Следующая неделя",
+            "add": "Добавить тренировку",
+            "addShort": "Добавить",
+            "edit": "Изменить",
+            "chartTitle": "Длительность по дням недели",
+            "noData": "На этой неделе тренировок нет.",
+            "noEntries": "На этой неделе пока нет тренировок.",
+            "logTitle": "Журнал тренировок",
+            "loadError": "Не удалось загрузить активности.",
+            "loadErrorDesc": "Пожалуйста, попробуйте позже.",
+            "retry": "Повторить",
+            "saved": "Тренировка сохранена.",
+            "saveError": "Не удалось сохранить тренировку.",
+            "deleted": "Тренировка удалена.",
+            "deleteError": "Не удалось удалить тренировку.",
+            "deleteConfirm": "Действительно удалить эту тренировку?",
+            "invalid": "Введите корректные значения.",
             "totals": {
-                "count": "Einheiten",
-                "duration": "Gesamt-Dauer",
-                "distance": "Gesamt-Distanz",
-                "calories": "Kalorien"
+                "count": "Тренировки",
+                "duration": "Общая длительность",
+                "distance": "Общая дистанция",
+                "calories": "Калории"
             },
             "unit": {
-                "min": "{{value}} Min",
-                "km": "{{value}} km",
-                "kcal": "{{value}} kcal"
+                "min": "{{value}} мин",
+                "km": "{{value}} км",
+                "kcal": "{{value}} ккал"
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
-                "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "mon": "Пн",
+                "tue": "Вт",
+                "wed": "Ср",
+                "thu": "Чт",
+                "fri": "Пт",
+                "sat": "Сб",
+                "sun": "Вс"
             },
             "type": {
-                "running": "Laufen",
-                "cycling": "Radfahren",
-                "swimming": "Schwimmen",
-                "strength": "Kraft",
-                "yoga": "Yoga",
-                "walking": "Gehen",
-                "other": "Sonstiges",
-                "custom": "Eigene…"
+                "running": "Бег",
+                "cycling": "Велосипед",
+                "swimming": "Плавание",
+                "strength": "Силовая",
+                "yoga": "Йога",
+                "walking": "Ходьба",
+                "other": "Прочее",
+                "custom": "Свой вариант…"
             },
             "field": {
-                "type": "Art",
-                "typePlaceholder": "Art wählen",
-                "customType": "Eigene Art",
-                "performedAt": "Durchgeführt am",
-                "duration": "Dauer (Min)",
-                "distance": "Distanz (km)",
-                "calories": "Kalorien (kcal)",
-                "intensity": "Intensität",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "type": "Тип",
+                "typePlaceholder": "Выберите тип",
+                "customType": "Свой тип",
+                "performedAt": "Выполнено",
+                "duration": "Длительность (мин)",
+                "distance": "Дистанция (км)",
+                "calories": "Калории (ккал)",
+                "intensity": "Интенсивность",
+                "visibility": "Видимость",
+                "note": "Заметка"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Личное",
+                "family": "Семья"
             },
             "col": {
-                "day": "Tag"
+                "day": "День"
             }
         },
         "export": {
-            "title": "Export (CSV)",
-            "rangeFrom": "Von",
-            "rangeTo": "Bis",
-            "vitals": "Vitalwerte",
-            "activities": "Aktivitäten",
-            "labs": "Laborwerte",
-            "medsLogs": "Einnahmeprotokoll",
-            "hint": "Lädt die Daten des gewählten Zeitraums als CSV-Datei herunter."
+            "title": "Экспорт (CSV)",
+            "rangeFrom": "С",
+            "rangeTo": "По",
+            "vitals": "Показатели",
+            "activities": "Активности",
+            "labs": "Лабораторные показатели",
+            "medsLogs": "Журнал приёма",
+            "hint": "Скачивает данные выбранного периода в виде CSV-файла."
         },
-        "disclaimer": "Nur zur persönlichen Dokumentation. Kein Ersatz für ärztliche Beratung, Diagnose oder Behandlung.",
-        "readOnlyBanner": "Du siehst die Daten von {{name}} — nur Lesen."
+        "disclaimer": "Только для личного учёта. Не заменяет медицинскую консультацию, диагностику или лечение.",
+        "readOnlyBanner": "Вы просматриваете данные {{name}} — только чтение."
     }
 }

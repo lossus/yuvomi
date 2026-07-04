@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.88.2] - 2026-07-04
+
+### Fixed
+- **Health module is now fully translated in all 23 languages (Discussion #431)** — the Health module and its sub-tabs (Overview, Vitals, Medications, Lab results, Activity) still fell back to German for most labels, form fields, and messages in many languages, most visibly in Spanish. All 227 affected strings are now translated across the 18 languages that were incomplete (Arabic, Chinese, Czech, Dutch, French, Greek, Hindi, Hungarian, Italian, Japanese, Polish, Portuguese, Russian, Spanish, Swedish, Turkish, Ukrainian, Vietnamese); English, Korean, Indonesian, and Persian were already complete. Interpolation placeholders (dates, counts, names) are preserved in every language.
+
 ## [0.88.1] - 2026-07-03
 
 ### Fixed

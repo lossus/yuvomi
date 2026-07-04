@@ -2306,319 +2306,319 @@
             "title": "Tổng quan",
             "emptyTitle": "Chưa có gì ở đây",
             "emptyDesc": "Tổng quan sức khỏe của bạn sẽ hiển thị ở đây.",
-            "personsLabel": "Person auswählen",
-            "loadError": "Übersicht konnte nicht geladen werden",
-            "loadErrorDesc": "Bitte versuche es erneut.",
-            "retry": "Erneut versuchen",
+            "personsLabel": "Chọn người",
+            "loadError": "Không thể tải trang tổng quan",
+            "loadErrorDesc": "Vui lòng thử lại.",
+            "retry": "Thử lại",
             "dueToday": {
-                "title": "Heute fällig"
+                "title": "Cần làm hôm nay"
             },
             "adherence": {
-                "title": "Einnahmetreue",
-                "noData": "Noch keine Einnahmedaten",
-                "period": "Letzte {{days}} Tage",
-                "streakLabel": "Tage in Folge"
+                "title": "Tuân thủ dùng thuốc",
+                "noData": "Chưa có dữ liệu dùng thuốc",
+                "period": "{{days}} ngày qua",
+                "streakLabel": "Ngày liên tiếp"
             },
             "vitals": {
-                "title": "Letzte Vitalwerte"
+                "title": "Chỉ số sinh tồn gần nhất"
             },
             "quick": {
-                "title": "Schnell erfassen",
-                "vital": "Vitalwert",
-                "activity": "Aktivität",
-                "meds": "Medikamente"
+                "title": "Ghi nhanh",
+                "vital": "Chỉ số sinh tồn",
+                "activity": "Hoạt động",
+                "meds": "Thuốc"
             },
             "reminders": {
-                "title": "Nächste Erinnerungen",
-                "empty": "Heute keine weiteren Einnahmen"
+                "title": "Nhắc nhở tiếp theo",
+                "empty": "Hôm nay không còn lần dùng thuốc nào"
             }
         },
         "vitals": {
             "title": "Chỉ số sinh tồn",
             "emptyTitle": "Chưa có số đo",
             "emptyDesc": "Huyết áp, đường huyết và cân nặng sẽ hiển thị ở đây.",
-            "add": "Messwert erfassen",
-            "addShort": "Erfassen",
-            "personsLabel": "Person",
-            "you": "Ich",
-            "chartTitle": "Verlauf",
-            "prevPeriod": "Vorheriger Zeitraum",
-            "nextPeriod": "Nächster Zeitraum",
-            "noData": "Keine Messwerte im gewählten Zeitraum.",
-            "noValue": "Noch kein Wert",
-            "loadError": "Messwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Messwert gespeichert.",
-            "saveError": "Messwert konnte nicht gespeichert werden.",
-            "invalidValue": "Bitte gültige Werte eingeben.",
+            "add": "Ghi chỉ số đo",
+            "addShort": "Ghi",
+            "personsLabel": "Người",
+            "you": "Tôi",
+            "chartTitle": "Diễn biến",
+            "prevPeriod": "Kỳ trước",
+            "nextPeriod": "Kỳ sau",
+            "noData": "Không có chỉ số đo trong kỳ đã chọn.",
+            "noValue": "Chưa có giá trị",
+            "loadError": "Không thể tải các chỉ số đo.",
+            "loadErrorDesc": "Vui lòng thử lại sau.",
+            "retry": "Thử lại",
+            "saved": "Đã lưu chỉ số đo.",
+            "saveError": "Không thể lưu chỉ số đo.",
+            "invalidValue": "Vui lòng nhập giá trị hợp lệ.",
             "range": {
-                "week": "Woche",
-                "month": "Monat",
-                "year": "Jahr"
+                "week": "Tuần",
+                "month": "Tháng",
+                "year": "Năm"
             },
             "metric": {
-                "bp": "Blutdruck",
-                "glucose": "Blutzucker",
-                "weight": "Gewicht",
-                "spo2": "Sauerstoffsättigung",
-                "temp": "Temperatur"
+                "bp": "Huyết áp",
+                "glucose": "Đường huyết",
+                "weight": "Cân nặng",
+                "spo2": "Độ bão hòa oxy",
+                "temp": "Nhiệt độ"
             },
             "channel": {
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
-                "pulse": "Puls"
+                "systolic": "Tâm thu",
+                "diastolic": "Tâm trương",
+                "pulse": "Mạch"
             },
             "field": {
-                "type": "Art",
-                "value": "Wert",
-                "unit": "Einheit",
-                "measuredAt": "Gemessen am",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
-                "systolic": "Systolisch",
-                "diastolic": "Diastolisch",
-                "pulse": "Puls"
+                "type": "Loại",
+                "value": "Giá trị",
+                "unit": "Đơn vị",
+                "measuredAt": "Đo vào ngày",
+                "note": "Ghi chú",
+                "visibility": "Khả năng hiển thị",
+                "systolic": "Tâm thu",
+                "diastolic": "Tâm trương",
+                "pulse": "Mạch"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Riêng tư",
+                "family": "Gia đình"
             }
         },
         "meds": {
             "title": "Thuốc",
             "emptyTitle": "Chưa có thuốc",
             "emptyDesc": "Thuốc kèm lịch và nhắc nhở sẽ hiển thị ở đây.",
-            "add": "Medikament hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Medikament bearbeiten",
-            "loadError": "Medikamente konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Medikament gespeichert.",
-            "saveError": "Medikament konnte nicht gespeichert werden.",
-            "deleted": "Medikament gelöscht.",
-            "deleteError": "Medikament konnte nicht gelöscht werden.",
-            "deleteConfirm": "Dieses Medikament wirklich löschen? Einnahmeplan und Verlauf werden mitgelöscht.",
-            "doseSaved": "Eintrag aktualisiert.",
-            "doseError": "Eintrag konnte nicht gespeichert werden.",
-            "nameRequired": "Name ist erforderlich.",
-            "noMeds": "Noch keine Medikamente.",
-            "personsLabel": "Person",
-            "take": "Genommen",
-            "skip": "Überspringen",
+            "add": "Thêm thuốc",
+            "addShort": "Thêm",
+            "edit": "Sửa thuốc",
+            "loadError": "Không thể tải thuốc.",
+            "loadErrorDesc": "Vui lòng thử lại sau.",
+            "retry": "Thử lại",
+            "saved": "Đã lưu thuốc.",
+            "saveError": "Không thể lưu thuốc.",
+            "deleted": "Đã xóa thuốc.",
+            "deleteError": "Không thể xóa thuốc.",
+            "deleteConfirm": "Thực sự xóa thuốc này? Lịch dùng thuốc và lịch sử cũng sẽ bị xóa.",
+            "doseSaved": "Đã cập nhật mục.",
+            "doseError": "Không thể lưu mục.",
+            "nameRequired": "Tên là bắt buộc.",
+            "noMeds": "Chưa có thuốc.",
+            "personsLabel": "Người",
+            "take": "Đã dùng",
+            "skip": "Bỏ qua",
             "dueToday": {
-                "title": "Heute fällig",
-                "empty": "Heute ist nichts fällig."
+                "title": "Cần làm hôm nay",
+                "empty": "Hôm nay không có gì cần làm."
             },
             "adherence": {
-                "title": "Therapietreue",
-                "period": "Letzte {{days}} Tage",
-                "noData": "Noch keine geplanten Dosen im Zeitraum.",
-                "summary": "{{taken}} von {{planned}} genommen"
+                "title": "Tuân thủ điều trị",
+                "period": "{{days}} ngày qua",
+                "noData": "Chưa có liều được lên lịch trong kỳ.",
+                "summary": "Đã dùng {{taken}} trong {{planned}}"
             },
             "status": {
-                "taken": "Genommen",
-                "skipped": "Übersprungen",
-                "pending": "Offen"
+                "taken": "Đã dùng",
+                "skipped": "Đã bỏ qua",
+                "pending": "Đang chờ"
             },
             "badge": {
-                "prn": "Bei Bedarf",
-                "inactive": "Inaktiv"
+                "prn": "Khi cần",
+                "inactive": "Không hoạt động"
             },
             "stock": {
-                "label": "Bestand",
-                "low": "Nachfüllen",
-                "out": "Leer"
+                "label": "Tồn kho",
+                "low": "Bổ sung",
+                "out": "Hết"
             },
             "field": {
-                "name": "Name",
-                "dosageText": "Dosis",
-                "form": "Form",
-                "stockQty": "Bestand",
-                "stockUnit": "Einheit",
-                "refillThreshold": "Nachfüll-Schwelle",
-                "note": "Notiz",
-                "visibility": "Sichtbarkeit",
-                "active": "Aktiv",
-                "prn": "Bei Bedarf (PRN)"
+                "name": "Tên",
+                "dosageText": "Liều",
+                "form": "Dạng",
+                "stockQty": "Tồn kho",
+                "stockUnit": "Đơn vị",
+                "refillThreshold": "Ngưỡng bổ sung",
+                "note": "Ghi chú",
+                "visibility": "Khả năng hiển thị",
+                "active": "Hoạt động",
+                "prn": "Khi cần (PRN)"
             },
             "schedule": {
-                "title": "Einnahmeplan",
-                "add": "Zeitfenster hinzufügen",
-                "time": "Uhrzeit",
-                "dose": "Dosis",
-                "days": "Wochentage",
-                "daily": "Täglich",
-                "none": "Noch keine Zeitfenster.",
-                "delete": "Zeitfenster löschen",
-                "newHint": "Speichere das Medikament, dann kannst du Zeitfenster hinzufügen.",
-                "timeRequired": "Uhrzeit ist erforderlich."
+                "title": "Lịch dùng thuốc",
+                "add": "Thêm giờ",
+                "time": "Giờ",
+                "dose": "Liều",
+                "days": "Các ngày trong tuần",
+                "daily": "Hằng ngày",
+                "none": "Chưa có giờ.",
+                "delete": "Xóa giờ",
+                "newHint": "Hãy lưu thuốc để có thể thêm giờ.",
+                "timeRequired": "Giờ là bắt buộc."
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
-                "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "mon": "T2",
+                "tue": "T3",
+                "wed": "T4",
+                "thu": "T5",
+                "fri": "T6",
+                "sat": "T7",
+                "sun": "CN"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Riêng tư",
+                "family": "Gia đình"
             }
         },
         "labs": {
             "title": "Xét nghiệm",
             "emptyTitle": "Chưa có kết quả",
             "emptyDesc": "Kết quả xét nghiệm kèm khoảng tham chiếu sẽ hiển thị ở đây.",
-            "loadError": "Laborwerte konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "personsLabel": "Person",
-            "reportsTitle": "Befunde",
-            "add": "Befund hinzufügen",
-            "addShort": "Hinzufügen",
-            "edit": "Bearbeiten",
-            "noReports": "Noch keine Befunde.",
-            "analyteCount": "{{count}} Analyten",
-            "abnormalBadge": "{{count}} auffällig",
-            "selectHint": "Wähle einen Befund, um die Analyten zu sehen.",
-            "noAnalytes": "Für diesen Befund sind noch keine Analyten erfasst.",
-            "dateRequired": "Befunddatum ist erforderlich.",
-            "saved": "Befund gespeichert.",
-            "saveError": "Befund konnte nicht gespeichert werden.",
-            "deleted": "Befund gelöscht.",
-            "deleteError": "Befund konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diesen Befund wirklich löschen? Alle Analyten werden mitgelöscht.",
+            "loadError": "Không thể tải các chỉ số xét nghiệm.",
+            "loadErrorDesc": "Vui lòng thử lại sau.",
+            "retry": "Thử lại",
+            "personsLabel": "Người",
+            "reportsTitle": "Kết quả",
+            "add": "Thêm kết quả",
+            "addShort": "Thêm",
+            "edit": "Sửa",
+            "noReports": "Chưa có kết quả.",
+            "analyteCount": "{{count}} chỉ số",
+            "abnormalBadge": "{{count}} bất thường",
+            "selectHint": "Chọn một kết quả để xem các chỉ số.",
+            "noAnalytes": "Kết quả này chưa có chỉ số nào được ghi.",
+            "dateRequired": "Ngày kết quả là bắt buộc.",
+            "saved": "Đã lưu kết quả.",
+            "saveError": "Không thể lưu kết quả.",
+            "deleted": "Đã xóa kết quả.",
+            "deleteError": "Không thể xóa kết quả.",
+            "deleteConfirm": "Thực sự xóa kết quả này? Tất cả chỉ số cũng sẽ bị xóa.",
             "col": {
-                "analyte": "Analyt",
-                "value": "Wert",
-                "reference": "Referenz",
-                "flag": "Bewertung"
+                "analyte": "Chỉ số",
+                "value": "Giá trị",
+                "reference": "Tham chiếu",
+                "flag": "Đánh giá"
             },
             "flag": {
-                "low": "Niedrig",
-                "normal": "Normal",
-                "high": "Hoch"
+                "low": "Thấp",
+                "normal": "Bình thường",
+                "high": "Cao"
             },
             "trend": {
-                "title": "Verlauf",
-                "analyte": "Analyt",
-                "tooFew": "Mindestens zwei Befunde nötig, um einen Verlauf zu zeigen.",
-                "unit": "Einheit: {{unit}}"
+                "title": "Diễn biến",
+                "analyte": "Chỉ số",
+                "tooFew": "Cần ít nhất hai kết quả để hiển thị diễn biến.",
+                "unit": "Đơn vị: {{unit}}"
             },
             "field": {
-                "reportDate": "Befunddatum",
-                "labName": "Labor",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "reportDate": "Ngày kết quả",
+                "labName": "Phòng xét nghiệm",
+                "visibility": "Khả năng hiển thị",
+                "note": "Ghi chú"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Riêng tư",
+                "family": "Gia đình"
             },
             "results": {
-                "title": "Analyten",
-                "newHint": "Speichere den Befund, dann kannst du Analyten hinzufügen.",
-                "none": "Noch keine Analyten.",
-                "analyte": "Analyt",
-                "value": "Wert",
-                "unit": "Einheit",
-                "refLow": "Referenz min.",
-                "refHigh": "Referenz max.",
-                "add": "Analyt hinzufügen",
-                "delete": "Analyt löschen",
-                "flagPreview": "Bewertung:",
-                "analyteRequired": "Analyt-Name ist erforderlich.",
-                "valueRequired": "Bitte einen gültigen Wert eingeben."
+                "title": "Chỉ số",
+                "newHint": "Hãy lưu kết quả để có thể thêm chỉ số.",
+                "none": "Chưa có chỉ số.",
+                "analyte": "Chỉ số",
+                "value": "Giá trị",
+                "unit": "Đơn vị",
+                "refLow": "Tham chiếu tối thiểu",
+                "refHigh": "Tham chiếu tối đa",
+                "add": "Thêm chỉ số",
+                "delete": "Xóa chỉ số",
+                "flagPreview": "Đánh giá:",
+                "analyteRequired": "Tên chỉ số là bắt buộc.",
+                "valueRequired": "Vui lòng nhập một giá trị hợp lệ."
             }
         },
         "activity": {
             "title": "Hoạt động",
             "emptyTitle": "Chưa có hoạt động",
             "emptyDesc": "Các buổi tập của bạn sẽ hiển thị ở đây.",
-            "personsLabel": "Person",
-            "prevWeek": "Vorherige Woche",
-            "nextWeek": "Nächste Woche",
-            "add": "Einheit erfassen",
-            "addShort": "Erfassen",
-            "edit": "Bearbeiten",
-            "chartTitle": "Dauer je Wochentag",
-            "noData": "Keine Einheiten in dieser Woche.",
-            "noEntries": "Noch keine Einheiten in dieser Woche.",
-            "logTitle": "Trainings-Log",
-            "loadError": "Aktivitäten konnten nicht geladen werden.",
-            "loadErrorDesc": "Bitte versuche es später erneut.",
-            "retry": "Erneut versuchen",
-            "saved": "Einheit gespeichert.",
-            "saveError": "Einheit konnte nicht gespeichert werden.",
-            "deleted": "Einheit gelöscht.",
-            "deleteError": "Einheit konnte nicht gelöscht werden.",
-            "deleteConfirm": "Diese Einheit wirklich löschen?",
-            "invalid": "Bitte gültige Werte eingeben.",
+            "personsLabel": "Người",
+            "prevWeek": "Tuần trước",
+            "nextWeek": "Tuần sau",
+            "add": "Ghi buổi tập",
+            "addShort": "Ghi",
+            "edit": "Sửa",
+            "chartTitle": "Thời lượng theo ngày trong tuần",
+            "noData": "Không có buổi tập nào trong tuần này.",
+            "noEntries": "Tuần này chưa có buổi tập nào.",
+            "logTitle": "Nhật ký tập luyện",
+            "loadError": "Không thể tải các hoạt động.",
+            "loadErrorDesc": "Vui lòng thử lại sau.",
+            "retry": "Thử lại",
+            "saved": "Đã lưu buổi tập.",
+            "saveError": "Không thể lưu buổi tập.",
+            "deleted": "Đã xóa buổi tập.",
+            "deleteError": "Không thể xóa buổi tập.",
+            "deleteConfirm": "Thực sự xóa buổi tập này?",
+            "invalid": "Vui lòng nhập giá trị hợp lệ.",
             "totals": {
-                "count": "Einheiten",
-                "duration": "Gesamt-Dauer",
-                "distance": "Gesamt-Distanz",
-                "calories": "Kalorien"
+                "count": "Buổi tập",
+                "duration": "Tổng thời lượng",
+                "distance": "Tổng quãng đường",
+                "calories": "Calo"
             },
             "unit": {
-                "min": "{{value}} Min",
+                "min": "{{value}} phút",
                 "km": "{{value}} km",
                 "kcal": "{{value}} kcal"
             },
             "weekday": {
-                "mon": "Mo",
-                "tue": "Di",
-                "wed": "Mi",
-                "thu": "Do",
-                "fri": "Fr",
-                "sat": "Sa",
-                "sun": "So"
+                "mon": "T2",
+                "tue": "T3",
+                "wed": "T4",
+                "thu": "T5",
+                "fri": "T6",
+                "sat": "T7",
+                "sun": "CN"
             },
             "type": {
-                "running": "Laufen",
-                "cycling": "Radfahren",
-                "swimming": "Schwimmen",
-                "strength": "Kraft",
+                "running": "Chạy bộ",
+                "cycling": "Đạp xe",
+                "swimming": "Bơi lội",
+                "strength": "Sức mạnh",
                 "yoga": "Yoga",
-                "walking": "Gehen",
-                "other": "Sonstiges",
-                "custom": "Eigene…"
+                "walking": "Đi bộ",
+                "other": "Khác",
+                "custom": "Tùy chỉnh…"
             },
             "field": {
-                "type": "Art",
-                "typePlaceholder": "Art wählen",
-                "customType": "Eigene Art",
-                "performedAt": "Durchgeführt am",
-                "duration": "Dauer (Min)",
-                "distance": "Distanz (km)",
-                "calories": "Kalorien (kcal)",
-                "intensity": "Intensität",
-                "visibility": "Sichtbarkeit",
-                "note": "Notiz"
+                "type": "Loại",
+                "typePlaceholder": "Chọn loại",
+                "customType": "Loại tùy chỉnh",
+                "performedAt": "Thực hiện vào ngày",
+                "duration": "Thời lượng (phút)",
+                "distance": "Quãng đường (km)",
+                "calories": "Calo (kcal)",
+                "intensity": "Cường độ",
+                "visibility": "Khả năng hiển thị",
+                "note": "Ghi chú"
             },
             "visibility": {
-                "private": "Privat",
-                "family": "Familie"
+                "private": "Riêng tư",
+                "family": "Gia đình"
             },
             "col": {
-                "day": "Tag"
+                "day": "Ngày"
             }
         },
         "export": {
-            "title": "Export (CSV)",
-            "rangeFrom": "Von",
-            "rangeTo": "Bis",
-            "vitals": "Vitalwerte",
-            "activities": "Aktivitäten",
-            "labs": "Laborwerte",
-            "medsLogs": "Einnahmeprotokoll",
-            "hint": "Lädt die Daten des gewählten Zeitraums als CSV-Datei herunter."
+            "title": "Xuất (CSV)",
+            "rangeFrom": "Từ",
+            "rangeTo": "Đến",
+            "vitals": "Chỉ số sinh tồn",
+            "activities": "Hoạt động",
+            "labs": "Chỉ số xét nghiệm",
+            "medsLogs": "Nhật ký dùng thuốc",
+            "hint": "Tải dữ liệu của kỳ đã chọn dưới dạng tệp CSV."
         },
-        "disclaimer": "Nur zur persönlichen Dokumentation. Kein Ersatz für ärztliche Beratung, Diagnose oder Behandlung.",
-        "readOnlyBanner": "Du siehst die Daten von {{name}} — nur Lesen."
+        "disclaimer": "Chỉ dùng để ghi chép cá nhân. Không thay thế cho tư vấn, chẩn đoán hay điều trị y tế.",
+        "readOnlyBanner": "Bạn đang xem dữ liệu của {{name}} — chỉ đọc."
     }
 }
