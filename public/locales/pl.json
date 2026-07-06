@@ -1998,6 +1998,8 @@
         "title": "Wspólne wydatki",
         "subtitle": "Dziel rachunki domowe, wyjazdy, zakupy i koszty rodzinne.",
         "addExpense": "Dodaj wydatek",
+        "editExpense": "Edytuj wydatek",
+        "deleteExpenseConfirm": "Usunąć ten wydatek?",
         "addGroup": "Nowa grupa",
         "groups": "Grupy",
         "searchGroups": "Szukaj grup",

@@ -1998,6 +1998,8 @@
         "title": "Chi phí chung",
         "subtitle": "Chia sẻ hóa đơn gia đình, các chuyến đi, mua sắm và chi phí gia đình.",
         "addExpense": "Thêm chi phí",
+        "editExpense": "Sửa chi phí",
+        "deleteExpenseConfirm": "Xóa chi phí này?",
         "addGroup": "Nhóm mới",
         "groups": "Các nhóm",
         "searchGroups": "Tìm kiếm nhóm",

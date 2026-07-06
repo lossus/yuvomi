@@ -1998,6 +1998,8 @@
         "title": "Gemeinsame Ausgaben",
         "subtitle": "Teile Haushaltsrechnungen, Reisen, Einkäufe und Familienkosten.",
         "addExpense": "Ausgabe hinzufügen",
+        "editExpense": "Ausgabe bearbeiten",
+        "deleteExpenseConfirm": "Diese Ausgabe löschen?",
         "addGroup": "Neue Gruppe",
         "groups": "Gruppen",
         "searchGroups": "Gruppen suchen",

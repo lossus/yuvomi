@@ -1998,6 +1998,8 @@
         "title": "Despesas compartilhadas",
         "subtitle": "Divida contas da casa, viagens, compras e custos da família.",
         "addExpense": "Adicionar despesa",
+        "editExpense": "Editar despesa",
+        "deleteExpenseConfirm": "Excluir esta despesa?",
         "addGroup": "Novo grupo",
         "groups": "Grupos",
         "searchGroups": "Buscar grupos",

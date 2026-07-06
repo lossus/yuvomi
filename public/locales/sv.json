@@ -1998,6 +1998,8 @@
         "title": "Delade utgifter",
         "subtitle": "Dela hushållsräkningar, resor, inköp och familjekostnader.",
         "addExpense": "Lägg till utgift",
+        "editExpense": "Redigera utgift",
+        "deleteExpenseConfirm": "Ta bort denna utgift?",
         "addGroup": "Ny grupp",
         "groups": "Grupper",
         "searchGroups": "Sök grupper",

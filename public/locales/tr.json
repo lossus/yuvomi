@@ -1998,6 +1998,8 @@
         "title": "Paylaşılan giderler",
         "subtitle": "Ev faturalarını, seyahatleri, alışverişleri ve aile giderlerini bölüşün.",
         "addExpense": "Gider ekle",
+        "editExpense": "Gideri düzenle",
+        "deleteExpenseConfirm": "Bu gider silinsin mi?",
         "addGroup": "Yeni grup",
         "groups": "Gruplar",
         "searchGroups": "Grup ara",

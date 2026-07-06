@@ -1797,6 +1797,8 @@
         "title": "Společné výdaje",
         "subtitle": "Sdílejte domácí účty, cestovní náklady, nákupy a rodinné výdaje.",
         "addExpense": "Přidat výdaj",
+        "editExpense": "Upravit výdaj",
+        "deleteExpenseConfirm": "Smazat tento výdaj?",
         "addGroup": "Nová skupina",
         "groups": "Skupiny",
         "searchGroups": "Hledat skupiny",

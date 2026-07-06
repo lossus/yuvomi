@@ -1998,6 +1998,8 @@
         "title": "Pengeluaran Bersama",
         "subtitle": "Bagi tagihan rumah tangga, perjalanan, belanja, dan biaya keluarga.",
         "addExpense": "Tambah pengeluaran",
+        "editExpense": "Edit pengeluaran",
+        "deleteExpenseConfirm": "Hapus pengeluaran ini?",
         "addGroup": "Grup baru",
         "groups": "Grup",
         "searchGroups": "Cari grup",

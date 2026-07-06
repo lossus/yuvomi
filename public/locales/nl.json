@@ -1998,6 +1998,8 @@
         "title": "Gedeelde uitgaven",
         "subtitle": "Huishoudrekeningen, reizen, boodschappen en gezinskosten splitsen.",
         "addExpense": "Uitgave toevoegen",
+        "editExpense": "Uitgave bewerken",
+        "deleteExpenseConfirm": "Deze uitgave verwijderen?",
         "addGroup": "Nieuwe groep",
         "groups": "Groepen",
         "searchGroups": "Groepen zoeken",

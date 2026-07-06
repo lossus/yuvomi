@@ -1998,6 +1998,8 @@
         "title": "Shared expenses",
         "subtitle": "Split household bills, trips, shopping, and family costs.",
         "addExpense": "Add expense",
+        "editExpense": "Edit expense",
+        "deleteExpenseConfirm": "Delete this expense?",
         "addGroup": "New group",
         "groups": "Groups",
         "searchGroups": "Search groups",

@@ -1998,6 +1998,8 @@
         "title": "Megosztott költségek",
         "subtitle": "Ossza meg a háztartási számlákat, utazásokat, bevásárlásokat és családi költségeket.",
         "addExpense": "Költség hozzáadása",
+        "editExpense": "Kiadás szerkesztése",
+        "deleteExpenseConfirm": "Törli ezt a kiadást?",
         "addGroup": "Új csoport",
         "groups": "Csoportok",
         "searchGroups": "Csoportok keresése",

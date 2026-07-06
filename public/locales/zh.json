@@ -1998,6 +1998,8 @@
         "title": "共享支出",
         "subtitle": "分摊家庭账单、旅行、购物和家庭费用。",
         "addExpense": "添加支出",
+        "editExpense": "编辑支出",
+        "deleteExpenseConfirm": "删除此支出？",
         "addGroup": "新建群组",
         "groups": "群组",
         "searchGroups": "搜索群组",

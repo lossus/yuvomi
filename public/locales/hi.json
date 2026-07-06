@@ -1998,6 +1998,8 @@
         "title": "साझा खर्च",
         "subtitle": "घर के बिल, यात्राएं, खरीदारी और पारिवारिक खर्च बांटें।",
         "addExpense": "खर्च जोड़ें",
+        "editExpense": "व्यय संपादित करें",
+        "deleteExpenseConfirm": "इस व्यय को हटाएं?",
         "addGroup": "नया समूह",
         "groups": "समूह",
         "searchGroups": "समूह खोजें",

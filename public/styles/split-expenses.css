@@ -291,6 +291,24 @@
   flex: 1 1 auto;
 }
 
+button.split-expense {
+  width: 100%;
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
+  border-radius: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+button.split-expense:hover {
+  background: color-mix(in srgb, var(--module-split-expenses) 8%, transparent);
+}
+
 .split-activity-dot {
   width: 10px;
   height: 10px;

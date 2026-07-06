@@ -1998,6 +1998,8 @@
         "title": "공동 지출",
         "subtitle": "집안 청구서, 여행, 장보기, 가족 비용을 나누세요.",
         "addExpense": "지출 추가",
+        "editExpense": "지출 편집",
+        "deleteExpenseConfirm": "이 지출을 삭제하시겠습니까?",
         "addGroup": "새 그룹",
         "groups": "그룹",
         "searchGroups": "그룹 검색",

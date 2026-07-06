@@ -1998,6 +1998,8 @@
         "title": "Gastos compartidos",
         "subtitle": "Divide facturas del hogar, viajes, compras y gastos familiares.",
         "addExpense": "Añadir gasto",
+        "editExpense": "Editar gasto",
+        "deleteExpenseConfirm": "¿Eliminar este gasto?",
         "addGroup": "Nuevo grupo",
         "groups": "Grupos",
         "searchGroups": "Buscar grupos",

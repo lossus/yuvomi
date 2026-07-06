@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.96.10] - 2026-07-06
+
+### Fixed
+- **Split expenses could not be edited after adding them** — expense rows under Budget → Split were a static, non-interactive list. Each row is now a button that opens the expense dialog in edit mode (pre-filled with title, amount, payer, currency, date, split method, participants, and per-participant split values), with a delete action. The `PUT`/`DELETE /expenses/:id` routes already existed; only the frontend wiring was missing (#445).
+
 ## [0.96.9] - 2026-07-06
 
 ### Fixed

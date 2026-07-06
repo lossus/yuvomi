@@ -1998,6 +1998,8 @@
         "title": "Spese condivise",
         "subtitle": "Dividi bollette, viaggi, spesa e costi familiari.",
         "addExpense": "Aggiungi spesa",
+        "editExpense": "Modifica spesa",
+        "deleteExpenseConfirm": "Eliminare questa spesa?",
         "addGroup": "Nuovo gruppo",
         "groups": "Gruppi",
         "searchGroups": "Cerca gruppi",

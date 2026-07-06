@@ -1998,6 +1998,8 @@
         "title": "Dépenses partagées",
         "subtitle": "Partagez factures, voyages, courses et coûts familiaux.",
         "addExpense": "Ajouter une dépense",
+        "editExpense": "Modifier la dépense",
+        "deleteExpenseConfirm": "Supprimer cette dépense ?",
         "addGroup": "Nouveau groupe",
         "groups": "Groupes",
         "searchGroups": "Rechercher des groupes",

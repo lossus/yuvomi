@@ -1998,6 +1998,8 @@
         "title": "共有費用",
         "subtitle": "家計、旅行、買い物、家族の費用を分割します。",
         "addExpense": "費用を追加",
+        "editExpense": "支出を編集",
+        "deleteExpenseConfirm": "この支出を削除しますか？",
         "addGroup": "新しいグループ",
         "groups": "グループ",
         "searchGroups": "グループを検索",
