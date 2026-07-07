@@ -342,16 +342,17 @@ const BUDGET_CATEGORY_LABEL_KEYS = {
 
 function greeting(displayName) {
   const h = new Date().getHours();
-  if (h < 12) return t('dashboard.greetingMorning', { name: esc(displayName) });
-  if (h < 18) return t('dashboard.greetingDay',     { name: esc(displayName) });
+  if (h >= 5 && h < 12) return t('dashboard.greetingMorning', { name: esc(displayName) });
+  if (h >= 12 && h < 18) return t('dashboard.greetingDay',    { name: esc(displayName) });
   return t('dashboard.greetingEvening', { name: esc(displayName) });
 }
 
 // Tageszeit-Fenster für den Begrüßungs-Gradienten (deckt sich mit greeting()).
+// Nacht (0–4 Uhr) zählt zum Abend, damit 00:37 nicht als „Morgen" begrüßt wird.
 function greetingPeriod() {
   const h = new Date().getHours();
-  if (h < 12) return 'morning';
-  if (h < 18) return 'day';
+  if (h >= 5 && h < 12) return 'morning';
+  if (h >= 12 && h < 18) return 'day';
   return 'evening';
 }
 

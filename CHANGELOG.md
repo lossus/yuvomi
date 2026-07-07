@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.101.2] - 2026-07-08
+
+### Fixed
+- The dashboard greeting no longer says "Good morning" during the night: hours 0–4 now fall into the evening window, so a visit at 00:37 is greeted with "Good evening" and the matching gradient.
+
 ## [0.101.1] - 2026-07-07
 
 ### Changed
