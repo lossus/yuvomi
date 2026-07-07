@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.100.0] - 2026-07-07
+
+### Added
+- **MCP endpoint now reaches the whole API** — the built-in `/mcp` Model Context Protocol endpoint gains a generic OpenAPI bridge: `list_api_operations` and `get_api_operation` discover every documented REST operation, and `call_api_operation` invokes any of them. AI agents such as Claude Desktop can now drive the full planner (not just tasks, shopping, and calendar), while every call still runs with the API token's own permissions (admin-only routes require an admin token). The optional `MCP_INTERNAL_BASE_URL` env var overrides the internal loopback base URL for non-standard bind addresses.
+- **Broader OpenAPI coverage** — the OpenAPI spec (`/openapi.json`, `/docs`) now documents previously-missing routes (Housekeeping, Modules, Budget loans & statistics, CalDAV, ICS export feed, OIDC login, document preview/folders, and the `/mcp` endpoint) and corrects several method/auth mismatches.
+
+### Changed
+- **Wider MCP token auth** — the `/mcp` endpoint now also accepts the plain `API-Key` header alongside `X-API-Key` and `Authorization: Bearer` for broader MCP-client compatibility.
+- **Safe binary passthrough** — the MCP bridge inlines binary responses (e.g. document or backup downloads) as base64 up to 5 MiB; larger downloads are rejected so they keep using the dedicated streaming route instead of buffering the whole file in memory.
+
 ## [0.99.1] - 2026-07-07
 
 ### Changed
