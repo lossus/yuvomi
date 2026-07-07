@@ -242,4 +242,26 @@ test('Fulfill behält Abzug', async () => {
   assert.equal(again.status, 409);
 });
 
+test('Ohne Eltern-Freigabe (rewards_require_approval=0) wird sofort gutgeschrieben', async () => {
+  asAdmin();
+  await request('POST', '/api/v1/rewards/bonus', { user_id: child2, delta: 100 });
+  const balBefore = getBalance(db, child2);
+  db.prepare("INSERT INTO sync_config (key, value) VALUES ('rewards_require_approval', '0') ON CONFLICT(key) DO UPDATE SET value = '0'").run();
+
+  asChild(child2);
+  const redeem = await request('POST', '/api/v1/rewards/redemptions', { catalog_id: rewardId });
+  assert.equal(redeem.status, 201);
+  assert.equal(redeem.body.data.status, 'fulfilled', 'sofort erfüllt ohne Freigabe');
+  assert.ok(redeem.body.data.decided_at, 'decided_at gesetzt');
+  assert.equal(getBalance(db, child2), balBefore - 100, 'Punkte bleiben abgezogen');
+
+  // Bereits erfüllt → erneutes Entscheiden abgelehnt.
+  asAdmin();
+  const again = await request('PATCH', `/api/v1/rewards/redemptions/${redeem.body.data.id}`, { action: 'reject' });
+  assert.equal(again.status, 409);
+
+  // Default (Freigabe nötig) wiederherstellen.
+  db.prepare("UPDATE sync_config SET value = '1' WHERE key = 'rewards_require_approval'").run();
+});
+
 test.after(() => { server.close(); db.close(); });

@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.98.3] - 2026-07-07
+
+### Added
+- **Settings → Modules → Health** page: admins can show or hide the Cycle tab household-wide (opt-in, on by default). When off, the tab is hidden and its route redirects to the Health overview.
+- **Settings → Modules → Rewards** page: admins can enable or disable the Rewards module and choose whether reward redemptions require parent/admin approval (on by default; when off, redemptions are granted immediately).
+
+### Fixed
+- The **Rewards** module could not be hidden or reordered in Settings → Modules → Navigation — the enable switch and drag order silently reset because the server did not recognize `rewards` as a toggleable module. Rewards is now a fully toggleable and orderable module.
+- The **Health** and **Rewards** page modules and their new settings pages are now precached by the service worker like every other module, so they are available offline and refresh reliably on each release.
+
 ## [0.98.2] - 2026-07-07
 
 ### Fixed

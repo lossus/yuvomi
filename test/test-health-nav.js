@@ -69,6 +69,15 @@ test('HEALTH_TABS(): sechs Tabs mit passenden Routen, Label-Keys und Icons', () 
   ]);
 });
 
+test('HEALTH_TABS({ cycleEnabled: false }): blendet den Zyklus-Tab aus', () => {
+  const tabs = HEALTH_TABS({ cycleEnabled: false });
+  assert.equal(tabs.length, 5);
+  assert.ok(!tabs.some((tab) => tab.route === '/health/cycle'), 'kein Zyklus-Tab');
+  assert.deepEqual(tabs.map((tab) => tab.route), [
+    '/health', '/health/vitals', '/health/meds', '/health/labs', '/health/activity',
+  ]);
+});
+
 // --------------------------------------------------------
 // isHealthRoute / getLastHealthRoute
 // --------------------------------------------------------
@@ -142,6 +151,13 @@ test('Server-Allowlist: health ist ein toggelbares Modul', () => {
 test('Settings-Toggle: health in BUILT_IN_MODULES', () => {
   const src = read('public/settings/pages/modules-navigation.js');
   assert.match(src, /\{ id: 'health', labelKey: 'nav\.health', icon: 'heart-pulse' \}/);
+});
+
+test('Server-Allowlist: rewards ist toggelbar/sortierbar (Backend-Parität zur Nav)', () => {
+  const src = read('server/routes/preferences.js');
+  assert.match(src, /TOGGLEABLE_MODULES = \[[\s\S]*'rewards'[\s\S]*\]/);
+  assert.match(src, /MODULE_ORDER_RE =[^\n]*\|rewards\|/);
+  assert.match(src, /MOBILE_NAV_ORDER_RE =[^\n]*\|rewards\|/);
 });
 
 // --------------------------------------------------------

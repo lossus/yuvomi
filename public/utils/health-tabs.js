@@ -15,10 +15,12 @@ export const HEALTH_ROUTES = Object.freeze([
 ]);
 export const HEALTH_STORAGE_KEY = 'yuvomi-health-tab';
 
-export const HEALTH_TABS = () => [
+// Der Zyklus-Tab ist ein haushaltweiter Opt-in (Settings → Module → Gesundheit).
+// Ist er deaktiviert, entfällt der Tab; die Route leitet auf die Übersicht um.
+export const HEALTH_TABS = ({ cycleEnabled = true } = {}) => [
   { route: '/health',          labelKey: 'health.tabs.overview', icon: 'heart-pulse'    },
   { route: '/health/vitals',   labelKey: 'health.tabs.vitals',   icon: 'activity'       },
-  { route: '/health/cycle',    labelKey: 'health.tabs.cycle',    icon: 'droplet'        },
+  ...(cycleEnabled ? [{ route: '/health/cycle', labelKey: 'health.tabs.cycle', icon: 'droplet' }] : []),
   { route: '/health/meds',     labelKey: 'health.tabs.meds',     icon: 'pill'           },
   { route: '/health/labs',     labelKey: 'health.tabs.labs',     icon: 'flask-conical'  },
   { route: '/health/activity', labelKey: 'health.tabs.activity', icon: 'dumbbell'       },
@@ -40,11 +42,11 @@ export function getLastHealthRoute() {
   return '/health';
 }
 
-export function renderHealthTabsBar(container, activeRoute) {
+export function renderHealthTabsBar(container, activeRoute, { cycleEnabled = true } = {}) {
   container.classList.add('has-health-tabs');
 
   renderSubTabs(container, {
-    tabs: HEALTH_TABS().map(({ route, labelKey, icon }) => ({ id: route, label: t(labelKey), icon })),
+    tabs: HEALTH_TABS({ cycleEnabled }).map(({ route, labelKey, icon }) => ({ id: route, label: t(labelKey), icon })),
     activeId: activeRoute,
     storageKey: HEALTH_STORAGE_KEY,
     extraClass: 'health-tabs-bar',

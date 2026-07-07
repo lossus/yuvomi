@@ -37,6 +37,20 @@ import { HEALTH_ROUTES, renderHealthTabsBar } from '/utils/health-tabs.js';
 
 let _container = null;
 
+// Haushaltweiter Opt-in für den Zyklus-Tab (Settings → Module → Gesundheit).
+// Default an, damit Bestandshaushalte ihr Verhalten behalten; wird in render()
+// aus /preferences aufgefrischt.
+let cycleEnabled = true;
+
+async function loadHealthPrefs() {
+  try {
+    const res = await api.get('/preferences');
+    cycleEnabled = res?.data?.health_cycle_enabled !== false;
+  } catch {
+    cycleEnabled = true;
+  }
+}
+
 // Vitalwerte-View-Zustand. Eine einzige Messungs-Liste (alle Typen) je Person;
 // Karten und Chart werden clientseitig daraus abgeleitet.
 const vitals = {
@@ -108,6 +122,8 @@ const PANELS = () => [
 ];
 
 function normalizeHealthPath(path) {
+  // Zyklus deaktiviert → Deep-Link auf die Übersicht umleiten (kein leeres Panel).
+  if (path === '/health/cycle' && !cycleEnabled) return '/health';
   return HEALTH_ROUTES.includes(path) ? path : '/health';
 }
 
@@ -206,13 +222,15 @@ export async function render(container, ctx = {}) {
   overview.meId = ctx.user?.id ?? overview.meId;
   overview.root = null;
   overview.loaded = false;
+  await loadHealthPrefs();
   const activeRoute = normalizeHealthPath(window.location.pathname);
+  const panels = PANELS().filter((panel) => cycleEnabled || panel.route !== '/health/cycle');
 
   container.replaceChildren();
   container.insertAdjacentHTML('beforeend', `
     <div class="health-page">
       <h1 class="sr-only">${esc(t('nav.health'))}</h1>
-      ${PANELS().map((panel) => panelMarkup(panel, activeRoute)).join('')}
+      ${panels.map((panel) => panelMarkup(panel, activeRoute)).join('')}
     </div>
   `);
 
@@ -221,7 +239,7 @@ export async function render(container, ctx = {}) {
 
   if (window.lucide) window.lucide.createIcons({ el: container });
   showPanel(activeRoute);
-  renderHealthTabsBar(container, activeRoute);
+  renderHealthTabsBar(container, activeRoute, { cycleEnabled });
   updateHealthFab(activeRoute);
   maybeMountOverview(activeRoute);
   maybeMountVitals(activeRoute);
@@ -241,7 +259,7 @@ export async function update({ path, user } = {}) {
 
   showPanel(activeRoute);
   _container.querySelector('.sub-tabs-bar')?.remove();
-  renderHealthTabsBar(_container, activeRoute);
+  renderHealthTabsBar(_container, activeRoute, { cycleEnabled });
   updateHealthFab(activeRoute);
   maybeMountOverview(activeRoute);
   maybeMountVitals(activeRoute);

@@ -36,6 +36,14 @@ function toInt(val) {
   return Number.isFinite(n) ? n : NaN;
 }
 
+// Haushaltweiter Freigabe-Schalter (sync_config). Default an: fehlender Wert =>
+// Einlösungen müssen bestätigt werden (Verhalten wie bisher). '0' => sofortige
+// Gutschrift ohne Eltern-Freigabe.
+function requiresApproval(d) {
+  const row = d.prepare("SELECT value FROM sync_config WHERE key = 'rewards_require_approval'").get();
+  return !row || row.value !== '0';
+}
+
 /** Rangfolge mit gleichen Rängen bei Punktegleichstand. */
 function withRanks(rows) {
   let rank = 0;
@@ -315,12 +323,20 @@ router.post('/redemptions', (req, res) => {
       return res.status(400).json({ error: 'Insufficient points.', code: 400 });
 
     const note = req.body?.note != null ? String(req.body.note).trim().slice(0, 500) || null : null;
+    // Ohne Eltern-Freigabe (haushaltweit deaktiviert) wird die Einlösung sofort
+    // gutgeschrieben; die reservierten Punkte bleiben abgezogen (keine Rückbuchung).
+    const autoFulfill = !requiresApproval(d);
 
     const redemptionId = d.transaction(() => {
-      const r = d.prepare(`
-        INSERT INTO reward_redemptions (user_id, catalog_id, reward_name, reward_icon, cost, note, requested_by)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-      `).run(targetId, item.id, item.name, item.icon, item.cost, note, me);
+      const r = autoFulfill
+        ? d.prepare(`
+            INSERT INTO reward_redemptions (user_id, catalog_id, reward_name, reward_icon, cost, note, requested_by, status, decided_by, decided_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, 'fulfilled', ?, strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+          `).run(targetId, item.id, item.name, item.icon, item.cost, note, me, me)
+        : d.prepare(`
+            INSERT INTO reward_redemptions (user_id, catalog_id, reward_name, reward_icon, cost, note, requested_by)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+          `).run(targetId, item.id, item.name, item.icon, item.cost, note, me);
       // Punkte sofort reservieren, damit sie nicht doppelt ausgegeben werden.
       postLedger(d, {
         userId: targetId, delta: -item.cost, type: 'redeem',

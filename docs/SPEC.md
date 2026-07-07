@@ -53,7 +53,7 @@ Join table for multi-person task assignment (migration v32). Existing `assigned_
 
 ### Rewards (migration v70)
 
-Points-and-rewards system. A member earns a task's `points` when the task is marked done (awarded to its assigned members; if unassigned, to the acting user — useful for a wall-mounted kiosk tablet on a single account). Participation is **opt-in per member**; redemptions require **parent/admin approval**. A member's balance is always `SUM(delta)` over `reward_ledger` — there is no separately stored balance that could drift. Point award is idempotent (partial unique index) and reversed when a task leaves the `done` state.
+Points-and-rewards system. A member earns a task's `points` when the task is marked done (awarded to its assigned members; if unassigned, to the acting user — useful for a wall-mounted kiosk tablet on a single account). Participation is **opt-in per member**; redemptions require **parent/admin approval** by default — an admin can disable this household-wide (`rewards_require_approval` preference, Settings → Modules → Rewards) so redemptions are granted immediately. The Rewards module itself is toggleable in Settings → Modules → Rewards (nav visibility). A member's balance is always `SUM(delta)` over `reward_ledger` — there is no separately stored balance that could drift. Point award is idempotent (partial unique index) and reversed when a task leaves the `done` state.
 
 **Reward Participants** — who takes part (opt-in).
 
@@ -1073,7 +1073,9 @@ makes **no diagnostic claims**; reference ranges and flags are neutral, user-sup
 | created_at / updated_at | TEXT | ISO 8601, default now |
 
 **Menstrual cycle (migration 71).** Three tables back the Cycle tab; predictions are computed
-client-side (calendar method), the server only stores.
+client-side (calendar method), the server only stores. The Cycle tab is a household opt-in
+(`health_cycle_enabled` preference, default on, Settings → Modules → Health); when disabled the tab
+is hidden and its route redirects to the Health overview.
 
 **`cycle_periods`** — one row per menstrual period episode.
 

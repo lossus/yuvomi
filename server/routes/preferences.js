@@ -46,10 +46,10 @@ const VALID_WIDGET_SIZES = ['1x1', '1x2', '1x3', '1x4', '2x1', '2x2', '2x3', '2x
 const TOGGLEABLE_MODULES = [
   'tasks', 'calendar', 'meals', 'recipes', 'shopping',
   'birthdays', 'notes', 'contacts', 'budget', 'documents',
-  'housekeeping', 'health',
+  'housekeeping', 'rewards', 'health',
 ];
-const MODULE_ORDER_RE = /^(dashboard|tasks|calendar|meals|recipes|shopping|birthdays|notes|contacts|budget|documents|housekeeping|health|third-party-[a-z0-9][a-z0-9-]{1,62}[a-z0-9])$/;
-const MOBILE_NAV_ORDER_RE = /^(tasks|calendar|kitchen|meals|recipes|shopping|birthdays|notes|contacts|budget|documents|housekeeping|health|third-party-[a-z0-9][a-z0-9-]{1,62}[a-z0-9])$/;
+const MODULE_ORDER_RE = /^(dashboard|tasks|calendar|meals|recipes|shopping|birthdays|notes|contacts|budget|documents|housekeeping|rewards|health|third-party-[a-z0-9][a-z0-9-]{1,62}[a-z0-9])$/;
+const MOBILE_NAV_ORDER_RE = /^(tasks|calendar|kitchen|meals|recipes|shopping|birthdays|notes|contacts|budget|documents|housekeeping|rewards|health|third-party-[a-z0-9][a-z0-9-]{1,62}[a-z0-9])$/;
 const KITCHEN_NAV_IDS = new Set(['kitchen', 'meals', 'recipes', 'shopping']);
 
 function defaultWidgetSize(id) {
@@ -225,6 +225,10 @@ router.get('/', (req, res) => {
         module_order: moduleOrder,
         mobile_nav_order: mobileNavOrder,
         housekeeping_payment_tasks: cfgGet('housekeeping_payment_tasks') === '1',
+        // Modul-Feature-Schalter (haushaltweit). Default an: fehlender Wert =>
+        // Feature aktiv, damit Bestandshaushalte ihr Verhalten behalten.
+        health_cycle_enabled: cfgGet('health_cycle_enabled') !== '0',
+        rewards_require_approval: cfgGet('rewards_require_approval') !== '0',
         weather_provider: cfgGet('weather_provider') ?? null,
         weather_lat:      cfgGet('weather_lat')      ?? null,
         weather_lon:      cfgGet('weather_lon')      ?? null,
@@ -256,7 +260,7 @@ router.get('/', (req, res) => {
 
 router.put('/', (req, res) => {
   try {
-    const { visible_meal_types, currency, date_format, time_format, app_name, dashboard_widgets, disabled_modules, module_order, mobile_nav_order, housekeeping_payment_tasks, weather_provider, weather_lat, weather_lon, weather_city, weather_units, weather_auto_locate, weather_user, holiday_country, holiday_subdivision, holiday_show_public, holiday_show_school, holiday_public_color, holiday_school_color } = req.body;
+    const { visible_meal_types, currency, date_format, time_format, app_name, dashboard_widgets, disabled_modules, module_order, mobile_nav_order, housekeeping_payment_tasks, health_cycle_enabled, rewards_require_approval, weather_provider, weather_lat, weather_lon, weather_city, weather_units, weather_auto_locate, weather_user, holiday_country, holiday_subdivision, holiday_show_public, holiday_show_school, holiday_public_color, holiday_school_color } = req.body;
 
     if (visible_meal_types !== undefined) {
       if (!Array.isArray(visible_meal_types)) {
@@ -342,6 +346,27 @@ router.put('/', (req, res) => {
         return res.status(400).json({ error: 'housekeeping_payment_tasks must be a boolean', code: 400 });
       }
       cfgSet('housekeeping_payment_tasks', housekeeping_payment_tasks ? '1' : '0');
+    }
+
+    // Haushaltweite Modul-Feature-Schalter — nur Admins.
+    if (health_cycle_enabled !== undefined) {
+      if (req.authRole !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required.', code: 403 });
+      }
+      if (typeof health_cycle_enabled !== 'boolean') {
+        return res.status(400).json({ error: 'health_cycle_enabled must be a boolean', code: 400 });
+      }
+      cfgSet('health_cycle_enabled', health_cycle_enabled ? '1' : '0');
+    }
+
+    if (rewards_require_approval !== undefined) {
+      if (req.authRole !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required.', code: 403 });
+      }
+      if (typeof rewards_require_approval !== 'boolean') {
+        return res.status(400).json({ error: 'rewards_require_approval must be a boolean', code: 400 });
+      }
+      cfgSet('rewards_require_approval', rewards_require_approval ? '1' : '0');
     }
 
     // Weather configuration — admin only
@@ -532,6 +557,8 @@ router.put('/', (req, res) => {
         module_order: savedModuleOrder,
         mobile_nav_order: savedMobileNavOrder,
         housekeeping_payment_tasks: savedHousekeepingPaymentTasks,
+        health_cycle_enabled: cfgGet('health_cycle_enabled') !== '0',
+        rewards_require_approval: cfgGet('rewards_require_approval') !== '0',
         weather_provider: cfgGet('weather_provider') ?? null,
         weather_lat:      cfgGet('weather_lat')      ?? null,
         weather_lon:      cfgGet('weather_lon')      ?? null,
