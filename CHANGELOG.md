@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.98.1] - 2026-07-07
+
+### Fixed
+- **Papra DMS documents could not be previewed or opened, and showed 0 KB** — Papra's file endpoint always serves `application/octet-stream` (an intentional XSS defence), so the in-app viewer rejected every linked document with a 415 "Preview not supported" error even though it downloaded fine. Linking now captures the document's real MIME type and size from Papra's metadata, and the preview/download handlers fall back to the stored MIME type when the DMS returns a generic `octet-stream`, so PDFs and text files render inline again. The "Open in DMS" link was also pointing at a non-existent path (`/documents/<org>/<id>`) and 404'd; it now uses Papra's real document route (`/organizations/<org>/documents/<id>`). Existing links keep their old metadata — re-link to pick up the correct size, MIME type, and URL (#451).
+
 ## [0.98.0] - 2026-07-07
 
 ### Added

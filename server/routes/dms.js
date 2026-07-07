@@ -148,12 +148,17 @@ router.post('/link', async (req, res) => {
     const visibility = VISIBILITIES.includes(req.body.visibility) ? req.body.visibility : 'family';
     const meta = JSON.stringify({ correspondent: doc.correspondent ?? null, tags: doc.tags ?? [] });
 
+    // Echten MIME-Typ und Dateigröße aus dem DMS übernehmen, falls der Adapter sie
+    // liefert (Papra), sonst aus dem Dateinamen ableiten bzw. 0 (Issue #451).
+    const mimeType = doc.mime || mimeFromFilename(doc.filename);
+    const fileSize = Number.isFinite(doc.size) && doc.size >= 0 ? doc.size : 0;
+
     const result = db.get().prepare(`
       INSERT INTO family_documents
         (name, category, visibility, original_name, mime_type, file_size, content_data,
          storage_provider, storage_backend, storage_key, dms_account_id, external_url, external_meta, created_by)
-      VALUES (?, ?, ?, ?, ?, 0, '', 'external', 'dms', ?, ?, ?, ?, ?)
-    `).run(doc.title, category, visibility, doc.filename, mimeFromFilename(doc.filename), dmsId, account.id, doc.url, meta, userId(req));
+      VALUES (?, ?, ?, ?, ?, ?, '', 'external', 'dms', ?, ?, ?, ?, ?)
+    `).run(doc.title, category, visibility, doc.filename, mimeType, fileSize, dmsId, account.id, doc.url, meta, userId(req));
 
     const row = db.get().prepare('SELECT * FROM family_documents WHERE id = ?').get(result.lastInsertRowid);
     res.status(201).json({ data: row });

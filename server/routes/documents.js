@@ -69,6 +69,21 @@ const PREVIEWABLE_MIME = new Set([
   'text/csv',
 ]);
 
+function normalizeMime(value) {
+  return String(value || '').split(';')[0].trim().toLowerCase();
+}
+
+// Effektiver MIME-Typ für Preview/Download. Manche DMS (Papra) liefern ihre Datei
+// aus XSS-Schutz stets als application/octet-stream aus; in dem Fall ist der beim
+// Verlinken gespeicherte spezifische MIME-Typ verlässlicher (Issue #451).
+function effectiveMime(content, doc) {
+  const live = normalizeMime(content.mime);
+  const stored = normalizeMime(doc.mime_type);
+  if (live && live !== 'application/octet-stream') return live;
+  if (stored) return stored;
+  return live || 'application/octet-stream';
+}
+
 function userId(req) {
   return req.authUserId || req.session.userId;
 }
@@ -573,8 +588,7 @@ router.get('/:id/preview', async (req, res) => {
     const doc = getVisibleDocument(id, req, true);
     if (!doc) return res.status(404).json({ error: 'Document not found.', code: 404 });
     const content = await resolveDocumentContent(doc);
-    const rawMime = (content.mime || doc.mime_type || 'application/octet-stream')
-      .split(';')[0].trim().toLowerCase();
+    const rawMime = effectiveMime(content, doc);
     // Inline-Auslieferung nur für nicht-skriptfähige Typen. Alles andere kann über
     // /download (als attachment) geholt werden.
     if (!PREVIEWABLE_MIME.has(rawMime)) {
@@ -616,8 +630,7 @@ router.get('/:id/download', async (req, res) => {
     const doc = getVisibleDocument(id, req, true);
     if (!doc) return res.status(404).json({ error: 'Document not found.', code: 404 });
     const content = await resolveDocumentContent(doc);
-    const rawMime = (content.mime || doc.mime_type || 'application/octet-stream')
-      .split(';')[0].trim().toLowerCase();
+    const rawMime = effectiveMime(content, doc);
     const filename = encodeURIComponent((doc.original_name || `${doc.id}`).replace(/[/\\]/g, '_'));
     res.setHeader('Content-Type', rawMime);
     res.setHeader('Content-Length', String(content.buffer.length));

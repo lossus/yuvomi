@@ -44,7 +44,7 @@ test('search: baut Query-URL, setzt Bearer-Header, mappt Treffer', async () => {
   mockFetch(() => jsonResponse({
     documents: [{
       id: 'doc_1', name: 'Stromrechnung', originalName: 'strom.pdf',
-      mimeType: 'application/pdf', createdAt: '2026-01-02T10:00:00.000Z',
+      mimeType: 'application/pdf', originalSize: 20480, createdAt: '2026-01-02T10:00:00.000Z',
     }],
     documentsCount: 1,
   }));
@@ -59,7 +59,11 @@ test('search: baut Query-URL, setzt Bearer-Header, mappt Treffer', async () => {
     title: 'Stromrechnung',
     created: '2026-01-02T10:00:00.000Z',
     filename: 'strom.pdf',
-    url: 'https://papra.example.com/documents/org_abc/doc_1',
+    mime: 'application/pdf',
+    size: 20480,
+    url: 'https://papra.example.com/organizations/org_abc/documents/doc_1',
+    correspondent: null,
+    tags: [],
   });
 });
 
@@ -85,7 +89,7 @@ test('getDocument: liefert normalisierte Metadaten', async () => {
   mockFetch(() => jsonResponse({
     document: {
       id: 'doc_1', name: 'Rechnung', originalName: 'rechnung.pdf',
-      mimeType: 'application/pdf', createdAt: '2026-01-02T10:00:00.000Z',
+      mimeType: 'application/pdf', originalSize: 51200, createdAt: '2026-01-02T10:00:00.000Z',
       tags: [{ id: 'tag_1', name: 'Finanzen', color: '#ff0000' }],
     },
   }));
@@ -96,9 +100,21 @@ test('getDocument: liefert normalisierte Metadaten', async () => {
   assert.equal(doc.id, 'doc_1');
   assert.equal(doc.title, 'Rechnung');
   assert.equal(doc.filename, 'rechnung.pdf');
-  assert.equal(doc.url, 'https://papra.example.com/documents/org_abc/doc_1');
+  assert.equal(doc.mime, 'application/pdf');
+  assert.equal(doc.size, 51200);
+  assert.equal(doc.url, 'https://papra.example.com/organizations/org_abc/documents/doc_1');
   assert.equal(doc.correspondent, null);
   assert.equal(doc.tags.length, 1);
+});
+
+test('getDocument: fehlende Größe/MIME → null (Preview fällt auf Dateinamen zurück)', async () => {
+  mockFetch(() => jsonResponse({
+    document: { id: 'doc_2', name: 'Notiz', originalName: 'notiz.txt', createdAt: null },
+  }));
+  const adapter = new PapraAdapter(account);
+  const doc = await adapter.getDocument('doc_2');
+  assert.equal(doc.mime, null);
+  assert.equal(doc.size, null);
 });
 
 test('fetchContent: lädt Binärdaten herunter, gibt buffer + mime zurück', async () => {
@@ -167,9 +183,9 @@ test('getAdapter: liefert PapraAdapter für provider=papra', () => {
   assert.equal(a.orgId, 'org_1');
 });
 
-test('docUrl: enthält orgId und docId', () => {
+test('docUrl: Papra-Frontend-Route /organizations/<org>/documents/<id>', () => {
   const adapter = new PapraAdapter(account);
-  assert.equal(adapter.docUrl('doc_42'), 'https://papra.example.com/documents/org_abc/doc_42');
+  assert.equal(adapter.docUrl('doc_42'), 'https://papra.example.com/organizations/org_abc/documents/doc_42');
 });
 
 test('Base-URL: trailing slash wird entfernt', () => {

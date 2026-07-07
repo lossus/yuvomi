@@ -38,7 +38,9 @@ export class PapraAdapter {
   }
 
   docUrl(id) {
-    return `${this.base}/documents/${encodeURIComponent(this.orgId)}/${id}`;
+    // Papra-Frontend-Route für die Dokumentansicht: /organizations/<org>/documents/<id>
+    // (nicht /documents/<org>/<id> — das ergibt im Browser einen 404, Issue #451).
+    return `${this.base}/organizations/${encodeURIComponent(this.orgId)}/documents/${encodeURIComponent(id)}`;
   }
 
   async search(query, { limit = 20 } = {}) {
@@ -49,24 +51,26 @@ export class PapraAdapter {
     if (q) params.set('searchQuery', q);
     const res = await this.#request(`${this.#orgPath()}/documents?${params.toString()}`);
     const body = await res.json();
-    return (body.documents || []).map((r) => ({
-      id: String(r.id),
-      title: r.name || r.originalName || r.id,
-      created: r.createdAt || null,
-      filename: r.originalName || String(r.id),
-      url: this.docUrl(r.id),
-    }));
+    return (body.documents || []).map((r) => this.#mapDocument(r));
   }
 
   async getDocument(id) {
     const res = await this.#request(`${this.#orgPath()}/documents/${encodeURIComponent(id)}`);
     const body = await res.json();
-    const r = body.document ?? body;
+    return this.#mapDocument(body.document ?? body);
+  }
+
+  #mapDocument(r) {
+    const size = Number(r.originalSize);
     return {
       id: String(r.id),
       title: r.name || r.originalName || String(r.id),
       created: r.createdAt || null,
       filename: r.originalName || String(r.id),
+      // Papras /file-Endpoint liefert aus XSS-Schutz stets application/octet-stream,
+      // daher den echten MIME-Typ aus dem Dokument-Objekt übernehmen (Issue #451).
+      mime: r.mimeType || null,
+      size: Number.isFinite(size) && size >= 0 ? size : null,
       url: this.docUrl(r.id),
       correspondent: null,
       tags: Array.isArray(r.tags) ? r.tags : [],
