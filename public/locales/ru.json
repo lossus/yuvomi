@@ -378,7 +378,14 @@
         "recurrenceLabel": "Повторять каждую неделю",
         "recurrenceHint": "Yuvomi автоматически добавляет это блюдо в тот же день недели в следующих неделях.",
         "recurrenceBadge": "Повторяющееся блюдо",
-        "recurrenceEditHint": "Это блюдо повторяется каждую неделю. Удаление пропускает только эту дату."
+        "recurrenceEditHint": "Это блюдо повторяется каждую неделю. Удаление пропускает только эту дату.",
+        "editScopeLabel": "Применить изменение к",
+        "editScopeSingle": "Только эта дата",
+        "editScopeSeries": "Вся серия",
+        "deleteRecurringTitle": "Удалить повторяющийся приём пищи",
+        "deleteScopeSingle": "Только эта дата",
+        "deleteScopeSeries": "Вся серия (все недели)",
+        "seriesDeletedToast": "Серия удалена"
     },
     "calendar": {
         "title": "Календарь",

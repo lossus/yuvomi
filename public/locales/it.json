@@ -378,7 +378,14 @@
         "recurrenceLabel": "Ripeti ogni settimana",
         "recurrenceHint": "Yuvomi aggiunge automaticamente questo pasto nello stesso giorno della settimana nelle settimane future.",
         "recurrenceBadge": "Pasto ricorrente",
-        "recurrenceEditHint": "Questo pasto si ripete ogni settimana. Eliminandolo salti solo questa data."
+        "recurrenceEditHint": "Questo pasto si ripete ogni settimana. Eliminandolo salti solo questa data.",
+        "editScopeLabel": "Applica modifica a",
+        "editScopeSingle": "Solo questa data",
+        "editScopeSeries": "Tutta la serie",
+        "deleteRecurringTitle": "Elimina pasto ricorrente",
+        "deleteScopeSingle": "Solo questa data",
+        "deleteScopeSeries": "Tutta la serie (tutte le settimane)",
+        "seriesDeletedToast": "Serie eliminata"
     },
     "calendar": {
         "title": "Calendario",

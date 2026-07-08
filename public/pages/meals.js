@@ -835,6 +835,13 @@ function buildModalContent({ mode, date, mealType, meal, presetRecipeId = null }
     <div class="meal-recurrence-note">
       <i data-lucide="repeat-2" class="icon-sm" aria-hidden="true"></i>
       <span>${t('meals.recurrenceEditHint')}</span>
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="modal-edit-scope">${t('meals.editScopeLabel')}</label>
+      <select class="form-input" id="modal-edit-scope">
+        <option value="single">${t('meals.editScopeSingle')}</option>
+        <option value="series">${t('meals.editScopeSeries')}</option>
+      </select>
     </div>` : '') : `
     <div class="meal-recurrence-option">
       <label class="toggle">
@@ -935,23 +942,30 @@ async function saveModal(overlay) {
       const res     = await api.post('/meals', { date, meal_type, title, notes, recipe_url, recipe_id, ingredients, repeat_weekly });
       state.meals.push(res.data);
     } else {
-      // Update meal meta
-      await api.put(`/meals/${meal.id}`, { date, meal_type, title, notes, recipe_url, recipe_id });
+      const scope = overlay.querySelector('#modal-edit-scope')?.value || 'single';
 
-      // Sync ingredients
-      const existingIds = new Set((meal.ingredients ?? []).map((i) => i.id));
-      const keptIds     = new Set(
-        ingredients.filter((i) => i.id).map((i) => parseInt(i.id, 10))
-      );
+      if (scope === 'series') {
+        // Ganze Serie: Template + alle Instanzen inkl. Zutaten serverseitig aktualisieren.
+        await api.put(`/meals/${meal.id}?scope=series`, { meal_type, title, notes, recipe_url, recipe_id, ingredients });
+      } else {
+        // Nur diese Instanz
+        await api.put(`/meals/${meal.id}`, { date, meal_type, title, notes, recipe_url, recipe_id });
 
-      for (const id of existingIds) {
-        if (!keptIds.has(id)) await api.delete(`/meals/ingredients/${id}`);
+        // Zutaten synchronisieren
+        const existingIds = new Set((meal.ingredients ?? []).map((i) => i.id));
+        const keptIds     = new Set(
+          ingredients.filter((i) => i.id).map((i) => parseInt(i.id, 10))
+        );
+
+        for (const id of existingIds) {
+          if (!keptIds.has(id)) await api.delete(`/meals/ingredients/${id}`);
+        }
+        for (const ing of ingredients) {
+          if (!ing.id) await api.post(`/meals/${meal.id}/ingredients`, { name: ing.name, quantity: ing.quantity, category: ing.category });
+        }
       }
-      for (const ing of ingredients) {
-        if (!ing.id) await api.post(`/meals/${meal.id}/ingredients`, { name: ing.name, quantity: ing.quantity, category: ing.category });
-      }
 
-      // Reload updated meal
+      // Aktualisierte Woche laden
       await loadWeek(state.currentWeek);
     }
 
@@ -982,6 +996,29 @@ function collectModalIngredients(overlay) {
 
 async function deleteMeal(mealId) {
   const meal = state.meals.find((m) => m.id === mealId);
+
+  // Wiederkehrende Mahlzeit: Einzeltermin oder ganze Serie löschen.
+  if (meal?.recurrence_template_id) {
+    const choice = await selectModal(t('meals.deleteRecurringTitle'), [
+      { value: 'single', label: t('meals.deleteScopeSingle') },
+      { value: 'series', label: t('meals.deleteScopeSeries') },
+    ]);
+    if (choice === null) return;
+
+    if (choice === 'series') {
+      try {
+        await api.delete(`/meals/${mealId}?scope=series`);
+        await loadWeek(state.currentWeek);
+        renderWeekGrid();
+        window.yuvomi?.showToast(t('meals.seriesDeletedToast'), 'success');
+      } catch (err) {
+        window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+      }
+      return;
+    }
+    // choice === 'single' → weiter mit der Undo-Löschung unten
+  }
+
   const itemEl = _container.querySelector(`.meal-card[data-meal-id="${mealId}"]`);
   if (itemEl) itemEl.style.display = 'none';
 

@@ -378,7 +378,14 @@
         "recurrenceLabel": "Opakovat každý týden",
         "recurrenceHint": "Yuvomi tuto večeři nebo jídlo automaticky vytvoří ve stejný den v dalších týdnech.",
         "recurrenceBadge": "Opakované jídlo",
-        "recurrenceEditHint": "Toto jídlo se opakuje každý týden. Smazání tohoto záznamu přeskočí jen toto datum."
+        "recurrenceEditHint": "Toto jídlo se opakuje každý týden. Smazání tohoto záznamu přeskočí jen toto datum.",
+        "editScopeLabel": "Použít změnu na",
+        "editScopeSingle": "Pouze toto datum",
+        "editScopeSeries": "Celá série",
+        "deleteRecurringTitle": "Smazat opakující se jídlo",
+        "deleteScopeSingle": "Pouze toto datum",
+        "deleteScopeSeries": "Celá série (všechny týdny)",
+        "seriesDeletedToast": "Série smazána"
     },
     "calendar": {
         "title": "Kalendář",

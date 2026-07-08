@@ -378,7 +378,14 @@
         "recurrenceLabel": "Lặp lại hằng tuần",
         "recurrenceHint": "Yuvomi tự động thêm bữa ăn này vào cùng thứ trong các tuần sau.",
         "recurrenceBadge": "Bữa ăn lặp lại",
-        "recurrenceEditHint": "Bữa ăn này lặp lại hằng tuần. Xóa sẽ chỉ bỏ qua ngày này."
+        "recurrenceEditHint": "Bữa ăn này lặp lại hằng tuần. Xóa sẽ chỉ bỏ qua ngày này.",
+        "editScopeLabel": "Áp dụng thay đổi cho",
+        "editScopeSingle": "Chỉ ngày này",
+        "editScopeSeries": "Toàn bộ chuỗi",
+        "deleteRecurringTitle": "Xóa bữa ăn lặp lại",
+        "deleteScopeSingle": "Chỉ ngày này",
+        "deleteScopeSeries": "Toàn bộ chuỗi (tất cả các tuần)",
+        "seriesDeletedToast": "Đã xóa chuỗi"
     },
     "calendar": {
         "title": "Lịch",

@@ -384,7 +384,14 @@
         "recurrenceLabel": "Wöchentlich wiederholen",
         "recurrenceHint": "Yuvomi legt diese Mahlzeit in zukünftigen Wochen automatisch am gleichen Wochentag an.",
         "recurrenceBadge": "Wiederkehrende Mahlzeit",
-        "recurrenceEditHint": "Diese Mahlzeit wiederholt sich wöchentlich. Löschen überspringt nur dieses Datum."
+        "recurrenceEditHint": "Diese Mahlzeit wiederholt sich wöchentlich. Beim Bearbeiten und Löschen kannst du zwischen diesem Datum und der ganzen Serie wählen.",
+        "editScopeLabel": "Änderung anwenden auf",
+        "editScopeSingle": "Nur dieses Datum",
+        "editScopeSeries": "Ganze Serie",
+        "deleteRecurringTitle": "Wiederkehrende Mahlzeit löschen",
+        "deleteScopeSingle": "Nur dieses Datum",
+        "deleteScopeSeries": "Ganze Serie (alle Wochen)",
+        "seriesDeletedToast": "Serie gelöscht"
     },
     "calendar": {
         "title": "Kalender",

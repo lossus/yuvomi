@@ -378,7 +378,14 @@
         "recurrenceLabel": "Repeat weekly",
         "recurrenceHint": "Yuvomi automatically adds this meal on the same weekday in future weeks.",
         "recurrenceBadge": "Recurring meal",
-        "recurrenceEditHint": "This meal repeats weekly. Deleting it skips only this date."
+        "recurrenceEditHint": "This meal repeats weekly. When editing or deleting you can choose between this date and the whole series.",
+        "editScopeLabel": "Apply change to",
+        "editScopeSingle": "Only this date",
+        "editScopeSeries": "Whole series",
+        "deleteRecurringTitle": "Delete recurring meal",
+        "deleteScopeSingle": "Only this date",
+        "deleteScopeSeries": "Whole series (all weeks)",
+        "seriesDeletedToast": "Series deleted"
     },
     "calendar": {
         "title": "Calendar",

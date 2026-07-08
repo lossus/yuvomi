@@ -378,7 +378,14 @@
         "recurrenceLabel": "हर सप्ताह दोहराएं",
         "recurrenceHint": "Yuvomi आने वाले सप्ताहों में इसी सप्ताह-दिन पर यह भोजन अपने आप जोड़ता है।",
         "recurrenceBadge": "दोहराया जाने वाला भोजन",
-        "recurrenceEditHint": "यह भोजन हर सप्ताह दोहरता है। इसे हटाने से केवल यह तारीख छोड़ी जाएगी।"
+        "recurrenceEditHint": "यह भोजन हर सप्ताह दोहरता है। इसे हटाने से केवल यह तारीख छोड़ी जाएगी।",
+        "editScopeLabel": "परिवर्तन लागू करें",
+        "editScopeSingle": "केवल यह तारीख",
+        "editScopeSeries": "पूरी शृंखला",
+        "deleteRecurringTitle": "आवर्ती भोजन हटाएं",
+        "deleteScopeSingle": "केवल यह तारीख",
+        "deleteScopeSeries": "पूरी शृंखला (सभी सप्ताह)",
+        "seriesDeletedToast": "शृंखला हटाई गई"
     },
     "calendar": {
         "title": "कैलेंडर",

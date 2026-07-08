@@ -378,7 +378,14 @@
         "recurrenceLabel": "Haftalık tekrarla",
         "recurrenceHint": "Yuvomi bu öğünü gelecek haftalarda aynı hafta gününde otomatik olarak ekler.",
         "recurrenceBadge": "Tekrarlanan öğün",
-        "recurrenceEditHint": "Bu öğün haftalık tekrarlanır. Silmek yalnızca bu tarihi atlar."
+        "recurrenceEditHint": "Bu öğün haftalık tekrarlanır. Silmek yalnızca bu tarihi atlar.",
+        "editScopeLabel": "Değişikliği uygula",
+        "editScopeSingle": "Yalnızca bu tarih",
+        "editScopeSeries": "Tüm seri",
+        "deleteRecurringTitle": "Yinelenen öğünü sil",
+        "deleteScopeSingle": "Yalnızca bu tarih",
+        "deleteScopeSeries": "Tüm seri (tüm haftalar)",
+        "seriesDeletedToast": "Seri silindi"
     },
     "calendar": {
         "title": "Takvim",

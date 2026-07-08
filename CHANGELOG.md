@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-07-08
+
+### Added
+- Kitchen (Meals): recurring meals can now be edited or deleted as a whole series. Editing or deleting a weekly meal offers a scope choice — "only this date" or "whole series". A series edit propagates the meal's content and ingredients to every occurrence; a series deletion removes the recurrence template together with all of its occurrences.
+
 ## [1.0.0] - 2026-07-08
 
 A design and accessibility overhaul of three core areas — the Dashboard, the Kitchen (meals, recipes, shopping), and the Calendar — sharing one calmer visual grammar and AA-contrast throughout.

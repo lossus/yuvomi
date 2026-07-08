@@ -384,7 +384,14 @@
         "recurrenceLabel": "تکرار هفتگی",
         "recurrenceHint": "Yuvomi این وعده را در هفته‌های آینده به‌طور خودکار در همان روز هفته اضافه می‌کند.",
         "recurrenceBadge": "وعده تکرارشونده",
-        "recurrenceEditHint": "این وعده هر هفته تکرار می‌شود. حذف فقط این تاریخ را نادیده می‌گیرد."
+        "recurrenceEditHint": "این وعده هر هفته تکرار می‌شود. حذف فقط این تاریخ را نادیده می‌گیرد.",
+        "editScopeLabel": "اعمال تغییر بر",
+        "editScopeSingle": "فقط این تاریخ",
+        "editScopeSeries": "کل مجموعه",
+        "deleteRecurringTitle": "حذف وعده تکرارشونده",
+        "deleteScopeSingle": "فقط این تاریخ",
+        "deleteScopeSeries": "کل مجموعه (همه هفته‌ها)",
+        "seriesDeletedToast": "مجموعه حذف شد"
     },
     "calendar": {
         "title": "تقویم",

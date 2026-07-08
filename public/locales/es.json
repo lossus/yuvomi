@@ -378,7 +378,14 @@
         "recurrenceLabel": "Repetir semanalmente",
         "recurrenceHint": "Yuvomi crea esta comida automáticamente el mismo día de la semana en las próximas semanas.",
         "recurrenceBadge": "Comida recurrente",
-        "recurrenceEditHint": "Esta comida se repite cada semana. Al eliminarla solo se omite esta fecha."
+        "recurrenceEditHint": "Esta comida se repite cada semana. Al eliminarla solo se omite esta fecha.",
+        "editScopeLabel": "Aplicar cambio a",
+        "editScopeSingle": "Solo esta fecha",
+        "editScopeSeries": "Toda la serie",
+        "deleteRecurringTitle": "Eliminar comida recurrente",
+        "deleteScopeSingle": "Solo esta fecha",
+        "deleteScopeSeries": "Toda la serie (todas las semanas)",
+        "seriesDeletedToast": "Serie eliminada"
     },
     "calendar": {
         "title": "Calendario",

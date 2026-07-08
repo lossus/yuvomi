@@ -378,7 +378,14 @@
         "recurrenceLabel": "Upprepa varje vecka",
         "recurrenceHint": "Yuvomi lägger automatiskt till den här måltiden samma veckodag kommande veckor.",
         "recurrenceBadge": "Återkommande måltid",
-        "recurrenceEditHint": "Den här måltiden upprepas varje vecka. Om du tar bort den hoppas bara detta datum över."
+        "recurrenceEditHint": "Den här måltiden upprepas varje vecka. Om du tar bort den hoppas bara detta datum över.",
+        "editScopeLabel": "Tillämpa ändring på",
+        "editScopeSingle": "Endast detta datum",
+        "editScopeSeries": "Hela serien",
+        "deleteRecurringTitle": "Ta bort återkommande måltid",
+        "deleteScopeSingle": "Endast detta datum",
+        "deleteScopeSeries": "Hela serien (alla veckor)",
+        "seriesDeletedToast": "Serien borttagen"
     },
     "calendar": {
         "title": "Kalender",

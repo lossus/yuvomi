@@ -384,7 +384,14 @@
         "recurrenceLabel": "Powtarzaj co tydzień",
         "recurrenceHint": "Yuvomi automatycznie dodaje ten posiłek w ten sam dzień tygodnia w kolejnych tygodniach.",
         "recurrenceBadge": "Posiłek cykliczny",
-        "recurrenceEditHint": "Ten posiłek powtarza się co tydzień. Usunięcie pomija tylko tę datę."
+        "recurrenceEditHint": "Ten posiłek powtarza się co tydzień. Usunięcie pomija tylko tę datę.",
+        "editScopeLabel": "Zastosuj zmianę do",
+        "editScopeSingle": "Tylko ta data",
+        "editScopeSeries": "Cała seria",
+        "deleteRecurringTitle": "Usuń powtarzający się posiłek",
+        "deleteScopeSingle": "Tylko ta data",
+        "deleteScopeSeries": "Cała seria (wszystkie tygodnie)",
+        "seriesDeletedToast": "Seria usunięta"
     },
     "calendar": {
         "title": "Kalendarz",

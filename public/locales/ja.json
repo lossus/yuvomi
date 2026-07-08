@@ -378,7 +378,14 @@
         "recurrenceLabel": "毎週繰り返す",
         "recurrenceHint": "Yuvomi は今後の週でも同じ曜日にこの食事を自動で追加します。",
         "recurrenceBadge": "繰り返しの食事",
-        "recurrenceEditHint": "この食事は毎週繰り返されます。削除するとこの日付だけをスキップします。"
+        "recurrenceEditHint": "この食事は毎週繰り返されます。削除するとこの日付だけをスキップします。",
+        "editScopeLabel": "変更の適用範囲",
+        "editScopeSingle": "この日付のみ",
+        "editScopeSeries": "シリーズ全体",
+        "deleteRecurringTitle": "繰り返しの食事を削除",
+        "deleteScopeSingle": "この日付のみ",
+        "deleteScopeSeries": "シリーズ全体（毎週）",
+        "seriesDeletedToast": "シリーズを削除しました"
     },
     "calendar": {
         "title": "カレンダー",

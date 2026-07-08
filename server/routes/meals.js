@@ -332,6 +332,65 @@ router.put('/:id', (req, res) => {
       if (!recipeExists) return res.status(400).json({ error: 'Rezept nicht gefunden.', code: 400 });
     }
 
+    // scope=series schreibt die inhaltlichen Felder (nicht das Datum) auf das Template
+    // und auf alle bereits materialisierten Instanzen zurück; Zutaten werden – falls
+    // mitgeschickt – überall vollständig ersetzt.
+    if (req.query.scope === 'series' && meal.recurrence_template_id) {
+      const templateId = meal.recurrence_template_id;
+      const tpl = db.get().prepare('SELECT * FROM meal_recurrence_templates WHERE id = ?').get(templateId);
+
+      const nMealType  = req.body.meal_type  !== undefined ? req.body.meal_type                 : tpl.meal_type;
+      const nTitle     = req.body.title      !== undefined ? (req.body.title?.trim() || tpl.title) : tpl.title;
+      const nNotes     = req.body.notes      !== undefined ? (req.body.notes      || null)       : tpl.notes;
+      const nRecipeUrl = req.body.recipe_url !== undefined ? (req.body.recipe_url || null)       : tpl.recipe_url;
+      const nRecipeId  = req.body.recipe_id  !== undefined ? (req.body.recipe_id  || null)       : tpl.recipe_id;
+
+      db.transaction(() => {
+        db.get().prepare(`
+          UPDATE meal_recurrence_templates
+          SET meal_type = ?, title = ?, notes = ?, recipe_url = ?, recipe_id = ?
+          WHERE id = ?
+        `).run(nMealType, nTitle, nNotes, nRecipeUrl, nRecipeId, templateId);
+
+        db.get().prepare(`
+          UPDATE meals
+          SET meal_type = ?, title = ?, notes = ?, recipe_url = ?, recipe_id = ?
+          WHERE recurrence_template_id = ?
+        `).run(nMealType, nTitle, nNotes, nRecipeUrl, nRecipeId, templateId);
+
+        if (Array.isArray(req.body.ingredients)) {
+          const cleanIngredients = sanitizedIngredients(req.body.ingredients);
+
+          db.get().prepare('DELETE FROM meal_recurrence_ingredients WHERE template_id = ?').run(templateId);
+          const insertTemplateIng = db.get().prepare(`
+            INSERT INTO meal_recurrence_ingredients (template_id, name, quantity, category)
+            VALUES (?, ?, ?, ?)
+          `);
+          for (const ing of cleanIngredients) {
+            insertTemplateIng.run(templateId, ing.name, ing.quantity, ing.category);
+          }
+
+          const instances = db.get().prepare('SELECT id FROM meals WHERE recurrence_template_id = ?').all(templateId);
+          const deleteIng  = db.get().prepare('DELETE FROM meal_ingredients WHERE meal_id = ?');
+          for (const inst of instances) {
+            deleteIng.run(inst.id);
+            insertMealIngredients(inst.id, cleanIngredients);
+          }
+        }
+      });
+
+      const updated = db.get().prepare(`
+        SELECT m.*, u.display_name AS creator_name, u.avatar_color AS creator_color
+        FROM meals m LEFT JOIN users u ON u.id = m.created_by
+        WHERE m.id = ?
+      `).get(id);
+      const ings = db.get().prepare(
+        'SELECT * FROM meal_ingredients WHERE meal_id = ? ORDER BY id ASC'
+      ).all(id);
+
+      return res.json({ data: { ...updated, ingredients: ings } });
+    }
+
     if (meal.recurrence_template_id && req.body.date !== undefined && req.body.date !== meal.date) {
       db.get().prepare(`
         INSERT OR IGNORE INTO meal_recurrence_exceptions (template_id, date, created_by)
@@ -385,6 +444,19 @@ router.delete('/:id', (req, res) => {
     const id     = parseInt(req.params.id, 10);
     const meal   = db.get().prepare('SELECT * FROM meals WHERE id = ?').get(id);
     if (!meal) return res.status(404).json({ error: 'Mahlzeit nicht gefunden', code: 404 });
+
+    // scope=series entfernt die gesamte Serie: alle materialisierten Instanzen plus
+    // das Template (CASCADE räumt Template-Zutaten und Ausnahmen ab). Da
+    // meals.recurrence_template_id ON DELETE SET NULL ist, müssen die Instanzen vor
+    // dem Template explizit gelöscht werden, sonst blieben sie als Einzel-Mahlzeiten zurück.
+    if (req.query.scope === 'series' && meal.recurrence_template_id) {
+      const templateId = meal.recurrence_template_id;
+      db.transaction(() => {
+        db.get().prepare('DELETE FROM meals WHERE recurrence_template_id = ?').run(templateId);
+        db.get().prepare('DELETE FROM meal_recurrence_templates WHERE id = ?').run(templateId);
+      });
+      return res.status(204).end();
+    }
 
     if (meal.recurrence_template_id) {
       db.get().prepare(`

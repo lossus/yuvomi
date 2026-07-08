@@ -180,6 +180,77 @@ test('Wiederkehrende Mahlzeit: Skip-Ausnahme blockiert ein Datum', () => {
 });
 
 // --------------------------------------------------------
+// Serie bearbeiten / löschen (scope=series) — spiegelt die Route-Handler-SQL
+// --------------------------------------------------------
+
+test('Serie bearbeiten: Template + alle Instanzen + Zutaten propagieren', () => {
+  const tpl = db.prepare(`
+    INSERT INTO meal_recurrence_templates
+      (start_date, weekday, meal_type, title, notes, created_by)
+    VALUES ('2026-05-04', 0, 'breakfast', 'Porridge', NULL, ?)
+  `).run(uid).lastInsertRowid;
+  db.prepare(`INSERT INTO meal_recurrence_ingredients (template_id, name, quantity, category)
+              VALUES (?, 'Oats', '100g', 'Sonstiges')`).run(tpl);
+
+  const i1 = db.prepare(`INSERT INTO meals (date, meal_type, title, recurrence_template_id, created_by)
+                         VALUES ('2026-05-04', 'breakfast', 'Porridge', ?, ?)`).run(tpl, uid).lastInsertRowid;
+  const i2 = db.prepare(`INSERT INTO meals (date, meal_type, title, recurrence_template_id, created_by)
+                         VALUES ('2026-05-11', 'breakfast', 'Porridge', ?, ?)`).run(tpl, uid).lastInsertRowid;
+  db.prepare(`INSERT INTO meal_ingredients (meal_id, name, quantity) VALUES (?, 'Oats', '100g')`).run(i1);
+  db.prepare(`INSERT INTO meal_ingredients (meal_id, name, quantity) VALUES (?, 'Oats', '100g')`).run(i2);
+
+  // Handler scope=series: Titel/Notes ändern, Zutaten komplett ersetzen
+  db.prepare(`UPDATE meal_recurrence_templates
+              SET meal_type = 'breakfast', title = 'Overnight Oats', notes = 'kalt', recipe_url = NULL, recipe_id = NULL
+              WHERE id = ?`).run(tpl);
+  db.prepare(`UPDATE meals
+              SET meal_type = 'breakfast', title = 'Overnight Oats', notes = 'kalt'
+              WHERE recurrence_template_id = ?`).run(tpl);
+  db.prepare(`DELETE FROM meal_recurrence_ingredients WHERE template_id = ?`).run(tpl);
+  db.prepare(`INSERT INTO meal_recurrence_ingredients (template_id, name, quantity, category)
+              VALUES (?, 'Oats', '100g', 'Sonstiges'), (?, 'Milk', '200ml', 'Sonstiges')`).run(tpl, tpl);
+  for (const iid of [i1, i2]) {
+    db.prepare(`DELETE FROM meal_ingredients WHERE meal_id = ?`).run(iid);
+    db.prepare(`INSERT INTO meal_ingredients (meal_id, name, quantity)
+                VALUES (?, 'Oats', '100g'), (?, 'Milk', '200ml')`).run(iid, iid);
+  }
+
+  const titles = db.prepare(`SELECT DISTINCT title FROM meals WHERE recurrence_template_id = ?`).all(tpl);
+  assert(titles.length === 1 && titles[0].title === 'Overnight Oats', 'alle Instanzen tragen neuen Titel');
+  const ingCount = db.prepare(`SELECT COUNT(*) c FROM meal_ingredients WHERE meal_id = ?`).get(i2).c;
+  assert(ingCount === 2, 'Instanz-Zutaten wurden ersetzt (2 Einträge)');
+  const tplIng = db.prepare(`SELECT COUNT(*) c FROM meal_recurrence_ingredients WHERE template_id = ?`).get(tpl).c;
+  assert(tplIng === 2, 'Template-Zutaten wurden ersetzt (2 Einträge)');
+});
+
+test('Serie löschen: Instanzen zuerst entfernen, dann Template (kein SET-NULL-Waisenrest)', () => {
+  const tpl = db.prepare(`
+    INSERT INTO meal_recurrence_templates
+      (start_date, weekday, meal_type, title, created_by)
+    VALUES ('2026-06-01', 0, 'lunch', 'Soup', ?)
+  `).run(uid).lastInsertRowid;
+  db.prepare(`INSERT INTO meal_recurrence_ingredients (template_id, name, quantity, category)
+              VALUES (?, 'Broth', '1L', 'Sonstiges')`).run(tpl);
+  db.prepare(`INSERT INTO meal_recurrence_exceptions (template_id, date, created_by)
+              VALUES (?, '2026-06-08', ?)`).run(tpl, uid);
+  const s1 = db.prepare(`INSERT INTO meals (date, meal_type, title, recurrence_template_id, created_by)
+                         VALUES ('2026-06-01', 'lunch', 'Soup', ?, ?)`).run(tpl, uid).lastInsertRowid;
+  db.prepare(`INSERT INTO meals (date, meal_type, title, recurrence_template_id, created_by)
+              VALUES ('2026-06-15', 'lunch', 'Soup', ?, ?)`).run(tpl, uid);
+  db.prepare(`INSERT INTO meal_ingredients (meal_id, name, quantity) VALUES (?, 'Broth', '1L')`).run(s1);
+
+  // Handler scope=series: erst Instanzen, dann Template (CASCADE für Template-Zutaten/Ausnahmen)
+  db.prepare(`DELETE FROM meals WHERE recurrence_template_id = ?`).run(tpl);
+  db.prepare(`DELETE FROM meal_recurrence_templates WHERE id = ?`).run(tpl);
+
+  assert(db.prepare(`SELECT COUNT(*) c FROM meals WHERE recurrence_template_id = ?`).get(tpl).c === 0, 'keine Instanzen mit Template-Bezug');
+  assert(db.prepare(`SELECT COUNT(*) c FROM meals WHERE title = 'Soup' AND recurrence_template_id IS NULL`).get().c === 0, 'keine verwaisten Einzel-Mahlzeiten (SET NULL)');
+  assert(db.prepare(`SELECT COUNT(*) c FROM meal_recurrence_templates WHERE id = ?`).get(tpl).c === 0, 'Template gelöscht');
+  assert(db.prepare(`SELECT COUNT(*) c FROM meal_recurrence_ingredients WHERE template_id = ?`).get(tpl).c === 0, 'Template-Zutaten via CASCADE entfernt');
+  assert(db.prepare(`SELECT COUNT(*) c FROM meal_recurrence_exceptions WHERE template_id = ?`).get(tpl).c === 0, 'Ausnahmen via CASCADE entfernt');
+});
+
+// --------------------------------------------------------
 // Zutaten CRUD
 // --------------------------------------------------------
 test('Zutat hinzufügen', () => {

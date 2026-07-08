@@ -169,7 +169,7 @@ Ingredient snapshot copied to each generated weekly meal occurrence.
 | category | TEXT | NOT NULL (default 'Sonstiges') |
 
 ### Meal Recurrence Exceptions
-Stores individual skipped recurring meal dates so deleting one occurrence does not regenerate it.
+Stores individual skipped recurring meal dates so deleting a single occurrence (scope: this date only) does not regenerate it. Deleting the whole series drops the template and cascades these exceptions away.
 
 | Column | Type | Constraint |
 |--------|------|-----------|
@@ -1206,7 +1206,7 @@ Skeleton loading instead of spinners (the skeleton mirrors the default-visible w
 - Autocomplete from meal history
 - **Multiple items per slot:** each day/meal-type cell can hold any number of meals, displayed as stacked cards with a separator. A hover-visible `+` button lets you add another item to an already-filled slot without clearing the existing entry. (v0.63.3)
 - **Recipe integration:** Select a saved recipe from the meal modal to auto-fill title, notes, URL, and ingredients. Scale ingredient quantities by a numeric factor. Save the current meal as a new recipe with one click.
-- **Weekly meal repeats:** New meals can be marked as weekly repeats from the advanced meal dialog. Yuvomi stores a recurrence template, materializes future occurrences for each loaded week, shows a repeat badge on generated meals, and records per-date skip exceptions when a single occurrence is deleted. (v0.78.1)
+- **Weekly meal repeats:** New meals can be marked as weekly repeats from the advanced meal dialog. Yuvomi stores a recurrence template, materializes future occurrences for each loaded week, shows a repeat badge on generated meals, and records per-date skip exceptions when a single occurrence is deleted. Editing or deleting a recurring meal offers a scope choice — **this date only** or the **whole series**: series edits propagate the content fields and ingredients to the template and every materialized occurrence, while series deletion removes the template together with all of its occurrences. (v0.78.1, series scope v1.1.0)
 - **Customizable meal visibility:** In Settings, users can toggle which meal types (breakfast, lunch, dinner, snack) are shown in the planner and the dashboard's Today Meals widget. Stored as household-wide preference in `sync_config` (key: `visible_meal_types`). At least one type must remain active.
 
 ### Recipes (`/recipes`)

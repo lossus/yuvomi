@@ -378,7 +378,14 @@
         "recurrenceLabel": "Ismétlés hetente",
         "recurrenceHint": "A Yuvomi a következő hetekben automatikusan létrehozza ezt az ételt ugyanazon a hétköznapon.",
         "recurrenceBadge": "Ismétlődő étel",
-        "recurrenceEditHint": "Ez az étel hetente ismétlődik. A törlés csak ezt a dátumot hagyja ki."
+        "recurrenceEditHint": "Ez az étel hetente ismétlődik. A törlés csak ezt a dátumot hagyja ki.",
+        "editScopeLabel": "Módosítás alkalmazása erre",
+        "editScopeSingle": "Csak ez a dátum",
+        "editScopeSeries": "Teljes sorozat",
+        "deleteRecurringTitle": "Ismétlődő étkezés törlése",
+        "deleteScopeSingle": "Csak ez a dátum",
+        "deleteScopeSeries": "Teljes sorozat (minden hét)",
+        "seriesDeletedToast": "Sorozat törölve"
     },
     "calendar": {
         "title": "Naptár",

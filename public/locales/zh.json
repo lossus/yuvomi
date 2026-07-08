@@ -378,7 +378,14 @@
         "recurrenceLabel": "每周重复",
         "recurrenceHint": "Yuvomi 会在未来每周的同一天自动添加这顿餐食。",
         "recurrenceBadge": "重复餐食",
-        "recurrenceEditHint": "这顿餐食每周重复。删除只会跳过这个日期。"
+        "recurrenceEditHint": "这顿餐食每周重复。删除只会跳过这个日期。",
+        "editScopeLabel": "应用更改到",
+        "editScopeSingle": "仅此日期",
+        "editScopeSeries": "整个系列",
+        "deleteRecurringTitle": "删除重复餐食",
+        "deleteScopeSingle": "仅此日期",
+        "deleteScopeSeries": "整个系列（所有周）",
+        "seriesDeletedToast": "已删除系列"
     },
     "calendar": {
         "title": "日历",
