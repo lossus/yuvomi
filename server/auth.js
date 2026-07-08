@@ -18,6 +18,7 @@ import * as oidcClient from 'openid-client';
 import { isOidcEnabled, getConfig as getOidcConfig } from './services/oidc.js';
 import { emailService as defaultEmailService } from './services/email.js';
 import { passwordResetService as defaultResetService } from './services/password-reset.js';
+import { parseScopes, serializeScopes, normalizeScopes } from './scopes.js';
 
 const log = createLogger('Auth');
 const router = express.Router();
@@ -224,6 +225,7 @@ function publicApiToken(row) {
     token_prefix: row.token_prefix,
     created_by: row.created_by,
     creator_name: row.creator_name,
+    scopes: parseScopes(row.scopes),
     expires_at: row.expires_at,
     revoked_at: row.revoked_at,
     last_used_at: row.last_used_at,
@@ -430,6 +432,8 @@ function requireAuth(req, res, next) {
     req.authMethod = 'api_token';
     req.authUserId = apiToken.created_by;
     req.authRole = apiToken.role;
+    // null = kein Scoping (voller rollenbasierter Zugriff, Legacy-Token).
+    req.authScopes = parseScopes(apiToken.scopes);
     return next();
   }
 
@@ -437,6 +441,8 @@ function requireAuth(req, res, next) {
     req.authMethod = 'session';
     req.authUserId = req.session.userId;
     req.authRole = req.session.role;
+    // Interaktive Sessions kennen kein Scoping — voller Zugriff.
+    req.authScopes = null;
     return next();
   }
   res.status(401).json({ error: 'Not authenticated.', code: 401 });
@@ -1004,15 +1010,33 @@ router.post('/api-tokens', requireAuth, requireAdmin, csrfMiddleware, (req, res)
       return res.status(400).json({ error: 'Expiration date must be in the future.', code: 400 });
     }
 
+    // scopes: fehlend/null → uneingeschränktes Token (Voll-Zugriff, Default wie bisher).
+    // Explizit gesetzt → Least-Privilege-Allowlist; muss mind. einen gültigen Scope
+    // enthalten, ungültige/unbekannte Einträge werden abgewiesen (kein stilles Verwerfen).
+    let serializedScopes = null;
+    if (req.body.scopes !== undefined && req.body.scopes !== null) {
+      if (!Array.isArray(req.body.scopes)) {
+        return res.status(400).json({ error: 'scopes must be an array of "module:read"/"module:write" strings.', code: 400 });
+      }
+      const normalized = normalizeScopes(req.body.scopes);
+      if (normalized.length !== req.body.scopes.length) {
+        return res.status(400).json({ error: 'scopes contains unknown or duplicate entries.', code: 400 });
+      }
+      if (normalized.length === 0) {
+        return res.status(400).json({ error: 'Provide at least one scope, or omit scopes for full access.', code: 400 });
+      }
+      serializedScopes = serializeScopes(normalized);
+    }
+
     const token = API_TOKEN_PREFIX + crypto.randomBytes(32).toString('base64url');
     const tokenHash = hashApiToken(token);
     const tokenPrefix = token.slice(0, 12);
     const normalizedExpiresAt = expiresAt ? new Date(expiresAt).toISOString() : null;
 
     const result = db.get().prepare(`
-      INSERT INTO api_tokens (name, token_hash, token_prefix, created_by, expires_at)
-      VALUES (?, ?, ?, ?, ?)
-    `).run(name, tokenHash, tokenPrefix, req.authUserId, normalizedExpiresAt);
+      INSERT INTO api_tokens (name, token_hash, token_prefix, created_by, expires_at, scopes)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `).run(name, tokenHash, tokenPrefix, req.authUserId, normalizedExpiresAt, serializedScopes);
 
     const row = db.get().prepare(`
       SELECT t.*, u.display_name AS creator_name

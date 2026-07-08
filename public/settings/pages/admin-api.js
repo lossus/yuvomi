@@ -4,6 +4,13 @@ import { esc } from '/utils/html.js';
 import { confirmModal } from '/components/modal.js';
 import { createRetryState } from '/settings/components.js';
 
+// Muss mit MODULE_KEYS in server/scopes.js übereinstimmen (gleiche Reihenfolge).
+const SCOPE_MODULE_KEYS = [
+  'tasks', 'shopping', 'meals', 'calendar', 'notes', 'contacts', 'budget',
+  'documents', 'health', 'rewards', 'housekeeping', 'weather', 'family',
+  'dashboard', 'search',
+];
+
 function formatTokenTime(value) {
   if (!value) return null;
   const date = new Date(value);
@@ -35,8 +42,12 @@ function apiTokenHtml(token) {
     : token.expires_at && new Date(token.expires_at).getTime() <= Date.now()
       ? t('settings.apiTokenExpired')
       : t('settings.apiTokenActive');
+  const scopeSummary = Array.isArray(token.scopes)
+    ? t('settings.apiTokenScopeSummary', { count: token.scopes.length })
+    : t('settings.apiTokenScopeFull');
   const meta = [
     `${t('settings.apiTokenPrefix')}: ${token.token_prefix}...`,
+    scopeSummary,
     token.expires_at
       ? `${t('settings.apiTokenExpires')}: ${formatTokenTime(token.expires_at)}`
       : t('settings.apiTokenNeverExpires'),
@@ -98,6 +109,28 @@ function renderPage(container) {
             <input class="form-input" type="datetime-local" id="api-token-expires" />
             <p class="form-hint">${t('settings.apiTokenExpiresHint')}</p>
           </div>
+          <div class="form-group">
+            <label class="form-label">${t('settings.apiTokenScopes')}</label>
+            <p class="form-hint" style="margin-bottom:var(--space-2)">${t('settings.apiTokenScopeHint')}</p>
+            <label class="settings-toggle">
+              <input type="checkbox" id="api-token-scope-limit" />
+              <span>${t('settings.apiTokenScopeLimit')}</span>
+            </label>
+            <div id="api-token-scope-grid" class="api-token-scopes" hidden>
+              <div class="api-token-scopes__head">
+                <span>${t('settings.apiTokenScopeModule')}</span>
+                <span>${t('settings.apiTokenScopeRead')}</span>
+                <span>${t('settings.apiTokenScopeWrite')}</span>
+              </div>
+              ${SCOPE_MODULE_KEYS.map((key) => `
+                <div class="api-token-scopes__row">
+                  <span class="api-token-scopes__name">${t(`settings.apiTokenScopeModules.${key}`)}</span>
+                  <label class="api-token-scopes__cell"><input type="checkbox" data-scope="${key}:read" aria-label="${t(`settings.apiTokenScopeModules.${key}`)} ${t('settings.apiTokenScopeRead')}" /></label>
+                  <label class="api-token-scopes__cell"><input type="checkbox" data-scope="${key}:write" aria-label="${t(`settings.apiTokenScopeModules.${key}`)} ${t('settings.apiTokenScopeWrite')}" /></label>
+                </div>
+              `).join('')}
+            </div>
+          </div>
           <div id="api-token-created" class="settings-token-output" hidden>
             <label class="form-label" for="api-token-created-value">${t('settings.apiTokenCreatedLabel')}</label>
             <input class="form-input" id="api-token-created-value" type="text" readonly />
@@ -118,6 +151,22 @@ function bindEvents(container, initialTokens) {
 
   let tokens = [...initialTokens];
 
+  const scopeLimit = container.querySelector('#api-token-scope-limit');
+  const scopeGrid = container.querySelector('#api-token-scope-grid');
+  if (scopeLimit && scopeGrid) {
+    scopeLimit.addEventListener('change', () => {
+      scopeGrid.hidden = !scopeLimit.checked;
+    });
+    // Schreibrecht schließt Leserecht ein: read spiegeln + sperren, solange write aktiv ist.
+    scopeGrid.addEventListener('change', (event) => {
+      const box = event.target;
+      if (!box.dataset.scope || !box.dataset.scope.endsWith(':write')) return;
+      const readBox = scopeGrid.querySelector(`[data-scope="${box.dataset.scope.replace(':write', ':read')}"]`);
+      if (!readBox) return;
+      if (box.checked) { readBox.checked = true; readBox.disabled = true; } else { readBox.disabled = false; }
+    });
+  }
+
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const errorEl = container.querySelector('#api-token-error');
@@ -134,13 +183,29 @@ function bindEvents(container, initialTokens) {
       return;
     }
 
+    // scopes: nur senden, wenn „auf Module beschränken" aktiv ist. Sonst voller Zugriff.
+    const payload = { name, expires_at };
+    if (scopeLimit && scopeLimit.checked) {
+      const scopes = [...scopeGrid.querySelectorAll('input[data-scope]:checked')]
+        .map((box) => box.dataset.scope);
+      if (!scopes.length) {
+        showError(errorEl, t('settings.apiTokenScopeRequired'));
+        return;
+      }
+      payload.scopes = scopes;
+    }
+
     const btn = form.querySelector('[type=submit]');
     btn.disabled = true;
     try {
-      const res = await api.post('/auth/api-tokens', { name, expires_at });
+      const res = await api.post('/auth/api-tokens', payload);
       tokens.unshift(res.data);
       renderApiTokenList(container, tokens);
       form.reset();
+      if (scopeGrid) {
+        scopeGrid.hidden = true;
+        scopeGrid.querySelectorAll('input[data-scope]').forEach((box) => { box.disabled = false; });
+      }
       // The raw token is shown exactly once, only from the creation response.
       outputValue.value = res.token;
       output.hidden = false;

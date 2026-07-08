@@ -55,6 +55,7 @@ import notificationsRouter from './routes/notifications.js';
 import healthRouter from './routes/health.js';
 import rewardsRouter from './routes/rewards.js';
 import mcpRouter from './mcp/server.js';
+import { moduleForPath, requiredAccess, tokenAllows } from './scopes.js';
 
 const log     = createLogger('Server');
 const logSync = createLogger('Sync');
@@ -349,6 +350,18 @@ app.use('/api/v1', (req, res, next) => {
   } catch {
     return res.status(403).json({ error: 'This account can only access Split expenses.', code: 403 });
   }
+});
+// Token-Scopes: Nur für Token-Auth relevant. Ein gescoptes Token (scopes !== null)
+// darf ein Modul nur in der gewährten Zugriffsart (read/write) erreichen; jeder
+// nicht abgedeckte /api/v1-Pfad wird verweigert (Least Privilege). Deckt damit
+// zugleich die MCP-OpenAPI-Brücke ab, da diese per Loopback mit demselben Token
+// hier durchläuft. Interaktive Sessions (authScopes === null) sind unbetroffen.
+app.use('/api/v1', (req, res, next) => {
+  if (req.authMethod !== 'api_token' || req.authScopes == null) return next();
+  const moduleKey = moduleForPath(req.path);
+  const access = requiredAccess(req.method);
+  if (tokenAllows(req.authScopes, moduleKey, access)) return next();
+  return res.status(403).json({ error: 'Token scope does not permit this operation.', code: 403 });
 });
 app.use('/api/v1', csrfMiddleware);
 app.use('/api/v1/dashboard', dashboardRouter);

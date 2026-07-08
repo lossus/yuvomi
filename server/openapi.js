@@ -2180,6 +2180,11 @@ function buildOpenApiSpec(req, appVersion) {
             token_prefix: { type: 'string' },
             created_by: { type: 'integer' },
             creator_name: { type: 'string' },
+            scopes: {
+              type: ['array', 'null'],
+              items: { type: 'string' },
+              description: 'Permission allow-list of "module:read"/"module:write" entries. null means no scoping (full role-based access, e.g. legacy tokens). write implies read.',
+            },
             expires_at: { type: ['string', 'null'], format: 'date-time' },
             revoked_at: { type: ['string', 'null'], format: 'date-time' },
             last_used_at: { type: ['string', 'null'], format: 'date-time' },
@@ -2191,6 +2196,11 @@ function buildOpenApiSpec(req, appVersion) {
           type: 'object',
           properties: {
             name: { type: 'string' },
+            scopes: {
+              type: ['array', 'null'],
+              items: { type: 'string' },
+              description: 'Optional permission allow-list of "module:read"/"module:write" entries (e.g. ["calendar:write","tasks:read"]). Omit or null for a full-access token. When set, must be non-empty and only contain known scopes. Enforced on both REST and MCP; write implies read.',
+            },
             expires_at: { type: ['string', 'null'], format: 'date-time' },
           },
           required: ['name'],

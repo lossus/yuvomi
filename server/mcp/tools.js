@@ -23,6 +23,7 @@
 import * as v from '../middleware/validate.js';
 import { readFileSync } from 'node:fs';
 import { buildOpenApiSpec } from '../openapi.js';
+import { tokenAllows } from '../scopes.js';
 
 const pkg = JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf8'));
 
@@ -430,6 +431,7 @@ const CORE_TOOLS = [
   {
     name: 'list_tasks',
     description: 'List the family\'s current top-level tasks (open by default). Optionally filter by status.',
+    scope: { module: 'tasks', access: 'read' },
     inputSchema: {
       type: 'object',
       properties: {
@@ -441,6 +443,7 @@ const CORE_TOOLS = [
   {
     name: 'create_task',
     description: 'Create a new task on the family planner.',
+    scope: { module: 'tasks', access: 'write' },
     inputSchema: {
       type: 'object',
       properties: {
@@ -458,6 +461,7 @@ const CORE_TOOLS = [
   {
     name: 'list_shopping_items',
     description: 'List shopping items across all lists (unchecked by default).',
+    scope: { module: 'shopping', access: 'read' },
     inputSchema: {
       type: 'object',
       properties: {
@@ -469,6 +473,7 @@ const CORE_TOOLS = [
   {
     name: 'add_shopping_item',
     description: 'Add an item to a shopping list. Uses the first list if none is named.',
+    scope: { module: 'shopping', access: 'write' },
     inputSchema: {
       type: 'object',
       properties: {
@@ -484,6 +489,7 @@ const CORE_TOOLS = [
   {
     name: 'list_upcoming_events',
     description: 'List upcoming calendar events from today onward.',
+    scope: { module: 'calendar', access: 'read' },
     inputSchema: {
       type: 'object',
       properties: {
@@ -495,6 +501,7 @@ const CORE_TOOLS = [
   {
     name: 'create_event',
     description: 'Create a calendar event.',
+    scope: { module: 'calendar', access: 'write' },
     inputSchema: {
       type: 'object',
       properties: {
@@ -597,17 +604,46 @@ const TOOL_DEFINITIONS = ALL_TOOLS.map(({ name, description, inputSchema }) => (
 const TOOL_MAP = new Map(ALL_TOOLS.map((t) => [t.name, t]));
 
 /**
+ * Darf der Token dieses Tool nutzen? Tools ohne `scope` (Meta-/Brücken-Tools) sind
+ * immer erlaubt — die OpenAPI-Brücke setzt Scopes ohnehin serverseitig am
+ * Loopback-REST-Layer durch. `scopes === null` = kein Scoping (voller Zugriff).
+ * @param {string[]|null} scopes
+ * @param {{ scope?: { module: string, access: 'read'|'write' } }} tool
+ * @returns {boolean}
+ */
+function toolAllowed(scopes, tool) {
+  if (!tool.scope) return true;
+  return tokenAllows(scopes, tool.scope.module, tool.scope.access);
+}
+
+/**
+ * Tool-Definitionen für `tools/list`, gefiltert auf die Scopes des Tokens —
+ * ein LLM sieht nur Tools, die es auch aufrufen darf.
+ * @param {string[]|null} scopes
+ * @returns {Array<{ name: string, description: string, inputSchema: object }>}
+ */
+function listToolDefinitions(scopes = null) {
+  return ALL_TOOLS
+    .filter((tool) => toolAllowed(scopes, tool))
+    .map(({ name, description, inputSchema }) => ({ name, description, inputSchema }));
+}
+
+/**
  * Führt ein Tool aus.
- * @param {{ db: object, actor: { id: number, role?: string }, requestHeaders?: object }} ctx
+ * @param {{ db: object, actor: { id: number, role?: string, scopes?: string[]|null }, requestHeaders?: object }} ctx
  * @param {string} name  - Tool-Name
  * @param {object} args  - Tool-Argumente
  * @returns {Promise<any>} rohes Ergebnis (wird vom Protokoll-Layer serialisiert)
- * @throws {ToolError} bei unbekanntem Tool oder Validierungsfehler
+ * @throws {ToolError} bei unbekanntem Tool, fehlender Scope-Berechtigung oder Validierungsfehler
  */
 async function callTool(ctx, name, args = {}) {
   const tool = TOOL_MAP.get(name);
   if (!tool) throw new ToolError(`Unknown tool: ${name}`);
+  const scopes = ctx.actor ? (ctx.actor.scopes ?? null) : null;
+  if (!toolAllowed(scopes, tool)) {
+    throw new ToolError(`Tool "${name}" is not permitted by this token's scopes.`);
+  }
   return tool.handler(ctx, args || {});
 }
 
-export { TOOL_DEFINITIONS, callTool, ToolError };
+export { TOOL_DEFINITIONS, listToolDefinitions, callTool, ToolError };

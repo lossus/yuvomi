@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.1.0] - 2026-07-08
+## [1.2.0] - 2026-07-08
+
+### Added
+- API Tokens: optional per-module permission scopes. An admin can restrict a token to individual modules and access levels (`<module>:read` / `<module>:write`, where write implies read) instead of granting the creator's full access. This matters most for tokens handed to an off-device AI/MCP client — for example a token that may write the calendar but can never read the health module. Tokens created without scopes keep full role-based access, so existing tokens are unaffected.
+
+### Security
+- API Tokens: scoped tokens are enforced across both the REST API and the MCP endpoint. A scoped token can only reach modules on its allow-list — every other `/api/v1` path is denied, `tools/list` hides MCP tools the token cannot use, out-of-scope `tools/call` is refused, and the OpenAPI bridge inherits the same limits because it loops back through the REST layer with the same token.
 
 ### Added
 - Kitchen (Meals): recurring meals can now be edited or deleted as a whole series. Editing or deleting a weekly meal offers a scope choice — "only this date" or "whole series". A series edit propagates the meal's content and ingredients to every occurrence; a series deletion removes the recurrence template together with all of its occurrences.

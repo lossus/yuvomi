@@ -24,7 +24,7 @@ router.post('/', async (req, res) => {
         error: { code: PARSE_ERROR, message: 'Parse error: expected a JSON-RPC 2.0 body.' },
       });
     }
-    const actor = { id: req.authUserId, role: req.authRole };
+    const actor = { id: req.authUserId, role: req.authRole, scopes: req.authScopes ?? null };
     const response = await handleMcpRequest(
       db.get(),
       actor,

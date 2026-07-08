@@ -8,7 +8,7 @@
  */
 
 import { readFileSync } from 'node:fs';
-import { TOOL_DEFINITIONS, callTool, ToolError } from './tools.js';
+import { listToolDefinitions, callTool, ToolError } from './tools.js';
 
 const pkg = JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf8'));
 
@@ -79,7 +79,8 @@ async function handleMcpRequest(database, actor, body, onInternalError, requestC
         return ok(id, {});
 
       case 'tools/list':
-        return ok(id, { tools: TOOL_DEFINITIONS });
+        // Nur Tools zeigen, die die Scopes des Tokens zulassen (actor.scopes === null = voll).
+        return ok(id, { tools: listToolDefinitions(actor ? (actor.scopes ?? null) : null) });
 
       case 'tools/call': {
         const name = params && params.name;
