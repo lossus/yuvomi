@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.2] - 2026-07-09
+
+### Fixed
+- Dashboard: all-day calendar events (e.g. from Google Calendar) no longer appear one calendar day early in the dashboard's upcoming-events widget. Date-only values were parsed as UTC midnight and shifted back a day in timezones west of UTC; they are now parsed as local calendar dates, matching the full Calendar page.
+
 ## [1.2.1] - 2026-07-08
 
 ### Changed
