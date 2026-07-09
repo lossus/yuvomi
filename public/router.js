@@ -858,10 +858,19 @@ function renderAppShell(container) {
   _toggleIcon.dataset.lucide = _sidebarInitCollapsed ? 'panel-left-open' : 'panel-left-close';
   _toggleIcon.setAttribute('aria-hidden', 'true');
   sidebarToggle.appendChild(_toggleIcon);
-  sidebarToggle.addEventListener('click', () => {
+  sidebarToggle.addEventListener('click', (event) => {
     const nowCollapsed = !document.documentElement.classList.contains('sidebar-collapsed');
     localStorage.setItem(SIDEBAR_COLLAPSED_KEY, nowCollapsed ? '1' : '0');
     applySidebarCollapsed(nowCollapsed);
+    if (event.detail > 0) {
+      document.documentElement.classList.toggle('sidebar-collapse-pointer-lock', nowCollapsed);
+    }
+    // Pointer clicks leave the toggle focused, which immediately re-expands the
+    // collapsed rail via .nav-sidebar:focus-within. Blur only for pointer-driven
+    // activation so keyboard users keep the expected focus behavior.
+    if (nowCollapsed && event.detail > 0) {
+      requestAnimationFrame(() => sidebarToggle.blur());
+    }
     const lbl = nowCollapsed ? t('nav.sidebarExpand') : t('nav.sidebarCollapse');
     sidebarToggle.setAttribute('aria-label', lbl);
     sidebarToggle.setAttribute('title', lbl);
@@ -899,6 +908,20 @@ function renderAppShell(container) {
   });
   sidebarItems.addEventListener('focusout', (ev) => {
     if (!sidebarItems.contains(ev.relatedTarget)) positionSidebarIndicator();
+  });
+
+  const syncSidebarIndicator = () => {
+    requestAnimationFrame(() => positionSidebarIndicator());
+  };
+  // In collapsed mode the section headers are hidden. Expanding the rail on
+  // hover/focus puts them back into layout, which shifts the nav items down.
+  // Re-sync the active pill after those layout changes.
+  sidebar.addEventListener('mouseenter', syncSidebarIndicator);
+  sidebar.addEventListener('mouseleave', syncSidebarIndicator);
+  sidebar.addEventListener('focusin', syncSidebarIndicator);
+  sidebar.addEventListener('focusout', syncSidebarIndicator);
+  sidebar.addEventListener('mouseleave', () => {
+    document.documentElement.classList.remove('sidebar-collapse-pointer-lock');
   });
 
   sidebar.appendChild(sidebarLogo);
@@ -1629,6 +1652,9 @@ function isModuleDisabled(moduleName) {
 
 function applySidebarCollapsed(collapsed) {
   document.documentElement.classList.toggle('sidebar-collapsed', collapsed);
+  if (!collapsed) {
+    document.documentElement.classList.remove('sidebar-collapse-pointer-lock');
+  }
 }
 
 function setDisabledModules(modules) {
