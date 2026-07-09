@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-07-09
+
+### Added
+- Meals: a drag-and-drop recipe sidebar on the weekly planner — drag any saved recipe onto a day/slot to plan it, with title, notes, URL, and ingredients pre-filled. Slots only accept recipes whose meal-type suitability includes that slot; the existing per-slot add button remains as the keyboard/touch path. (#464)
+- Meals: a one-click "Randomize plan" action that fills the visible week's empty slots with randomly chosen suitable recipes, respecting each recipe's meal types and the household's visible meal types. (#464)
+- Recipes: per-recipe meal-type suitability (breakfast/lunch/dinner/snack, all on by default) chosen via checkboxes in the recipe editor; it gates which planner slots accept a recipe and scopes the week randomizer. (#464)
+- Shopping: bulk import ingredients from the meal plan by date range — a "From meal plan" action imports every planned meal's ingredients in the selected range (default: next 7 days), aggregating repeated ingredients and skipping already-transferred ones. (#462)
+- In-app changelog: a Help-adjacent "Changelog" action opens the release history, showing the installed version alongside the latest available release. Notes are fetched on demand from GitHub via the app's own backend and cached in memory for 30 minutes. (#463)
+
+### Fixed
+- Sidebar: fixed several desktop collapse issues — the rail now actually collapses on click, stays collapsed instead of re-expanding while the pointer rests on it, and the active-item indicator tracks the collapsed/expanded layout correctly. (#460)
+
 ## [1.2.3] - 2026-07-09
 
 ### Fixed
