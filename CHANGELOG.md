@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.3] - 2026-07-10
+
+### Fixed
+- Meals: on phone-width screens the weekly plan can now be scrolled through all seven days again. A broken flex height chain left the day grid unable to scroll, so only today and tomorrow were reachable and swiping did nothing.
+
 ## [1.6.2] - 2026-07-10
 
 ### Changed
