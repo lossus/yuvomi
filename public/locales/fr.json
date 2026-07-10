@@ -1783,6 +1783,8 @@
         "noResults": "Aucun résultat trouvé."
     },
     "birthdays": {
+        "inDays": "dans {{days}} jours",
+        "turnsAge": "aura {{age}} ans",
         "title": "Anniversaires",
         "addButton": "Ajouter un anniversaire",
         "searchPlaceholder": "Rechercher des anniversaires…",

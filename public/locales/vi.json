@@ -1784,6 +1784,8 @@
         "customWeeks": "Tuần"
     },
     "birthdays": {
+        "inDays": "trong {{days}} ngày",
+        "turnsAge": "tròn {{age}} tuổi",
         "title": "Sinh nhật",
         "addButton": "Thêm sinh nhật",
         "searchPlaceholder": "Tìm kiếm sinh nhật…",

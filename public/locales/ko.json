@@ -1790,6 +1790,8 @@
         "customWeeks": "주"
     },
     "birthdays": {
+        "inDays": "{{days}}일 후",
+        "turnsAge": "{{age}}세가 됩니다",
         "title": "생일",
         "addButton": "생일 추가",
         "searchPlaceholder": "생일 검색…",

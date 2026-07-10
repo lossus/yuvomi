@@ -1790,6 +1790,8 @@
         "customWeeks": "Minggu"
     },
     "birthdays": {
+        "inDays": "dalam {{days}} hari",
+        "turnsAge": "berusia {{age}}",
         "title": "Ulang Tahun",
         "addButton": "Tambah ulang tahun",
         "searchPlaceholder": "Cari ulang tahun…",

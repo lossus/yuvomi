@@ -1783,6 +1783,8 @@
         "noResults": "Nessun risultato trovato."
     },
     "birthdays": {
+        "inDays": "tra {{days}} giorni",
+        "turnsAge": "compie {{age}}",
         "title": "Compleanni",
         "addButton": "Aggiungi compleanno",
         "searchPlaceholder": "Cerca compleanni…",

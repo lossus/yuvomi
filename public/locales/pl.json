@@ -1790,6 +1790,8 @@
         "customWeeks": "Tygodnie"
     },
     "birthdays": {
+        "inDays": "za {{days}} dni",
+        "turnsAge": "kończy {{age}}",
         "title": "Urodziny",
         "addButton": "Dodaj urodziny",
         "searchPlaceholder": "Szukaj urodzin…",

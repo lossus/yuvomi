@@ -1783,6 +1783,8 @@
         "noResults": "結果が見つかりませんでした。"
     },
     "birthdays": {
+        "inDays": "あと{{days}}日",
+        "turnsAge": "{{age}}歳になります",
         "title": "誕生日",
         "addButton": "誕生日を追加",
         "searchPlaceholder": "誕生日を検索…",

@@ -1783,6 +1783,8 @@
         "noResults": "कोई परिणाम नहीं मिला।"
     },
     "birthdays": {
+        "inDays": "{{days}} दिनों में",
+        "turnsAge": "{{age}} का हो जाता है",
         "title": "जन्मदिन",
         "addButton": "जन्मदिन जोड़ें",
         "searchPlaceholder": "जन्मदिन खोजें…",

@@ -2180,6 +2180,8 @@
         "customWeeks": "Týdny"
     },
     "birthdays": {
+        "inDays": "za {{days}} dní",
+        "turnsAge": "oslaví {{age}}",
         "title": "Narozeniny",
         "addButton": "Přidat narozeniny",
         "searchPlaceholder": "Hledat narozeniny…",

@@ -1784,6 +1784,8 @@
         "customWeeks": "Weeks"
     },
     "birthdays": {
+        "inDays": "in {{days}} days",
+        "turnsAge": "turns {{age}}",
         "title": "Birthdays",
         "addButton": "Add birthday",
         "searchPlaceholder": "Search birthdays…",

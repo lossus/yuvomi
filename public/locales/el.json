@@ -1783,6 +1783,8 @@
         "noResults": "Δεν βρέθηκαν αποτελέσματα."
     },
     "birthdays": {
+        "inDays": "σε {{days}} ημέρες",
+        "turnsAge": "γίνεται {{age}}",
         "title": "Γενέθλια",
         "addButton": "Προσθήκη γενεθλίων",
         "searchPlaceholder": "Αναζήτηση γενεθλίων…",

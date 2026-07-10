@@ -1783,6 +1783,8 @@
         "noResults": "Результаты не найдены."
     },
     "birthdays": {
+        "inDays": "через {{days}} дн.",
+        "turnsAge": "исполняется {{age}}",
         "title": "Дни рождения",
         "addButton": "Добавить день рождения",
         "searchPlaceholder": "Поиск дней рождения…",

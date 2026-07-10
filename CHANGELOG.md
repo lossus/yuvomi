@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.5] - 2026-07-10
+
+### Changed
+- Birthdays: the page is now a single list sorted by proximity (the nearest birthday first) with live search, replacing the separate "upcoming" panel and the search-suggestions dropdown that only filtered the list.
+- Birthdays: the day itself is now celebrated — the person whose birthday is today gets a highlighted card with a cake icon and a filled accent chip, and every row shows a consistent countdown (Today / Tomorrow / in N days) alongside a "date · turns N" line.
+- Birthdays: the page now uses the shared canonical page header (title + search) for a look consistent with the other modules, and the empty state welcomes new users with an icon and an "Add birthday" button.
+- Birthdays: a new birthday now defaults its reminder to "1 day before" instead of at the moment of the birthday, and the reminder menu is trimmed to the common offsets.
+
+### Fixed
+- Birthdays: avatar initials and countdown chips now meet WCAG AA contrast in both light and dark themes, fixing a bug where the fallback avatar became illegible in dark mode.
+- Birthdays: the birth-date picker no longer allows selecting a future date, and the edit/delete and photo controls now meet the minimum touch-target size.
+
 ## [1.6.4] - 2026-07-10
 
 ### Added

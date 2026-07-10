@@ -1783,6 +1783,8 @@
         "noResults": "未找到结果。"
     },
     "birthdays": {
+        "inDays": "{{days}}天后",
+        "turnsAge": "即将{{age}}岁",
         "title": "生日",
         "addButton": "添加生日",
         "searchPlaceholder": "搜索生日…",

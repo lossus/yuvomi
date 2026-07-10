@@ -1783,6 +1783,8 @@
         "noResults": "Inga resultat hittades."
     },
     "birthdays": {
+        "inDays": "om {{days}} dagar",
+        "turnsAge": "fyller {{age}}",
         "title": "Födelsedagar",
         "addButton": "Lägg till födelsedag",
         "searchPlaceholder": "Sök födelsedagar…",

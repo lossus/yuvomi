@@ -1783,6 +1783,8 @@
         "noResults": "Sonuç bulunamadı."
     },
     "birthdays": {
+        "inDays": "{{days}} gün sonra",
+        "turnsAge": "{{age}} yaşına giriyor",
         "title": "Doğum Günleri",
         "addButton": "Doğum günü ekle",
         "searchPlaceholder": "Doğum günlerinde ara…",

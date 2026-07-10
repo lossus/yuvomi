@@ -1784,6 +1784,8 @@
         "customWeeks": "Hét"
     },
     "birthdays": {
+        "inDays": "{{days}} nap múlva",
+        "turnsAge": "betölti a(z) {{age}}. évét",
         "title": "Születésnapok",
         "addButton": "Születésnap hozzáadása",
         "searchPlaceholder": "Születésnap keresése…",

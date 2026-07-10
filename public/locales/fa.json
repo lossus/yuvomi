@@ -1790,6 +1790,8 @@
         "customWeeks": "هفته"
     },
     "birthdays": {
+        "inDays": "{{days}} روز دیگر",
+        "turnsAge": "{{age}} ساله می‌شود",
         "title": "تولدها",
         "addButton": "افزودن تولد",
         "searchPlaceholder": "جستجوی تولدها…",

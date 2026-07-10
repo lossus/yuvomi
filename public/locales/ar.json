@@ -1783,6 +1783,8 @@
         "noResults": "لم يتم العثور على نتائج."
     },
     "birthdays": {
+        "inDays": "خلال {{days}} أيام",
+        "turnsAge": "يبلغ {{age}}",
         "title": "أعياد الميلاد",
         "addButton": "إضافة عيد ميلاد",
         "searchPlaceholder": "ابحث عن أعياد الميلاد…",

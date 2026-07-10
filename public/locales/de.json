@@ -1790,6 +1790,8 @@
         "customWeeks": "Wochen"
     },
     "birthdays": {
+        "inDays": "in {{days}} Tagen",
+        "turnsAge": "wird {{age}}",
         "title": "Geburtstage",
         "addButton": "Geburtstag hinzufügen",
         "searchPlaceholder": "Geburtstage suchen…",

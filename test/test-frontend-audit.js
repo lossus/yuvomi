@@ -1348,13 +1348,11 @@ test('responsive adaptation uses tablet space without crowding module toolbars',
   );
 });
 
-test('responsive adaptation removes duplicate Birthday creation action on phones', () => {
-  const birthdays = read('../public/styles/birthdays.css');
+test('Birthday page exposes a single creation action (FAB), no duplicate toolbar button', () => {
+  const birthdays = read('../public/pages/birthdays.js');
 
-  assert.match(
-    birthdays,
-    /@media \(max-width:\s*640px\)[\s\S]*\.birthdays-header__action\s*\{[\s\S]*display:\s*none/
-  );
+  assert.match(birthdays, /class="page-fab" id="fab-new-birthday"/);
+  assert.doesNotMatch(birthdays, /toolbar-new-btn/);
 });
 
 test('dashboard polish keeps one page heading and native quick-action controls', () => {
@@ -1420,22 +1418,14 @@ test('polished rounded cards use subtle full borders instead of thick accent cap
 test('hardening keeps Birthday cards bounded with extreme localized content', () => {
   const birthdays = read('../public/styles/birthdays.css');
 
-  assert.match(birthdays, /\.birthdays-panel\s*\{[\s\S]*min-width:\s*0/);
+  assert.match(birthdays, /\.birthday-item__body\s*\{[\s\S]*min-width:\s*0/);
+  assert.match(birthdays, /\.birthday-item__name\s*\{[\s\S]*overflow-wrap:\s*anywhere/);
+  assert.match(birthdays, /\.birthday-item__name\s*\{[\s\S]*unicode-bidi:\s*plaintext/);
+  assert.match(birthdays, /\.birthday-item__notes\s*\{[\s\S]*overflow-wrap:\s*anywhere/);
+  assert.match(birthdays, /\.birthday-item__notes\s*\{[\s\S]*unicode-bidi:\s*plaintext/);
   assert.match(
     birthdays,
-    /@media \(max-width:\s*1023px\)[\s\S]*\.birthdays-grid\s*\{[\s\S]*grid-template-columns:\s*minmax\(0,\s*1fr\)/
-  );
-  assert.match(
-    birthdays,
-    /\.birthday-card__name,[\s\S]*\.birthday-item__notes\s*\{[\s\S]*overflow-wrap:\s*anywhere/
-  );
-  assert.match(
-    birthdays,
-    /\.birthday-card__name,[\s\S]*\.birthday-item__notes\s*\{[\s\S]*unicode-bidi:\s*plaintext/
-  );
-  assert.match(
-    birthdays,
-    /@media \(max-width:\s*640px\)[\s\S]*\.birthday-card__top,[\s\S]*\.birthday-item__row\s*\{[\s\S]*flex-wrap:\s*wrap/
+    /@media \(max-width:\s*640px\)[\s\S]*\.birthday-item__row\s*\{[\s\S]*flex-wrap:\s*wrap/
   );
 });
 
@@ -1455,7 +1445,6 @@ test('hardening uses logical alignment for RTL-sensitive adapted controls', () =
     /\[dir=['"]rtl['"]\] \.tasks-toolbar__secondary-panel\s*\{[\s\S]*inset-inline-start:\s*0;[\s\S]*inset-inline-end:\s*auto/
   );
   assert.match(birthdays, /\.birthdays-toolbar__search-icon\s*\{[\s\S]*inset-inline-start:/);
-  assert.match(birthdays, /\.birthdays-autocomplete\s*\{[\s\S]*inset-inline:\s*0/);
 });
 
 test('route failures expose a localized recoverable alert instead of raw technical errors', () => {
@@ -2352,7 +2341,7 @@ test('audited profile, birthday, navigation, and budget controls meet mobile tou
     /@media \(max-width:\s*640px\)[\s\S]*\.settings-avatar-action\s*\{[\s\S]*width:\s*var\(--target-lg\)[\s\S]*height:\s*var\(--target-lg\)/,
   );
   assert.match(settings, /\.settings-module-move\s*\{[\s\S]*width:\s*var\(--target-base\)[\s\S]*height:\s*var\(--target-base\)/);
-  assert.match(birthdays, /\.contact-action-btn\s*\{[\s\S]*width:\s*var\(--target-lg\)[\s\S]*height:\s*var\(--target-lg\)/);
+  assert.match(birthdays, /\.birthday-action-btn\s*\{[\s\S]*width:\s*var\(--target-lg\)[\s\S]*height:\s*var\(--target-lg\)/);
   assert.match(budget, /\.budget-tab\s*\{[\s\S]*min-height:\s*var\(--target-lg\)/);
   assert.match(budget, /\.budget-nav__today\s*\{[\s\S]*min-height:\s*var\(--target-lg\)/);
   assert.match(
@@ -2460,7 +2449,7 @@ test('birthday and navigation headings keep a sequential hierarchy', () => {
   const birthdays = read('../public/pages/birthdays.js');
   const navigation = read('../public/settings/pages/modules-navigation.js');
 
-  assert.match(birthdays, /<h1 class="u-toolbar-title">/);
+  assert.match(birthdays, /<h1 class="page-toolbar__title">/);
   assert.doesNotMatch(birthdays, /<h3>/);
   assert.match(navigation, /<h2 class="settings-navigation-panel__title"/);
   assert.match(navigation, /<h3 class="settings-navigation-group__title"/);
