@@ -2514,7 +2514,8 @@
                 "title": "Tuân thủ dùng thuốc",
                 "noData": "Chưa có dữ liệu dùng thuốc",
                 "period": "{{days}} ngày qua",
-                "streakLabel": "Ngày liên tiếp"
+                "streakLabel": "Ngày liên tiếp",
+                "notStarted": "Chưa ghi nhận gì"
             },
             "vitals": {
                 "title": "Chỉ số sinh tồn gần nhất"
@@ -2613,7 +2614,8 @@
                 "title": "Tuân thủ dùng thuốc",
                 "period": "{{days}} ngày qua",
                 "noData": "Chưa có liều được lên lịch trong kỳ.",
-                "summary": "Đã dùng {{taken}} trong {{planned}}"
+                "summary": "Đã dùng {{taken}} trong {{planned}}",
+                "notStarted": "Chưa ghi nhận liều nào"
             },
             "status": {
                 "taken": "Đã dùng",

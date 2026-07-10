@@ -2514,7 +2514,8 @@
                 "title": "Kepatuhan minum obat",
                 "noData": "Belum ada data minum obat",
                 "period": "{{days}} hari terakhir",
-                "streakLabel": "Hari berturut-turut"
+                "streakLabel": "Hari berturut-turut",
+                "notStarted": "Belum ada yang dicatat"
             },
             "vitals": {
                 "title": "Tanda vital terakhir"
@@ -2613,7 +2614,8 @@
                 "title": "Kepatuhan minum obat",
                 "period": "{{days}} hari terakhir",
                 "noData": "Belum ada dosis terjadwal pada periode ini.",
-                "summary": "{{taken}} dari {{planned}} diminum"
+                "summary": "{{taken}} dari {{planned}} diminum",
+                "notStarted": "Belum ada konsumsi yang dicatat"
             },
             "status": {
                 "taken": "Diminum",

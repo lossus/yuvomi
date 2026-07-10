@@ -2514,7 +2514,8 @@
                 "title": "服薬遵守",
                 "noData": "服薬データはまだありません",
                 "period": "過去{{days}}日間",
-                "streakLabel": "連続日数"
+                "streakLabel": "連続日数",
+                "notStarted": "まだ記録がありません"
             },
             "vitals": {
                 "title": "最新のバイタル"
@@ -2613,7 +2614,8 @@
                 "title": "服薬遵守",
                 "period": "過去{{days}}日間",
                 "noData": "この期間に予定された服用はまだありません。",
-                "summary": "{{planned}}回中{{taken}}回服用"
+                "summary": "{{planned}}回中{{taken}}回服用",
+                "notStarted": "服用の記録はまだありません"
             },
             "status": {
                 "taken": "服用済み",

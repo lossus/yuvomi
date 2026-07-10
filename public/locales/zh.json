@@ -2514,7 +2514,8 @@
                 "title": "服药依从性",
                 "noData": "暂无服药数据",
                 "period": "最近 {{days}} 天",
-                "streakLabel": "连续天数"
+                "streakLabel": "连续天数",
+                "notStarted": "尚无记录"
             },
             "vitals": {
                 "title": "最新生命体征"
@@ -2613,7 +2614,8 @@
                 "title": "服药依从性",
                 "period": "最近 {{days}} 天",
                 "noData": "该时段内暂无计划的剂量。",
-                "summary": "已服用 {{planned}} 次中的 {{taken}} 次"
+                "summary": "已服用 {{planned}} 次中的 {{taken}} 次",
+                "notStarted": "尚未记录任何服药"
             },
             "status": {
                 "taken": "已服用",

@@ -2514,7 +2514,8 @@
                 "title": "Przestrzeganie zaleceń",
                 "noData": "Brak danych o przyjmowaniu",
                 "period": "Ostatnie {{days}} dni",
-                "streakLabel": "Dni z rzędu"
+                "streakLabel": "Dni z rzędu",
+                "notStarted": "Nic jeszcze nie zarejestrowano"
             },
             "vitals": {
                 "title": "Ostatnie parametry życiowe"
@@ -2613,7 +2614,8 @@
                 "title": "Przestrzeganie zaleceń",
                 "period": "Ostatnie {{days}} dni",
                 "noData": "Brak zaplanowanych dawek w tym okresie.",
-                "summary": "Przyjęto {{taken}} z {{planned}}"
+                "summary": "Przyjęto {{taken}} z {{planned}}",
+                "notStarted": "Nie zarejestrowano jeszcze przyjęcia"
             },
             "status": {
                 "taken": "Przyjęto",

@@ -2514,7 +2514,8 @@
                 "title": "Therapietrouw",
                 "noData": "Nog geen innamegegevens",
                 "period": "Afgelopen {{days}} dagen",
-                "streakLabel": "Dagen op rij"
+                "streakLabel": "Dagen op rij",
+                "notStarted": "Nog niets geregistreerd"
             },
             "vitals": {
                 "title": "Laatste vitale waarden"
@@ -2613,7 +2614,8 @@
                 "title": "Therapietrouw",
                 "period": "Afgelopen {{days}} dagen",
                 "noData": "Nog geen geplande doses in de periode.",
-                "summary": "{{taken}} van {{planned}} ingenomen"
+                "summary": "{{taken}} van {{planned}} ingenomen",
+                "notStarted": "Nog geen inname geregistreerd"
             },
             "status": {
                 "taken": "Ingenomen",

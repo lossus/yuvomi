@@ -2514,7 +2514,8 @@
                 "title": "복약 순응도",
                 "noData": "아직 복약 데이터 없음",
                 "period": "최근 {{days}}일",
-                "streakLabel": "연속 일수"
+                "streakLabel": "연속 일수",
+                "notStarted": "아직 기록된 내용이 없습니다"
             },
             "vitals": {
                 "title": "최근 생체 신호"
@@ -2613,7 +2614,8 @@
                 "title": "복약 순응도",
                 "period": "최근 {{days}}일",
                 "noData": "해당 기간에 아직 예정된 복용이 없습니다.",
-                "summary": "{{planned}}회 중 {{taken}}회 복용"
+                "summary": "{{planned}}회 중 {{taken}}회 복용",
+                "notStarted": "아직 복용 기록이 없습니다"
             },
             "status": {
                 "taken": "복용함",

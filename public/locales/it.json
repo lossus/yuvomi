@@ -2514,7 +2514,8 @@
                 "title": "Aderenza",
                 "noData": "Ancora nessun dato sulle assunzioni",
                 "period": "Ultimi {{days}} giorni",
-                "streakLabel": "Giorni consecutivi"
+                "streakLabel": "Giorni consecutivi",
+                "notStarted": "Ancora nessun dato registrato"
             },
             "vitals": {
                 "title": "Ultimi parametri vitali"
@@ -2613,7 +2614,8 @@
                 "title": "Aderenza",
                 "period": "Ultimi {{days}} giorni",
                 "noData": "Ancora nessuna dose pianificata nel periodo.",
-                "summary": "{{taken}} su {{planned}} assunte"
+                "summary": "{{taken}} su {{planned}} assunte",
+                "notStarted": "Nessuna assunzione registrata finora"
             },
             "status": {
                 "taken": "Assunto",

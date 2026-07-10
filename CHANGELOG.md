@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.4] - 2026-07-10
+
+### Added
+- Health: the vitals and lab trend charts now have a labelled value axis, a dated time axis, exact values on hover, and a shaded area under single-value trends; each vital metric card also carries a mini sparkline of its recent trend.
+
+### Changed
+- Health: medication adherence now reads "Nothing logged yet" instead of a discouraging "0 %" until the first dose is logged, the streak counter only appears once a streak has actually started, and the percentage is shown in neutral ink rather than the module accent.
+- Health: the overview reflows as a masonry layout so short cards no longer leave an empty gap beside taller ones, the "due today" medication rows are more compact, and the low-stock refill chip wraps to its own line instead of breaking the stock text mid-line.
+
 ## [1.6.3] - 2026-07-10
 
 ### Fixed

@@ -2514,7 +2514,8 @@
                 "title": "Kullanım uyumu",
                 "noData": "Henüz kullanım verisi yok",
                 "period": "Son {{days}} gün",
-                "streakLabel": "Ardışık gün"
+                "streakLabel": "Ardışık gün",
+                "notStarted": "Henüz kayıt yok"
             },
             "vitals": {
                 "title": "Son yaşamsal değerler"
@@ -2613,7 +2614,8 @@
                 "title": "Kullanım uyumu",
                 "period": "Son {{days}} gün",
                 "noData": "Bu dönemde henüz planlanmış doz yok.",
-                "summary": "{{planned}} dozdan {{taken}} tanesi alındı"
+                "summary": "{{planned}} dozdan {{taken}} tanesi alındı",
+                "notStarted": "Henüz alım kaydı yok"
             },
             "status": {
                 "taken": "Alındı",

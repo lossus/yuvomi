@@ -2514,7 +2514,8 @@
                 "title": "Följsamhet",
                 "noData": "Inga intagsdata ännu",
                 "period": "Senaste {{days}} dagarna",
-                "streakLabel": "Dagar i rad"
+                "streakLabel": "Dagar i rad",
+                "notStarted": "Inget loggat ännu"
             },
             "vitals": {
                 "title": "Senaste vitalvärden"
@@ -2613,7 +2614,8 @@
                 "title": "Följsamhet",
                 "period": "Senaste {{days}} dagarna",
                 "noData": "Inga planerade doser under perioden ännu.",
-                "summary": "{{taken}} av {{planned}} tagna"
+                "summary": "{{taken}} av {{planned}} tagna",
+                "notStarted": "Ingen dos loggad ännu"
             },
             "status": {
                 "taken": "Taget",

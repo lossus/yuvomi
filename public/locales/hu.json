@@ -2514,7 +2514,8 @@
                 "title": "Szedési fegyelem",
                 "noData": "Még nincsenek szedési adatok",
                 "period": "Utolsó {{days}} nap",
-                "streakLabel": "Nap egymás után"
+                "streakLabel": "Nap egymás után",
+                "notStarted": "Még nincs semmi rögzítve"
             },
             "vitals": {
                 "title": "Legutóbbi vitális értékek"
@@ -2613,7 +2614,8 @@
                 "title": "Szedési fegyelem",
                 "period": "Utolsó {{days}} nap",
                 "noData": "Az időszakban még nincsenek tervezett adagok.",
-                "summary": "{{planned}} adagból {{taken}} bevéve"
+                "summary": "{{planned}} adagból {{taken}} bevéve",
+                "notStarted": "Még nincs bevétel rögzítve"
             },
             "status": {
                 "taken": "Bevéve",

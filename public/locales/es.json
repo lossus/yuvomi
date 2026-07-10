@@ -2514,7 +2514,8 @@
                 "title": "Adherencia",
                 "noData": "Aún no hay datos de tomas",
                 "period": "Últimos {{days}} días",
-                "streakLabel": "Días seguidos"
+                "streakLabel": "Días seguidos",
+                "notStarted": "Aún no hay registros"
             },
             "vitals": {
                 "title": "Últimas constantes"
@@ -2613,7 +2614,8 @@
                 "title": "Adherencia",
                 "period": "Últimos {{days}} días",
                 "noData": "Aún no hay dosis planificadas en el periodo.",
-                "summary": "{{taken}} de {{planned}} tomadas"
+                "summary": "{{taken}} de {{planned}} tomadas",
+                "notStarted": "Aún no hay tomas registradas"
             },
             "status": {
                 "taken": "Tomado",

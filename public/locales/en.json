@@ -2514,7 +2514,8 @@
                 "title": "Adherence",
                 "noData": "No intake data yet",
                 "period": "Last {{days}} days",
-                "streakLabel": "day streak"
+                "streakLabel": "day streak",
+                "notStarted": "Nothing logged yet"
             },
             "vitals": {
                 "title": "Latest vitals"
@@ -2613,7 +2614,8 @@
                 "title": "Adherence",
                 "period": "Last {{days}} days",
                 "noData": "No planned doses in this period yet.",
-                "summary": "{{taken}} of {{planned}} taken"
+                "summary": "{{taken}} of {{planned}} taken",
+                "notStarted": "No dose logged yet"
             },
             "status": {
                 "taken": "Taken",

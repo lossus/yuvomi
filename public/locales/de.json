@@ -2514,7 +2514,8 @@
                 "title": "Einnahmetreue",
                 "noData": "Noch keine Einnahmedaten",
                 "period": "Letzte {{days}} Tage",
-                "streakLabel": "Tage in Folge"
+                "streakLabel": "Tage in Folge",
+                "notStarted": "Noch nichts protokolliert"
             },
             "vitals": {
                 "title": "Letzte Vitalwerte"
@@ -2613,7 +2614,8 @@
                 "title": "Einnahmetreue",
                 "period": "Letzte {{days}} Tage",
                 "noData": "Noch keine geplanten Dosen im Zeitraum.",
-                "summary": "{{taken}} von {{planned}} genommen"
+                "summary": "{{taken}} von {{planned}} genommen",
+                "notStarted": "Noch keine Einnahme protokolliert"
             },
             "status": {
                 "taken": "Genommen",

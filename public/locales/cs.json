@@ -2514,7 +2514,8 @@
                 "title": "Dodržování",
                 "noData": "Zatím žádné údaje o užívání",
                 "period": "Posledních {{days}} dní",
-                "streakLabel": "Dní v řadě"
+                "streakLabel": "Dní v řadě",
+                "notStarted": "Zatím nic nezaznamenáno"
             },
             "vitals": {
                 "title": "Poslední vitální hodnoty"
@@ -2613,7 +2614,8 @@
                 "title": "Dodržování",
                 "period": "Posledních {{days}} dní",
                 "noData": "V období zatím nejsou žádné plánované dávky.",
-                "summary": "Užito {{taken}} z {{planned}}"
+                "summary": "Užito {{taken}} z {{planned}}",
+                "notStarted": "Zatím nezaznamenáno žádné užití"
             },
             "status": {
                 "taken": "Užito",
