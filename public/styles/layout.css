@@ -1014,9 +1014,12 @@ html.fab-anim-done .page-fab {
   }
 
   /* Abmelden bricht in eine eigene, volle Zeile unter Hilfe/Änderungen und
-   * setzt sich mit einer Haarlinie als terminale Aktion ab. */
-  .nav-sidebar__footer-actions .nav-item--logout {
-    flex-basis: 100%;
+   * setzt sich mit einer Haarlinie als terminale Aktion ab. Doppelte
+   * Klassen-Spezifität (.nav-item.nav-item--logout) + volle flex-Shorthand
+   * schlagen die spätere `.nav-item { flex: 0 1 auto }`-Regel, die sonst
+   * flex-basis auf auto zurücksetzte → Zeile blieb schmal statt vollbreit. */
+  .nav-sidebar__footer-actions .nav-item.nav-item--logout {
+    flex: 1 1 100%;
     margin-top: var(--space-1);
     padding-top: var(--space-3);
     border-top: 1px solid var(--color-border-subtle);
@@ -1155,9 +1158,10 @@ html.fab-anim-done .page-fab {
   }
 
   /* Eingeklappt stapelt der Footer bereits vertikal (icon-only) — der
-   * Vollzeilen-Umbruch entfällt, die Haarlinie bleibt als Trenner. */
-  html.sidebar-collapsed .nav-sidebar__footer-actions .nav-item--logout {
-    flex-basis: auto;
+   * Vollzeilen-Umbruch entfällt (flex komplett zurücksetzen, sonst streckt
+   * flex-grow das Icon in der Spalte), die Haarlinie bleibt als Trenner. */
+  html.sidebar-collapsed .nav-sidebar__footer-actions .nav-item.nav-item--logout {
+    flex: 0 0 auto;
     margin-top: var(--space-0h);
   }
 

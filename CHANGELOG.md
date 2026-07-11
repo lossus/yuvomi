@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.1] - 2026-07-11
+
+### Fixed
+- The **Log out** action in the desktop sidebar footer now spans its own full-width row below Help / Changelog, so it reads clearly as a distinct action. A CSS specificity conflict previously left it rendering as a narrow, easy-to-miss item. (#479)
+
 ## [1.10.0] - 2026-07-11
 
 ### Added
