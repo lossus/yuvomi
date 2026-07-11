@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.11.1] - 2026-07-11
+
+### Changed
+- **New app icon and logo.** The house glyph has been replaced with a mark of three overlapping, translucent circles representing the family. The redesign has two reasons: the house referenced "Oikos" (Greek for *household*) and no longer fit after the rename to **Yuvomi**, and the old house-on-a-rounded-square looked too much like smart-home apps such as Apple Home. The brand violet is unchanged; the mark is applied everywhere (app icon, maskable/PWA icons, favicon, in-app sidebar, the website, and the Unraid/Umbrel catalog icons). The TrueNAS catalog icon is hosted upstream and updates with the pending catalog rename.
+
+### Fixed
+- Count placeholders in translated text no longer leak stray braces. The dashboard birthdays widget, the health lab-report badges, and other counters showed strings like "{63}" or "{8} analytes" instead of the number, because of a triple-brace typo (`{{{count}}}`) that was present in every locale. Corrected to `{{count}}` across all 23 languages.
+
 ## [1.11.0] - 2026-07-11
 
 ### Added
