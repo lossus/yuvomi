@@ -7,7 +7,7 @@
  *
  * Usage:  node scripts/take-screenshots.mjs
  *
- * Side effects: writes a temporary database to /tmp/oikos-screenshot.db
+ * Side effects: writes a temporary database to /tmp/yuvomi-screenshot.db
  *               and starts a server on port 3099. Both are cleaned up on exit.
  */
 
@@ -20,7 +20,7 @@ import { spawn, spawnSync } from 'node:child_process';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT        = resolve(__dirname, '..');
 const SCREENSHOT_DIR = resolve(ROOT, 'docs', 'screenshots');
-const DEMO_DB     = '/tmp/oikos-screenshot.db';
+const DEMO_DB     = '/tmp/yuvomi-screenshot.db';
 const PORT        = 3099;
 const BASE_URL    = `http://localhost:${PORT}`;
 const SESSION_SECRET = 'screenshots_secret_123';
@@ -79,6 +79,8 @@ const MODULES = [
   { path: '/notes',        name: 'notes'          },
   { path: '/contacts',     name: 'contacts'       },
   { path: '/budget',       name: 'budget'              },
+  { path: '/budget',       name: 'budget-subscriptions', tab: '#budget-tab-subscriptions' },
+  { path: '/budget',       name: 'budget-reports',       tab: '#budget-tab-reports' },
   { path: '/budget',       name: 'budget-loans',         tab: '#budget-tab-loans' },
   { path: '/budget',       name: 'split-expenses',       tab: '#budget-tab-split-expenses' },
   { path: '/documents',    name: 'documents'      },
@@ -86,6 +88,13 @@ const MODULES = [
   { path: '/housekeeping', name: 'housekeeping-tasks',   tab: '[data-housekeeping-tab="tasks"]' },
   { path: '/housekeeping', name: 'housekeeping-reports', tab: '[data-housekeeping-tab="reports"]' },
   { path: '/housekeeping', name: 'housekeeping-staff',   tab: '[data-housekeeping-tab="staff"]' },
+  { path: '/rewards',         name: 'rewards'         },
+  { path: '/health',          name: 'health'          },
+  { path: '/health/vitals',   name: 'health-vitals'   },
+  { path: '/health/cycle',    name: 'health-cycle'    },
+  { path: '/health/meds',     name: 'health-meds'     },
+  { path: '/health/labs',     name: 'health-labs'     },
+  { path: '/health/activity', name: 'health-activity' },
 ];
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -95,10 +104,10 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 function initFlags(theme) {
   return (_t) => {
     try {
-      localStorage.setItem('oikos-locale', 'en');
-      localStorage.setItem('oikos-onboarded', '1');
-      localStorage.setItem('oikos-install-dismissed', String(Date.now()));
-      localStorage.setItem('oikos-theme', theme);
+      localStorage.setItem('yuvomi-locale', 'en');
+      localStorage.setItem('yuvomi-onboarded', '1');
+      localStorage.setItem('yuvomi-install-dismissed', String(Date.now()));
+      localStorage.setItem('yuvomi-theme', theme);
     } catch {}
     window.addEventListener('beforeinstallprompt', (e) => e.preventDefault());
   };
@@ -106,7 +115,7 @@ function initFlags(theme) {
 
 async function dismissOverlays(page) {
   await page.evaluate(() => {
-    document.querySelectorAll('.onboarding-overlay, oikos-install-prompt').forEach((el) => el.remove());
+    document.querySelectorAll('.onboarding-overlay, yuvomi-install-prompt').forEach((el) => el.remove());
   });
   const closeBtn = page.locator('.modal-close').first();
   if (await closeBtn.count() > 0) {
@@ -116,10 +125,10 @@ async function dismissOverlays(page) {
 
 async function applyAppState(page, theme) {
   await page.evaluate((t) => {
-    localStorage.setItem('oikos-locale', 'en');
-    localStorage.setItem('oikos-onboarded', '1');
-    localStorage.setItem('oikos-install-dismissed', String(Date.now()));
-    localStorage.setItem('oikos-theme', t);
+    localStorage.setItem('yuvomi-locale', 'en');
+    localStorage.setItem('yuvomi-onboarded', '1');
+    localStorage.setItem('yuvomi-install-dismissed', String(Date.now()));
+    localStorage.setItem('yuvomi-theme', t);
     document.documentElement.setAttribute('data-theme', t);
   }, theme);
 }
@@ -251,7 +260,7 @@ async function waitForServer() {
 
 // ── Demo database setup ───────────────────────────────────────────────────────
 
-async function setupDemoDb(browser) {
+async function setupDemoDb() {
   console.log('Setting up demo database…');
 
   // 1. Remove old temp db
@@ -266,7 +275,9 @@ async function setupDemoDb(browser) {
   stopServer();
   await wait(500);
 
-  // 3. Seed demo data
+  // 3. Seed demo data. seed-demo.js creates every user (incl. Linda, the admin/mom
+  //    screenshot persona with her own health & cycle data) and sets the weather
+  //    preference (Dortmund) directly in sync_config — no post-seed API calls needed.
   console.log('  Running seed-demo.js…');
   const seed = spawnSync(
     'node',
@@ -275,85 +286,6 @@ async function setupDemoDb(browser) {
   );
   if (seed.status !== 0) throw new Error('seed-demo.js failed');
 
-  // 4. Generate Linda's avatar via Playwright canvas
-  console.log('  Generating Linda avatar…');
-  const tempCtx = await browser.newContext({ viewport: { width: 400, height: 400 } });
-  const tmpPage = await tempCtx.newPage();
-  await tmpPage.goto('about:blank');
-  const lindaAvatar = await tmpPage.evaluate(() => {
-    const canvas = document.createElement('canvas');
-    canvas.width = 200;
-    canvas.height = 200;
-    const ctx = canvas.getContext('2d');
-    // Pink circle background
-    ctx.fillStyle = '#EC4899';
-    ctx.beginPath();
-    ctx.arc(100, 100, 100, 0, Math.PI * 2);
-    ctx.fill();
-    // White "L" initial
-    ctx.fillStyle = 'white';
-    ctx.font = 'bold 112px Arial, Helvetica, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('L', 100, 108);
-    return canvas.toDataURL('image/png');
-  });
-  await tempCtx.close();
-
-  // 5. Insert Linda + weather directly into the database
-  console.log('  Adding Linda user and weather settings…');
-  // Use the server API: start server, authenticate as alex, call APIs
-  await startServer();
-  await waitForServer();
-
-  const apiCtx = await browser.newContext();
-
-  // Login as alex (admin)
-  const loginResp = await apiCtx.request.post(`${BASE_URL}/api/v1/auth/login`, {
-    data: { username: 'alex', password: 'demo1234' },
-    headers: { 'Content-Type': 'application/json' },
-  });
-  if (!loginResp.ok()) throw new Error(`Admin login failed: ${await loginResp.text()}`);
-
-  // Trigger CSRF token generation via a GET to /api/v1/preferences
-  const prefResp = await apiCtx.request.get(`${BASE_URL}/api/v1/preferences`);
-  const csrfToken = prefResp.headers()['x-csrf-token'];
-  if (!csrfToken) throw new Error('Could not obtain CSRF token');
-
-  // Create Linda user
-  const createResp = await apiCtx.request.post(`${BASE_URL}/api/v1/auth/users`, {
-    data: {
-      username:     'linda',
-      display_name: 'Linda',
-      password:     'demo1234',
-      avatar_color: '#EC4899',
-      avatar_data:  lindaAvatar,
-      role:         'admin',
-      family_role:  'mom',
-    },
-    headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken },
-  });
-  if (!createResp.ok()) throw new Error(`Failed to create Linda: ${await createResp.text()}`);
-  console.log('  Linda user created ✓');
-
-  // Set weather preferences (Berlin). weather_provider is required — without it
-  // the weather route falls back to { data: null } and the widget stays hidden.
-  const weatherResp = await apiCtx.request.put(`${BASE_URL}/api/v1/preferences`, {
-    data: {
-      weather_provider: 'open-meteo',
-      weather_lat:   52.5200,
-      weather_lon:   13.4050,
-      weather_city:  'Berlin',
-      weather_units: 'metric',
-    },
-    headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken },
-  });
-  if (!weatherResp.ok()) throw new Error(`Failed to set weather: ${await weatherResp.text()}`);
-  console.log('  Weather set to Berlin ✓');
-
-  await apiCtx.close();
-  stopServer();
-  await wait(500);
   console.log('Demo database ready.\n');
 }
 
@@ -372,7 +304,7 @@ async function warmWeatherCache(browser) {
     if (loginResp.ok()) {
       const wRes = await ctx.request.get(`${BASE_URL}/api/v1/weather`);
       const body = await wRes.json().catch(() => ({}));
-      console.log(body?.data ? '  Weather cache warmed (Berlin) ✓' : '  ⚠️  Weather cache empty (data: null)');
+      console.log(body?.data ? '  Weather cache warmed (Dortmund) ✓' : '  ⚠️  Weather cache empty (data: null)');
     }
     await ctx.close();
   } catch (err) {
@@ -388,7 +320,7 @@ async function main() {
   const warnings = [];
 
   try {
-    await setupDemoDb(browser);
+    await setupDemoDb();
 
     // Start server for screenshots
     console.log('Starting server for screenshots…');
