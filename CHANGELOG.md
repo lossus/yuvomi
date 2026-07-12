@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.18.4] - 2026-07-12
+
+### Fixed
+- Placeholder text in input fields (for example "New category") was nearly invisible in dark mode: it used a disabled-state colour that dropped to about 1.4:1 contrast. Placeholders now use a dedicated, theme-aware colour that meets WCAG AA (≥5:1) in both light and dark mode, across every input in the app.
+
+### Changed
+- Category names in the manager (Tasks, Contacts, Budget) now show a visible pencil button, so renaming is discoverable on touch devices where the tap-the-name hint never appears. Clicking the name still works as a shortcut.
+
 ## [1.18.3] - 2026-07-12
 
 ### Fixed

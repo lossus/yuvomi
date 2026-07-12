@@ -97,6 +97,9 @@
   --color-text-tertiary:  var(--_color-text-tertiary);  /* WCAG AA: 5.00:1 auf --color-bg, 5.50:1 auf weiß */
   --color-text-quaternary: var(--neutral-500);  /* nur dekorativ (z.B. Kbd-Hint), nie für Fließtext */
   --color-text-disabled:  var(--neutral-300);
+  /* Placeholder-Führungstext: folgt --color-text-tertiary (gethemt, WCAG AA in Light
+     UND Dark ≥5:1) — NICHT --color-text-disabled verwenden, das ergab nur 1.43:1. */
+  --color-text-placeholder: var(--color-text-tertiary);
   --color-text-on-accent: #ffffff;  /* Weißer Text auf farbigen Hintergründen */
   --color-ink-on-bright:  #000000;  /* Maximalkontrast auf frei wählbaren hellen Flächen */
 

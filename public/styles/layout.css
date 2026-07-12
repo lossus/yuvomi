@@ -1965,7 +1965,8 @@ html.fab-anim-done .page-fab {
 
 .input::placeholder,
 .form-input::placeholder {
-  color: var(--color-text-disabled);
+  color: var(--color-text-placeholder);
+  opacity: 1; /* Firefox setzt ::placeholder sonst auf opacity < 1 und senkt den Kontrast erneut */
 }
 
 .label, .form-label {

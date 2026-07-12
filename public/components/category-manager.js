@@ -107,6 +107,10 @@ class CategoryManagerElement extends HTMLElement {
         <button type="button" class="cat-row__name" data-action="rename"
               title="${esc(t('category.renameHint'))}">${esc(this._labelResolver(cat))}</button>
         <div class="cat-row__actions">
+          <button class="btn btn--icon btn--ghost" data-action="rename"
+                  aria-label="${esc(t('category.renameHint'))}" title="${esc(t('category.renameHint'))}">
+            <i data-lucide="pencil" class="icon-sm" aria-hidden="true"></i>
+          </button>
           <button class="btn btn--icon btn--ghost" data-action="up"
                   aria-label="${esc(t('category.moveUp'))}" ${isFirst ? 'disabled' : ''}>
             <i data-lucide="chevron-up" class="icon-md" aria-hidden="true"></i>
@@ -133,6 +137,8 @@ class CategoryManagerElement extends HTMLElement {
           <li class="cat-subrow" data-subkey="${esc(String(s.key))}" data-parent="${esc(String(cat.key))}">
             <button type="button" class="cat-subrow__name" data-action="sub-rename">${esc(this._labelResolver(s))}</button>
             <div class="cat-row__actions">
+              <button class="btn btn--icon btn--ghost" data-action="sub-rename" aria-label="${esc(t('category.renameHint'))}" title="${esc(t('category.renameHint'))}">
+                <i data-lucide="pencil" class="icon-sm" aria-hidden="true"></i></button>
               <button class="btn btn--icon btn--ghost" data-action="sub-up" aria-label="${esc(t('category.moveUp'))}" ${j === 0 ? 'disabled' : ''}>
                 <i data-lucide="chevron-up" class="icon-sm" aria-hidden="true"></i></button>
               <button class="btn btn--icon btn--ghost" data-action="sub-down" aria-label="${esc(t('category.moveDown'))}" ${j === arr.length - 1 ? 'disabled' : ''}>
