@@ -1244,7 +1244,7 @@ router.put('/cycle/settings', (req, res) => {
     `).run(viewer, cycleLen.value, periodLen.value, luteal.value === null ? 14 : luteal.value,
            track === undefined ? 1 : track,
            pregnancy === undefined ? 0 : pregnancy,
-           pregnancy ? dueDate.value : null);
+           dueDate.value);
 
     res.json({ data: db.get().prepare('SELECT * FROM cycle_settings WHERE user_id = ?').get(viewer) });
   } catch (err) {

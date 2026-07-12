@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.17.1] - 2026-07-12
+
+### Changed
+- **Pregnancy mode polish.** The estimated due date now only accepts a plausible window (roughly six weeks in the past to about ten months ahead) so the gestational week and countdown always stay sensible, and turning pregnancy mode off no longer discards the due date you entered. The cycle tab's quick actions no longer offer "start period" while pregnancy mode is on, and the status card heading is quieter and matches the rest of the module.
+
 ## [1.17.0] - 2026-07-12
 
 ### Added

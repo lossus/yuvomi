@@ -558,10 +558,11 @@ test('Cycle-Settings: Schwangerschafts-Modus + Entbindungstermin (#450)', async 
   assert.equal(saved.body.data.pregnancy_mode, 1);
   assert.equal(saved.body.data.pregnancy_due_date, '2027-01-15');
 
-  // Modus aus → Entbindungstermin wird geleert.
+  // Modus aus → Termin bleibt erhalten (nur im aktiven Modus genutzt), damit
+  // versehentliches Umschalten die Eingabe nicht löscht.
   const off = await call('PUT', '/cycle/settings', { pregnancy_mode: false, pregnancy_due_date: '2027-01-15' });
   assert.equal(off.body.data.pregnancy_mode, 0);
-  assert.equal(off.body.data.pregnancy_due_date, null);
+  assert.equal(off.body.data.pregnancy_due_date, '2027-01-15');
 });
 
 test('Cycle-Settings: ungültiges Entbindungsdatum wird abgelehnt', async () => {

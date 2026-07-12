@@ -3325,7 +3325,7 @@ function renderCycleShell() {
     cycle.root.insertAdjacentHTML('beforeend', `
       ${persons}
       ${cyclePregnancyMarkup(prediction, own)}
-      ${own ? cycleTodayActionsMarkup(prediction) : ''}
+      ${own ? cycleTodayActionsMarkup(true) : ''}
       ${cycleCalendarMarkup(own)}
       ${prediction.hasData ? cycleHistoryMarkup(own) : ''}
       ${cycleFooterMarkup(own)}
@@ -3361,7 +3361,7 @@ function renderCycleShell() {
         ${prediction.trackFertility ? `<p class="health-disclaimer">${esc(t('health.cycle.fertilityDisclaimer'))}</p>` : ''}
       </div>
     </div>
-    ${own ? cycleTodayActionsMarkup(prediction) : ''}
+    ${own ? cycleTodayActionsMarkup() : ''}
     ${cycleCalendarMarkup(own)}
     ${cycleHistoryMarkup(own)}
     ${cycleFooterMarkup(own)}
@@ -3536,11 +3536,15 @@ function cycleOpenPeriod() {
     .sort((a, b) => (a.start_date < b.start_date ? 1 : -1))[0] || null;
 }
 
-function cycleTodayActionsMarkup() {
+function cycleTodayActionsMarkup(pregnant = false) {
   const open = cycleOpenPeriod();
-  const primary = open
-    ? `<button class="btn btn--secondary" data-action="cycle-end-period"><i data-lucide="check" aria-hidden="true"></i>${esc(t('health.cycle.today.endPeriod'))}</button>`
-    : `<button class="btn btn--primary" data-action="cycle-start-period"><i data-lucide="droplet" aria-hidden="true"></i>${esc(t('health.cycle.today.startPeriod'))}</button>`;
+  // Im Schwangerschafts-Modus keine „Periode starten/beenden"-Aktion anbieten —
+  // nur das Tages-Protokoll bleibt (z. B. für Schmierblutungen/Symptome).
+  const primary = pregnant
+    ? ''
+    : (open
+      ? `<button class="btn btn--secondary" data-action="cycle-end-period"><i data-lucide="check" aria-hidden="true"></i>${esc(t('health.cycle.today.endPeriod'))}</button>`
+      : `<button class="btn btn--primary" data-action="cycle-start-period"><i data-lucide="droplet" aria-hidden="true"></i>${esc(t('health.cycle.today.startPeriod'))}</button>`);
   return `
     <div class="cycle-today">
       <span class="cycle-today__label">${esc(t('health.cycle.today.title'))}</span>
@@ -3941,6 +3945,12 @@ function openCycleSettingsModal() {
   const s = cycle.settings || {};
   const val = (v) => (v == null ? '' : String(v));
   const stats = cycleStats(cycle.periods, s);
+  // Plausibilitäts-Fenster für den Entbindungstermin: knapp in der Vergangenheit
+  // (gerade entbunden/überfällig) bis ~40 Wochen voraus (frisch schwanger). Hält
+  // die SSW-/Countdown-Mathematik sinnvoll, verhindert absurde Eingaben.
+  const dueTodayKey = toLocalDateKey(new Date());
+  const dueMin = addLocalDays(dueTodayKey, -40);
+  const dueMax = addLocalDays(dueTodayKey, 300);
 
   openModal({
     title: t('health.cycle.settings.title'),
@@ -3974,7 +3984,7 @@ function openCycleSettingsModal() {
         </label>
         <div class="form-field" id="cs-due-field" ${s.pregnancy_mode ? '' : 'hidden'}>
           <label class="label" for="cs-due">${esc(t('health.cycle.settings.dueDate'))}</label>
-          <yuvomi-datepicker id="cs-due" type="date" value="${esc(s.pregnancy_due_date || '')}"></yuvomi-datepicker>
+          <yuvomi-datepicker id="cs-due" type="date" value="${esc(s.pregnancy_due_date || '')}" min="${esc(dueMin)}" max="${esc(dueMax)}"></yuvomi-datepicker>
         </div>
         <p class="cycle-hint">${esc(t('health.cycle.settings.pregnancyHint'))}</p>
         <div class="modal-actions">
@@ -4000,7 +4010,9 @@ function openCycleSettingsModal() {
           luteal_length: numOr('#cs-luteal') ?? 14,
           track_fertility: panel.querySelector('#cs-fertility').checked,
           pregnancy_mode: pregnant,
-          pregnancy_due_date: pregnant && due ? due : null,
+          // Termin auch beim Ausschalten behalten (nur im aktiven Modus genutzt) —
+          // versehentliches Umschalten löscht die Eingabe dann nicht.
+          pregnancy_due_date: due || null,
         };
         submitBtn.disabled = true;
         try {
