@@ -191,7 +191,7 @@
     },
     "tasks": {
         "manageCategories": "Διαχείριση κατηγοριών",
-        "addCategory": "+ category",
+        "addCategory": "+ κατηγορία",
         "title": "Εργασίες",
         "newTask": "Νέα εργασία",
         "editTask": "Επεξεργασία εργασίας",
@@ -672,7 +672,7 @@
     },
     "contacts": {
         "manageCategories": "Διαχείριση κατηγοριών",
-        "addCategory": "+ category",
+        "addCategory": "+ κατηγορία",
         "title": "Επαφές",
         "newContact": "Νέα επαφή",
         "editContact": "Επεξεργασία επαφής",
@@ -841,7 +841,7 @@
         "subcatInvestments": "Investments",
         "subcatTaxes": "Taxes",
         "metaLoadError": "Budget categories could not be loaded.",
-        "addCategory": "+ category",
+        "addCategory": "+ κατηγορία",
         "addSubcategory": "+ subcategory",
         "newCategoryPrompt": "Name of the new category:",
         "newSubcategoryPrompt": "Name of the new subcategory:",

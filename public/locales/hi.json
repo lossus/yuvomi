@@ -191,7 +191,7 @@
     },
     "tasks": {
         "manageCategories": "श्रेणियाँ प्रबंधित करें",
-        "addCategory": "+ category",
+        "addCategory": "+ श्रेणी",
         "title": "कार्य",
         "newTask": "नया कार्य",
         "editTask": "कार्य संपादित करें",
@@ -672,7 +672,7 @@
     },
     "contacts": {
         "manageCategories": "श्रेणियाँ प्रबंधित करें",
-        "addCategory": "+ category",
+        "addCategory": "+ श्रेणी",
         "title": "संपर्क",
         "newContact": "नया संपर्क",
         "editContact": "संपर्क संपादित करें",
@@ -841,7 +841,7 @@
         "subcatInvestments": "Investments",
         "subcatTaxes": "Taxes",
         "metaLoadError": "Budget categories could not be loaded.",
-        "addCategory": "+ category",
+        "addCategory": "+ श्रेणी",
         "addSubcategory": "+ subcategory",
         "newCategoryPrompt": "Name of the new category:",
         "newSubcategoryPrompt": "Name of the new subcategory:",

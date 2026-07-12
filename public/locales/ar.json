@@ -191,7 +191,7 @@
     },
     "tasks": {
         "manageCategories": "إدارة الفئات",
-        "addCategory": "+ category",
+        "addCategory": "+ فئة",
         "title": "المهام",
         "newTask": "مهمة جديدة",
         "editTask": "تعديل المهمة",
@@ -672,7 +672,7 @@
     },
     "contacts": {
         "manageCategories": "إدارة الفئات",
-        "addCategory": "+ category",
+        "addCategory": "+ فئة",
         "title": "جهات الاتصال",
         "newContact": "جهة اتصال جديدة",
         "editContact": "تعديل جهة الاتصال",
@@ -841,7 +841,7 @@
         "subcatInvestments": "Investments",
         "subcatTaxes": "Taxes",
         "metaLoadError": "Budget categories could not be loaded.",
-        "addCategory": "+ category",
+        "addCategory": "+ فئة",
         "addSubcategory": "+ subcategory",
         "newCategoryPrompt": "Name of the new category:",
         "newSubcategoryPrompt": "Name of the new subcategory:",

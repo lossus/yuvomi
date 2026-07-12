@@ -191,7 +191,7 @@
     },
     "tasks": {
         "manageCategories": "Kategorileri yönet",
-        "addCategory": "+ category",
+        "addCategory": "+ kategori",
         "title": "Görevler",
         "newTask": "Yeni Görev",
         "editTask": "Görevi Düzenle",
@@ -672,7 +672,7 @@
     },
     "contacts": {
         "manageCategories": "Kategorileri yönet",
-        "addCategory": "+ category",
+        "addCategory": "+ kategori",
         "title": "Kişiler",
         "newContact": "Yeni Kişi",
         "editContact": "Kişiyi Düzenle",
@@ -841,7 +841,7 @@
         "subcatInvestments": "Investments",
         "subcatTaxes": "Taxes",
         "metaLoadError": "Budget categories could not be loaded.",
-        "addCategory": "+ category",
+        "addCategory": "+ kategori",
         "addSubcategory": "+ subcategory",
         "newCategoryPrompt": "Name of the new category:",
         "newSubcategoryPrompt": "Name of the new subcategory:",

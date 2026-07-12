@@ -191,7 +191,7 @@
     },
     "tasks": {
         "manageCategories": "Управление категориями",
-        "addCategory": "+ category",
+        "addCategory": "+ категория",
         "title": "Задачи",
         "newTask": "Новая задача",
         "editTask": "Редактировать задачу",
@@ -672,7 +672,7 @@
     },
     "contacts": {
         "manageCategories": "Управление категориями",
-        "addCategory": "+ category",
+        "addCategory": "+ категория",
         "title": "Контакты",
         "newContact": "Новый контакт",
         "editContact": "Редактировать контакт",
@@ -841,7 +841,7 @@
         "subcatInvestments": "Investments",
         "subcatTaxes": "Taxes",
         "metaLoadError": "Budget categories could not be loaded.",
-        "addCategory": "+ category",
+        "addCategory": "+ категория",
         "addSubcategory": "+ subcategory",
         "newCategoryPrompt": "Name of the new category:",
         "newSubcategoryPrompt": "Name of the new subcategory:",

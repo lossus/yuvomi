@@ -191,7 +191,7 @@
     },
     "tasks": {
         "manageCategories": "カテゴリーを管理",
-        "addCategory": "+ category",
+        "addCategory": "+ カテゴリー",
         "title": "タスク",
         "newTask": "新しいタスク",
         "editTask": "タスクを編集",
@@ -672,7 +672,7 @@
     },
     "contacts": {
         "manageCategories": "カテゴリーを管理",
-        "addCategory": "+ category",
+        "addCategory": "+ カテゴリー",
         "title": "連絡先",
         "newContact": "新しい連絡先",
         "editContact": "連絡先を編集",
@@ -841,7 +841,7 @@
         "subcatInvestments": "Investments",
         "subcatTaxes": "Taxes",
         "metaLoadError": "Budget categories could not be loaded.",
-        "addCategory": "+ category",
+        "addCategory": "+ カテゴリー",
         "addSubcategory": "+ subcategory",
         "newCategoryPrompt": "Name of the new category:",
         "newSubcategoryPrompt": "Name of the new subcategory:",

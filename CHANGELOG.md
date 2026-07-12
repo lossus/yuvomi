@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.18.1] - 2026-07-12
+
+### Fixed
+- Translated the "Add category" button label into Arabic, Greek, Hindi, Japanese, Russian, Turkish, and Chinese — it was still displaying English ("+ category") in those languages across the Tasks, Contacts, and Budget category managers.
+
 ## [1.18.0] - 2026-07-12
 
 ### Added

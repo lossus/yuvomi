@@ -191,7 +191,7 @@
     },
     "tasks": {
         "manageCategories": "管理类别",
-        "addCategory": "+ category",
+        "addCategory": "+ 类别",
         "title": "任务",
         "newTask": "新建任务",
         "editTask": "编辑任务",
@@ -672,7 +672,7 @@
     },
     "contacts": {
         "manageCategories": "管理类别",
-        "addCategory": "+ category",
+        "addCategory": "+ 类别",
         "title": "联系人",
         "newContact": "新建联系人",
         "editContact": "编辑联系人",
@@ -841,7 +841,7 @@
         "subcatInvestments": "Investments",
         "subcatTaxes": "Taxes",
         "metaLoadError": "Budget categories could not be loaded.",
-        "addCategory": "+ category",
+        "addCategory": "+ 类别",
         "addSubcategory": "+ subcategory",
         "newCategoryPrompt": "Name of the new category:",
         "newSubcategoryPrompt": "Name of the new subcategory:",
