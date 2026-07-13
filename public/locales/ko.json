@@ -432,7 +432,13 @@
         "deleteRecurringTitle": "반복 식사 삭제",
         "deleteScopeSingle": "이 날짜만",
         "deleteScopeSeries": "전체 시리즈(모든 주)",
-        "seriesDeletedToast": "시리즈가 삭제되었습니다"
+        "seriesDeletedToast": "시리즈가 삭제되었습니다",
+        "shoppingImportLabel": "재료를 장보기 목록으로 옮기기",
+        "shoppingImportListLabel": "Shopping list",
+        "shoppingImportHint": "The meal and shopping items are created together when you save.",
+        "shoppingImportSuccess": "{{count}}개 재료를 옮겼습니다",
+        "shoppingImportSuccessPlural": "{{count}}개 재료를 옮겼습니다",
+        "shoppingImportError": "The meal and shopping items could not be saved together."
     },
     "calendar": {
         "searchOpen": "일정 검색",

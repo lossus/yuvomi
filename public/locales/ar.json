@@ -425,7 +425,13 @@
         "deleteRecurringTitle": "حذف الوجبة المتكررة",
         "deleteScopeSingle": "هذا التاريخ فقط",
         "deleteScopeSeries": "السلسلة كاملة (كل الأسابيع)",
-        "seriesDeletedToast": "تم حذف السلسلة"
+        "seriesDeletedToast": "تم حذف السلسلة",
+        "shoppingImportLabel": "نقل المكونات إلى قائمة التسوق",
+        "shoppingImportListLabel": "Shopping list",
+        "shoppingImportHint": "The meal and shopping items are created together when you save.",
+        "shoppingImportSuccess": "تم نقل {{count}} مكون",
+        "shoppingImportSuccessPlural": "تم نقل {{count}} مكونات",
+        "shoppingImportError": "The meal and shopping items could not be saved together."
     },
     "calendar": {
         "searchOpen": "البحث عن المواعيد",

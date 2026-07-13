@@ -432,7 +432,13 @@
         "deleteRecurringTitle": "Hapus makanan berulang",
         "deleteScopeSingle": "Hanya tanggal ini",
         "deleteScopeSeries": "Seluruh rangkaian (semua minggu)",
-        "seriesDeletedToast": "Rangkaian dihapus"
+        "seriesDeletedToast": "Rangkaian dihapus",
+        "shoppingImportLabel": "Pindahkan bahan ke daftar belanja",
+        "shoppingImportListLabel": "Shopping list",
+        "shoppingImportHint": "The meal and shopping items are created together when you save.",
+        "shoppingImportSuccess": "{{count}} bahan dipindahkan",
+        "shoppingImportSuccessPlural": "{{count}} bahan dipindahkan",
+        "shoppingImportError": "The meal and shopping items could not be saved together."
     },
     "calendar": {
         "searchOpen": "Cari acara",

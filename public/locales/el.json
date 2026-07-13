@@ -425,7 +425,13 @@
         "deleteRecurringTitle": "Διαγραφή επαναλαμβανόμενου γεύματος",
         "deleteScopeSingle": "Μόνο αυτή η ημερομηνία",
         "deleteScopeSeries": "Ολόκληρη η σειρά (όλες οι εβδομάδες)",
-        "seriesDeletedToast": "Η σειρά διαγράφηκε"
+        "seriesDeletedToast": "Η σειρά διαγράφηκε",
+        "shoppingImportLabel": "Μεταφορά υλικών στη λίστα αγορών",
+        "shoppingImportListLabel": "Shopping list",
+        "shoppingImportHint": "The meal and shopping items are created together when you save.",
+        "shoppingImportSuccess": "{{count}} υλικό μεταφέρθηκε",
+        "shoppingImportSuccessPlural": "{{count}} υλικά μεταφέρθηκαν",
+        "shoppingImportError": "The meal and shopping items could not be saved together."
     },
     "calendar": {
         "searchOpen": "Αναζήτηση εκδηλώσεων",

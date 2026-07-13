@@ -425,7 +425,13 @@
         "deleteRecurringTitle": "Ta bort återkommande måltid",
         "deleteScopeSingle": "Endast detta datum",
         "deleteScopeSeries": "Hela serien (alla veckor)",
-        "seriesDeletedToast": "Serien borttagen"
+        "seriesDeletedToast": "Serien borttagen",
+        "shoppingImportLabel": "Överför ingredienserna till inköpslistan",
+        "shoppingImportListLabel": "Shopping list",
+        "shoppingImportHint": "The meal and shopping items are created together when you save.",
+        "shoppingImportSuccess": "{{count}} ingrediens har överförts",
+        "shoppingImportSuccessPlural": "{{count}} ingredienser har överförts",
+        "shoppingImportError": "The meal and shopping items could not be saved together."
     },
     "calendar": {
         "searchOpen": "Sök händelser",

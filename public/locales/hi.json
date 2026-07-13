@@ -425,7 +425,13 @@
         "deleteRecurringTitle": "आवर्ती भोजन हटाएं",
         "deleteScopeSingle": "केवल यह तारीख",
         "deleteScopeSeries": "पूरी शृंखला (सभी सप्ताह)",
-        "seriesDeletedToast": "शृंखला हटाई गई"
+        "seriesDeletedToast": "शृंखला हटाई गई",
+        "shoppingImportLabel": "सामग्री खरीदारी सूची में जोड़ें",
+        "shoppingImportListLabel": "Shopping list",
+        "shoppingImportHint": "The meal and shopping items are created together when you save.",
+        "shoppingImportSuccess": "{{count}} सामग्री जोड़ी गई",
+        "shoppingImportSuccessPlural": "{{count}} सामग्रियां जोड़ी गईं",
+        "shoppingImportError": "The meal and shopping items could not be saved together."
     },
     "calendar": {
         "searchOpen": "इवेंट खोजें",

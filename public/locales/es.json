@@ -425,7 +425,13 @@
         "deleteRecurringTitle": "Eliminar comida recurrente",
         "deleteScopeSingle": "Solo esta fecha",
         "deleteScopeSeries": "Toda la serie (todas las semanas)",
-        "seriesDeletedToast": "Serie eliminada"
+        "seriesDeletedToast": "Serie eliminada",
+        "shoppingImportLabel": "Transferir ingredientes a la lista de compras",
+        "shoppingImportListLabel": "Shopping list",
+        "shoppingImportHint": "The meal and shopping items are created together when you save.",
+        "shoppingImportSuccess": "{{count}} ingrediente transferido",
+        "shoppingImportSuccessPlural": "{{count}} ingredientes transferidos",
+        "shoppingImportError": "The meal and shopping items could not be saved together."
     },
     "calendar": {
         "searchOpen": "Buscar eventos",

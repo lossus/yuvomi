@@ -665,7 +665,7 @@ function buildPaths() {
     },
     '/api/v1/meals': {
       get: op({ summary: 'List meal plan entries', tag: 'Meals' }),
-      post: op({ summary: 'Create meal plan entry', tag: 'Meals', stateChanging: true, requestBody: jsonBody(null) }),
+      post: op({ summary: 'Create meal plan entry', tag: 'Meals', description: 'Optionally accepts shopping_import: { enabled: true, list_id }. When enabled, the meal, optional recurrence template, concrete ingredients, shopping items, provenance snapshots, and transfer flags are created in one transaction. Only the concrete recurring start occurrence is imported.', stateChanging: true, requestBody: jsonBody(null, 'Meal fields with optional shopping_import block') }),
     },
     '/api/v1/meals/suggestions': { get: op({ summary: 'Get meal suggestions', tag: 'Meals' }) },
     '/api/v1/meals/{id}': {

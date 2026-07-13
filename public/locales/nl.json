@@ -425,7 +425,13 @@
         "deleteRecurringTitle": "Terugkerende maaltijd verwijderen",
         "deleteScopeSingle": "Alleen deze datum",
         "deleteScopeSeries": "Hele reeks (alle weken)",
-        "seriesDeletedToast": "Reeks verwijderd"
+        "seriesDeletedToast": "Reeks verwijderd",
+        "shoppingImportLabel": "Ingrediënten naar boodschappenlijst sturen",
+        "shoppingImportListLabel": "Shopping list",
+        "shoppingImportHint": "The meal and shopping items are created together when you save.",
+        "shoppingImportSuccess": "{{count}} ingrediënt overgezet",
+        "shoppingImportSuccessPlural": "{{count}} ingrediënten overgezet",
+        "shoppingImportError": "The meal and shopping items could not be saved together."
     },
     "calendar": {
         "searchOpen": "Afspraken zoeken",

@@ -425,7 +425,13 @@
         "deleteRecurringTitle": "Xóa bữa ăn lặp lại",
         "deleteScopeSingle": "Chỉ ngày này",
         "deleteScopeSeries": "Toàn bộ chuỗi (tất cả các tuần)",
-        "seriesDeletedToast": "Đã xóa chuỗi"
+        "seriesDeletedToast": "Đã xóa chuỗi",
+        "shoppingImportLabel": "Chuyển nguyên liệu vào danh sách mua sắm",
+        "shoppingImportListLabel": "Shopping list",
+        "shoppingImportHint": "The meal and shopping items are created together when you save.",
+        "shoppingImportSuccess": "{{count}} nguyên liệu đã được chuyển",
+        "shoppingImportSuccessPlural": "{{count}} nguyên liệu đã được chuyển",
+        "shoppingImportError": "The meal and shopping items could not be saved together."
     },
     "calendar": {
         "searchOpen": "Tìm sự kiện",

@@ -427,11 +427,13 @@ test('added_from_meal FK auf meals(id) gesetzt', () => {
 });
 
 test('Meals-Importpfade speichern Artikel, Herkunft und Flag in derselben Transaktion', () => {
-  const source = readFileSync(new URL('../server/routes/meals.js', import.meta.url), 'utf8');
-  const sourceInsertCount = (source.match(/insertShoppingItemSource\(/g) || []).length;
-  assert(sourceInsertCount >= 2, 'Einzel- und Wochenimport müssen Herkunft speichern');
-  assert(/quantity_snapshot: ing\.quantity/.test(source), 'Import muss die unveränderte Freitextmenge snapshotten');
-  assert(/const transferred = db\.transaction/.test(source), 'Importe müssen atomar bleiben');
+  const routeSource = readFileSync(new URL('../server/routes/meals.js', import.meta.url), 'utf8');
+  const serviceSource = readFileSync(new URL('../server/services/meal-shopping-import.js', import.meta.url), 'utf8');
+  assert(/importMealIngredientsToShoppingList/.test(routeSource), 'Meal-Create und Einzelimport müssen den gemeinsamen Import-Service nutzen');
+  assert(/insertShoppingItemSource\(/.test(serviceSource), 'Gemeinsamer Import-Service muss Herkunft speichern');
+  assert(/shoppingItemsFromMealIngredients/.test(serviceSource), 'Gemeinsamer Import-Service muss Freitextmengen und Snapshots konservativ ableiten');
+  assert(/const transferred = db\.transaction/.test(routeSource), 'Manueller Einzelimport muss atomar bleiben');
+  assert(/const created = db\.transaction/.test(routeSource), 'Meal-Create plus optionaler Import muss atomar bleiben');
 });
 
 test('Rezepte speichern passende meal_types für Planer-Features', () => {
@@ -533,6 +535,27 @@ test('Meals-Route bietet einen atomaren apply-plan Endpunkt für Replace-Flows',
   assert(/db\.transaction\(\(\) => \{[\s\S]*replaceExisting/.test(source), 'apply-plan muss als DB-Transaktion laufen');
   assert(/deleteMealOccurrence/.test(source), 'apply-plan soll bestehende Mahlzeiten serverseitig mit Wiederholungs-Semantik ersetzen');
   assert(!/const created = db\.transaction\([\s\S]*\}\)\(\);/.test(source), 'apply-plan darf das Ergebnis des DB-Transaction-Helfers nicht erneut aufrufen');
+});
+
+test('Meal-Create-Modal sendet optionalen Shopping-Import in genau einem Request', () => {
+  const source = readFileSync(new URL('../public/pages/meals.js', import.meta.url), 'utf8');
+  assert(/id="modal-shopping-import"/.test(source), 'Create-Modal braucht eine Import-Checkbox');
+  assert(/id="modal-shopping-import-list"/.test(source), 'Create-Modal braucht eine Ziellistenauswahl');
+  assert(/shopping_import:\s*shoppingImportEnabled/.test(source), 'Meal-POST muss den shopping_import-Block senden');
+  assert(/\{ enabled: true, list_id: shoppingImportListId \}/.test(source), 'Aktivierter Import muss die gewählte Liste senden');
+  assert(/state\.lists\.map/.test(source), 'Ziellisten müssen aus der bereits sortierten Shopping-Antwort stammen');
+  assert(/modal-shopping-import-list" disabled/.test(source), 'Zielliste muss standardmäßig deaktiviert sein');
+  assert(!/id="modal-shopping-import"[^>]*checked/.test(source), 'Import-Checkbox muss standardmäßig aus sein');
+});
+
+test('Direktes Recipe-Drop und apply-plan aktivieren keinen stillen Shopping-Import', () => {
+  const source = readFileSync(new URL('../public/pages/meals.js', import.meta.url), 'utf8');
+  const addRecipeToSlot = source.match(/async function addRecipeToSlot[\s\S]*?\n}/)?.[0] ?? '';
+  const runRandomize = source.match(/async function runRandomize[\s\S]*?\n}/)?.[0] ?? '';
+  assert(addRecipeToSlot, 'addRecipeToSlot muss auffindbar sein');
+  assert(runRandomize, 'runRandomize muss auffindbar sein');
+  assert(!/shopping_import/.test(addRecipeToSlot), 'Drag-and-drop darf nicht still importieren');
+  assert(!/shopping_import/.test(runRandomize), 'Randomizer darf nicht still importieren');
 });
 
 // --------------------------------------------------------

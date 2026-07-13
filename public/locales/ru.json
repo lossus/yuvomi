@@ -425,7 +425,13 @@
         "deleteRecurringTitle": "Удалить повторяющийся приём пищи",
         "deleteScopeSingle": "Только эта дата",
         "deleteScopeSeries": "Вся серия (все недели)",
-        "seriesDeletedToast": "Серия удалена"
+        "seriesDeletedToast": "Серия удалена",
+        "shoppingImportLabel": "Перенести ингредиенты в список покупок",
+        "shoppingImportListLabel": "Shopping list",
+        "shoppingImportHint": "The meal and shopping items are created together when you save.",
+        "shoppingImportSuccess": "{{count}} ингредиент перенесён",
+        "shoppingImportSuccessPlural": "{{count}} ингредиентов перенесено",
+        "shoppingImportError": "The meal and shopping items could not be saved together."
     },
     "calendar": {
         "searchOpen": "Поиск событий",

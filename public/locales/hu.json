@@ -425,7 +425,13 @@
         "deleteRecurringTitle": "Ismétlődő étkezés törlése",
         "deleteScopeSingle": "Csak ez a dátum",
         "deleteScopeSeries": "Teljes sorozat (minden hét)",
-        "seriesDeletedToast": "Sorozat törölve"
+        "seriesDeletedToast": "Sorozat törölve",
+        "shoppingImportLabel": "Hozzávalók átvitele a bevásárlólistára",
+        "shoppingImportListLabel": "Shopping list",
+        "shoppingImportHint": "The meal and shopping items are created together when you save.",
+        "shoppingImportSuccess": "{{count}} hozzávaló átvitele sikeres",
+        "shoppingImportSuccessPlural": "{{count}} hozzávaló átvitele sikeres",
+        "shoppingImportError": "The meal and shopping items could not be saved together."
     },
     "calendar": {
         "searchOpen": "Események keresése",
