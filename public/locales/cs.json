@@ -340,7 +340,15 @@
         "importMealsTitle": "Import z jídelníčku",
         "importMealsAction": "Importovat",
         "importMealsEmpty": "Ve vybraném rozsahu nebyly nalezeny žádné ingredience jídel.",
-        "manageCategories": "Spravovat kategorie"
+        "manageCategories": "Spravovat kategorie",
+        "manageLists": "Seřadit seznamy",
+        "manageListsHint": "Přetáhněte seznamy do požadovaného pořadí nebo použijte tlačítka. První seznam je výchozí.",
+        "defaultList": "Výchozí",
+        "dragList": "Přetáhnout seznam",
+        "moveListFirst": "Přesunout na začátek",
+        "moveListUp": "Přesunout nahoru",
+        "moveListDown": "Přesunout dolů",
+        "reorderError": "Pořadí seznamů se nepodařilo uložit."
     },
     "meals": {
         "title": "Jídelníček",

@@ -11,6 +11,7 @@ const log = createLogger('CalDAV-Reminders');
 
 import * as db from '../db.js';
 import { parseVTODO } from './ics-parser.js';
+import { createShoppingList } from './shopping-lists.js';
 
 // --------------------------------------------------------
 // Pure Mapping Helpers
@@ -126,8 +127,7 @@ function ensureShoppingList(sel) {
   }
   const owner     = db.get().prepare('SELECT id FROM users ORDER BY id ASC LIMIT 1').get();
   const createdBy = owner ? owner.id : 1;
-  const row       = db.get().prepare('INSERT INTO shopping_lists (name, created_by) VALUES (?, ?)').run(sel.list_name, createdBy);
-  const id        = row.lastInsertRowid;
+  const id        = createShoppingList(db.get(), sel.list_name, createdBy).id;
   db.get().prepare('UPDATE caldav_reminder_selection SET target_list_id = ? WHERE id = ?').run(id, sel.id);
   sel.target_list_id = id;
   return id;

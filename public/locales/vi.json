@@ -340,7 +340,15 @@
         "importMealsTitle": "Nhập từ kế hoạch bữa ăn",
         "importMealsAction": "Nhập",
         "importMealsEmpty": "Không tìm thấy nguyên liệu bữa ăn nào trong phạm vi đã chọn.",
-        "manageCategories": "Quản lý danh mục"
+        "manageCategories": "Quản lý danh mục",
+        "manageLists": "Sắp xếp danh sách",
+        "manageListsHint": "Kéo danh sách theo thứ tự mong muốn hoặc dùng các nút. Danh sách đầu tiên là mặc định.",
+        "defaultList": "Mặc định",
+        "dragList": "Kéo danh sách",
+        "moveListFirst": "Đưa lên đầu",
+        "moveListUp": "Di chuyển lên",
+        "moveListDown": "Di chuyển xuống",
+        "reorderError": "Không thể lưu thứ tự danh sách."
     },
     "meals": {
         "title": "Kế hoạch Bữa ăn",

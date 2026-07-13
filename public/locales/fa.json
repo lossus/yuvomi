@@ -347,7 +347,15 @@
         "importMealsTitle": "درون‌ریزی از برنامه غذایی",
         "importMealsAction": "درون‌ریزی",
         "importMealsEmpty": "هیچ ماده غذایی از برنامه غذایی در بازه انتخاب‌شده پیدا نشد.",
-        "manageCategories": "مدیریت دسته‌ها"
+        "manageCategories": "مدیریت دسته‌ها",
+        "manageLists": "مرتب‌سازی فهرست‌ها",
+        "manageListsHint": "فهرست‌ها را به ترتیب دلخواه بکشید یا از دکمه‌ها استفاده کنید. فهرست اول پیش‌فرض است.",
+        "defaultList": "پیش‌فرض",
+        "dragList": "کشیدن فهرست",
+        "moveListFirst": "انتقال به اول",
+        "moveListUp": "انتقال به بالا",
+        "moveListDown": "انتقال به پایین",
+        "reorderError": "ترتیب فهرست‌ها ذخیره نشد."
     },
     "meals": {
         "title": "برنامه غذایی",

@@ -890,6 +890,17 @@ const MIGRATIONS_SQL = {
       PRIMARY KEY (event_id, exception_date)
     );
   `,
+  86: `
+    ALTER TABLE shopping_lists ADD COLUMN sort_order INTEGER NOT NULL DEFAULT 0;
+    WITH ordered AS (
+      SELECT id, ROW_NUMBER() OVER (ORDER BY created_at ASC, id ASC) - 1 AS position
+      FROM shopping_lists
+    )
+    UPDATE shopping_lists
+    SET sort_order = (SELECT position FROM ordered WHERE ordered.id = shopping_lists.id);
+    CREATE INDEX IF NOT EXISTS idx_shopping_lists_sort_order
+      ON shopping_lists(sort_order, created_at, id);
+  `,
 };
 
 export { MIGRATIONS_SQL };

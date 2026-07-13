@@ -347,7 +347,15 @@
         "importMealsTitle": "Impor dari rencana makan",
         "importMealsAction": "Impor",
         "importMealsEmpty": "Tidak ada bahan makanan yang ditemukan dalam rentang yang dipilih.",
-        "manageCategories": "Kelola kategori"
+        "manageCategories": "Kelola kategori",
+        "manageLists": "Urutkan daftar",
+        "manageListsHint": "Seret daftar ke urutan yang diinginkan atau gunakan tombol. Daftar pertama adalah daftar utama.",
+        "defaultList": "Utama",
+        "dragList": "Seret daftar",
+        "moveListFirst": "Pindahkan ke awal",
+        "moveListUp": "Pindahkan ke atas",
+        "moveListDown": "Pindahkan ke bawah",
+        "reorderError": "Urutan daftar tidak dapat disimpan."
     },
     "meals": {
         "title": "Rencana Makan",

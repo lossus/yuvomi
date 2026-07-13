@@ -340,7 +340,15 @@
         "importMealsTitle": "Importa dal piano pasti",
         "importMealsAction": "Importa",
         "importMealsEmpty": "Nell'intervallo selezionato non sono stati trovati ingredienti dei pasti.",
-        "manageCategories": "Gestisci categorie"
+        "manageCategories": "Gestisci categorie",
+        "manageLists": "Riordina liste",
+        "manageListsHint": "Trascina le liste nell’ordine desiderato o usa i pulsanti. La prima lista è quella predefinita.",
+        "defaultList": "Predefinita",
+        "dragList": "Trascina lista",
+        "moveListFirst": "Sposta all’inizio",
+        "moveListUp": "Sposta su",
+        "moveListDown": "Sposta giù",
+        "reorderError": "Impossibile salvare l’ordine delle liste."
     },
     "meals": {
         "title": "Piano pasti",

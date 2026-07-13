@@ -340,7 +340,15 @@
         "importMealsTitle": "Importeren uit maaltijdplan",
         "importMealsAction": "Importeren",
         "importMealsEmpty": "Er zijn geen maaltijdingrediënten gevonden in de geselecteerde periode.",
-        "manageCategories": "Categorieën beheren"
+        "manageCategories": "Categorieën beheren",
+        "manageLists": "Lijsten sorteren",
+        "manageListsHint": "Sleep de lijsten naar de gewenste volgorde of gebruik de knoppen. De eerste lijst is de standaardlijst.",
+        "defaultList": "Standaard",
+        "dragList": "Lijst slepen",
+        "moveListFirst": "Naar eerste plaats",
+        "moveListUp": "Omhoog",
+        "moveListDown": "Omlaag",
+        "reorderError": "De lijstvolgorde kon niet worden opgeslagen."
     },
     "meals": {
         "title": "Maaltijdplan",

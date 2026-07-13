@@ -340,7 +340,15 @@
         "importMealsTitle": "Yemek planından içe aktar",
         "importMealsAction": "İçe aktar",
         "importMealsEmpty": "Seçilen aralıkta yemek malzemesi bulunamadı.",
-        "manageCategories": "Kategorileri yönet"
+        "manageCategories": "Kategorileri yönet",
+        "manageLists": "Listeleri sırala",
+        "manageListsHint": "Listeleri istediğiniz sıraya sürükleyin veya düğmeleri kullanın. İlk liste varsayılan listedir.",
+        "defaultList": "Varsayılan",
+        "dragList": "Listeyi sürükle",
+        "moveListFirst": "İlk sıraya taşı",
+        "moveListUp": "Yukarı taşı",
+        "moveListDown": "Aşağı taşı",
+        "reorderError": "Liste sırası kaydedilemedi."
     },
     "meals": {
         "title": "Yemek Planı",

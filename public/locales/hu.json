@@ -340,7 +340,15 @@
         "importMealsTitle": "Importálás az étkezési tervből",
         "importMealsAction": "Importálás",
         "importMealsEmpty": "A kiválasztott időszakban nem találhatók étkezési hozzávalók.",
-        "manageCategories": "Kategóriák kezelése"
+        "manageCategories": "Kategóriák kezelése",
+        "manageLists": "Listák rendezése",
+        "manageListsHint": "Húzza a listákat a kívánt sorrendbe, vagy használja a gombokat. Az első lista az alapértelmezett.",
+        "defaultList": "Alapértelmezett",
+        "dragList": "Lista húzása",
+        "moveListFirst": "Mozgatás az elejére",
+        "moveListUp": "Mozgatás fel",
+        "moveListDown": "Mozgatás le",
+        "reorderError": "A listák sorrendjét nem sikerült menteni."
     },
     "meals": {
         "title": "Étkezési terv",

@@ -26,6 +26,7 @@ db.exec(`CREATE TABLE IF NOT EXISTS schema_migrations (
   applied_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
 );`);
 db.exec(MIGRATIONS_SQL[1]);
+db.exec(MIGRATIONS_SQL[86]);
 
 const uid = db.prepare(
   `INSERT INTO users (username, display_name, password_hash, avatar_color, role)

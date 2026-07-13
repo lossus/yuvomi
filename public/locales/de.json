@@ -347,7 +347,15 @@
         "importMealsTitle": "Essensplan importieren",
         "importMealsAction": "Importieren",
         "importMealsEmpty": "Im gewählten Zeitraum wurden keine Essensplan-Zutaten gefunden.",
-        "manageCategories": "Kategorien verwalten"
+        "manageCategories": "Kategorien verwalten",
+        "manageLists": "Listen sortieren",
+        "manageListsHint": "Ziehe Listen in die gewünschte Reihenfolge oder verwende die Schaltflächen. Die erste Liste ist die Standardliste.",
+        "defaultList": "Standard",
+        "dragList": "Liste ziehen",
+        "moveListFirst": "An erste Stelle",
+        "moveListUp": "Nach oben",
+        "moveListDown": "Nach unten",
+        "reorderError": "Die Listenreihenfolge konnte nicht gespeichert werden."
     },
     "meals": {
         "title": "Essensplan",

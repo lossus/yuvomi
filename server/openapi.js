@@ -630,6 +630,9 @@ function buildPaths() {
       get: op({ summary: 'List shopping lists', tag: 'Shopping' }),
       post: op({ summary: 'Create shopping list', tag: 'Shopping', stateChanging: true, requestBody: jsonBody(null) }),
     },
+    '/api/v1/shopping/reorder': {
+      patch: op({ summary: 'Reorder all shopping lists', tag: 'Shopping', stateChanging: true, requestBody: jsonBody(null) }),
+    },
     '/api/v1/shopping/categories': {
       get: op({ summary: 'List shopping categories', tag: 'Shopping' }),
       post: op({ summary: 'Create shopping category', tag: 'Shopping', stateChanging: true, requestBody: jsonBody(null) }),

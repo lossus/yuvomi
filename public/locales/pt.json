@@ -340,7 +340,15 @@
         "importMealsTitle": "Importar do plano de refeições",
         "importMealsAction": "Importar",
         "importMealsEmpty": "Não foram encontrados ingredientes de refeições no intervalo selecionado.",
-        "manageCategories": "Gerir categorias"
+        "manageCategories": "Gerir categorias",
+        "manageLists": "Ordenar listas",
+        "manageListsHint": "Arraste as listas para a ordem pretendida ou use os botões. A primeira lista é a predefinida.",
+        "defaultList": "Predefinida",
+        "dragList": "Arrastar lista",
+        "moveListFirst": "Mover para primeiro",
+        "moveListUp": "Mover para cima",
+        "moveListDown": "Mover para baixo",
+        "reorderError": "Não foi possível guardar a ordem das listas."
     },
     "meals": {
         "title": "Plano de refeições",

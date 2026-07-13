@@ -340,7 +340,15 @@
         "importMealsTitle": "भोजन योजना से आयात करें",
         "importMealsAction": "आयात करें",
         "importMealsEmpty": "चयनित अवधि में भोजन योजना की कोई सामग्री नहीं मिली।",
-        "manageCategories": "श्रेणियाँ प्रबंधित करें"
+        "manageCategories": "श्रेणियाँ प्रबंधित करें",
+        "manageLists": "सूचियाँ क्रमबद्ध करें",
+        "manageListsHint": "सूचियों को इच्छित क्रम में खींचें या बटनों का उपयोग करें। पहली सूची डिफ़ॉल्ट है।",
+        "defaultList": "डिफ़ॉल्ट",
+        "dragList": "सूची खींचें",
+        "moveListFirst": "सबसे पहले ले जाएँ",
+        "moveListUp": "ऊपर ले जाएँ",
+        "moveListDown": "नीचे ले जाएँ",
+        "reorderError": "सूची क्रम सहेजा नहीं जा सका।"
     },
     "meals": {
         "title": "भोजन योजना",
