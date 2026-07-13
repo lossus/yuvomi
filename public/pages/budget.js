@@ -8,6 +8,7 @@
 import { api } from '/api.js';
 import { openModal as openSharedModal, closeModal, confirmModal, advancedSection } from '/components/modal.js';
 import { stagger, vibrate } from '/utils/ux.js';
+import { wireTablist } from '/utils/tablist.js';
 import { t, formatDate, getLocale } from '/i18n.js';
 import { esc } from '/utils/html.js';
 import { renderSkeletonList } from '/utils/skeleton.js';
@@ -287,28 +288,20 @@ export async function render(container, { user }) {
         </div>
         <div class="page-toolbar__actions">
           <div class="budget-tabs" role="tablist" aria-label="${t('budget.tabsLabel')}">
-            ${user?.access_scope === 'split_guest' ? '' : `
-            <button class="budget-tab" id="budget-tab-budget" type="button" role="tab" aria-selected="true" aria-controls="budget-body" tabindex="-1" data-tab="budget">
-              ${t('budget.budgetTab')}
-            </button>
-            <button class="budget-tab" id="budget-tab-accounts" type="button" role="tab" aria-selected="false" aria-controls="budget-body" tabindex="-1" data-tab="accounts">
-              ${t('budget.accountsTab')}
-            </button>
-            <button class="budget-tab" id="budget-tab-plan" type="button" role="tab" aria-selected="false" aria-controls="budget-body" tabindex="-1" data-tab="plan">
-              ${t('budget.planTab')}
-            </button>
-            <button class="budget-tab" id="budget-tab-subscriptions" type="button" role="tab" aria-selected="false" aria-controls="budget-body" tabindex="-1" data-tab="subscriptions">
-              ${t('subscriptions.tabLabel')}
-            </button>
-            <button class="budget-tab" id="budget-tab-loans" type="button" role="tab" aria-selected="false" aria-controls="budget-body" tabindex="-1" data-tab="loans">
-              ${t('budget.loansTab')}
-            </button>
-            <button class="budget-tab" id="budget-tab-reports" type="button" role="tab" aria-selected="false" aria-controls="budget-body" tabindex="-1" data-tab="reports">
-              ${t('budget.reportsTab')}
-            </button>`}
-            <button class="budget-tab" id="budget-tab-split-expenses" type="button" role="tab" aria-selected="false" aria-controls="budget-body" tabindex="-1" data-tab="split-expenses">
-              ${t('splitExpenses.tabLabel')}
-            </button>
+            ${[
+              ...(user?.access_scope === 'split_guest' ? [] : [
+                ['budget',        t('budget.budgetTab')],
+                ['accounts',      t('budget.accountsTab')],
+                ['plan',          t('budget.planTab')],
+                ['subscriptions', t('subscriptions.tabLabel')],
+                ['loans',         t('budget.loansTab')],
+                ['reports',       t('budget.reportsTab')],
+              ]),
+              ['split-expenses',  t('splitExpenses.tabLabel')],
+            ].map(([id, label]) => {
+              const on = id === state.activeTab;
+              return `<button class="sub-tab${on ? ' sub-tab--active' : ''}" id="budget-tab-${id}" type="button" role="tab" data-tab-id="${id}" aria-controls="budget-body" aria-selected="${on ? 'true' : 'false'}" tabindex="${on ? '0' : '-1'}"><span class="sub-tab__label">${label}</span></button>`;
+            }).join('')}
           </div>
           <button class="btn btn--primary btn--icon toolbar-new-btn" id="budget-add" aria-label="${t('budget.addEntryLabel')}">
             <i data-lucide="plus" aria-hidden="true"></i>
@@ -383,36 +376,23 @@ function wireNav() {
   };
   _container.querySelector('#budget-add').addEventListener('click', addHandler);
   _container.querySelector('#fab-new-budget').addEventListener('click', addHandler);
-  _container.querySelectorAll('.budget-tab').forEach((tab) => {
-    tab.addEventListener('click', () => {
-      state.activeTab = tab.dataset.tab;
+  // Geteilte Tablist-Verhaltensschicht (Klick + Pfeiltasten/Home/End + Roving-
+  // Tabindex + ARIA) — dieselbe Grammatik wie Rewards/Haushaltshilfe statt einer
+  // modul-eigenen Nachbildung (utils/tablist.js). wireTablist malt den aktiven
+  // Tab (sub-tab--active/aria/tabindex); renderBody übernimmt nur noch den Inhalt.
+  wireTablist(_container.querySelector('.budget-tabs'), {
+    activeId: state.activeTab,
+    onChange: (id) => {
+      state.activeTab = id;
       renderBody();
-    });
-  });
-  // Pfeiltasten-Navigation im Tablist (WAI-ARIA): ←/→ und Home/End wechseln
-  // den aktiven Tab und ziehen den Fokus mit.
-  _container.querySelector('.budget-tabs')?.addEventListener('keydown', (e) => {
-    const keys = ['ArrowLeft', 'ArrowRight', 'Home', 'End'];
-    if (!keys.includes(e.key)) return;
-    const tabs = [..._container.querySelectorAll('.budget-tab')];
-    if (!tabs.length) return;
-    const current = tabs.findIndex((tab) => tab.dataset.tab === state.activeTab);
-    let next = current;
-    if (e.key === 'ArrowLeft') next = (current - 1 + tabs.length) % tabs.length;
-    else if (e.key === 'ArrowRight') next = (current + 1) % tabs.length;
-    else if (e.key === 'Home') next = 0;
-    else if (e.key === 'End') next = tabs.length - 1;
-    e.preventDefault();
-    state.activeTab = tabs[next].dataset.tab;
-    renderBody();
-    _container.querySelector('.budget-tab--active')?.focus();
+    },
   });
   // Edge-Fade live nachführen, während der Nutzer die Tab-Leiste scrollt.
   // (Re-Render ruft updateTabsFade ohnehin auf; daher kein window-resize-
   // Listener, der bei Re-Navigation lecken würde.) Aktiven Tab in Sicht holen.
   const tabsEl = _container.querySelector('.budget-tabs');
   tabsEl?.addEventListener('scroll', updateTabsFade, { passive: true });
-  _container.querySelector('.budget-tab--active')?.scrollIntoView({ inline: 'nearest', block: 'nearest' });
+  _container.querySelector('.sub-tab--active')?.scrollIntoView({ inline: 'nearest', block: 'nearest' });
   updateLabel();
 }
 
@@ -590,18 +570,10 @@ function updateTabs() {
   _container.classList.toggle('budget-page--split-active', state.activeTab === 'split-expenses' || _user?.access_scope === 'split_guest');
   _container.classList.toggle('budget-page--loans-active', state.activeTab === 'loans');
   _container.classList.toggle('budget-page--subscriptions-active', state.activeTab === 'subscriptions');
-  let activeTabId = '';
-  _container.querySelectorAll('.budget-tab').forEach((tab) => {
-    const active = tab.dataset.tab === state.activeTab;
-    tab.classList.toggle('budget-tab--active', active);
-    tab.setAttribute('aria-selected', String(active));
-    // Roving Tabindex: nur der aktive Tab ist per Tab-Taste fokussierbar,
-    // zwischen den Tabs wird mit Pfeiltasten gewechselt (WAI-ARIA Tabs).
-    tab.tabIndex = active ? 0 : -1;
-    if (active) activeTabId = tab.id;
-  });
+  // Tab-Optik (aktive Pille, aria-selected, Roving-Tabindex) trägt jetzt
+  // wireTablist; hier bleiben nur Panel-Verknüpfung und Scroll-Fade.
   const panel = _container.querySelector('#budget-body');
-  if (panel && activeTabId) panel.setAttribute('aria-labelledby', activeTabId);
+  if (panel) panel.setAttribute('aria-labelledby', `budget-tab-${state.activeTab}`);
   updateTabsFade();
   const splitActive = state.activeTab === 'split-expenses' || _user?.access_scope === 'split_guest';
   const loansActive = state.activeTab === 'loans';

@@ -2251,9 +2251,11 @@ test('budget chart exposes a screen-reader summary (audit 1.7)', () => {
 test('Budget places Subscriptions between Budget and Loans with secure rendering', () => {
   const budget = read('../public/pages/budget.js');
   const subscriptions = read('../public/pages/subscriptions.js');
-  const budgetTab = budget.indexOf('data-tab="budget"');
-  const subscriptionsTab = budget.indexOf('data-tab="subscriptions"');
-  const loansTab = budget.indexOf('data-tab="loans"');
+  // Tab-Reihenfolge liegt in der Definitionsliste (data-tab-id wird daraus
+  // generiert): Abonnements müssen zwischen Budget und Darlehen stehen.
+  const budgetTab = budget.indexOf("['budget',");
+  const subscriptionsTab = budget.indexOf("['subscriptions',");
+  const loansTab = budget.indexOf("['loans',");
 
   assert.ok(budgetTab >= 0 && subscriptionsTab > budgetTab && loansTab > subscriptionsTab);
   assert.match(budget, /renderSubscriptions/);
@@ -2370,6 +2372,7 @@ test('audited profile, birthday, navigation, and budget controls meet mobile tou
   const budget = read('../public/styles/budget.css');
   const contacts = read('../public/styles/contacts.css');
   const housekeeping = read('../public/styles/housekeeping.css');
+  const subTabs = read('../public/styles/sub-tabs.css');
 
   assert.match(settings, /\.settings-avatar-action\s*\{[\s\S]*width:\s*var\(--target-md\)[\s\S]*height:\s*var\(--target-md\)/);
   assert.match(
@@ -2378,7 +2381,10 @@ test('audited profile, birthday, navigation, and budget controls meet mobile tou
   );
   assert.match(settings, /\.settings-module-move\s*\{[\s\S]*width:\s*var\(--target-base\)[\s\S]*height:\s*var\(--target-base\)/);
   assert.match(birthdays, /\.birthday-action-btn\s*\{[\s\S]*width:\s*var\(--target-lg\)[\s\S]*height:\s*var\(--target-lg\)/);
-  assert.match(budget, /\.budget-tab\s*\{[\s\S]*min-height:\s*var\(--target-lg\)/);
+  // Budget-Tabs nutzen jetzt das geteilte .sub-tab (sub-tabs.css) statt eigener
+  // .budget-tab-Buttons — Touch-Target dort prüfen (44px, iOS-Minimum, wie alle
+  // Sub-Tab-Module: Belohnungen/Haushaltshilfe/Küche/Gesundheit).
+  assert.match(subTabs, /\.sub-tab\s*\{[\s\S]*height:\s*var\(--target-base\)/);
   assert.match(budget, /\.budget-nav__today\s*\{[\s\S]*min-height:\s*var\(--target-lg\)/);
   assert.match(
     contacts,
