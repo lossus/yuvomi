@@ -2,8 +2,8 @@
  * Modul: yuvomi-datepicker
  * Zweck: Styling für das gemeinsame Datum-/Zeit-Auswahl-Component.
  *        Feld = bestehendes .form-input (Tippen bleibt der schnelle Pfad),
- *        Icon-Trigger öffnet auf Desktop ein Glass-Popover im Top-Layer,
- *        auf Touch das native OS-Sheet.
+ *        Der Datums-Trigger öffnet auf allen Geräten ein Glass-Popover im
+ *        Top-Layer; nur der Zeit-Trigger nutzt auf Touch das native OS-Sheet.
  * Abhängigkeiten: tokens.css (alle Werte via Token), layout.css (.form-input)
  *
  * Akzent: --active-module-accent (vom Router pro Modul gesetzt) mit Fallback
@@ -108,8 +108,12 @@ yuvomi-datepicker[disabled] .ydp__trigger {
   position: fixed;
   inset: auto;
   margin: 0;
-  width: max-content;
-  max-width: min(92vw, 340px);
+  box-sizing: border-box;
+  width: min(340px, calc(100vw - 16px));
+  max-width: none;
+  max-height: calc(100dvh - 16px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: var(--space-3);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);

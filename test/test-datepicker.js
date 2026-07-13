@@ -53,12 +53,26 @@ test('Öffnet Popover über die native Popover-API (Top-Layer)', () => {
   assert(/setAttribute\('popover'/.test(comp), 'Muss popover-Attribut setzen');
   assert(/showPopover\(\)/.test(comp) && /hidePopover\(\)/.test(comp), 'show/hidePopover nötig');
 });
-test('Nutzt auf Touch das native OS-Sheet (showPicker)', () => {
+test('Öffnet den Microkalender auch auf Touch und nutzt native Sheets nur für Zeiten', () => {
   assert(/pointer:\s*coarse/.test(comp), 'Coarse-Pointer-Erkennung nötig');
   assert(/showPicker\(\)/.test(comp), 'showPicker() für native Sheets nötig');
+  assert(/sub\.kind\s*===\s*'time'\s*&&\s*coarse\s*&&\s*this\._openNative\(sub\)/.test(comp),
+    'Nur die Zeit-Auswahl darf auf Touch den nativen Picker öffnen');
+  assert(/this\._openPopover\(sub\)/.test(comp), 'Datums-Auswahl muss auf Touch zum gemeinsamen Popover durchfallen');
 });
 test('Kalenderraster ist Montag-first', () => {
   assert(/Montag\s*=\s*0/.test(comp) || /getDay\(\)\s*-\s*1/.test(comp), 'Montag-first-Offset nötig');
+});
+test('Kalenderraster unterstützt Arrow, Home, End und Monatswechsel per Tastatur', () => {
+  for (const key of ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'PageUp', 'PageDown']) {
+    assert(comp.includes(key), `${key}-Behandlung fehlt`);
+  }
+  assert(/e\.key\s*===\s*'Home'\s*\?\s*-weekday\s*:\s*6\s*-\s*weekday/.test(comp),
+    'Home/End müssen Montag-basiert zum Wochenanfang/-ende navigieren');
+});
+test('Tagesbuttons bleiben native Buttons für Enter und Touch-Klick', () => {
+  assert(/btn\.type\s*=\s*'button'/.test(comp), 'Tage müssen native Buttons sein');
+  assert(/btn\.addEventListener\('click'/.test(comp), 'Tage brauchen den gemeinsamen Klick-/Touch-Pfad');
 });
 test('Wochentags-/Monatsnamen kommen aus Intl (keine eigenen Locale-Keys)', () => {
   assert(/Intl\.DateTimeFormat/.test(comp), 'Intl muss für Labels genutzt werden');
@@ -94,6 +108,13 @@ test('CSS nutzt Tokens (--active-module-accent Fallback)', () => {
 });
 test('CSS respektiert prefers-reduced-motion', () => {
   assert(/@media \(prefers-reduced-motion: reduce\)/.test(css), 'Reduced-Motion-Alternative nötig');
+});
+test('Popover bleibt vollständig innerhalb kleiner Viewports', () => {
+  assert(/box-sizing:\s*border-box/.test(css), 'Viewport-Breite muss inklusive Padding gelten');
+  assert(/width:\s*min\(340px,\s*calc\(100vw\s*-\s*16px\)\)/.test(css), 'Breite muss am kleinen Viewport geklemmt sein');
+  assert(/max-height:\s*calc\(100dvh\s*-\s*16px\)/.test(css), 'Höhe muss am dynamischen Viewport geklemmt sein');
+  assert(/overflow-y:\s*auto/.test(css) && /overscroll-behavior:\s*contain/.test(css),
+    'Kleine Querformat-Viewports brauchen internes, begrenztes Scrollen');
 });
 test('CSS enthält keine Hex-Farben (nur Tokens)', () => {
   const hex = css.match(/#[0-9a-fA-F]{3,8}\b/g);

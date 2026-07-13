@@ -548,6 +548,21 @@ test('Meal-Create-Modal sendet optionalen Shopping-Import in genau einem Request
   assert(!/id="modal-shopping-import"[^>]*checked/.test(source), 'Import-Checkbox muss standardmäßig aus sein');
 });
 
+test('Recipe-Query öffnet dasselbe Meal-Modal mit heutigem ISO-Datum', () => {
+  const source = readFileSync(new URL('../public/pages/meals.js', import.meta.url), 'utf8');
+  assert(/new URLSearchParams\(window\.location\.search\)\.get\('recipe'\)/.test(source), 'Recipe-Query muss ausgewertet werden');
+  assert(/openMealModal\(\{ mode: 'create', date: today,[\s\S]*presetRecipeId: selectedRecipe\.id \}\)/.test(source),
+    'Recipe-Query muss das gemeinsame Create-Modal für heute öffnen');
+  assert(/<yuvomi-datepicker type="date" id="modal-date"/.test(source), 'Meal-Modal muss den gemeinsamen Datepicker verwenden');
+});
+
+test('Meal-Modal übernimmt den Datepicker-Wert als ISO-Datum in denselben POST', () => {
+  const source = readFileSync(new URL('../public/pages/meals.js', import.meta.url), 'utf8');
+  assert(/const dateRaw\s*=\s*overlay\.querySelector\('#modal-date'\)\.value/.test(source), 'Save muss den Component-Wert lesen');
+  assert(/const date\s*=\s*parseDateInput\(dateRaw\)/.test(source), 'Save muss den bestehenden ISO-/Locale-Parser nutzen');
+  assert(/api\.post\('\/meals',\s*\{[\s\S]*?date,[\s\S]*?meal_type/.test(source), 'Parsed date muss im Meal-POST landen');
+});
+
 test('Direktes Recipe-Drop und apply-plan aktivieren keinen stillen Shopping-Import', () => {
   const source = readFileSync(new URL('../public/pages/meals.js', import.meta.url), 'utf8');
   const addRecipeToSlot = source.match(/async function addRecipeToSlot[\s\S]*?\n}/)?.[0] ?? '';

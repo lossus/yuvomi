@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- The shared meal-planning microcalendar now remains available inside the recipe-to-meal dialog on tablets and phones, stays within small viewports, and supports Home/End keyboard navigation without replacing the calendar with the native date field.
+
 ### Added
 - Shopping lists can now be reordered with drag-and-drop or touch-friendly move actions. The first list is marked as the default and is used wherever Yuvomi needs an implicit shopping-list target.
 - Shopping items imported from meals now retain durable one-to-many provenance snapshots and show their source meal and date in the list.
