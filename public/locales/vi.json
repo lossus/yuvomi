@@ -348,7 +348,12 @@
         "moveListFirst": "Đưa lên đầu",
         "moveListUp": "Di chuyển lên",
         "moveListDown": "Di chuyển xuống",
-        "reorderError": "Không thể lưu thứ tự danh sách."
+        "reorderError": "Không thể lưu thứ tự danh sách.",
+        "sourceSingle": "From: {{source}} · {{date}}",
+        "sourceSingleNoDate": "From: {{source}}",
+        "sourcesMultiple": "{{count}} sources",
+        "sourceDeleted": "{{source}} (source deleted)",
+        "sourceUnknown": "Unknown source"
     },
     "meals": {
         "title": "Kế hoạch Bữa ăn",

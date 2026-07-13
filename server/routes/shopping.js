@@ -11,7 +11,12 @@ import { createLogger } from '../logger.js';
 import express from 'express';
 import * as db from '../db.js';
 import { str, oneOf, url, date, collectErrors, MAX_TITLE, MAX_SHORT, MAX_TEXT } from '../middleware/validate.js';
-import { aggregateMealIngredients } from '../services/shopping-import.js';
+import { shoppingItemsFromMealIngredients } from '../services/shopping-import.js';
+import {
+  attachShoppingItemSources,
+  attachShoppingItemSourcesOne,
+  insertShoppingItemSource,
+} from '../services/shopping-item-sources.js';
 import { SHOPPING_LIST_ORDER, createShoppingList } from '../services/shopping-lists.js';
 
 const log = createLogger('Shopping');
@@ -307,7 +312,7 @@ router.patch('/items/:itemId', (req, res) => {
     const updated = db.get()
       .prepare('SELECT * FROM shopping_items WHERE id = ?')
       .get(req.params.itemId);
-    res.json({ data: updated });
+    res.json({ data: attachShoppingItemSourcesOne(db.get(), updated) });
   } catch (err) {
     log.error('PATCH items/:id error:', err);
     res.status(500).json({ error: 'Internal server error.', code: 500 });
@@ -437,7 +442,7 @@ router.get('/:listId/items', (req, res) => {
         created_at ASC
     `).all(req.params.listId);
 
-    res.json({ data: items, list, categories });
+    res.json({ data: attachShoppingItemSources(db.get(), items), list, categories });
   } catch (err) {
     log.error('GET /:listId/items error:', err);
     res.status(500).json({ error: 'Internal server error.', code: 500 });
@@ -477,7 +482,7 @@ router.post('/:listId/items', (req, res) => {
     const item = db.get()
       .prepare('SELECT * FROM shopping_items WHERE id = ?')
       .get(result.lastInsertRowid);
-    res.status(201).json({ data: item });
+    res.status(201).json({ data: attachShoppingItemSourcesOne(db.get(), item) });
   } catch (err) {
     log.error('POST /:listId/items error:', err);
     res.status(500).json({ error: 'Internal server error.', code: 500 });
@@ -506,7 +511,15 @@ router.post('/:listId/import-meal-plan', (req, res) => {
     }
 
     const ingredients = db.get().prepare(`
-      SELECT mi.id, mi.meal_id, mi.name, mi.quantity, mi.category
+      SELECT
+        mi.id,
+        mi.meal_id,
+        mi.name,
+        mi.quantity,
+        mi.category,
+        m.title AS source_label,
+        m.date AS meal_date_snapshot,
+        m.recipe_id
       FROM meal_ingredients mi
       JOIN meals m ON m.id = mi.meal_id
       WHERE m.date BETWEEN ? AND ?
@@ -518,7 +531,7 @@ router.post('/:listId/import-meal-plan', (req, res) => {
       return res.json({ data: { transferred: 0, added: 0 } });
     }
 
-    const aggregated = aggregateMealIngredients(ingredients);
+    const importItems = shoppingItemsFromMealIngredients(ingredients);
     const added = db.get().transaction(() => {
       const insertItem = db.get().prepare(`
         INSERT INTO shopping_items (list_id, name, quantity, category, added_from_meal)
@@ -526,13 +539,14 @@ router.post('/:listId/import-meal-plan', (req, res) => {
       `);
       const markDone = db.get().prepare('UPDATE meal_ingredients SET on_shopping_list = 1 WHERE id = ?');
 
-      for (const item of aggregated) {
-        insertItem.run(req.params.listId, item.name, item.quantity, item.category, item.added_from_meal);
+      for (const item of importItems) {
+        const result = insertItem.run(req.params.listId, item.name, item.quantity, item.category, item.added_from_meal);
+        insertShoppingItemSource(db.get(), result.lastInsertRowid, item.source);
       }
       for (const ingredient of ingredients) {
         markDone.run(ingredient.id);
       }
-      return aggregated.length;
+      return importItems.length;
     })();
 
     res.json({ data: { transferred: ingredients.length, added } });

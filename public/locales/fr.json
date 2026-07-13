@@ -348,7 +348,12 @@
         "moveListFirst": "Placer en premier",
         "moveListUp": "Monter",
         "moveListDown": "Descendre",
-        "reorderError": "L’ordre des listes n’a pas pu être enregistré."
+        "reorderError": "L’ordre des listes n’a pas pu être enregistré.",
+        "sourceSingle": "From: {{source}} · {{date}}",
+        "sourceSingleNoDate": "From: {{source}}",
+        "sourcesMultiple": "{{count}} sources",
+        "sourceDeleted": "{{source}} (source deleted)",
+        "sourceUnknown": "Unknown source"
     },
     "meals": {
         "title": "Plan de repas",

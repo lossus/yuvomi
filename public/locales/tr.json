@@ -348,7 +348,12 @@
         "moveListFirst": "İlk sıraya taşı",
         "moveListUp": "Yukarı taşı",
         "moveListDown": "Aşağı taşı",
-        "reorderError": "Liste sırası kaydedilemedi."
+        "reorderError": "Liste sırası kaydedilemedi.",
+        "sourceSingle": "From: {{source}} · {{date}}",
+        "sourceSingleNoDate": "From: {{source}}",
+        "sourcesMultiple": "{{count}} sources",
+        "sourceDeleted": "{{source}} (source deleted)",
+        "sourceUnknown": "Unknown source"
     },
     "meals": {
         "title": "Yemek Planı",

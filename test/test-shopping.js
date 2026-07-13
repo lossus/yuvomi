@@ -11,7 +11,8 @@ import path from 'node:path';
 import express from 'express';
 import { MIGRATIONS_SQL } from '../server/db-schema-test.js';
 import { url } from '../server/middleware/validate.js';
-import { aggregateMealIngredients } from '../server/services/shopping-import.js';
+import { shoppingItemsFromMealIngredients } from '../server/services/shopping-import.js';
+import { attachShoppingItemSources } from '../server/services/shopping-item-sources.js';
 import { defaultShoppingList } from '../server/services/shopping-lists.js';
 
 let passed = 0;
@@ -58,7 +59,9 @@ db.exec(`CREATE TABLE IF NOT EXISTS schema_migrations (
   applied_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
 );`);
 db.exec(MIGRATIONS_SQL[1]);
+db.exec(MIGRATIONS_SQL[13]);
 db.exec(MIGRATIONS_SQL[86]);
+db.exec(MIGRATIONS_SQL[87]);
 db.exec(MIGRATIONS_SQL[44]); // FTS5 search_index + Item-Trigger (indiziert notes)
 
 const u1 = db.prepare(`INSERT INTO users (username, display_name, password_hash, role)
@@ -70,7 +73,7 @@ console.log('\n[Shopping-Test] Listen, Artikel, Sortierung\n');
 test('Einkaufslisten-Zeilen toggeln nur außerhalb interaktiver Controls', () => {
   const source = readFileSync(new URL('../public/pages/shopping.js', import.meta.url), 'utf8');
   assert(/function shouldIgnoreShoppingRowToggle/.test(source), 'Row-Toggle-Guard muss als Helper existieren');
-  assert(/button, a, input, select, textarea, \[data-no-row-toggle\]/.test(source), 'Interaktive Controls müssen ignoriert werden');
+  assert(/button, a, input, select, textarea, details, summary, \[data-no-row-toggle\]/.test(source), 'Interaktive Controls müssen ignoriert werden');
   assert(/closest\('\.shopping-item'\)/.test(source), 'Klicks müssen auf Einkaufszeilen begrenzt sein');
   assert(/data-item-id/.test(source), 'Zeilen-Toggle muss die Artikel-ID aus data-item-id lesen');
 });
@@ -297,43 +300,48 @@ test('Autocomplete - kein Match gibt leeres Array', () => {
   assert(results.length === 0, 'Kein Match erwartet');
 });
 
-test('Essensplan-Import aggregiert gleiche Zutaten mit numerischen Mengen', () => {
-  const result = aggregateMealIngredients([
-    { id: 1, meal_id: 10, name: 'Tomaten', quantity: '2', category: 'Obst & Gemüse' },
-    { id: 2, meal_id: 11, name: 'Tomaten', quantity: '3', category: 'Obst & Gemüse' },
+test('Essensplan-Import bewahrt gleiche Freitext-Zutaten als getrennte Positionen mit Snapshot', () => {
+  const result = shoppingItemsFromMealIngredients([
+    { id: 1, meal_id: 10, name: 'Tomaten', quantity: '2', category: 'Obst & Gemüse', source_label: 'Pasta', meal_date_snapshot: '2026-07-13', recipe_id: 4 },
+    { id: 2, meal_id: 11, name: 'Tomaten', quantity: '3', category: 'Obst & Gemüse', source_label: 'Salat', meal_date_snapshot: '2026-07-14', recipe_id: null },
   ]);
-  assert(result.length === 1, `Erwartet 1 aggregierten Eintrag, erhalten ${result.length}`);
-  assert(result[0].name === 'Tomaten', 'Name muss erhalten bleiben');
-  assert(result[0].quantity === '5', `Erwartet summierte Menge 5, erhalten ${result[0].quantity}`);
-  assert(result[0].added_from_meal === null, 'Bei mehreren Mahlzeiten darf kein einzelner meal-Verweis gesetzt werden');
+  assert(result.length === 2, `Erwartet 2 getrennte Einträge, erhalten ${result.length}`);
+  assert(result[0].quantity === '2' && result[1].quantity === '3', 'Freitextmengen müssen unverändert bleiben');
+  assert(result[0].source.source_label === 'Pasta', 'Quellenlabel muss erhalten bleiben');
+  assert(result[0].source.quantity_snapshot === '2', 'Mengen-Snapshot muss erhalten bleiben');
+  assert(result[0].added_from_meal === 10, 'Legacy-Meal-Verweis muss kompatibel bleiben');
 });
 
-test('Essensplan-Import aggregiert gleiche Zutaten mit Einheiten', () => {
-  const result = aggregateMealIngredients([
-    { id: 1, meal_id: 10, name: 'Reis', quantity: '100 g', category: 'Sonstiges' },
-    { id: 2, meal_id: 11, name: 'Reis', quantity: '50 g', category: 'Sonstiges' },
-  ]);
-  assert(result.length === 1, `Erwartet 1 aggregierten Eintrag, erhalten ${result.length}`);
-  assert(result[0].quantity === '150 g', `Erwartet summierte Menge 150 g, erhalten ${result[0].quantity}`);
+test('Quellen-Serializer liefert mehrere Quellen und für manuelle Artikel ein leeres Array', () => {
+  const manual = db.prepare("INSERT INTO shopping_items (list_id, name) VALUES (?, 'Manuell')").run(listId).lastInsertRowid;
+  const sourced = db.prepare("INSERT INTO shopping_items (list_id, name) VALUES (?, 'Tomaten')").run(listId).lastInsertRowid;
+  db.prepare(`INSERT INTO shopping_item_sources
+    (shopping_item_id, source_type, source_label, meal_date_snapshot)
+    VALUES (?, 'meal', 'Pasta', '2026-07-13'), (?, 'recipe', 'Tomatensalat', NULL)`)
+    .run(sourced, sourced);
+  const items = db.prepare('SELECT * FROM shopping_items WHERE id IN (?, ?) ORDER BY id').all(manual, sourced);
+  const serialized = attachShoppingItemSources(db, items);
+  assert(serialized[0].sources.length === 0, 'Manueller Artikel braucht sources: []');
+  assert(serialized[1].sources.length === 2, 'Beide Quellen müssen serialisiert werden');
 });
 
-test('Essensplan-Import summiert auch Mengen mit gleicher Einheit', () => {
-  const result = aggregateMealIngredients([
-    { id: 1, meal_id: 10, name: 'Eier', quantity: '1 pack', category: 'Milchprodukte' },
-    { id: 2, meal_id: 11, name: 'Eier', quantity: '1 pack', category: 'Milchprodukte' },
-    { id: 3, meal_id: 12, name: 'Eier', quantity: '2 pack', category: 'Milchprodukte' },
-  ]);
-  assert(result.length === 1, `Erwartet 1 aggregierten Eintrag, erhalten ${result.length}`);
-  assert(result[0].quantity === '4 pack', `Erwartet summierte Menge 4 pack, erhalten ${result[0].quantity}`);
-});
-
-test('Essensplan-Import zählt rein textuelle Mengen sichtbar zusammen', () => {
-  const result = aggregateMealIngredients([
-    { id: 1, meal_id: 10, name: 'Salz', quantity: 'nach Geschmack', category: 'Sonstiges' },
-    { id: 2, meal_id: 11, name: 'Salz', quantity: 'nach Geschmack', category: 'Sonstiges' },
-  ]);
-  assert(result.length === 1, `Erwartet 1 aggregierten Eintrag, erhalten ${result.length}`);
-  assert(result[0].quantity === '2 x nach Geschmack', `Erwartet 2 x nach Geschmack, erhalten ${result[0].quantity}`);
+test('Source-Insertfehler rollt Item und Transfer-Flag vollständig zurück', () => {
+  const meal = db.prepare("INSERT INTO meals (date, meal_type, title, created_by) VALUES ('2026-07-15', 'dinner', 'Rollback', ?)").run(uid).lastInsertRowid;
+  const ingredient = db.prepare("INSERT INTO meal_ingredients (meal_id, name) VALUES (?, 'Test')").run(meal).lastInsertRowid;
+  let failedAsExpected = false;
+  try {
+    db.exec('BEGIN');
+    const item = db.prepare("INSERT INTO shopping_items (list_id, name, added_from_meal) VALUES (?, 'Test', ?)").run(listId, meal).lastInsertRowid;
+    db.prepare("INSERT INTO shopping_item_sources (shopping_item_id, source_type, source_label) VALUES (?, 'invalid', 'Rollback')").run(item);
+    db.prepare('UPDATE meal_ingredients SET on_shopping_list = 1 WHERE id = ?').run(ingredient);
+    db.exec('COMMIT');
+  } catch {
+    failedAsExpected = true;
+    db.exec('ROLLBACK');
+  }
+  assert(failedAsExpected, 'Ungültiger Source-Typ muss scheitern');
+  assert(!db.prepare("SELECT id FROM shopping_items WHERE name = 'Test' AND added_from_meal = ?").get(meal), 'Item darf nicht verbleiben');
+  assert(db.prepare('SELECT on_shopping_list FROM meal_ingredients WHERE id = ?').get(ingredient).on_shopping_list === 0, 'Flag darf nicht gesetzt bleiben');
 });
 
 // --------------------------------------------------------
@@ -501,9 +509,18 @@ test('shopping-Route validiert und persistiert notes/url', () => {
 test('shopping-Route bietet einen Datumsbereich-Import aus dem Essensplan an', () => {
   const source = readFileSync(new URL('../server/routes/shopping.js', import.meta.url), 'utf8');
   assert(/router\.post\('\/:listId\/import-meal-plan'/.test(source), 'Shopping-Route muss eine Import-Route für den Essensplan bereitstellen');
-  assert(/aggregateMealIngredients/.test(source), 'Import-Route muss aggregierte Zutaten verwenden');
+  assert(/shoppingItemsFromMealIngredients/.test(source), 'Import-Route muss konservative Importpositionen verwenden');
+  assert(/insertShoppingItemSource/.test(source), 'Import-Route muss Herkunft atomar speichern');
   assert(/m\.date BETWEEN \? AND \?/.test(source), 'Import-Route muss Mahlzeiten nach Datumsbereich filtern');
   assert(/mi\.on_shopping_list = 0/.test(source), 'Bereits übertragene Zutaten dürfen nicht erneut importiert werden');
+});
+
+test('Shopping-UI rendert einzelne und mehrere Quellen zugänglich', () => {
+  const source = readFileSync(new URL('../public/pages/shopping.js', import.meta.url), 'utf8');
+  assert(/function renderItemSources/.test(source), 'Quellen-Renderer fehlt');
+  assert(/<details class="item-sources item-sources--multiple">/.test(source), 'Mehrere Quellen benötigen einen zugänglichen Aufklapper');
+  assert(/shopping\.sourcesMultiple/.test(source), 'Mehrquellen-Label muss übersetzt sein');
+  assert(/formatDate\(source\.meal_date_snapshot\)/.test(source), 'Snapshot-Datum muss das gemeinsame Datumsformat nutzen');
 });
 
 test('Shopping-UI bietet Drag-and-drop, Touch-Aktionen und Default-Kennzeichnung', () => {
@@ -523,6 +540,7 @@ process.env.DB_PATH = path.join(os.tmpdir(), `yuvomi-shopping-order-${process.pi
 process.env.SESSION_SECRET = 'shopping-order-test-secret-32bytes-long';
 const routeDb = await import('../server/db.js');
 const { default: shoppingRouter } = await import('../server/routes/shopping.js');
+const { default: mealsRouter } = await import('../server/routes/meals.js');
 const routeDatabase = routeDb.get();
 routeDatabase.prepare("INSERT INTO users (username, display_name, password_hash, role) VALUES ('shopping-owner', 'Owner', 'x', 'admin')").run();
 
@@ -535,9 +553,11 @@ app.use((req, _res, next) => {
   next();
 });
 app.use('/shopping', shoppingRouter);
+app.use('/meals', mealsRouter);
 const server = app.listen(0, '127.0.0.1');
 await new Promise((resolve) => server.once('listening', resolve));
-const base = `http://127.0.0.1:${server.address().port}/shopping`;
+const apiBase = `http://127.0.0.1:${server.address().port}`;
+const base = `${apiBase}/shopping`;
 const jget = async () => {
   const response = await fetch(base);
   return { status: response.status, body: await response.json() };
@@ -561,6 +581,67 @@ try {
     }
     const orders = routeDatabase.prepare('SELECT sort_order FROM shopping_lists ORDER BY id').all().map((row) => row.sort_order);
     assert(JSON.stringify(orders) === JSON.stringify([0, 1, 2]), `sort_order: ${JSON.stringify(orders)}`);
+  });
+
+  await asyncTest('Manuelle Item-Antwort enthält sources: []', async () => {
+    const response = await fetch(`${base}/${createdIds[0]}/items`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: 'Manual item' }),
+    });
+    const body = await response.json();
+    assert(response.status === 201, `POST-Status ${response.status}`);
+    assert(Array.isArray(body.data.sources) && body.data.sources.length === 0, 'sources: [] fehlt');
+  });
+
+  await asyncTest('Einzel- und Wochen-Meal-Import erzeugen Herkunftszeilen', async () => {
+    const singleMeal = routeDatabase.prepare("INSERT INTO meals (date, meal_type, title, created_by) VALUES ('2026-07-16', 'dinner', 'Single source', 1)").run().lastInsertRowid;
+    routeDatabase.prepare("INSERT INTO meal_ingredients (meal_id, name, quantity) VALUES (?, 'Single ingredient', 'one')").run(singleMeal);
+    const singleResponse = await fetch(`${apiBase}/meals/${singleMeal}/to-shopping-list`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ listId: createdIds[0] }),
+    });
+    assert(singleResponse.status === 200, `Single-Status ${singleResponse.status}`);
+
+    const weekMeal = routeDatabase.prepare("INSERT INTO meals (date, meal_type, title, created_by) VALUES ('2026-07-20', 'lunch', 'Week source', 1)").run().lastInsertRowid;
+    routeDatabase.prepare("INSERT INTO meal_ingredients (meal_id, name, quantity) VALUES (?, 'Week ingredient', 'some')").run(weekMeal);
+    const weekResponse = await fetch(`${apiBase}/meals/week-to-shopping-list`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ listId: createdIds[0], week: '2026-07-20' }),
+    });
+    assert(weekResponse.status === 200, `Week-Status ${weekResponse.status}`);
+
+    const sources = routeDatabase.prepare("SELECT source_label, quantity_snapshot FROM shopping_item_sources WHERE source_label IN ('Single source', 'Week source') ORDER BY source_label").all();
+    assert(sources.length === 2, `Erwartet 2 Quellen, erhalten ${sources.length}`);
+    assert(sources.some((source) => source.source_label === 'Single source' && source.quantity_snapshot === 'one'), 'Einzel-Snapshot fehlt');
+    assert(sources.some((source) => source.source_label === 'Week source' && source.quantity_snapshot === 'some'), 'Wochen-Snapshot fehlt');
+  });
+
+  await asyncTest('Bereichsimport hält gleiche Mengen getrennt und liefert löschfeste Quellen-Snapshots', async () => {
+    const recipeId = routeDatabase.prepare("INSERT INTO recipes (title, created_by) VALUES ('Tomato recipe', 1)").run().lastInsertRowid;
+    const mealId = routeDatabase.prepare("INSERT INTO meals (date, meal_type, title, recipe_id, created_by) VALUES ('2026-07-13', 'dinner', 'Tomato dinner', ?, 1)").run(recipeId).lastInsertRowid;
+    routeDatabase.prepare("INSERT INTO meal_ingredients (meal_id, name, quantity) VALUES (?, 'Tomatoes', '2'), (?, 'Tomatoes', '3')").run(mealId, mealId);
+
+    const imported = await fetch(`${base}/${createdIds[0]}/import-meal-plan`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ from: '2026-07-13', to: '2026-07-13' }),
+    });
+    const importBody = await imported.json();
+    assert(imported.status === 200, `Import-Status ${imported.status}`);
+    assert(importBody.data.transferred === 2 && importBody.data.added === 2, `Import-Counts ${JSON.stringify(importBody.data)}`);
+
+    routeDatabase.prepare('DELETE FROM meals WHERE id = ?').run(mealId);
+    routeDatabase.prepare('DELETE FROM recipes WHERE id = ?').run(recipeId);
+    const response = await fetch(`${base}/${createdIds[0]}/items`);
+    const body = await response.json();
+    const tomatoes = body.data.filter((item) => item.name === 'Tomatoes');
+    assert(tomatoes.length === 2, 'Freitextmengen dürfen nicht aggregiert werden');
+    assert(tomatoes.every((item) => item.sources.length === 1), 'Jedes Item braucht genau eine Quelle');
+    assert(tomatoes.every((item) => item.sources[0].meal_id === null && item.sources[0].recipe_id === null), 'Gelöschte FKs müssen null sein');
+    assert(tomatoes.every((item) => item.sources[0].source_label === 'Tomato dinner' && item.sources[0].meal_date_snapshot === '2026-07-13'), 'Snapshots müssen erhalten bleiben');
   });
 
   await asyncTest('GET liefert Einkaufslisten nach sort_order', async () => {

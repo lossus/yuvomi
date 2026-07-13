@@ -355,7 +355,12 @@
         "moveListFirst": "انتقال به اول",
         "moveListUp": "انتقال به بالا",
         "moveListDown": "انتقال به پایین",
-        "reorderError": "ترتیب فهرست‌ها ذخیره نشد."
+        "reorderError": "ترتیب فهرست‌ها ذخیره نشد.",
+        "sourceSingle": "From: {{source}} · {{date}}",
+        "sourceSingleNoDate": "From: {{source}}",
+        "sourcesMultiple": "{{count}} sources",
+        "sourceDeleted": "{{source}} (source deleted)",
+        "sourceUnknown": "Unknown source"
     },
     "meals": {
         "title": "برنامه غذایی",

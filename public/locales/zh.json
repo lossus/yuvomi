@@ -348,7 +348,12 @@
         "moveListFirst": "移到最前",
         "moveListUp": "上移",
         "moveListDown": "下移",
-        "reorderError": "无法保存清单顺序。"
+        "reorderError": "无法保存清单顺序。",
+        "sourceSingle": "From: {{source}} · {{date}}",
+        "sourceSingleNoDate": "From: {{source}}",
+        "sourcesMultiple": "{{count}} sources",
+        "sourceDeleted": "{{source}} (source deleted)",
+        "sourceUnknown": "Unknown source"
     },
     "meals": {
         "title": "饮食计划",

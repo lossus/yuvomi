@@ -36,7 +36,7 @@ Begründete Anpassung der vorgeschlagenen Reihenfolge: KWF-003 kommt vor dem dir
 |---:|---|---|---|---|
 | 1 | KWF-001 | Repository-, Architektur- und Planungsbaseline | mittel | abgeschlossen |
 | 2 | KWF-002 | persistente Reihenfolge und Default-Liste | mittel | abgeschlossen und in `main` |
-| 3 | KWF-003 | mehrquellenfähige Einkaufsartikel-Herkunft | groß | geplant |
+| 3 | KWF-003 | mehrquellenfähige Einkaufsartikel-Herkunft | groß | abgeschlossen |
 | 4 | KWF-004 | atomarer Rezept→Meal→Shopping-Flow | mittel | geplant |
 | 5 | KWF-005 | bestehender Microkalender verifiziert/gezielt ergänzt | klein | größtenteils vorhanden |
 | 6 | KWF-006 | rückwärtskompatible strukturierte Mengenbasis | groß | geplant |
@@ -127,7 +127,7 @@ Begründete Anpassung der vorgeschlagenen Reihenfolge: KWF-003 kommt vor dem dir
   - Transaktionen verhindern verwaiste Sources oder halb gesetzte Flags.
 - Branch: `feature/shopping-item-sources`.
 - Komplexität: groß.
-- Empfohlene Reihenfolge: 3.
+- Empfohlene Reihenfolge: 3; **abgeschlossen auf `feature/shopping-item-sources`**.
 
 ## KWF-004 — Zutaten direkt beim Einplanen eines Rezeptes übernehmen
 
@@ -358,10 +358,11 @@ Begründete Anpassung der vorgeschlagenen Reihenfolge: KWF-003 kommt vor dem dir
 
 ## Empfohlener nächster Schritt
 
-1. KWF-003 auf `feature/shopping-item-sources` vom aktualisierten Fork-`main` beginnen.
-2. Vor Implementierung ADR-KITCHEN-002 und das konkrete Migrations-/Snapshot-Modell reviewen.
+1. KWF-003 ist extern akzeptiert und ohne Pull Request in den eigenen Fork-`main` integriert; `upstream` bleibt unverändert.
+2. Erst in einer neuen, separat reservierten Session KWF-004 auf `feature/recipe-meal-shopping-import` beginnen.
+3. Für KWF-004 die bestehende Migration 87 und den gemeinsamen Source-Service wiederverwenden; keine zweite Herkunftsstruktur anlegen.
 
-KWF-003 ist der erste **neue** Implementierungstask. Das Herkunftsmodell muss vor dem atomaren Rezeptimport stehen, damit keine weitere Übergangsgeneration von Einkaufsartikeln ohne belastbare Quellen entsteht.
+KWF-003 ist implementiert, lokal verifiziert und extern akzeptiert. Der atomare Rezeptimport aus KWF-004 kann damit neue Einkaufsartikel direkt mit belastbarer Herkunft erzeugen.
 
 ## Review-Gates pro Task
 

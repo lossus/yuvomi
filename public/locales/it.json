@@ -348,7 +348,12 @@
         "moveListFirst": "Sposta all’inizio",
         "moveListUp": "Sposta su",
         "moveListDown": "Sposta giù",
-        "reorderError": "Impossibile salvare l’ordine delle liste."
+        "reorderError": "Impossibile salvare l’ordine delle liste.",
+        "sourceSingle": "From: {{source}} · {{date}}",
+        "sourceSingleNoDate": "From: {{source}}",
+        "sourcesMultiple": "{{count}} sources",
+        "sourceDeleted": "{{source}} (source deleted)",
+        "sourceUnknown": "Unknown source"
     },
     "meals": {
         "title": "Piano pasti",

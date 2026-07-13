@@ -348,7 +348,12 @@
         "moveListFirst": "Naar eerste plaats",
         "moveListUp": "Omhoog",
         "moveListDown": "Omlaag",
-        "reorderError": "De lijstvolgorde kon niet worden opgeslagen."
+        "reorderError": "De lijstvolgorde kon niet worden opgeslagen.",
+        "sourceSingle": "From: {{source}} · {{date}}",
+        "sourceSingleNoDate": "From: {{source}}",
+        "sourcesMultiple": "{{count}} sources",
+        "sourceDeleted": "{{source}} (source deleted)",
+        "sourceUnknown": "Unknown source"
     },
     "meals": {
         "title": "Maaltijdplan",

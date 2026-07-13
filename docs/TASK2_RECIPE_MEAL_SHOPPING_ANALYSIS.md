@@ -9,8 +9,8 @@ This document prepares the follow-up feature. It does not implement it.
 - `public/styles/meals.css`: would own the checkbox/list-picker layout. No new UI dependency is needed.
 - `public/components/yuvomi-datepicker.js`: existing micro-calendar implementation to reuse. A native or free-text date input should not be introduced.
 - `server/routes/meals.js`: `POST /api/v1/meals` already validates the recipe, creates the optional recurrence template, the meal, and its ingredients in one transaction. The separate `POST /api/v1/meals/:id/to-shopping-list` and `POST /api/v1/meals/week-to-shopping-list` routes demonstrate the current import behavior.
-- `server/routes/shopping.js`: `GET /api/v1/shopping` supplies the ordered target lists; `POST /api/v1/shopping/:listId/import-meal-plan` demonstrates date-range aggregation.
-- `server/services/shopping-import.js`: `aggregateMealIngredients` parses only a numeric prefix and groups equal ingredient name/category plus the exact normalized unit. It intentionally preserves non-numeric quantities as text.
+- `server/routes/shopping.js`: `GET /api/v1/shopping` supplies the ordered target lists; `POST /api/v1/shopping/:listId/import-meal-plan` demonstrates the provenance-aware, one-item-per-ingredient import.
+- `server/services/shopping-import.js` keeps each free-text ingredient separate until the structured quantity task can determine compatibility without guessing. `server/services/shopping-item-sources.js` is the canonical insert/serialization helper for provenance rows.
 - `server/services/shopping-lists.js`: `defaultShoppingList` is the canonical backend fallback for the list with the lowest `sort_order`.
 - `server/db.js`, `server/db-schema-test.js`, `docs/SPEC.md`, `server/openapi.js`, all locale JSON files, `test/test-meals.js`, and `test/test-shopping.js` would also be affected.
 
@@ -44,23 +44,23 @@ The recipe action continues to open the meal creation flow with the selected rec
 
 The existing `shopping_items.added_from_meal` column can represent only one meal. It loses the recipe/ingredient-level origin and becomes `NULL` for aggregates spanning multiple meals. It must remain for backward compatibility, but it is not sufficient as the canonical provenance model.
 
-A regular migration should add a normalized `shopping_item_sources` table, conceptually:
+A regular migration (v87, implemented by KWF-003) adds a normalized `shopping_item_sources` table:
 
 ```sql
 CREATE TABLE shopping_item_sources (
   id                   INTEGER PRIMARY KEY AUTOINCREMENT,
   shopping_item_id     INTEGER NOT NULL REFERENCES shopping_items(id) ON DELETE CASCADE,
+  source_type          TEXT NOT NULL CHECK(source_type IN ('meal', 'recipe')),
   meal_id              INTEGER REFERENCES meals(id) ON DELETE SET NULL,
   recipe_id            INTEGER REFERENCES recipes(id) ON DELETE SET NULL,
-  meal_ingredient_id   INTEGER REFERENCES meal_ingredients(id) ON DELETE SET NULL,
-  recipe_ingredient_id INTEGER REFERENCES recipe_ingredients(id) ON DELETE SET NULL,
-  source_title         TEXT NOT NULL,
-  source_quantity      TEXT,
+  source_label         TEXT NOT NULL,
+  meal_date_snapshot   TEXT,
+  quantity_snapshot    TEXT,
   created_at           TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
 );
 ```
 
-Indexes are required for `shopping_item_id`, `meal_id`, and `recipe_id`; a uniqueness rule on `(shopping_item_id, meal_ingredient_id)` prevents the same ingredient source from being linked twice when `meal_ingredient_id` is present. `source_title` and `source_quantity` are snapshots so the shopping UI can still explain an origin after a meal or recipe is renamed or deleted. For a recipe-planned meal, each source row links the shopping item to the new meal and its recipe. Existing `added_from_meal` should continue to be filled when exactly one meal is the source during the compatibility period.
+Indexes cover `shopping_item_id`, `meal_id`, and `recipe_id`. `source_label`, `meal_date_snapshot`, and `quantity_snapshot` let the shopping UI explain an origin after a meal or recipe is renamed or deleted. For a recipe-planned meal, each source row links the shopping item to the concrete meal and its optional recipe. Existing `added_from_meal` continues to be filled for backward compatibility.
 
 ## Transaction boundary
 
@@ -77,9 +77,7 @@ Any failure rolls back the meal and the import together. For a recurring meal, o
 
 ## Duplicate handling and quantity boundary
 
-The current direct meal transfer creates one shopping item per open meal ingredient. The date-range importer aggregates within that import batch via `aggregateMealIngredients`; it does not merge against pre-existing items in the target list.
-
-The safe follow-up policy is to aggregate only within the current atomic import and create provenance rows for every source ingredient. It should not silently merge into an arbitrary existing shopping item until product identity, units, and provenance rules are explicitly defined. If later merging is introduced, it must preserve all source rows rather than overwrite a single `added_from_meal` value.
+The direct meal, week, and date-range transfers now create one shopping item per open meal ingredient together with one provenance row in the same transaction. They do not merge against pre-existing items or combine free-text quantities. If later structured aggregation is introduced, it must preserve all source rows rather than overwrite a single `added_from_meal` value.
 
 Quantities remain free text. The existing parser can add numeric prefixes only when the remaining unit text matches exactly (for example `1 kg` plus `0.5 kg`). It cannot safely equate `g` and `kg`, interpret fractions, packages, or recipe prose. Task 2 must preserve the raw quantity and must not invent conversions.
 
@@ -95,7 +93,7 @@ Provenance rows provide auditability but are not a pantry ledger. A future pantr
 - unknown target list and unknown recipe are rejected before any write;
 - forced shopping/provenance failure rolls back the meal, recurrence data, ingredients, items, and flags;
 - repeated submission/import cannot link the same meal ingredient twice;
-- aggregate imports retain one provenance row per source ingredient, including multiple meals/recipes;
+- range imports retain one provenance row per source ingredient, including multiple meals/recipes, without free-text aggregation;
 - existing manual meal and week transfer routes use the same provenance behavior;
 - free-text and incompatible-unit quantities are preserved without conversion;
 - recurring creation imports only the concrete occurrence;

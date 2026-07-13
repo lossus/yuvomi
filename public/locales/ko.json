@@ -355,7 +355,12 @@
         "moveListFirst": "맨 앞으로 이동",
         "moveListUp": "위로 이동",
         "moveListDown": "아래로 이동",
-        "reorderError": "목록 순서를 저장하지 못했습니다."
+        "reorderError": "목록 순서를 저장하지 못했습니다.",
+        "sourceSingle": "From: {{source}} · {{date}}",
+        "sourceSingleNoDate": "From: {{source}}",
+        "sourcesMultiple": "{{count}} sources",
+        "sourceDeleted": "{{source}} (source deleted)",
+        "sourceUnknown": "Unknown source"
     },
     "meals": {
         "title": "식단표",

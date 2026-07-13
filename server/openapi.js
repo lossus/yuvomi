@@ -654,11 +654,14 @@ function buildPaths() {
       delete: op({ summary: 'Delete shopping list', tag: 'Shopping', params: [idParam('listId', 'List ID')], stateChanging: true }),
     },
     '/api/v1/shopping/{listId}/items': {
-      get: op({ summary: 'List items in shopping list', tag: 'Shopping', params: [idParam('listId', 'List ID')] }),
+      get: op({ summary: 'List items in shopping list', tag: 'Shopping', description: 'Each item includes a backward-compatible sources array with durable meal/recipe provenance snapshots.', params: [idParam('listId', 'List ID')] }),
       post: op({ summary: 'Add item to shopping list', tag: 'Shopping', params: [idParam('listId', 'List ID')], stateChanging: true, requestBody: jsonBody(null) }),
     },
     '/api/v1/shopping/{listId}/items/checked': {
       delete: op({ summary: 'Delete checked shopping items', tag: 'Shopping', params: [idParam('listId', 'List ID')], stateChanging: true }),
+    },
+    '/api/v1/shopping/{listId}/import-meal-plan': {
+      post: op({ summary: 'Import a meal-plan date range into a shopping list', tag: 'Shopping', description: 'Creates one item per free-text ingredient together with a durable provenance snapshot in the same transaction.', params: [idParam('listId', 'List ID')], stateChanging: true, requestBody: jsonBody(null) }),
     },
     '/api/v1/meals': {
       get: op({ summary: 'List meal plan entries', tag: 'Meals' }),
@@ -677,10 +680,10 @@ function buildPaths() {
       delete: op({ summary: 'Delete meal ingredient', tag: 'Meals', params: [idParam('ingId', 'Ingredient ID')], stateChanging: true }),
     },
     '/api/v1/meals/{id}/to-shopping-list': {
-      post: op({ summary: 'Transfer meal ingredients to shopping list', tag: 'Meals', params: [idParam()], stateChanging: true, requestBody: jsonBody(null) }),
+      post: op({ summary: 'Transfer meal ingredients to shopping list', tag: 'Meals', description: 'Creates each shopping item and its provenance snapshot atomically.', params: [idParam()], stateChanging: true, requestBody: jsonBody(null) }),
     },
     '/api/v1/meals/week-to-shopping-list': {
-      post: op({ summary: 'Transfer weekly meal ingredients to shopping list', tag: 'Meals', stateChanging: true, requestBody: jsonBody(null) }),
+      post: op({ summary: 'Transfer weekly meal ingredients to shopping list', tag: 'Meals', description: 'Creates each shopping item and its provenance snapshot atomically.', stateChanging: true, requestBody: jsonBody(null) }),
     },
     '/api/v1/recipes': {
       get: op({ summary: 'List recipes', tag: 'Recipes' }),

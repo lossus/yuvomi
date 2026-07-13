@@ -355,7 +355,12 @@
         "moveListFirst": "Przenieś na początek",
         "moveListUp": "Przenieś wyżej",
         "moveListDown": "Przenieś niżej",
-        "reorderError": "Nie udało się zapisać kolejności list."
+        "reorderError": "Nie udało się zapisać kolejności list.",
+        "sourceSingle": "From: {{source}} · {{date}}",
+        "sourceSingleNoDate": "From: {{source}}",
+        "sourcesMultiple": "{{count}} sources",
+        "sourceDeleted": "{{source}} (source deleted)",
+        "sourceUnknown": "Unknown source"
     },
     "meals": {
         "title": "Plan posiłków",

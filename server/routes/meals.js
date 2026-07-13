@@ -9,6 +9,7 @@ import express from 'express';
 import * as db from '../db.js';
 import { str, oneOf, date, num, collectErrors, MAX_TITLE, MAX_TEXT, MAX_SHORT, DATE_RE } from '../middleware/validate.js';
 import { addDays, mealWeekday, datesForTemplateInRange } from '../services/meal-recurrence.js';
+import { insertShoppingItemSource } from '../services/shopping-item-sources.js';
 
 const log = createLogger('Meals');
 
@@ -638,7 +639,7 @@ router.delete('/ingredients/:ingId', (req, res) => {
 router.post('/:id/to-shopping-list', (req, res) => {
   try {
     const mealId = parseInt(req.params.id, 10);
-    const meal   = db.get().prepare('SELECT id FROM meals WHERE id = ?').get(mealId);
+    const meal   = db.get().prepare('SELECT id, title, date, recipe_id FROM meals WHERE id = ?').get(mealId);
     if (!meal) return res.status(404).json({ error: 'Mahlzeit nicht gefunden', code: 404 });
 
     const { listId } = req.body;
@@ -667,7 +668,15 @@ router.post('/:id/to-shopping-list', (req, res) => {
 
       let count = 0;
       for (const ing of ingredients) {
-        insertItem.run(listId, ing.name, ing.quantity, ing.category || 'Sonstiges', mealId);
+        const item = insertItem.run(listId, ing.name, ing.quantity, ing.category || 'Sonstiges', mealId);
+        insertShoppingItemSource(db.get(), item.lastInsertRowid, {
+          source_type: 'meal',
+          meal_id: mealId,
+          recipe_id: meal.recipe_id,
+          source_label: meal.title,
+          meal_date_snapshot: meal.date,
+          quantity_snapshot: ing.quantity,
+        });
         markDone.run(ing.id);
         count++;
       }
@@ -703,7 +712,12 @@ router.post('/week-to-shopping-list', (req, res) => {
     const to   = weekEnd(week);
 
     const ingredients = db.get().prepare(`
-      SELECT mi.* FROM meal_ingredients mi
+      SELECT
+        mi.*,
+        m.title AS source_label,
+        m.date AS meal_date_snapshot,
+        m.recipe_id
+      FROM meal_ingredients mi
       JOIN meals m ON m.id = mi.meal_id
       WHERE m.date BETWEEN ? AND ?
         AND mi.on_shopping_list = 0
@@ -723,7 +737,15 @@ router.post('/week-to-shopping-list', (req, res) => {
 
       let count = 0;
       for (const ing of ingredients) {
-        insertItem.run(listId, ing.name, ing.quantity, ing.category || 'Sonstiges', ing.meal_id);
+        const item = insertItem.run(listId, ing.name, ing.quantity, ing.category || 'Sonstiges', ing.meal_id);
+        insertShoppingItemSource(db.get(), item.lastInsertRowid, {
+          source_type: 'meal',
+          meal_id: ing.meal_id,
+          recipe_id: ing.recipe_id,
+          source_label: ing.source_label,
+          meal_date_snapshot: ing.meal_date_snapshot,
+          quantity_snapshot: ing.quantity,
+        });
         markDone.run(ing.id);
         count++;
       }

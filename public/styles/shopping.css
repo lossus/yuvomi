@@ -496,6 +496,45 @@
   font-variant-numeric: tabular-nums;
 }
 
+.item-sources {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-top: var(--space-1);
+  color: var(--color-text-tertiary);
+  font-size: var(--text-xs);
+  line-height: var(--line-height-normal);
+}
+
+.item-sources > svg {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+}
+
+.item-sources--multiple {
+  display: block;
+}
+
+.item-sources--multiple summary {
+  width: fit-content;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+}
+
+.item-sources--multiple ul {
+  margin: var(--space-1) 0 0;
+  padding-inline-start: var(--space-4);
+}
+
+.item-sources--multiple li + li {
+  margin-top: var(--space-1);
+}
+
+.shopping-item--checked .item-sources {
+  color: var(--color-text-disabled);
+}
+
 /* Löschen-Button */
 .item-delete {
   width: var(--target-base);

@@ -348,7 +348,12 @@
         "moveListFirst": "Переместить в начало",
         "moveListUp": "Переместить вверх",
         "moveListDown": "Переместить вниз",
-        "reorderError": "Не удалось сохранить порядок списков."
+        "reorderError": "Не удалось сохранить порядок списков.",
+        "sourceSingle": "From: {{source}} · {{date}}",
+        "sourceSingleNoDate": "From: {{source}}",
+        "sourcesMultiple": "{{count}} sources",
+        "sourceDeleted": "{{source}} (source deleted)",
+        "sourceUnknown": "Unknown source"
     },
     "meals": {
         "title": "План питания",

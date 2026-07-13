@@ -259,6 +259,31 @@ test('Migration 86 ergänzt und initialisiert shopping_lists.sort_order', () => 
   shoppingDb.close();
 });
 
+test('Migration 87 backfillt Herkunft und bewahrt Snapshots nach Quellenlöschung', () => {
+  const sourceDb = new DatabaseSync(':memory:');
+  sourceDb.exec('PRAGMA foreign_keys = ON;');
+  sourceDb.exec(MIGRATIONS_SQL[1]);
+  sourceDb.exec(MIGRATIONS_SQL[13]);
+  sourceDb.prepare("INSERT INTO users (username, display_name, password_hash) VALUES ('source-user', 'Source', 'x')").run();
+  const recipeId = sourceDb.prepare("INSERT INTO recipes (title, created_by) VALUES ('Original recipe', 1)").run().lastInsertRowid;
+  const mealId = sourceDb.prepare("INSERT INTO meals (date, meal_type, title, recipe_id, created_by) VALUES ('2026-07-13', 'dinner', 'Original meal', ?, 1)").run(recipeId).lastInsertRowid;
+  const listId = sourceDb.prepare("INSERT INTO shopping_lists (name, created_by) VALUES ('Source list', 1)").run().lastInsertRowid;
+  const itemId = sourceDb.prepare("INSERT INTO shopping_items (list_id, name, quantity, added_from_meal) VALUES (?, 'Tomatoes', '2 cans', ?)").run(listId, mealId).lastInsertRowid;
+
+  sourceDb.exec(MIGRATIONS_SQL[87]);
+  const source = sourceDb.prepare('SELECT * FROM shopping_item_sources WHERE shopping_item_id = ?').get(itemId);
+  assert(source && source.meal_id === mealId && source.recipe_id === recipeId, 'Meal-/Recipe-IDs müssen backfillen');
+  assert(source.source_label === 'Original meal' && source.meal_date_snapshot === '2026-07-13', 'Titel-/Datum-Snapshots fehlen');
+  assert(source.quantity_snapshot === '2 cans', 'Mengen-Snapshot fehlt');
+
+  sourceDb.prepare('DELETE FROM meals WHERE id = ?').run(mealId);
+  sourceDb.prepare('DELETE FROM recipes WHERE id = ?').run(recipeId);
+  const preserved = sourceDb.prepare('SELECT * FROM shopping_item_sources WHERE shopping_item_id = ?').get(itemId);
+  assert(preserved.meal_id === null && preserved.recipe_id === null, 'Gelöschte FKs müssen NULL werden');
+  assert(preserved.source_label === 'Original meal' && preserved.meal_date_snapshot === '2026-07-13', 'Snapshots müssen unverändert bleiben');
+  sourceDb.close();
+});
+
 // --------------------------------------------------------
 // Ergebnis
 // --------------------------------------------------------

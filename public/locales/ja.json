@@ -348,7 +348,12 @@
         "moveListFirst": "先頭へ移動",
         "moveListUp": "上へ移動",
         "moveListDown": "下へ移動",
-        "reorderError": "リストの順序を保存できませんでした。"
+        "reorderError": "リストの順序を保存できませんでした。",
+        "sourceSingle": "From: {{source}} · {{date}}",
+        "sourceSingleNoDate": "From: {{source}}",
+        "sourcesMultiple": "{{count}} sources",
+        "sourceDeleted": "{{source}} (source deleted)",
+        "sourceUnknown": "Unknown source"
     },
     "meals": {
         "title": "食事計画",

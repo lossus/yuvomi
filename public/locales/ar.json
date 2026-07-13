@@ -348,7 +348,12 @@
         "moveListFirst": "نقل إلى الأول",
         "moveListUp": "نقل لأعلى",
         "moveListDown": "نقل لأسفل",
-        "reorderError": "تعذر حفظ ترتيب القوائم."
+        "reorderError": "تعذر حفظ ترتيب القوائم.",
+        "sourceSingle": "From: {{source}} · {{date}}",
+        "sourceSingleNoDate": "From: {{source}}",
+        "sourcesMultiple": "{{count}} sources",
+        "sourceDeleted": "{{source}} (source deleted)",
+        "sourceUnknown": "Unknown source"
     },
     "meals": {
         "title": "خطة الوجبات",
