@@ -36,6 +36,23 @@
   border-radius: var(--radius-md);
   background: var(--glass-bg-card);
   color: var(--color-text);
+  /* Drop WebKit's native type=search magnifier; the explicit leading icon is
+   * the only magnifier this field should show. */
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.subscriptions-search input::-webkit-search-decoration,
+.subscriptions-search input::-webkit-search-results-decoration,
+.subscriptions-search input::-webkit-search-results-button,
+.subscriptions-search input::-webkit-search-cancel-button,
+.subscriptions-combobox__control .form-input::-webkit-search-decoration,
+.subscriptions-combobox__control .form-input::-webkit-search-results-decoration,
+.subscriptions-combobox__control .form-input::-webkit-search-results-button,
+.subscriptions-combobox__control .form-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
 }
 
 .subscriptions-filter {
@@ -519,6 +536,10 @@
 
 .subscriptions-combobox__control .form-input {
   padding-left: calc(var(--space-3) + 22px);
+  /* Drop WebKit's native type=search magnifier; the explicit leading icon is
+   * the only magnifier this field should show. */
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .subscriptions-combobox__options {

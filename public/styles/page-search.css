@@ -38,11 +38,20 @@
   background: var(--color-surface-2);
   color: var(--color-text-primary);
   font-size: var(--text-base);
+  /* Strip the native search chrome (WebKit draws its own leading magnifier for
+   * type=search) so only the explicit .page-search__icon shows — avoids two
+   * magnifiers side by side. */
+  -webkit-appearance: none;
+  appearance: none;
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-/* Native type=search clear cross suppressed — the explicit .page-search__clear
- * is the single, localized clear affordance (avoids two × controls). */
+/* Native type=search decorations suppressed: the leading magnifier is the
+ * explicit .page-search__icon and the clear affordance is .page-search__clear —
+ * the browser's own magnifier/clear cross would duplicate both. */
+.page-search__input::-webkit-search-decoration,
+.page-search__input::-webkit-search-results-decoration,
+.page-search__input::-webkit-search-results-button,
 .page-search__input::-webkit-search-cancel-button {
   -webkit-appearance: none;
   appearance: none;

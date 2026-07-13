@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.20.1] - 2026-07-13
+
+### Fixed
+- Search fields no longer show two magnifier icons in WebKit-based browsers (Safari). The browser's native search-field magnifier is now suppressed so only the app's own leading icon appears, across the shared page search (Notes, Contacts, Documents, Birthdays), Subscriptions, and the Split-expenses group filter.
+
 ## [1.20.0] - 2026-07-13
 
 ### Changed
