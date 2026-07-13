@@ -45,6 +45,15 @@ function categoryLabels() {
   return Object.fromEntries(CATEGORIES.map((category) => [category, t(`documents.category.${category}`)]));
 }
 
+// Aktiven Zustand einer Chip-Gruppe umschalten (aria-pressed + Modifier).
+function setActiveChip(active, groupSelector) {
+  _container.querySelectorAll(`${groupSelector} .documents-filter-chip`).forEach((chip) => {
+    const on = chip === active;
+    chip.classList.toggle('documents-filter-chip--active', on);
+    chip.setAttribute('aria-pressed', String(on));
+  });
+}
+
 // Nutzerfreundliche Fehlermeldung: strukturierte Server-Meldung (err.data.error)
 // bevorzugt; lokalisierte Client-Validierungsfehler (plain Error mit t()-Text)
 // bleiben erhalten; technische ApiError-Strings („HTTP 500"/„offline") werden auf
@@ -97,20 +106,14 @@ export async function render(container) {
                 <i data-lucide="list" aria-hidden="true"></i>
               </button>
             </div>
-            <label class="documents-filter-field" for="documents-status">
-              <span>${t('documents.statusLabel')}</span>
-              <select class="input documents-filter-select" id="documents-status">
-                <option value="active">${t('documents.statusActive')}</option>
-                <option value="archived">${t('documents.statusArchived')}</option>
-              </select>
-            </label>
-            <label class="documents-filter-field" for="documents-category">
-              <span>${t('documents.categoryLabel')}</span>
-              <select class="input documents-filter-select" id="documents-category">
-                <option value="">${t('documents.allCategories')}</option>
-                ${CATEGORIES.map((category) => `<option value="${category}">${categoryLabels()[category]}</option>`).join('')}
-              </select>
-            </label>
+            <div class="documents-filter-group" id="documents-status" role="group" aria-label="${t('documents.statusLabel')}">
+              <button type="button" class="documents-filter-chip${state.status === 'active' ? ' documents-filter-chip--active' : ''}" data-status="active" aria-pressed="${state.status === 'active'}">${t('documents.statusActive')}</button>
+              <button type="button" class="documents-filter-chip${state.status === 'archived' ? ' documents-filter-chip--active' : ''}" data-status="archived" aria-pressed="${state.status === 'archived'}">${t('documents.statusArchived')}</button>
+            </div>
+            <div class="documents-filter-chips" id="documents-category" role="group" aria-label="${t('documents.categoryLabel')}">
+              <button type="button" class="documents-filter-chip${!state.category ? ' documents-filter-chip--active' : ''}" data-category="" aria-pressed="${!state.category}">${t('documents.allCategories')}</button>
+              ${CATEGORIES.map((category) => `<button type="button" class="documents-filter-chip${state.category === category ? ' documents-filter-chip--active' : ''}" data-category="${esc(category)}" aria-pressed="${state.category === category}"><i data-lucide="${CATEGORY_ICONS[category] || 'folder'}" class="icon-md" aria-hidden="true"></i>${esc(categoryLabels()[category])}</button>`).join('')}
+            </div>
           </div>
         </details>
       </div>
@@ -241,15 +244,23 @@ function bindPageEvents() {
       renderDocuments();
     }, 200);
   });
-  _container.querySelector('#documents-status')?.addEventListener('change', async (e) => {
-    state.status = e.target.value;
+  _container.querySelector('#documents-status')?.addEventListener('click', async (e) => {
+    const chip = e.target.closest('[data-status]');
+    if (!chip || chip.dataset.status === state.status) return;
+    state.status = chip.dataset.status;
+    setActiveChip(chip, '#documents-status');
     showDocumentsLoading();
     await loadDocuments();
     renderFolderBrowser();
     renderDocuments();
   });
-  _container.querySelector('#documents-category')?.addEventListener('change', async (e) => {
-    state.category = e.target.value;
+  _container.querySelector('#documents-category')?.addEventListener('click', async (e) => {
+    const chip = e.target.closest('[data-category]');
+    if (!chip) return;
+    const next = chip.dataset.category;
+    if (next === state.category) return;
+    state.category = next;
+    setActiveChip(chip, '#documents-category');
     showDocumentsLoading();
     await loadDocuments();
     renderFolderBrowser();
