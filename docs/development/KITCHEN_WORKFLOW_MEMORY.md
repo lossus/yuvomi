@@ -27,7 +27,7 @@ Die Erweiterung bleibt im bestehenden Stack aus Node.js, Express, SQLite/SQLCiph
 - Baseline-Commit: `e8e799bc` (`chore: release v1.19.1`)
 - `main` war am 2026-07-13 ohne Abweichung zu `upstream/main`.
 - Planungsbranch: `planning/kitchen-workflow`
-- Task 1 liegt als noch uncommitteter, vom Benutzer funktional bestätigter Stand auf `feature/shopping-list-order`. Er wurde für die Planungsarbeit sicher zwischengespeichert und wird nicht neu implementiert.
+- Task 1 wurde als Commit `7e6ce49d` über PR #2 in den Fork-`main` gemergt; Merge-Commit: `b524dbc2`. Die Planungsdokumentation wurde zuvor über PR #1 gemergt.
 
 Vollständig gelesene Baseline-Dokumente:
 
@@ -116,7 +116,7 @@ Analysierte Implementierungsbereiche:
 | 2026-07-13 | Hauptagent | KWF-001 | DB/Migrationen | Tabellen, FKs, Migrationen 13/64/86 und Transaktionsmuster analysiert | abgeschlossen | geplante Migrationen erst je Task nummerieren |
 | 2026-07-13 | Hauptagent | KWF-001 | Meals/Recipes/Shopping Backend | CRUD, Importpfade, Default-Liste, Rekurrenz und Fehlergrenzen kartiert | abgeschlossen | Details in Tasks KWF-003–009 |
 | 2026-07-13 | Hauptagent | KWF-001 | Frontend/i18n/PWA | Modals, Datepicker, Navigation, Responsive-Pfade, 23 Locales und SW analysiert | abgeschlossen | Pantry-Offline-Verhalten entscheiden |
-| 2026-07-13 | Hauptagent | KWF-002 / `feature/shopping-list-order` | Task-1-Dateien laut Handoff | Bestehende Implementierung analysiert und Testergebnisse dokumentiert; keine Änderung in dieser Session | implementiert, uncommittet | separater Review/Commit/Push nötig |
+| 2026-07-13 | Hauptagent | KWF-002 / `feature/shopping-list-order` | Task-1-Dateien laut Handoff | Implementierung analysiert, funktional bestätigt, committed und über Fork-PR #2 gemergt | abgeschlossen | keine; KWF-003 ist nächster Implementierungstask |
 | 2026-07-13 | Hauptagent | KWF-001 | `docs/development/KITCHEN_WORKFLOW_MEMORY.md` | Zentrale Wissensbasis angelegt | abgeschlossen | bei jeder Session fortschreiben |
 | 2026-07-13 | Hauptagent | KWF-001 | `docs/development/KITCHEN_WORKFLOW_PLAN.md` | Vollständige Task-Zerlegung angelegt | abgeschlossen | Architekturvorschläge im Review bestätigen |
 | 2026-07-13 | Hauptagent | KWF-001 / Agent-Handoff | `docs/development/KITCHEN_WORKFLOW_TASK_MASTER_PROMPT.md` | Wiederverwendbaren, taskgebundenen Startprompt mit Reservierungs-, Analyse-, Test-, Memory- und Git-Gates angelegt | abgeschlossen | pro Session Task-ID und optional Branch/Vorgaben einsetzen |
@@ -296,7 +296,7 @@ Neue i18n-Namensräume: `pantry.*`, `shopping.sources*`, `shopping.addToPantry*`
 | Feature | Unit | API | DB/Migration | Frontend | Regression | Status |
 |---|---|---|---|---|---|---|
 | KWF-001 Baseline/Plan | Dokumentstruktur | – | – | – | Git-Diff nur Docs | abgeschlossen |
-| KWF-002 Listensortierung | Default-Helper | Reorder-Validierung | Migration 86/next order | DnD + Buttons + Default-Badge | MCP/Housekeeping/CalDAV/Meals | implementiert, Review/Commit offen |
+| KWF-002 Listensortierung | Default-Helper | Reorder-Validierung | Migration 86/next order | DnD + Buttons + Default-Badge | MCP/Housekeeping/CalDAV/Meals | abgeschlossen und in `main` |
 | KWF-003 Herkunft | Snapshot-/Serializer | Quellen in Importantworten | Backfill/FK-Löschung | eine/mehrere Quellen | bestehende Importcounts | geplant |
 | KWF-004 Direkter Import | Payload/Validierung | Erfolg und Rollback | keine halbe Speicherung | Checkbox/Default-Auswahl | Rekurrenz/normaler Meal-Create | geplant |
 | KWF-005 Microkalender | Datepicker-Grid | – | – | Recipe-Flow, Keyboard, Touch | Datepicker/Kitchen | größtenteils vorhanden |
@@ -308,13 +308,13 @@ Neue i18n-Namensräume: `pantry.*`, `shopping.sources*`, `shopping.addToPantry*`
 
 ## 10. Offene Findings
 
-### KWF-FINDING-001 — Task 1 ist noch nicht committed
+### KWF-FINDING-001 — Task 1 war noch nicht committed
 
 - Betroffene Dateien: Migration/Shopping/UI/i18n/Tests sowie Default-Verbraucher auf `feature/shopping-list-order`.
 - Schweregrad: mittel.
 - Auswirkung: Funktioniert lokal, ist aber noch kein reviewbarer Git-Stand.
 - Empfehlung: Separat reviewen, committen und pushen; nicht mit Folgefeatures vermischen.
-- Status: offen.
+- Status: **resolved** durch PR #2, Merge-Commit `b524dbc2`.
 - Task: KWF-002.
 
 ### KWF-FINDING-002 — `added_from_meal` ist nicht mehrquellenfähig
@@ -419,12 +419,12 @@ Neue i18n-Namensräume: `pantry.*`, `shopping.sources*`, `shopping.addToPantry*`
 ## 11. Session-Handoff
 
 - Letzter abgeschlossener Schritt: vollständige Repository- und Workflow-Analyse; Memory und Taskplan erstellt.
-- Planungsbranch: `planning/kitchen-workflow`.
+- Aktueller Integrationsstand: Fork-`main` auf Merge-Commit `b524dbc2`; Planungs-PR #1 und Task-1-PR #2 sind gemergt.
 - Geänderte Dateien der Planungs-/Handoff-Sessions: diese Memory-Datei, `KITCHEN_WORKFLOW_PLAN.md` und `KITCHEN_WORKFLOW_TASK_MASTER_PROMPT.md`; kein Featurecode.
 - Ergänzte Agentenvorlage: `KITCHEN_WORKFLOW_TASK_MASTER_PROMPT.md`; sie startet genau einen KWF-Task und verbietet ungeplante Folgeaufgaben.
-- Separater Arbeitsstand: KWF-002 auf `feature/shopping-list-order`, sicher erhalten, funktional bestätigt, noch uncommittet.
+- KWF-002: abgeschlossen und in Fork-`main`; Feature-Branch bleibt nur als nachvollziehbare Historie bestehen.
 - Offene Tests dieser Session: Dokumentationsprüfung/Git-Diff; keine Featuretests nötig, da kein Featurecode geändert wurde.
-- Offene Findings: KWF-FINDING-001 bis -012.
-- Nächster sinnvoller Schritt: KWF-002 separat reviewen/committen; danach KWF-003 Herkunftsmodell implementieren.
+- Offene Findings: KWF-FINDING-002 bis -004 und -006 bis -012; KWF-FINDING-001 ist gelöst, KWF-FINDING-005 bestätigt vorhandene Funktionalität.
+- Nächster sinnvoller Schritt: KWF-003 Herkunftsmodell für Einkaufsartikel von aktualisiertem Fork-`main` beginnen.
 - Nicht erneut blind analysieren: Baseline-Dokumente, bestehende DB-Tabellen, aktuelle Meals/Recipes/Shopping-Flows, Datepicker-Funktion, Kitchen-Navigation, i18n-Konvention und Service-Worker-Grundmuster sind oben kartiert.
 - Pflicht für Folgesessions/Agents: diese Datei zuerst lesen, eigene Zeile in „Angegriffene Bereiche“ ergänzen, neue ADRs/Findings fortlaufend nummerieren und den Handoff aktualisieren.

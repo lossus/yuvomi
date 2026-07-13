@@ -17,7 +17,7 @@ Basis: [`KITCHEN_WORKFLOW_MEMORY.md`](./KITCHEN_WORKFLOW_MEMORY.md)
 
 ```text
 KWF-001 Baseline und Planung (dieser Commit)
-  └─ KWF-002 Einkaufslisten sortierbar (bereits lokal implementiert; Review/Commit offen)
+  └─ KWF-002 Einkaufslisten sortierbar (über PR #2 in Fork-main abgeschlossen)
       └─ KWF-003 Herkunftsmodell
           └─ KWF-004 Direkter Rezept-Zutatenimport
               └─ KWF-005 Microkalender-Verifikation/Polish
@@ -35,7 +35,7 @@ Begründete Anpassung der vorgeschlagenen Reihenfolge: KWF-003 kommt vor dem dir
 | Reihenfolge | Task | Ergebnis | Komplexität | Status |
 |---:|---|---|---|---|
 | 1 | KWF-001 | Repository-, Architektur- und Planungsbaseline | mittel | abgeschlossen |
-| 2 | KWF-002 | persistente Reihenfolge und Default-Liste | mittel | lokal implementiert, Review/Commit offen |
+| 2 | KWF-002 | persistente Reihenfolge und Default-Liste | mittel | abgeschlossen und in `main` |
 | 3 | KWF-003 | mehrquellenfähige Einkaufsartikel-Herkunft | groß | geplant |
 | 4 | KWF-004 | atomarer Rezept→Meal→Shopping-Flow | mittel | geplant |
 | 5 | KWF-005 | bestehender Microkalender verifiziert/gezielt ergänzt | klein | größtenteils vorhanden |
@@ -83,7 +83,7 @@ Begründete Anpassung der vorgeschlagenen Reihenfolge: KWF-003 kommt vor dem dir
 - Frontend: Listenmanager mit HTML5-DnD ohne Bibliothek sowie „erste“, „hoch“, „runter“; nach jeder Änderung speichern; erste Liste als „Standard“ markieren.
 - i18n: neue Shopping-Keys in allen 23 Locales; Deutsch/Englisch vollständig.
 - Tests: Migration, next order, GET-Sortierung, Erfolg, unbekannte/doppelte/unvollständige IDs, keine Teilmutation, Default-Consumer, UI-Key/API-Wiring, MCP/Housekeeping/CalDAV.
-- Risiken: versteckte Consumer mit `ORDER BY created_at`; konkurrierende Reorder-Requests; Task-1-Arbeitsstand ist noch uncommittet.
+- Risiken: versteckte Consumer mit `ORDER BY created_at`; konkurrierende Reorder-Requests. Der implementierte Stand wurde über PR #2 gemergt.
 - Abhängigkeiten: KWF-001-Dokumentation.
 - Akzeptanzkriterien:
   - Alle Listen haben deterministische, persistente Reihenfolge.
@@ -93,7 +93,7 @@ Begründete Anpassung der vorgeschlagenen Reihenfolge: KWF-003 kommt vor dem dir
   - Shopping/DB und betroffene Regressionstests bestehen.
 - Branch: `feature/shopping-list-order`.
 - Komplexität: mittel.
-- Empfohlene Reihenfolge: 2; **bereits lokal implementiert und vom Benutzer funktional bestätigt**, separat reviewen/committen.
+- Empfohlene Reihenfolge: 2; **abgeschlossen, funktional bestätigt und über PR #2 in Fork-`main` gemergt**.
 
 ## KWF-003 — Herkunftsmodell für Einkaufsartikel
 
@@ -358,8 +358,8 @@ Begründete Anpassung der vorgeschlagenen Reihenfolge: KWF-003 kommt vor dem dir
 
 ## Empfohlener nächster Schritt
 
-1. Den bestehenden KWF-002-Arbeitsstand auf `feature/shopping-list-order` separat reviewen, committen und pushen.
-2. Danach KWF-003 auf `feature/shopping-item-sources` beginnen.
+1. KWF-003 auf `feature/shopping-item-sources` vom aktualisierten Fork-`main` beginnen.
+2. Vor Implementierung ADR-KITCHEN-002 und das konkrete Migrations-/Snapshot-Modell reviewen.
 
 KWF-003 ist der erste **neue** Implementierungstask. Das Herkunftsmodell muss vor dem atomaren Rezeptimport stehen, damit keine weitere Übergangsgeneration von Einkaufsartikeln ohne belastbare Quellen entsteht.
 
