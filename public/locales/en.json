@@ -348,7 +348,12 @@
         "moveListFirst": "Move to first",
         "moveListUp": "Move up",
         "moveListDown": "Move down",
-        "reorderError": "The list order could not be saved."
+        "reorderError": "The list order could not be saved.",
+        "sourceSingle": "From: {{source}} · {{date}}",
+        "sourceSingleNoDate": "From: {{source}}",
+        "sourcesMultiple": "{{count}} sources",
+        "sourceDeleted": "{{source}} (source deleted)",
+        "sourceUnknown": "Unknown source"
     },
     "meals": {
         "title": "Meal Plan",

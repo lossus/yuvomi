@@ -6,7 +6,7 @@
 
 import { api } from '/api.js';
 import { stagger, vibrate } from '/utils/ux.js';
-import { t } from '/i18n.js';
+import { formatDate, t } from '/i18n.js';
 import { esc } from '/utils/html.js';
 import { promptModal, openModal, closeModal } from '/components/modal.js';
 import { DEFAULT_CATEGORY_NAME, categoryLabel } from '/utils/shopping-categories.js';
@@ -63,7 +63,7 @@ function groupItemsByCategory(items) {
 }
 
 function shouldIgnoreShoppingRowToggle(target) {
-  return Boolean(target?.closest?.('button, a, input, select, textarea, [data-no-row-toggle]'));
+  return Boolean(target?.closest?.('button, a, input, select, textarea, details, summary, [data-no-row-toggle]'));
 }
 
 async function toggleShoppingItem(id, checked, container) {
@@ -269,6 +269,32 @@ function renderItemMeta(item) {
   return bits.length ? `<span class="item-meta">${bits.join('')}</span>` : '';
 }
 
+function sourceText(source) {
+  const snapshot = source.source_label || t('shopping.sourceUnknown');
+  const isDeleted = (source.source_type === 'meal' && source.meal_id == null)
+    || (source.source_type === 'recipe' && source.recipe_id == null);
+  const label = isDeleted
+    ? t('shopping.sourceDeleted', { source: snapshot })
+    : snapshot;
+  const date = source.meal_date_snapshot ? formatDate(source.meal_date_snapshot) : '';
+  return date
+    ? t('shopping.sourceSingle', { source: label, date })
+    : t('shopping.sourceSingleNoDate', { source: label });
+}
+
+function renderItemSources(item) {
+  const sources = Array.isArray(item.sources) ? item.sources : [];
+  if (!sources.length) return '';
+  if (sources.length === 1) {
+    return `<div class="item-sources"><i data-lucide="utensils" aria-hidden="true"></i><span>${esc(sourceText(sources[0]))}</span></div>`;
+  }
+  return `
+    <details class="item-sources item-sources--multiple">
+      <summary>${t('shopping.sourcesMultiple', { count: sources.length })}</summary>
+      <ul>${sources.map((source) => `<li>${esc(sourceText(source))}</li>`).join('')}</ul>
+    </details>`;
+}
+
 function renderItem(item) {
   const isDone = Boolean(item.is_checked);
   return `
@@ -291,6 +317,7 @@ function renderItem(item) {
         <div class="item-body">
           <div class="item-name">${esc(item.name)}${renderItemMeta(item)}</div>
           ${item.quantity ? `<div class="item-quantity">${esc(item.quantity)}</div>` : ''}
+          ${renderItemSources(item)}
         </div>
         <button class="item-details" data-action="item-details" data-id="${item.id}"
                 aria-label="${t('shopping.detailsLabel', { name: esc(item.name) })}">

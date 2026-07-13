@@ -133,6 +133,21 @@ Points-and-rewards system. A member earns a task's `points` when the task is mar
 | notes | TEXT | Optional free-text note (brand, size, instructions); searchable |
 | url | TEXT | Optional http(s) product/store link (scheme-validated) |
 
+### Shopping Item Sources
+Imported shopping items have zero or more normalized provenance rows. `shopping_items.added_from_meal`
+remains available for compatibility, while new clients use the `sources[]` array returned with shopping
+items.
+
+| Column | Type | Constraint |
+|--------|------|-----------|
+| shopping_item_id | INTEGER | FK → Shopping Items (CASCADE delete), NOT NULL |
+| source_type | TEXT | `meal` or `recipe` |
+| meal_id | INTEGER | FK → Meals (SET NULL), nullable |
+| recipe_id | INTEGER | FK → Recipes (SET NULL), nullable |
+| source_label | TEXT | Immutable display snapshot, NOT NULL |
+| meal_date_snapshot | TEXT | Immutable meal-date snapshot, nullable |
+| quantity_snapshot | TEXT | Original free-text quantity snapshot, nullable |
+
 Notes and links are edited in a per-item detail drawer (progressive disclosure); the quick-add row
 stays name/quantity/category only. A subtle inline icon marks items that carry a note or link. The
 note is indexed in the global search.
@@ -1310,8 +1325,8 @@ Skeleton loading instead of spinners (the skeleton mirrors the default-visible w
 - **User-defined list order:** lists are loaded by `sort_order`, then `created_at` and `id`. The first list is the implicit default. The list manager persists drag-and-drop and touch-friendly move actions atomically through `PATCH /api/v1/shopping/reorder`.
 - Items: name, category, quantity, checkbox
 - Grouping by category (aisle logic)
-- Integration with meal plan: "Add ingredients to shopping list" transfers with source reference
-- **Bulk import from meal plan (v1.3.0):** a "From meal plan" action in the list header opens a date-range dialog (defaults to the next 7 days) and imports the ingredients of every planned meal in that range into the active list. Repeated ingredients are aggregated before insertion — numeric quantities with a matching unit are summed, purely textual quantities collapse to a `N × …` note. Already-transferred ingredients are skipped via the existing `on_shopping_list` flag (`POST /api/v1/shopping/:listId/import-meal-plan`).
+- Integration with meal plan: "Add ingredients to shopping list" transfers each ingredient with normalized source IDs plus durable title/date/quantity snapshots. One or multiple sources are exposed as `sources[]` and rendered below the item; deleting a meal or recipe does not erase the snapshot.
+- **Bulk import from meal plan (v1.3.0, provenance update):** a "From meal plan" action in the list header opens a date-range dialog (defaults to the next 7 days) and imports the ingredients of every planned meal in that range into the active list. Until the structured quantity model is available, every free-text ingredient remains a separate shopping item; no quantity compatibility is guessed. Already-transferred ingredients are skipped via the existing `on_shopping_list` flag (`POST /api/v1/shopping/:listId/import-meal-plan`).
 - Checked items shown with strikethrough + moved to bottom
 - "Clear list" = remove checked items only
 - Autocomplete from previous entries (local)

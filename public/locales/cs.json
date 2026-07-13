@@ -348,7 +348,12 @@
         "moveListFirst": "Přesunout na začátek",
         "moveListUp": "Přesunout nahoru",
         "moveListDown": "Přesunout dolů",
-        "reorderError": "Pořadí seznamů se nepodařilo uložit."
+        "reorderError": "Pořadí seznamů se nepodařilo uložit.",
+        "sourceSingle": "From: {{source}} · {{date}}",
+        "sourceSingleNoDate": "From: {{source}}",
+        "sourcesMultiple": "{{count}} sources",
+        "sourceDeleted": "{{source}} (source deleted)",
+        "sourceUnknown": "Unknown source"
     },
     "meals": {
         "title": "Jídelníček",

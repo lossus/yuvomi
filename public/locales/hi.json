@@ -348,7 +348,12 @@
         "moveListFirst": "सबसे पहले ले जाएँ",
         "moveListUp": "ऊपर ले जाएँ",
         "moveListDown": "नीचे ले जाएँ",
-        "reorderError": "सूची क्रम सहेजा नहीं जा सका।"
+        "reorderError": "सूची क्रम सहेजा नहीं जा सका।",
+        "sourceSingle": "From: {{source}} · {{date}}",
+        "sourceSingleNoDate": "From: {{source}}",
+        "sourcesMultiple": "{{count}} sources",
+        "sourceDeleted": "{{source}} (source deleted)",
+        "sourceUnknown": "Unknown source"
     },
     "meals": {
         "title": "भोजन योजना",

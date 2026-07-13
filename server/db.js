@@ -3190,6 +3190,44 @@ const MIGRATIONS = [
         ON shopping_lists(sort_order, created_at, id);
     `,
   },
+  {
+    version: 87,
+    description: 'Normalized shopping item provenance with durable snapshots',
+    up: `
+      CREATE TABLE IF NOT EXISTS shopping_item_sources (
+        id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+        shopping_item_id   INTEGER NOT NULL REFERENCES shopping_items(id) ON DELETE CASCADE,
+        source_type        TEXT    NOT NULL CHECK(source_type IN ('meal', 'recipe')),
+        meal_id            INTEGER REFERENCES meals(id) ON DELETE SET NULL,
+        recipe_id          INTEGER REFERENCES recipes(id) ON DELETE SET NULL,
+        source_label       TEXT    NOT NULL,
+        meal_date_snapshot TEXT,
+        quantity_snapshot  TEXT,
+        created_at         TEXT    NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_shopping_item_sources_item
+        ON shopping_item_sources(shopping_item_id);
+      CREATE INDEX IF NOT EXISTS idx_shopping_item_sources_meal
+        ON shopping_item_sources(meal_id);
+      CREATE INDEX IF NOT EXISTS idx_shopping_item_sources_recipe
+        ON shopping_item_sources(recipe_id);
+
+      INSERT INTO shopping_item_sources
+        (shopping_item_id, source_type, meal_id, recipe_id, source_label, meal_date_snapshot, quantity_snapshot)
+      SELECT
+        si.id,
+        'meal',
+        m.id,
+        m.recipe_id,
+        m.title,
+        m.date,
+        si.quantity
+      FROM shopping_items si
+      JOIN meals m ON m.id = si.added_from_meal
+      WHERE si.added_from_meal IS NOT NULL;
+    `,
+  },
 ];
 
 /**

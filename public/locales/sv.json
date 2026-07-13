@@ -348,7 +348,12 @@
         "moveListFirst": "Flytta först",
         "moveListUp": "Flytta upp",
         "moveListDown": "Flytta ned",
-        "reorderError": "Listordningen kunde inte sparas."
+        "reorderError": "Listordningen kunde inte sparas.",
+        "sourceSingle": "From: {{source}} · {{date}}",
+        "sourceSingleNoDate": "From: {{source}}",
+        "sourcesMultiple": "{{count}} sources",
+        "sourceDeleted": "{{source}} (source deleted)",
+        "sourceUnknown": "Unknown source"
     },
     "meals": {
         "title": "Måltidsplan",

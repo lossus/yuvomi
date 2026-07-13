@@ -348,7 +348,12 @@
         "moveListFirst": "Mozgatás az elejére",
         "moveListUp": "Mozgatás fel",
         "moveListDown": "Mozgatás le",
-        "reorderError": "A listák sorrendjét nem sikerült menteni."
+        "reorderError": "A listák sorrendjét nem sikerült menteni.",
+        "sourceSingle": "From: {{source}} · {{date}}",
+        "sourceSingleNoDate": "From: {{source}}",
+        "sourcesMultiple": "{{count}} sources",
+        "sourceDeleted": "{{source}} (source deleted)",
+        "sourceUnknown": "Unknown source"
     },
     "meals": {
         "title": "Étkezési terv",

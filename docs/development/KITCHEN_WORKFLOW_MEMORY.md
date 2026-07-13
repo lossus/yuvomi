@@ -72,6 +72,7 @@ Analysierte Implementierungsbereiche:
 - `POST /api/v1/shopping/:listId/import-meal-plan` importiert einen Datumsbereich. `aggregateMealIngredients()` gruppiert gleiche Namen/Kategorien/Einheiten, wenn eine numerische Präfixmenge erkannt wird.
 - Wenn eine aggregierte Position aus mehreren Mahlzeiten stammt, wird `added_from_meal` bewusst `NULL`; Herkunft geht damit verloren.
 - Task-1-Arbeitsstand ergänzt Migration 86, `sort_order`, deterministische Legacy-Migration, zentralen Default-Listen-Helper, Reorder-API, responsive Reorder-UI und vollständige Locale-Texte. Der Benutzer hat die Funktion manuell bestätigt.
+- KWF-003 ergänzt Migration 87 und `shopping_item_sources`. Einzel-, Wochen- und Bereichsimport erzeugen Einkaufsartikel, Herkunftssnapshot und Transfer-Flag atomar. Der Bereichsimport legt bis KWF-006 jede Freitextzutat getrennt an. REST-Antworten für Einkaufsartikel enthalten rückwärtskompatibel `sources: []`; die UI zeigt eine Quelle inline und mehrere Quellen in einem nativen, zugänglichen Aufklapper.
 - Default-Verbraucher im Task-1-Stand: Shopping-GET, Meals-Listenauswahl über sortierte API-Reihenfolge, MCP, Housekeeping und CalDAV-Reminders.
 
 ### Datenmodell
@@ -120,6 +121,7 @@ Analysierte Implementierungsbereiche:
 | 2026-07-13 | Hauptagent | KWF-001 | `docs/development/KITCHEN_WORKFLOW_MEMORY.md` | Zentrale Wissensbasis angelegt | abgeschlossen | bei jeder Session fortschreiben |
 | 2026-07-13 | Hauptagent | KWF-001 | `docs/development/KITCHEN_WORKFLOW_PLAN.md` | Vollständige Task-Zerlegung angelegt | abgeschlossen | Architekturvorschläge im Review bestätigen |
 | 2026-07-13 | Hauptagent | KWF-001 / Agent-Handoff | `docs/development/KITCHEN_WORKFLOW_TASK_MASTER_PROMPT.md` | Wiederverwendbaren, taskgebundenen Startprompt mit Reservierungs-, Analyse-, Test-, Memory- und Git-Gates angelegt | abgeschlossen | pro Session Task-ID und optional Branch/Vorgaben einsetzen |
+| 2026-07-13 | Codex | KWF-003 / `feature/shopping-item-sources` | Migration 87, Source-Service, alle drei Importpfade, Shopping-API/-UI/-CSS, OpenAPI, SPEC/Task-2-Analyse, Locales und Tests | Mehrquellenfähige Herkunft mit löschfesten Snapshots implementiert und verifiziert | abgeschlossen; Commit/Push im Git-Abschluss | `upstream/main` bleibt 7/8 divergent; separat integrieren, KWF-FINDING-013 |
 
 ## 5. Architekturentscheidungen
 
@@ -139,7 +141,8 @@ Analysierte Implementierungsbereiche:
 - Begründung: Mehrere Rezepte/Mahlzeiten bleiben darstellbar, Löschungen zerstören den historischen Kontext nicht.
 - Alternativen: weitere Einzelspalten; Freitext in `notes`; nur JSON.
 - Auswirkungen: Importfunktionen müssen Position plus Quellen in derselben Transaktion erzeugen; API liefert `sources[]`.
-- Status: **proposed**.
+- Präzisierung für KWF-003: Bestehende Meal-Importe erzeugen `source_type = 'meal'`, bewahren optional `recipe_id` und speichern Titel, Meal-Datum und die unveränderte Zutatenmenge als Snapshots. `meal_id`/`recipe_id` dürfen durch `ON DELETE SET NULL` verschwinden; die Snapshots bleiben unverändert. Bis KWF-006 wird beim Bereichsimport jede Zutat als eigene Position angelegt, statt Freitextmengen heuristisch zusammenzuführen.
+- Status: **accepted** (für KWF-003 am 2026-07-13 gegen den aktuellen Fork-`main` geprüft).
 
 ### ADR-KITCHEN-003 — Vorrat als Core-Kitchen-Bereich
 
@@ -228,7 +231,7 @@ Analysierte Implementierungsbereiche:
 |---|---|---|---|---|
 | `shopping_lists` | Listen; `id`, `name`, `created_by`, Zeitstempel; Task-1: `sort_order` | 1:n `shopping_items` | keine weitere Default-Spalte | Migration 86 backfillt 0..n-1 nach `created_at,id`; bestehende IDs bleiben |
 | `shopping_items` | Positionen; `quantity TEXT`, `category`, `is_checked`, `notes`, `url`, `added_from_meal` | Liste; optional eine Mahlzeit | Quellen über Join-Tabelle; später optionale `amount`,`unit` | `added_from_meal` vorerst behalten/deprecaten, API kompatibel halten |
-| `shopping_item_sources` (geplant) | Herkunft; `shopping_item_id`, `source_type`, `meal_id`, `recipe_id`, `source_label`, `meal_date_snapshot`, `quantity_snapshot`, `created_at` | n:1 Artikel; optionale FKs mit `ON DELETE SET NULL` | neu in KWF-003 | Backfill aus `added_from_meal`; Snapshot vor FK-Verlust |
+| `shopping_item_sources` | Herkunft; `shopping_item_id`, `source_type`, `meal_id`, `recipe_id`, `source_label`, `meal_date_snapshot`, `quantity_snapshot`, `created_at` | n:1 Artikel; Item `ON DELETE CASCADE`, optionale Quellen-FKs `ON DELETE SET NULL` | KWF-003 implementiert | Migration 87 backfillt `added_from_meal`; Snapshots bleiben nach FK-Verlust erhalten |
 | `meals` | geplante Instanz; Datum, Typ, Titel, Rezeptbezug, Serienbezug | Rezept/Template, Zutaten | kein bloßes `is_cooked`; Cooking-Events | additive Migrationen, bestehende Meals unverändert |
 | `meal_ingredients` | Zutaten-Snapshot; `name`, `quantity TEXT`, `category`, `on_shopping_list` | n:1 Meal | optionale `amount`,`unit`; Importquellen | Freitext bleibt; Flag aus Kompatibilitätsgründen vorerst bestehen |
 | `recipes` | Rezeptkopf | 1:n Zutaten; 1:n Meals | keine zwingende Änderung für KWF-004 | keine |
@@ -263,7 +266,7 @@ Technische Grenze: Ohne ein bestätigtes Zutaten-Stammdatenmodell kann ein Name 
 | Methode/Pfad | Request / Response | Validierung / Transaktionsgrenze | Fehlerfälle / Tests |
 |---|---|---|---|
 | `POST /api/v1/meals` (erweitert) | optional `shopping_import:{enabled,list_id}`; Response Meal plus Importsummary | Liste und Rezept vorab prüfen; Meal, Zutaten, Artikel, Quellen und Flags in **einer** Transaktion | 400 ungültig/keine Liste; 404 ID; künstlicher Insertfehler rollt alles zurück |
-| `GET /api/v1/shopping/:listId/items` (erweitert) | Artikel plus `sources[]` | FKs optional, Snapshots immer ausgeben | gelöschtes/umbenanntes Meal/Rezept; Mehrfachquellen |
+| `GET /api/v1/shopping/:listId/items` | Artikel plus `sources[]` | KWF-003: FKs optional, Snapshots immer ausgeben | gelöschtes Meal/Rezept und Mehrfachquellen getestet |
 | `GET /api/v1/pantry` | Filter `q,category,location,low_stock,expires_before` | read scope, param limits | Filter-/Scope-Tests |
 | `POST /api/v1/pantry` | Name, Menge/Anzeige, Einheit, Kategorie, Ort, Minimum, Ablauf | strukturierte Werte optional; initiale Bewegung in einer Transaktion | unklare Menge bleibt Displaytext; keine negative Anfangsmenge |
 | `PATCH /api/v1/pantry/:id` | Metadaten | Bestand nicht direkt überschreiben | 404, Validierung |
@@ -297,7 +300,7 @@ Neue i18n-Namensräume: `pantry.*`, `shopping.sources*`, `shopping.addToPantry*`
 |---|---|---|---|---|---|---|
 | KWF-001 Baseline/Plan | Dokumentstruktur | – | – | – | Git-Diff nur Docs | abgeschlossen |
 | KWF-002 Listensortierung | Default-Helper | Reorder-Validierung | Migration 86/next order | DnD + Buttons + Default-Badge | MCP/Housekeeping/CalDAV/Meals | abgeschlossen und in `main` |
-| KWF-003 Herkunft | Snapshot-/Serializer | Quellen in Importantworten | Backfill/FK-Löschung | eine/mehrere Quellen | bestehende Importcounts | geplant |
+| KWF-003 Herkunft | konservativer Import-/Source-Helper | `sources[]`, Einzel-/Wochen-/Bereichsimport | Migration 87, Backfill/FK-Löschung | eine/mehrere Quellen; Desktop/390/768 px | Search, Scopes, Permissions, SW, Kitchen, Frontend-Audit | abgeschlossen |
 | KWF-004 Direkter Import | Payload/Validierung | Erfolg und Rollback | keine halbe Speicherung | Checkbox/Default-Auswahl | Rekurrenz/normaler Meal-Create | geplant |
 | KWF-005 Microkalender | Datepicker-Grid | – | – | Recipe-Flow, Keyboard, Touch | Datepicker/Kitchen | größtenteils vorhanden |
 | KWF-006 Mengenbasis | Parser nur deterministisch | kompatible/incompatible Einheiten | additive Spalten/Legacywerte | manuelle Korrektur | alte Freitextanzeigen | geplant |
@@ -323,7 +326,7 @@ Neue i18n-Namensräume: `pantry.*`, `shopping.sources*`, `shopping.addToPantry*`
 - Schweregrad: hoch für Herkunftsanforderung.
 - Auswirkung: Aggregation oder mehrere Rezepte verlieren Nachvollziehbarkeit.
 - Empfehlung: `shopping_item_sources` mit Snapshots.
-- Status: offen.
+- Status: **resolved** durch Migration 87, `sources[]`-Serialisierung und atomare Source-Erzeugung in allen bestehenden Importpfaden.
 - Task: KWF-003.
 
 ### KWF-FINDING-003 — Bereichsimport aggregiert heuristisch
@@ -332,7 +335,7 @@ Neue i18n-Namensräume: `pantry.*`, `shopping.sources*`, `shopping.addToPantry*`
 - Schweregrad: mittel.
 - Auswirkung: numerische Präfixe werden summiert; mehrere Meal-IDs werden zu `NULL` Herkunft.
 - Empfehlung: Bis KWF-006 getrennte Positionen oder konservative Aggregation mit allen Quellen.
-- Status: offen.
+- Status: **resolved für KWF-003/Stufe 1**: Der Bereichsimport legt jede Freitextzutat getrennt an. Strukturierte Aggregation bleibt ausschließlich KWF-006.
 - Task: KWF-003/KWF-006.
 
 ### KWF-FINDING-004 — Meal-Create und Import sind heute getrennt
@@ -413,18 +416,28 @@ Neue i18n-Namensräume: `pantry.*`, `shopping.sources*`, `shopping.addToPantry*`
 - Schweregrad: mittel.
 - Auswirkung: `ON DELETE SET NULL` allein bewahrt keinen Anzeigenamen und kein Datum.
 - Empfehlung: Label-, Datums- und Mengen-Snapshots beim Erzeugen speichern.
-- Status: offen.
+- Status: **resolved für Shopping-Quellen in KWF-003**; Cooking-Event-Snapshots bleiben Teil von KWF-009.
 - Task: KWF-003/KWF-009.
+
+### KWF-FINDING-013 — Fork-`main` und `upstream/main` sind divergent
+
+- Betroffen: Repository-Baseline vor KWF-003; Überschneidungen insbesondere in `docs/SPEC.md`, `CHANGELOG.md`, allen Locale-Dateien und `test/test-frontend-audit.js`.
+- Schweregrad: mittel für spätere Upstream-Integration, niedrig für den isolierten KWF-003-Scope.
+- Auswirkung: `main` kann nicht per Fast-Forward synchronisiert werden (`main...upstream/main` = 7/8 Commits). Ein ungeprüfter Merge würde Kitchen-Historie und die Upstream-v1.20.0-Änderungen vermischen.
+- Empfehlung: KWF-003 auf dem aktuellen, sauberen Fork-`main` implementieren; Upstream-Integration separat und konfliktbewusst durchführen.
+- Status: offen; vor Implementierung dokumentiert, keine Architekturabweichung im KWF-003-Datenfluss festgestellt.
+- Task: Repository-Integration, nicht KWF-003-Feature-Scope.
 
 ## 11. Session-Handoff
 
-- Letzter abgeschlossener Schritt: vollständige Repository- und Workflow-Analyse; Memory und Taskplan erstellt.
-- Aktueller Integrationsstand: Fork-`main` auf Merge-Commit `b524dbc2`; Planungs-PR #1 und Task-1-PR #2 sind gemergt.
-- Geänderte Dateien der Planungs-/Handoff-Sessions: diese Memory-Datei, `KITCHEN_WORKFLOW_PLAN.md` und `KITCHEN_WORKFLOW_TASK_MASTER_PROMPT.md`; kein Featurecode.
-- Ergänzte Agentenvorlage: `KITCHEN_WORKFLOW_TASK_MASTER_PROMPT.md`; sie startet genau einen KWF-Task und verbietet ungeplante Folgeaufgaben.
-- KWF-002: abgeschlossen und in Fork-`main`; Feature-Branch bleibt nur als nachvollziehbare Historie bestehen.
-- Offene Tests dieser Session: Dokumentationsprüfung/Git-Diff; keine Featuretests nötig, da kein Featurecode geändert wurde.
-- Offene Findings: KWF-FINDING-002 bis -004 und -006 bis -012; KWF-FINDING-001 ist gelöst, KWF-FINDING-005 bestätigt vorhandene Funktionalität.
-- Nächster sinnvoller Schritt: KWF-003 Herkunftsmodell für Einkaufsartikel von aktualisiertem Fork-`main` beginnen.
-- Nicht erneut blind analysieren: Baseline-Dokumente, bestehende DB-Tabellen, aktuelle Meals/Recipes/Shopping-Flows, Datepicker-Funktion, Kitchen-Navigation, i18n-Konvention und Service-Worker-Grundmuster sind oben kartiert.
-- Pflicht für Folgesessions/Agents: diese Datei zuerst lesen, eigene Zeile in „Angegriffene Bereiche“ ergänzen, neue ADRs/Findings fortlaufend nummerieren und den Handoff aktualisieren.
+- Letzter abgeschlossener Schritt: KWF-003 vollständig implementiert, fokussiert/regressiv getestet und manuell auf Desktop, 390 px sowie 768 px geprüft; Git-Abschluss folgt unmittelbar auf diese Aktualisierung.
+- Aktueller Branch: `feature/shopping-item-sources`, Basis Fork-`main` `d92e8c19`; `upstream/main` wurde wegen dokumentierter 7/8-Divergenz nicht ungeprüft gemergt.
+- Commit-/Working-Tree-Status: ausschließlich KWF-003-Dateien geändert; Commit und Push werden nach finalem Diff-Check erzeugt, kein Pull Request.
+- Geänderte Bereiche: Migration 87/Schema-Testspiegel; neuer Source-Service; konservativer Import-Service; Meals-/Shopping-Routen; Shopping-UI/-CSS; OpenAPI; SPEC, Task-2-Analyse und Changelog; alle 23 Locales; DB-/Shopping-/Meals-Tests; diese Memory-Datei.
+- Bestätigte Annahmen: `added_from_meal` bleibt kompatibel; Meal-Importe verwenden `source_type='meal'` plus optionalen Recipe-Link; Titel/Datum/Freitextmenge sind unveränderliche Snapshots; manuelle Artikel liefern `sources: []`; Scopes, Permissions und Service Worker benötigen keinen neuen Pfad.
+- Tests bestanden: `test:db` 39/39, `test:shopping` 54/54, `test:meals` 40/40, `test:search` 15/15, `test:token-scopes` 16/16, `test:permissions` 15/15, `test:frontend-audit` 141/141, `test:kitchen-tabs` 8/8, `test:datepicker` 21/21, `test:mobile-scroll-layout` 5/5, `test:sw-api-cache` 9/9, `test:api` 11/11, `test:mcp` 29/29, `test:housekeeping` 13/13 und `test:caldav-reminders` 9/9; Syntaxchecks, 23 Locale-JSON-Dateien und `git diff --check` bestanden.
+- Vollsuite: `npm test` lief einschließlich KWF-Suiten und weiterer Regressionen bis `test:task-categories` (13/13) erfolgreich und brach danach reproduzierbar mit `Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\\win\\async.c, line 76` ab; entspricht KWF-FINDING-009, kein fachlicher KWF-003-Fehler.
+- Manuelle Prüfung: Einzelquelle und Mehrquellen-Aufklapper sichtbar; Snapshot-Daten korrekt; `<summary>` fokussierbar; bei 390 px und 768 px kein horizontaler Item-/Seitenüberlauf. Temporäre Browser-Testdaten vollständig entfernt.
+- Offene Findings: KWF-FINDING-004 und -006 bis -011 bleiben für spätere Tasks offen; KWF-FINDING-012 bleibt nur für Cooking-Events offen; KWF-FINDING-013 betrifft die separate Upstream-Integration. KWF-FINDING-002/-003 sind durch KWF-003 gelöst.
+- Nächster sinnvoller Schritt nach externer Annahme: KWF-004 auf eigenem Branch beginnen. In dieser Session wurde kein Folge-Task begonnen.
+- Nicht erneut analysieren: Migration-87-Modell, Source-Serializer, alle drei bisherigen Importpfade, Stufe-1-Duplikatverhalten, `sources[]`-UI, Locale-Key-Parität sowie Scope-/SW-Nichtbetroffenheit sind verifiziert.

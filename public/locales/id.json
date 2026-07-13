@@ -355,7 +355,12 @@
         "moveListFirst": "Pindahkan ke awal",
         "moveListUp": "Pindahkan ke atas",
         "moveListDown": "Pindahkan ke bawah",
-        "reorderError": "Urutan daftar tidak dapat disimpan."
+        "reorderError": "Urutan daftar tidak dapat disimpan.",
+        "sourceSingle": "From: {{source}} · {{date}}",
+        "sourceSingleNoDate": "From: {{source}}",
+        "sourcesMultiple": "{{count}} sources",
+        "sourceDeleted": "{{source}} (source deleted)",
+        "sourceUnknown": "Unknown source"
     },
     "meals": {
         "title": "Rencana Makan",

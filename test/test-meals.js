@@ -9,6 +9,7 @@ import { DatabaseSync } from 'node:sqlite';
 import { readFileSync } from 'node:fs';
 import { MIGRATIONS_SQL } from '../server/db-schema-test.js';
 import { datesForTemplateInRange, mealWeekday } from '../server/services/meal-recurrence.js';
+import { insertShoppingItemSource } from '../server/services/shopping-item-sources.js';
 import { __test as mealsUi } from '../public/pages/meals.js';
 
 let passed = 0;
@@ -30,6 +31,7 @@ db.exec(MIGRATIONS_SQL[1]);
 db.exec(MIGRATIONS_SQL[13]);
 db.exec(MIGRATIONS_SQL[64]);
 db.exec(MIGRATIONS_SQL[73]);
+db.exec(MIGRATIONS_SQL[87]);
 
 // Test-Benutzer
 const u1 = db.prepare(`INSERT INTO users (username, display_name, password_hash, role)
@@ -374,7 +376,15 @@ test('Zutaten → Einkaufsliste übertragen (INSERT + Flag setzen)', () => {
   const markDone = db.prepare(`UPDATE meal_ingredients SET on_shopping_list = 1 WHERE id = ?`);
 
   for (const ing of ingredients) {
-    insertItem.run(listId, ing.name, ing.quantity, mid);
+    const item = insertItem.run(listId, ing.name, ing.quantity, mid);
+    insertShoppingItemSource(db, item.lastInsertRowid, {
+      source_type: 'meal',
+      meal_id: mid,
+      recipe_id: null,
+      source_label: 'Suppe',
+      meal_date_snapshot: '2026-03-24',
+      quantity_snapshot: ing.quantity,
+    });
     markDone.run(ing.id);
   }
 
@@ -384,6 +394,9 @@ test('Zutaten → Einkaufsliste übertragen (INSERT + Flag setzen)', () => {
   `).all(mid);
   assert(items.length === 2, `Erwartet 2 Einkaufsartikel, erhalten ${items.length}`);
   assert(items[0].name === 'Karotten', `Erster Artikel: ${items[0].name}`);
+  const sources = db.prepare('SELECT * FROM shopping_item_sources WHERE meal_id = ? ORDER BY id').all(mid);
+  assert(sources.length === 2, `Erwartet 2 Herkunftszeilen, erhalten ${sources.length}`);
+  assert(sources[0].source_label === 'Suppe' && sources[0].quantity_snapshot === '3 Stück', 'Snapshots müssen gespeichert werden');
 
   // Prüfen: Flags gesetzt
   const stillOpen = db.prepare(`
@@ -411,6 +424,14 @@ test('added_from_meal FK auf meals(id) gesetzt', () => {
   `).all();
   assert(items.length > 0, 'Mindestens ein Artikel mit Mahlzeit-Referenz');
   assert(items[0].meal_title, 'meal_title verknüpft');
+});
+
+test('Meals-Importpfade speichern Artikel, Herkunft und Flag in derselben Transaktion', () => {
+  const source = readFileSync(new URL('../server/routes/meals.js', import.meta.url), 'utf8');
+  const sourceInsertCount = (source.match(/insertShoppingItemSource\(/g) || []).length;
+  assert(sourceInsertCount >= 2, 'Einzel- und Wochenimport müssen Herkunft speichern');
+  assert(/quantity_snapshot: ing\.quantity/.test(source), 'Import muss die unveränderte Freitextmenge snapshotten');
+  assert(/const transferred = db\.transaction/.test(source), 'Importe müssen atomar bleiben');
 });
 
 test('Rezepte speichern passende meal_types für Planer-Features', () => {

@@ -348,7 +348,12 @@
         "moveListFirst": "Μετακίνηση πρώτη",
         "moveListUp": "Μετακίνηση πάνω",
         "moveListDown": "Μετακίνηση κάτω",
-        "reorderError": "Δεν ήταν δυνατή η αποθήκευση της σειράς των λιστών."
+        "reorderError": "Δεν ήταν δυνατή η αποθήκευση της σειράς των λιστών.",
+        "sourceSingle": "From: {{source}} · {{date}}",
+        "sourceSingleNoDate": "From: {{source}}",
+        "sourcesMultiple": "{{count}} sources",
+        "sourceDeleted": "{{source}} (source deleted)",
+        "sourceUnknown": "Unknown source"
     },
     "meals": {
         "title": "Πρόγραμμα γευμάτων",

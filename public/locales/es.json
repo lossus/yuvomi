@@ -348,7 +348,12 @@
         "moveListFirst": "Mover al principio",
         "moveListUp": "Subir",
         "moveListDown": "Bajar",
-        "reorderError": "No se pudo guardar el orden de las listas."
+        "reorderError": "No se pudo guardar el orden de las listas.",
+        "sourceSingle": "From: {{source}} · {{date}}",
+        "sourceSingleNoDate": "From: {{source}}",
+        "sourcesMultiple": "{{count}} sources",
+        "sourceDeleted": "{{source}} (source deleted)",
+        "sourceUnknown": "Unknown source"
     },
     "meals": {
         "title": "Plan de comidas",

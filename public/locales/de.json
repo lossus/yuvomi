@@ -355,7 +355,12 @@
         "moveListFirst": "An erste Stelle",
         "moveListUp": "Nach oben",
         "moveListDown": "Nach unten",
-        "reorderError": "Die Listenreihenfolge konnte nicht gespeichert werden."
+        "reorderError": "Die Listenreihenfolge konnte nicht gespeichert werden.",
+        "sourceSingle": "Aus: {{source}} · {{date}}",
+        "sourceSingleNoDate": "Aus: {{source}}",
+        "sourcesMultiple": "{{count}} Quellen",
+        "sourceDeleted": "{{source}} (Quelle gelöscht)",
+        "sourceUnknown": "Unbekannte Quelle"
     },
     "meals": {
         "title": "Essensplan",
