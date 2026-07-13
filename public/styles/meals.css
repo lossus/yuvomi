@@ -531,6 +531,38 @@
   align-self: flex-start;
 }
 
+.meal-shopping-import {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--glass-border-subtle);
+  border-radius: var(--radius-glass-inner);
+  background: color-mix(in srgb, var(--module-shopping) 8%, transparent);
+}
+
+.meal-shopping-import__toggle {
+  align-items: center;
+}
+
+.meal-shopping-import__target {
+  margin: 0;
+}
+
+.meal-shopping-import .form-hint {
+  margin: 0;
+}
+
+@media (min-width: 641px) {
+  .meal-shopping-import {
+    grid-template-columns: minmax(0, 1fr) minmax(180px, 0.8fr);
+    align-items: end;
+  }
+
+  .meal-shopping-import .form-hint {
+    grid-column: 1 / -1;
+  }
+}
+
 .meal-randomize-modal {
   display: grid;
   gap: var(--space-4);

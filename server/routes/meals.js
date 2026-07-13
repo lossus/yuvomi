@@ -10,6 +10,7 @@ import * as db from '../db.js';
 import { str, oneOf, date, num, collectErrors, MAX_TITLE, MAX_TEXT, MAX_SHORT, DATE_RE } from '../middleware/validate.js';
 import { addDays, mealWeekday, datesForTemplateInRange } from '../services/meal-recurrence.js';
 import { insertShoppingItemSource } from '../services/shopping-item-sources.js';
+import { importMealIngredientsToShoppingList } from '../services/meal-shopping-import.js';
 
 const log = createLogger('Meals');
 
@@ -62,6 +63,23 @@ function sanitizedIngredients(ingredients) {
       category: String(ing.category || '').trim().slice(0, MAX_SHORT) || 'Sonstiges',
     }))
     .filter((ing) => ing.name);
+}
+
+function validateShoppingImport(value) {
+  if (value === undefined) return { enabled: false, listId: null, error: null };
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    return { enabled: false, listId: null, error: 'shopping_import muss ein Objekt sein.' };
+  }
+  if (value.enabled !== undefined && typeof value.enabled !== 'boolean') {
+    return { enabled: false, listId: null, error: 'shopping_import.enabled muss ein Boolean sein.' };
+  }
+  if (value.enabled !== true) return { enabled: false, listId: null, error: null };
+
+  const parsed = Number(value.list_id);
+  if (!Number.isInteger(parsed) || parsed <= 0) {
+    return { enabled: true, listId: null, error: 'shopping_import.list_id muss eine gültige Einkaufslisten-ID sein.' };
+  }
+  return { enabled: true, listId: parsed, error: null };
 }
 
 function loadMealWithIngredients(id) {
@@ -264,6 +282,7 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
   try {
     const { ingredients = [] } = req.body;
+    const shoppingImport = validateShoppingImport(req.body.shopping_import);
     const vDate       = date(req.body.date, 'Datum', true);
     const vType       = oneOf(req.body.meal_type, VALID_MEAL_TYPES, 'Mahlzeit-Typ');
     const vTitle      = str(req.body.title, 'Titel', { max: MAX_TITLE });
@@ -273,6 +292,7 @@ router.post('/', (req, res) => {
     const repeatWeekly = req.body.repeat_weekly === true;
     const errors = collectErrors([vDate, vType, vTitle, vNotes, vRecipeUrl, vRecipeId]);
     if (!req.body.meal_type) errors.push('Mahlzeit-Typ ist erforderlich.');
+    if (shoppingImport.error) errors.push(shoppingImport.error);
     if (errors.length) return res.status(400).json({ error: errors.join(' '), code: 400 });
 
     if (vRecipeId.value !== null) {
@@ -280,7 +300,12 @@ router.post('/', (req, res) => {
       if (!recipeExists) return res.status(400).json({ error: 'Rezept nicht gefunden.', code: 400 });
     }
 
-    const meal = db.transaction(() => {
+    if (shoppingImport.enabled) {
+      const listExists = db.get().prepare('SELECT id FROM shopping_lists WHERE id = ?').get(shoppingImport.listId);
+      if (!listExists) return res.status(404).json({ error: 'Einkaufsliste nicht gefunden.', code: 404 });
+    }
+
+    const created = db.transaction(() => {
       const cleanIngredients = sanitizedIngredients(ingredients);
       let recurrenceTemplateId = null;
 
@@ -319,10 +344,23 @@ router.post('/', (req, res) => {
 
       insertMealIngredients(mealId, cleanIngredients);
 
-      return loadMealWithIngredients(mealId);
+      const transferred = shoppingImport.enabled
+        ? importMealIngredientsToShoppingList(db.get(), { mealId, listId: shoppingImport.listId })
+        : 0;
+
+      return { meal: loadMealWithIngredients(mealId), transferred };
     });
 
-    res.status(201).json({ data: meal });
+    res.status(201).json({
+      data: created.meal,
+      ...(shoppingImport.enabled ? {
+        shopping_import: {
+          enabled: true,
+          list_id: shoppingImport.listId,
+          transferred: created.transferred,
+        },
+      } : {}),
+    });
   } catch (err) {
     log.error('', err);
     res.status(500).json({ error: 'Interner Fehler', code: 500 });
@@ -649,38 +687,8 @@ router.post('/:id/to-shopping-list', (req, res) => {
     const list = db.get().prepare('SELECT id FROM shopping_lists WHERE id = ?').get(listId);
     if (!list) return res.status(404).json({ error: 'Einkaufsliste nicht gefunden', code: 404 });
 
-    const ingredients = db.get().prepare(`
-      SELECT * FROM meal_ingredients
-      WHERE meal_id = ? AND on_shopping_list = 0
-    `).all(mealId);
-
-    if (ingredients.length === 0)
-      return res.json({ data: { transferred: 0 } });
-
     const transferred = db.transaction(() => {
-      const insertItem = db.get().prepare(`
-        INSERT INTO shopping_items (list_id, name, quantity, category, added_from_meal)
-        VALUES (?, ?, ?, ?, ?)
-      `);
-      const markDone = db.get().prepare(`
-        UPDATE meal_ingredients SET on_shopping_list = 1 WHERE id = ?
-      `);
-
-      let count = 0;
-      for (const ing of ingredients) {
-        const item = insertItem.run(listId, ing.name, ing.quantity, ing.category || 'Sonstiges', mealId);
-        insertShoppingItemSource(db.get(), item.lastInsertRowid, {
-          source_type: 'meal',
-          meal_id: mealId,
-          recipe_id: meal.recipe_id,
-          source_label: meal.title,
-          meal_date_snapshot: meal.date,
-          quantity_snapshot: ing.quantity,
-        });
-        markDone.run(ing.id);
-        count++;
-      }
-      return count;
+      return importMealIngredientsToShoppingList(db.get(), { mealId, listId });
     });
 
     res.json({ data: { transferred } });

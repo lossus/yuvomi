@@ -425,7 +425,13 @@
         "deleteRecurringTitle": "Smazat opakující se jídlo",
         "deleteScopeSingle": "Pouze toto datum",
         "deleteScopeSeries": "Celá série (všechny týdny)",
-        "seriesDeletedToast": "Série smazána"
+        "seriesDeletedToast": "Série smazána",
+        "shoppingImportLabel": "Převést ingredience do nákupního seznamu",
+        "shoppingImportListLabel": "Shopping list",
+        "shoppingImportHint": "The meal and shopping items are created together when you save.",
+        "shoppingImportSuccess": "Převedena {{count}} ingredience",
+        "shoppingImportSuccessPlural": "Převedeno {{count}} ingrediencí",
+        "shoppingImportError": "The meal and shopping items could not be saved together."
     },
     "calendar": {
         "searchOpen": "Hledat události",

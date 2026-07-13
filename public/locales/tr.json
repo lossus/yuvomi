@@ -425,7 +425,13 @@
         "deleteRecurringTitle": "Yinelenen öğünü sil",
         "deleteScopeSingle": "Yalnızca bu tarih",
         "deleteScopeSeries": "Tüm seri (tüm haftalar)",
-        "seriesDeletedToast": "Seri silindi"
+        "seriesDeletedToast": "Seri silindi",
+        "shoppingImportLabel": "Malzemeleri alışveriş listesine aktar",
+        "shoppingImportListLabel": "Shopping list",
+        "shoppingImportHint": "The meal and shopping items are created together when you save.",
+        "shoppingImportSuccess": "{{count}} malzeme aktarıldı",
+        "shoppingImportSuccessPlural": "{{count}} malzeme aktarıldı",
+        "shoppingImportError": "The meal and shopping items could not be saved together."
     },
     "calendar": {
         "searchOpen": "Etkinlik ara",

@@ -425,7 +425,13 @@
         "deleteRecurringTitle": "繰り返しの食事を削除",
         "deleteScopeSingle": "この日付のみ",
         "deleteScopeSeries": "シリーズ全体（毎週）",
-        "seriesDeletedToast": "シリーズを削除しました"
+        "seriesDeletedToast": "シリーズを削除しました",
+        "shoppingImportLabel": "材料を買い物リストに追加",
+        "shoppingImportListLabel": "Shopping list",
+        "shoppingImportHint": "The meal and shopping items are created together when you save.",
+        "shoppingImportSuccess": "{{count}} 種の材料を追加しました",
+        "shoppingImportSuccessPlural": "{{count}} 種の材料を追加しました",
+        "shoppingImportError": "The meal and shopping items could not be saved together."
     },
     "calendar": {
         "searchOpen": "予定を検索",

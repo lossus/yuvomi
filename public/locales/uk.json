@@ -425,7 +425,13 @@
         "deleteRecurringTitle": "Видалити повторюваний прийом їжі",
         "deleteScopeSingle": "Лише ця дата",
         "deleteScopeSeries": "Уся серія (усі тижні)",
-        "seriesDeletedToast": "Серію видалено"
+        "seriesDeletedToast": "Серію видалено",
+        "shoppingImportLabel": "Перенести інгредієнти до списку покупок",
+        "shoppingImportListLabel": "Shopping list",
+        "shoppingImportHint": "The meal and shopping items are created together when you save.",
+        "shoppingImportSuccess": "{{count}} інгредієнт перенесено",
+        "shoppingImportSuccessPlural": "{{count}} інгредієнтів перенесено",
+        "shoppingImportError": "The meal and shopping items could not be saved together."
     },
     "calendar": {
         "searchOpen": "Пошук подій",

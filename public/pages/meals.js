@@ -839,7 +839,13 @@ function openMealModal(opts) {
       const recipeSelect = panel.querySelector('#modal-recipe-id');
       const recipeScaleInput = panel.querySelector('#modal-recipe-scale');
       const saveAsRecipeBtn = panel.querySelector('#modal-save-as-recipe');
+      const shoppingImportCheckbox = panel.querySelector('#modal-shopping-import');
+      const shoppingImportList = panel.querySelector('#modal-shopping-import-list');
       let currentAppliedRecipe = null;
+
+      shoppingImportCheckbox?.addEventListener('change', () => {
+        if (shoppingImportList) shoppingImportList.disabled = !shoppingImportCheckbox.checked;
+      });
 
       const scaleQuantityText = (quantity, factor) => {
         if (!quantity || factor === 1) return quantity;
@@ -1055,6 +1061,20 @@ function buildModalContent({ mode, date, mealType, meal, presetRecipeId = null }
   const advancedOpen = (isEdit && (!!meal.recipe_id || !!meal.notes || !!meal.recipe_url || isRecurring))
     || !!presetRecipeId;
 
+  const shoppingImportHtml = !isEdit ? `
+    <div class="meal-shopping-import">
+      <label class="toggle meal-shopping-import__toggle">
+        <input type="checkbox" id="modal-shopping-import" ${state.lists.length ? '' : 'disabled'}>
+        <span class="toggle__track"></span>
+        <span>${t('meals.shoppingImportLabel')}</span>
+      </label>
+      <div class="form-group meal-shopping-import__target">
+        <label class="form-label" for="modal-shopping-import-list">${t('meals.shoppingImportListLabel')}</label>
+        <select class="form-input" id="modal-shopping-import-list" disabled>${listOpts}</select>
+      </div>
+      <p class="form-hint">${state.lists.length ? t('meals.shoppingImportHint') : t('meals.noShoppingLists')}</p>
+    </div>` : '';
+
   const advancedFieldsHtml = `
     <div class="form-group">
       <label class="form-label" for="modal-recipe-id">${t('meals.savedRecipeLabel')}</label>
@@ -1137,6 +1157,8 @@ function buildModalContent({ mode, date, mealType, meal, presetRecipeId = null }
 
     ${advancedSection(advancedFieldsHtml, { open: advancedOpen })}
 
+    ${shoppingImportHtml}
+
     ${isEdit && hasIngOpen ? `
     <div class="shopping-transfer">
       <div class="shopping-transfer__label">
@@ -1172,6 +1194,12 @@ async function saveModal(overlay) {
   const repeat_weekly = state.modal?.mode === 'create'
     ? Boolean(overlay.querySelector('#modal-repeat-weekly')?.checked)
     : false;
+  const shoppingImportEnabled = state.modal?.mode === 'create'
+    ? Boolean(overlay.querySelector('#modal-shopping-import')?.checked)
+    : false;
+  const shoppingImportListId = shoppingImportEnabled
+    ? Number(overlay.querySelector('#modal-shopping-import-list')?.value)
+    : null;
 
   if (!date || !isDateInputValid(dateRaw)) {
     window.yuvomi?.showToast(t('calendar.invalidDate'), 'error');
@@ -1192,8 +1220,30 @@ async function saveModal(overlay) {
     const { mode, meal } = state.modal;
 
     if (mode === 'create') {
-      const res     = await api.post('/meals', { date, meal_type, title, notes, recipe_url, recipe_id, ingredients, repeat_weekly });
+      const res = await api.post('/meals', {
+        date,
+        meal_type,
+        title,
+        notes,
+        recipe_url,
+        recipe_id,
+        ingredients,
+        repeat_weekly,
+        shopping_import: shoppingImportEnabled
+          ? { enabled: true, list_id: shoppingImportListId }
+          : { enabled: false },
+      });
       state.meals.push(res.data);
+
+      if (res.shopping_import) {
+        const count = res.shopping_import.transferred;
+        window.yuvomi?.showToast(
+          count === 1
+            ? t('meals.shoppingImportSuccess', { count })
+            : t('meals.shoppingImportSuccessPlural', { count }),
+          'success'
+        );
+      }
     } else {
       const scope = overlay.querySelector('#modal-edit-scope')?.value || 'single';
 
@@ -1224,9 +1274,14 @@ async function saveModal(overlay) {
 
     closeModal({ force: true });
     renderWeekGrid();
-    window.yuvomi?.showToast(mode === 'create' ? t('meals.addMealTitle') : t('meals.editMeal'), 'success');
+    if (mode !== 'create' || !shoppingImportEnabled) {
+      window.yuvomi?.showToast(mode === 'create' ? t('meals.addMealTitle') : t('meals.editMeal'), 'success');
+    }
   } catch (err) {
-    window.yuvomi?.showToast(err.data?.error ?? t('common.errorGeneric'), 'error');
+    window.yuvomi?.showToast(
+      err.data?.error ?? (shoppingImportEnabled ? t('meals.shoppingImportError') : t('common.errorGeneric')),
+      'error'
+    );
     saveBtn.disabled    = false;
     saveBtn.textContent = state.modal?.mode === 'edit' ? t('common.save') : t('common.add');
   }

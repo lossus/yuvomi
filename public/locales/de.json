@@ -432,7 +432,13 @@
         "deleteRecurringTitle": "Wiederkehrende Mahlzeit löschen",
         "deleteScopeSingle": "Nur dieses Datum",
         "deleteScopeSeries": "Ganze Serie (alle Wochen)",
-        "seriesDeletedToast": "Serie gelöscht"
+        "seriesDeletedToast": "Serie gelöscht",
+        "shoppingImportLabel": "Zutaten direkt zur Einkaufsliste hinzufügen",
+        "shoppingImportListLabel": "Einkaufsliste",
+        "shoppingImportHint": "Beim Speichern werden Mahlzeit und Einkaufsartikel gemeinsam angelegt.",
+        "shoppingImportSuccess": "{{count}} Zutat zur Einkaufsliste hinzugefügt",
+        "shoppingImportSuccessPlural": "{{count}} Zutaten zur Einkaufsliste hinzugefügt",
+        "shoppingImportError": "Mahlzeit und Einkaufsartikel konnten nicht gemeinsam gespeichert werden."
     },
     "calendar": {
         "searchOpen": "Termine suchen",

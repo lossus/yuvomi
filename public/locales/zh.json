@@ -425,7 +425,13 @@
         "deleteRecurringTitle": "删除重复餐食",
         "deleteScopeSingle": "仅此日期",
         "deleteScopeSeries": "整个系列（所有周）",
-        "seriesDeletedToast": "已删除系列"
+        "seriesDeletedToast": "已删除系列",
+        "shoppingImportLabel": "将食材添加到购物清单",
+        "shoppingImportListLabel": "Shopping list",
+        "shoppingImportHint": "The meal and shopping items are created together when you save.",
+        "shoppingImportSuccess": "已添加 {{count}} 种食材",
+        "shoppingImportSuccessPlural": "已添加 {{count}} 种食材",
+        "shoppingImportError": "The meal and shopping items could not be saved together."
     },
     "calendar": {
         "searchOpen": "搜索日程",

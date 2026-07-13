@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Shopping lists can now be reordered with drag-and-drop or touch-friendly move actions. The first list is marked as the default and is used wherever Yuvomi needs an implicit shopping-list target.
 - Shopping items imported from meals now retain durable one-to-many provenance snapshots and show their source meal and date in the list.
+- Meal creation can now optionally add the concrete meal's ingredients to a selected shopping list in the same atomic request, including provenance snapshots and recurring-start-instance semantics.
 
 ### Changed
 - Existing shopping lists receive a stable order during migration (`created_at`, then `id`), and new lists are appended to that order.

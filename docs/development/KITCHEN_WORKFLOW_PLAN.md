@@ -37,7 +37,7 @@ Begründete Anpassung der vorgeschlagenen Reihenfolge: KWF-003 kommt vor dem dir
 | 1 | KWF-001 | Repository-, Architektur- und Planungsbaseline | mittel | abgeschlossen |
 | 2 | KWF-002 | persistente Reihenfolge und Default-Liste | mittel | abgeschlossen und in `main` |
 | 3 | KWF-003 | mehrquellenfähige Einkaufsartikel-Herkunft | groß | abgeschlossen |
-| 4 | KWF-004 | atomarer Rezept→Meal→Shopping-Flow | mittel | geplant |
+| 4 | KWF-004 | atomarer Rezept→Meal→Shopping-Flow | mittel | abgeschlossen |
 | 5 | KWF-005 | bestehender Microkalender verifiziert/gezielt ergänzt | klein | größtenteils vorhanden |
 | 6 | KWF-006 | rückwärtskompatible strukturierte Mengenbasis | groß | geplant |
 | 7 | KWF-007 | Core-Pantry-MVP mit Bewegungsjournal | groß | geplant |
@@ -167,27 +167,56 @@ Begründete Anpassung der vorgeschlagenen Reihenfolge: KWF-003 kommt vor dem dir
 - Komplexität: mittel.
 - Empfohlene Reihenfolge: 4.
 
-## KWF-005 — Microkalender im Rezept→Essensplan-Flow
+## KWF-005 — Microkalender auf Tablet und Mobilgeräten verfügbar machen
 
-- Ziel: Sicherstellen, dass jeder relevante Rezept→Meal-Einstieg den bestehenden Microkalender korrekt nutzt; nur fehlende, generische UX ergänzen.
-- Scope: Recipe-Query-Flow, heutiger/gewählter Tag, Monatswechsel, Keyboard, Touch, ISO-Persistenz; optional nach Review ein generisches Marker-Attribut für bereits geplante Tage.
-- Nicht-Scope: neue Kalenderbibliothek; zweite Kalenderkomponente; automatische Wochen-/Monatsplanung.
-- Betroffene Dateien: `public/pages/meals.js`, `public/components/datepicker.js`, `public/styles/datepicker.css`, ggf. `public/pages/recipes.js`, Locale-Dateien, `test/test-datepicker.js`, `test/test-meals.js`, `test/test-ux-utils.js`.
-- Datenmodelländerungen/Migration: keine.
-- API: für Basisscope keine; optionale Tagesmarker nutzen bereits geladene Meal-Daten statt neuem Endpoint.
-- Frontend: vorhandenes `<yuvomi-datepicker type="date">`; verifizieren, dass Query-Prefill nicht Fokus/Datum überschreibt und alle Recipe-Einstiege das Modal öffnen, wenn eine Datumsentscheidung nötig ist.
-- i18n: vorhandener `datepicker.*`-Namespace; nur neue Markertexte ergänzen, falls tatsächlich umgesetzt.
-- Tests: Kalender-Grid, Heute/Selection, vorheriger/nächster Monat, Arrow/Home/End/Enter/Escape/Tab, Touch-Fallback, ISO-POST, Recipe-Query-Prefill.
-- Risiken: bestehender Drag-Drop-Flow erstellt direkt ohne Kalender; UX-Entscheidung nötig, ob Drag-Drop als bereits eindeutige Datumswahl gilt (empfohlen: ja).
-- Abhängigkeiten: KWF-004 für den vollständigen Recipe-Create-Dialog.
-- Akzeptanzkriterien:
-  - Kein nacktes Text-/Date-Feld im Dialog.
-  - Desktop, Tastatur und Touch bleiben funktionsfähig.
-  - Gespeicherter Wert ist immer ISO.
-  - Keine duplizierte Kalenderlogik.
-- Branch: `feature/recipe-meal-datepicker`.
-- Komplexität: klein.
-- Empfohlene Reihenfolge: 5; Basiskriterien sind bereits erfüllt, daher zuerst verifizieren und Scope klein halten.
+* Ziel: Sicherstellen, dass der bestehende Microkalender im Rezept→Essensplan-Flow nicht nur am Desktop, sondern auch auf Tablets und Smartphones korrekt angezeigt und bedient werden kann.
+* Scope: Responsive Darstellung, Touch-Bedienung, mobile Modal-Integration, Recipe-Query-Flow, heutiger und gewählter Tag, Monatswechsel, Keyboard-Fallback, ISO-Persistenz; optional nach Review ein generisches Marker-Attribut für bereits geplante Tage.
+* Nicht-Scope: neue Kalenderbibliothek; zweite Kalenderkomponente; Neuimplementierung des bestehenden Desktop-Datepickers; automatische Wochen- oder Monatsplanung.
+* Betroffene Dateien: `public/pages/meals.js`, `public/components/datepicker.js`, `public/styles/datepicker.css`, ggf. `public/pages/recipes.js`, relevante Mobile-/Modal-Styles, Locale-Dateien, `test/test-datepicker.js`, `test/test-meals.js`, `test/test-ux-utils.js`.
+* Datenmodelländerungen/Migration: keine.
+* API: für den Basisscope keine; optionale Tagesmarker verwenden bereits geladene Meal-Daten statt eines neuen Endpoints.
+* Frontend:
+
+  * Der vorhandene `<yuvomi-datepicker type="date">` bleibt die einzige Kalenderkomponente.
+  * Analysieren, warum der Microkalender auf Desktop verfügbar ist, auf Tablet und Smartphone jedoch nicht angezeigt oder durch ein natives beziehungsweise nacktes Datumsfeld ersetzt wird.
+  * Responsive CSS, Viewport-Erkennung, Modal-Layout, Touch-Events und mögliche mobile Fallbacks prüfen.
+  * Sicherstellen, dass der Kalender im mobilen Rezept→Essensplan-Dialog sichtbar bleibt, nicht abgeschnitten wird und innerhalb des Viewports bedienbar ist.
+  * Query-Prefill darf Fokus, ausgewähltes Datum oder Kalenderanzeige nicht überschreiben.
+  * Alle relevanten Recipe-Einstiege müssen dieselbe Datepicker-Komponente verwenden.
+  * Drag-and-drop auf ein konkretes Meal-Slot gilt weiterhin als bereits eindeutige Datumswahl und benötigt keinen zusätzlichen Kalenderdialog.
+* i18n: vorhandenen `datepicker.*`-Namespace verwenden; nur neue Marker- oder Hilfetexte ergänzen, falls tatsächlich notwendig.
+* Tests:
+
+  * Kalender-Grid
+  * heutiger und ausgewählter Tag
+  * vorheriger und nächster Monat
+  * Arrow, Home, End, Enter, Escape und Tab
+  * Touch-Bedienung
+  * kleine Viewports und Tablet-Breakpoints
+  * kein Abschneiden oder Überlagern im Modal
+  * ISO-POST
+  * Recipe-Query-Prefill
+  * Verifikation, dass Desktop-Verhalten unverändert bleibt
+* Risiken:
+
+  * Mobile Styles oder Modal-Logik blenden den bestehenden Datepicker möglicherweise bewusst aus.
+  * Native Date-Input-Fallbacks können je nach Browser unterschiedlich reagieren.
+  * Änderungen dürfen den bereits funktionierenden Desktop-Flow nicht verschlechtern.
+  * Touch- und Scroll-Gesten können miteinander kollidieren.
+* Abhängigkeiten: KWF-004 für den vollständigen Recipe-Create-Dialog.
+* Akzeptanzkriterien:
+
+  * Der bestehende Microkalender ist auf Desktop, Tablet und Smartphone verfügbar.
+  * Kein nacktes Text- oder Date-Feld ersetzt den Kalender im relevanten Dialog.
+  * Der Kalender bleibt innerhalb kleiner Viewports vollständig sichtbar und bedienbar.
+  * Touch- und Tastaturbedienung funktionieren.
+  * Gespeicherte Werte bleiben immer im ISO-Format.
+  * Es wird keine zweite Kalenderlogik eingeführt.
+  * Das bestehende Desktop-Verhalten bleibt unverändert.
+* Branch: `fix/mobile-recipe-meal-datepicker`.
+* Komplexität: klein bis mittel.
+* Empfohlene Reihenfolge: 5; zuerst Ursache des mobilen Ausblendens oder Fallbacks identifizieren, danach nur die notwendige responsive und Touch-spezifische Korrektur umsetzen.
+
 
 ## KWF-006 — Mengen- und Einheiten-Basismodell
 
@@ -358,11 +387,11 @@ Begründete Anpassung der vorgeschlagenen Reihenfolge: KWF-003 kommt vor dem dir
 
 ## Empfohlener nächster Schritt
 
-1. KWF-003 ist extern akzeptiert und ohne Pull Request in den eigenen Fork-`main` integriert; `upstream` bleibt unverändert.
-2. Erst in einer neuen, separat reservierten Session KWF-004 auf `feature/recipe-meal-shopping-import` beginnen.
-3. Für KWF-004 die bestehende Migration 87 und den gemeinsamen Source-Service wiederverwenden; keine zweite Herkunftsstruktur anlegen.
+1. KWF-004 ist auf `feature/recipe-meal-shopping-import` implementiert und lokal verifiziert; `upstream` bleibt unverändert.
+2. Erst in einer neuen, separat reservierten Session KWF-005 beginnen.
+3. Für KWF-005 den vorhandenen `public/components/datepicker.js` wiederverwenden und die im KWF-005-Abschnitt dokumentierte Drag-and-drop-Semantik beachten.
 
-KWF-003 ist implementiert, lokal verifiziert und extern akzeptiert. Der atomare Rezeptimport aus KWF-004 kann damit neue Einkaufsartikel direkt mit belastbarer Herkunft erzeugen.
+KWF-004 erzeugt beim bestätigten Meal-Create optional und atomar neue Einkaufsartikel mit belastbarer Herkunft. KWF-005 wurde in dieser Session nicht implementiert.
 
 ## Review-Gates pro Task
 

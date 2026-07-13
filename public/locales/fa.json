@@ -432,7 +432,13 @@
         "deleteRecurringTitle": "حذف وعده تکرارشونده",
         "deleteScopeSingle": "فقط این تاریخ",
         "deleteScopeSeries": "کل مجموعه (همه هفته‌ها)",
-        "seriesDeletedToast": "مجموعه حذف شد"
+        "seriesDeletedToast": "مجموعه حذف شد",
+        "shoppingImportLabel": "انتقال مواد اولیه به فهرست خرید",
+        "shoppingImportListLabel": "Shopping list",
+        "shoppingImportHint": "The meal and shopping items are created together when you save.",
+        "shoppingImportSuccess": "{{count}} ماده منتقل شد",
+        "shoppingImportSuccessPlural": "{{count}} ماده منتقل شد",
+        "shoppingImportError": "The meal and shopping items could not be saved together."
     },
     "calendar": {
         "searchOpen": "جستجوی رویدادها",

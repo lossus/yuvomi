@@ -594,6 +594,147 @@ try {
     assert(Array.isArray(body.data.sources) && body.data.sources.length === 0, 'sources: [] fehlt');
   });
 
+  await asyncTest('Meal-Create ohne Shopping-Import bleibt rückwärtskompatibel', async () => {
+    const response = await fetch(`${apiBase}/meals`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        date: '2026-07-21',
+        meal_type: 'dinner',
+        title: 'KWF004 no import',
+        ingredients: [{ name: 'No import ingredient', quantity: 'one' }],
+      }),
+    });
+    const body = await response.json();
+    assert(response.status === 201, `Create-Status ${response.status}`);
+    assert(!body.shopping_import, 'Ohne Block darf keine Importzusammenfassung erscheinen');
+    assert(routeDatabase.prepare("SELECT COUNT(*) count FROM shopping_items WHERE name = 'No import ingredient'").get().count === 0, 'Ohne Import darf kein Shopping-Item entstehen');
+    assert(routeDatabase.prepare('SELECT on_shopping_list FROM meal_ingredients WHERE meal_id = ?').get(body.data.id).on_shopping_list === 0, 'Zutat muss offen bleiben');
+  });
+
+  await asyncTest('Meal-Create importiert Zutaten, Quellen und Flags atomar in die explizite Liste', async () => {
+    const recipeId = routeDatabase.prepare("INSERT INTO recipes (title, created_by) VALUES ('KWF004 recipe', 1)").run().lastInsertRowid;
+    const response = await fetch(`${apiBase}/meals`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        date: '2026-07-22',
+        meal_type: 'dinner',
+        title: 'KWF004 direct import',
+        recipe_id: recipeId,
+        ingredients: [
+          { name: 'KWF004 tomatoes', quantity: '2 cans', category: 'Sonstiges' },
+          { name: 'KWF004 pasta', quantity: '500 g', category: 'Sonstiges' },
+        ],
+        shopping_import: { enabled: true, list_id: createdIds[1] },
+      }),
+    });
+    const body = await response.json();
+    assert(response.status === 201, `Create-Status ${response.status}: ${JSON.stringify(body)}`);
+    assert(body.shopping_import?.transferred === 2, `Importsummary ${JSON.stringify(body.shopping_import)}`);
+    assert(body.shopping_import.list_id === createdIds[1], 'Explizite Zielliste muss erhalten bleiben');
+
+    const ingredients = routeDatabase.prepare('SELECT * FROM meal_ingredients WHERE meal_id = ? ORDER BY id').all(body.data.id);
+    assert(ingredients.length === 2 && ingredients.every((ingredient) => ingredient.on_shopping_list === 1), 'Alle konkreten Meal-Zutaten müssen markiert sein');
+    const items = routeDatabase.prepare("SELECT * FROM shopping_items WHERE added_from_meal = ? ORDER BY id").all(body.data.id);
+    assert(items.length === 2 && items.every((item) => item.list_id === createdIds[1]), 'Items müssen in der expliziten Liste liegen');
+    const sources = routeDatabase.prepare('SELECT * FROM shopping_item_sources WHERE meal_id = ? ORDER BY id').all(body.data.id);
+    assert(sources.length === 2, 'Jedes Item braucht eine Herkunft');
+    assert(sources.every((source) => source.recipe_id === recipeId && source.source_label === 'KWF004 direct import'), 'Recipe-Link und Titel-Snapshot fehlen');
+    assert(sources.some((source) => source.quantity_snapshot === '2 cans'), 'Freitextmenge muss unverändert gesnapshotpt werden');
+  });
+
+  await asyncTest('Aktivierter Meal-Import lehnt ungültigen Block und unbekannte Liste vor jedem Write ab', async () => {
+    const before = routeDatabase.prepare('SELECT COUNT(*) count FROM meals').get().count;
+    const invalidBlock = await fetch(`${apiBase}/meals`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ date: '2026-07-23', meal_type: 'lunch', title: 'Invalid block', ingredients: [], shopping_import: { enabled: true } }),
+    });
+    assert(invalidBlock.status === 400, `Block-Status ${invalidBlock.status}`);
+
+    const unknownList = await fetch(`${apiBase}/meals`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ date: '2026-07-23', meal_type: 'lunch', title: 'Unknown list', ingredients: [], shopping_import: { enabled: true, list_id: 999999 } }),
+    });
+    assert(unknownList.status === 404, `Listen-Status ${unknownList.status}`);
+    assert(routeDatabase.prepare('SELECT COUNT(*) count FROM meals').get().count === before, 'Validierungsfehler dürfen kein Meal anlegen');
+  });
+
+  await asyncTest('Unbekannte Recipe-ID mit aktiviertem Import hinterlässt keine Daten', async () => {
+    const before = routeDatabase.prepare('SELECT COUNT(*) count FROM meals').get().count;
+    const response = await fetch(`${apiBase}/meals`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        date: '2026-07-24',
+        meal_type: 'dinner',
+        title: 'Unknown recipe',
+        recipe_id: 999999,
+        ingredients: [{ name: 'Never written' }],
+        shopping_import: { enabled: true, list_id: createdIds[0] },
+      }),
+    });
+    assert(response.status === 400, `Recipe-Status ${response.status}`);
+    assert(routeDatabase.prepare('SELECT COUNT(*) count FROM meals').get().count === before, 'Unbekanntes Rezept darf kein Meal anlegen');
+    assert(!routeDatabase.prepare("SELECT id FROM shopping_items WHERE name = 'Never written'").get(), 'Unbekanntes Rezept darf kein Item anlegen');
+  });
+
+  await asyncTest('Source-Fehler rollt Meal, Wiederholung, Zutaten, Items und Flags vollständig zurück', async () => {
+    routeDatabase.exec(`
+      CREATE TRIGGER kwf004_force_source_failure
+      BEFORE INSERT ON shopping_item_sources
+      WHEN NEW.source_label = 'KWF004 forced rollback'
+      BEGIN
+        SELECT RAISE(ABORT, 'forced KWF004 source failure');
+      END;
+    `);
+    try {
+      const response = await fetch(`${apiBase}/meals`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          date: '2026-07-25',
+          meal_type: 'dinner',
+          title: 'KWF004 forced rollback',
+          repeat_weekly: true,
+          ingredients: [{ name: 'Rollback ingredient', quantity: 'some' }],
+          shopping_import: { enabled: true, list_id: createdIds[0] },
+        }),
+      });
+      assert(response.status === 500, `Rollback-Status ${response.status}`);
+      assert(!routeDatabase.prepare("SELECT id FROM meals WHERE title = 'KWF004 forced rollback'").get(), 'Meal darf nicht verbleiben');
+      assert(!routeDatabase.prepare("SELECT id FROM meal_recurrence_templates WHERE title = 'KWF004 forced rollback'").get(), 'Template darf nicht verbleiben');
+      assert(!routeDatabase.prepare("SELECT id FROM shopping_items WHERE name = 'Rollback ingredient'").get(), 'Item darf nicht verbleiben');
+      assert(!routeDatabase.prepare("SELECT id FROM meal_ingredients WHERE name = 'Rollback ingredient'").get(), 'Meal-Zutat darf nicht verbleiben');
+    } finally {
+      routeDatabase.exec('DROP TRIGGER kwf004_force_source_failure;');
+    }
+  });
+
+  await asyncTest('Wiederkehrender Meal-Create importiert nur die konkrete Startinstanz', async () => {
+    const response = await fetch(`${apiBase}/meals`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        date: '2026-07-26',
+        meal_type: 'dinner',
+        title: 'KWF004 recurring start',
+        repeat_weekly: true,
+        ingredients: [{ name: 'Recurring ingredient', quantity: 'one' }],
+        shopping_import: { enabled: true, list_id: createdIds[2] },
+      }),
+    });
+    const body = await response.json();
+    assert(response.status === 201, `Recurring-Status ${response.status}`);
+    assert(body.shopping_import?.transferred === 1, 'Startinstanz muss genau eine Zutat importieren');
+    const template = routeDatabase.prepare("SELECT id FROM meal_recurrence_templates WHERE title = 'KWF004 recurring start'").get();
+    assert(template, 'Wiederholungstemplate fehlt');
+    assert(routeDatabase.prepare('SELECT COUNT(*) count FROM meals WHERE recurrence_template_id = ?').get(template.id).count === 1, 'Create darf nur die Startinstanz materialisieren');
+    assert(routeDatabase.prepare("SELECT COUNT(*) count FROM shopping_items WHERE name = 'Recurring ingredient'").get().count === 1, 'Zukünftige Instanzen dürfen nicht vorab importiert werden');
+  });
+
   await asyncTest('Einzel- und Wochen-Meal-Import erzeugen Herkunftszeilen', async () => {
     const singleMeal = routeDatabase.prepare("INSERT INTO meals (date, meal_type, title, created_by) VALUES ('2026-07-16', 'dinner', 'Single source', 1)").run().lastInsertRowid;
     routeDatabase.prepare("INSERT INTO meal_ingredients (meal_id, name, quantity) VALUES (?, 'Single ingredient', 'one')").run(singleMeal);
