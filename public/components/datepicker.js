@@ -2,8 +2,8 @@
  * Modul: yuvomi-datepicker Web Component
  * Zweck: Gemeinsame Datum-/Zeit-Eingabe für die ganze App. Tippen bleibt der
  *        schnelle Pfad (locale-Parsing wie bisher, #442); ein Icon-Trigger
- *        öffnet auf Desktop ein Glass-Popover (Kalender-Grid / Zeit-Liste),
- *        auf Touch das native OS-Sheet (showPicker()).
+ *        öffnet für Daten auf allen Geräten ein Glass-Popover (Kalender-Grid),
+ *        für Zeiten auf Touch weiterhin das native OS-Sheet (showPicker()).
  * Abhängigkeiten: /i18n.js (Format/Parse/Locale), /utils/html.js (esc)
  *
  * API (an nativem Input orientiert, damit der Umstieg mechanisch ist):
@@ -254,11 +254,12 @@ class YuvomiDatepicker extends HTMLElement {
       this._emit();
     });
 
-    // Trigger: Touch → natives Sheet, Desktop → eigenes Popover
+    // Datum: auf allen Geräten dasselbe Kalender-Grid. Nur die Zeit-Auswahl
+    // darf auf groben Pointern weiterhin das kompakte native OS-Sheet nutzen.
     sub.trigger.addEventListener('click', () => {
       if (this.hasAttribute('disabled')) return;
       const coarse = window.matchMedia?.('(pointer: coarse)').matches;
-      if (coarse && this._openNative(sub)) return;
+      if (sub.kind === 'time' && coarse && this._openNative(sub)) return;
       this._openPopover(sub);
     });
 
@@ -530,7 +531,12 @@ class YuvomiDatepicker extends HTMLElement {
     grid.addEventListener('keydown', (e) => {
       const cur = document.activeElement;
       if (!cur?.dataset?.iso) return;
-      const step = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 }[e.key];
+      let step = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 }[e.key];
+      if (e.key === 'Home' || e.key === 'End') {
+        const current = parseIso(cur.dataset.iso);
+        const weekday = (new Date(current.y, current.m, current.d).getDay() + 6) % 7;
+        step = e.key === 'Home' ? -weekday : 6 - weekday;
+      }
       if (step != null) {
         e.preventDefault();
         const p = parseIso(cur.dataset.iso);

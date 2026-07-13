@@ -86,8 +86,8 @@ Analysierte Implementierungsbereiche:
 
 - Kitchen ist eine gemeinsame Navigation aus `/meals`, `/recipes`, `/shopping`; Definitionen liegen in `public/router.js` und `public/utils/kitchen-tabs.js`.
 - Formulare verwenden das gemeinsame Modal aus `public/components/modal.js` und gemeinsame Ingredient-Row-Struktur aus `public/utils/ingredient-row.js`.
-- Der gewünschte Microkalender ist bereits vorhanden: `public/components/datepicker.js` zeigt auf Desktop einen Monatskalender mit Heute-/Auswahlmarkierung, Monatsnavigation und Tastatursteuerung; auf Touch wird bevorzugt der native Picker geöffnet. Der Wert bleibt ISO `YYYY-MM-DD`.
-- Der Rezept→Essensplan-Flow nutzt bereits `<yuvomi-datepicker type="date">` im Meal-Modal. KWF-005 ist daher eine Verifikations-/Integrationsaufgabe, keine neue Kalenderkomponente.
+- Der gewünschte Microkalender ist in `public/components/datepicker.js` vorhanden. KWF-005 öffnet den Monatskalender mit Heute-/Auswahlmarkierung, Monatsnavigation und Tastatursteuerung für `type="date"` jetzt auf Desktop, Tablet und Smartphone; nur `type="time"` darf auf groben Pointern weiter den nativen Picker verwenden. Der Wert bleibt ISO `YYYY-MM-DD`.
+- Der Rezept→Essensplan-Flow nutzt `<yuvomi-datepicker type="date">` im bestehenden Meal-Modal. KWF-005 änderte deshalb ausschließlich die gemeinsame Datepicker-Integration und keine Meals-/Recipes-/Modal-Implementierung.
 - Shopping-Abhaken erfolgt per Klick, Tastatur oder Swipe und endet derzeit nach dem `PATCH is_checked`.
 
 ### Tests
@@ -123,6 +123,7 @@ Analysierte Implementierungsbereiche:
 | 2026-07-13 | Hauptagent | KWF-001 / Agent-Handoff | `docs/development/KITCHEN_WORKFLOW_TASK_MASTER_PROMPT.md` | Wiederverwendbaren, taskgebundenen Startprompt mit Reservierungs-, Analyse-, Test-, Memory- und Git-Gates angelegt | abgeschlossen | pro Session Task-ID und optional Branch/Vorgaben einsetzen |
 | 2026-07-13 | Codex | KWF-003 / `feature/shopping-item-sources` | Migration 87, Source-Service, alle drei Importpfade, Shopping-API/-UI/-CSS, OpenAPI, SPEC/Task-2-Analyse, Locales und Tests | Mehrquellenfähige Herkunft mit löschfesten Snapshots implementiert und verifiziert | extern akzeptiert; Commit `073c4d06` gepusht und ohne PR in Fork-`main` integriert | `upstream/main` bleibt 7/8 divergent und unverändert, KWF-FINDING-013 |
 | 2026-07-13 | Codex | KWF-004 / `feature/recipe-meal-shopping-import` | `server/services/meal-shopping-import.js`, `server/routes/meals.js`, `server/openapi.js`, `public/pages/meals.js`, `public/styles/meals.css`, alle 23 Locale-Dateien, `test/test-meals.js`, `test/test-shopping.js`, `docs/SPEC.md`, `docs/TASK2_RECIPE_MEAL_SHOPPING_ANALYSIS.md`, `CHANGELOG.md` und Kitchen-Doku | Atomaren Create-und-Import-Flow mit expliziter Listenauswahl implementiert, dokumentiert und verifiziert | abgeschlossen; Feature-Commit `1de88813` und finaler Handoff-Abschluss zu `origin` gepusht | Benutzeränderung im KWF-005-Abschnitt von `KITCHEN_WORKFLOW_PLAN.md` ist im Feature-Commit enthalten, ohne KWF-005 zu implementieren; Fork-`main` vs. `upstream/main` bleibt 9/8 divergent; keine Überschneidung mit aktiver Fremdreservierung |
+| 2026-07-13 | Codex | KWF-005 / `fix/mobile-recipe-meal-datepicker` | Vollständig untersucht: Datepicker JS/CSS, Meals/Recipes, Shared Modal und relevante Layout-/Glass-/Meals-Styles, SW, SPEC, Tests; geändert: Datepicker JS/CSS, Datepicker-/Meals-/UX-Tests, SPEC, Changelog und Kitchen-Memory | Gemeinsamen Microkalender auf groben Pointern aktiviert, Viewport begrenzt, Home/End ergänzt sowie Recipe-Query/ISO-Vertrag verifiziert | implementiert und verifiziert; Commit/Push ausstehend | keine aktive Fremdreservierung; KWF-004 abgeschlossen; Fork-`main` vs. `upstream/main` live 12/8 divergent, daher kein Upstream-Merge; kein Folge-Task begonnen |
 
 ## 5. Architekturentscheidungen
 
@@ -215,7 +216,7 @@ Analysierte Implementierungsbereiche:
 - Begründung: Sie erfüllt Monatsansicht, Heute-/Auswahlmarkierung, ISO-Wert, Touch und Tastatur bereits.
 - Alternativen: neue Komponente; externe Bibliothek.
 - Auswirkungen: KWF-005 prüft Integration und ergänzt nur gezielte Erweiterungen, z. B. geplante Tage, falls nach Review gewünscht.
-- Status: **accepted**.
+- Status: **accepted und in KWF-005 für Desktop, Tablet und Smartphone umgesetzt**; der native Touch-Picker bleibt ausschließlich für Uhrzeitfelder bestehen.
 
 ### ADR-KITCHEN-011 — Checkbox-Präferenz zunächst nicht persistieren
 
@@ -286,7 +287,7 @@ Alle neuen Pfade müssen in `server/openapi.js`, `server/scopes.js` und den Bere
 | `public/pages/shopping.js` | Quellen anzeigen; Kauf→Vorrat anbieten | bestehende Check-/Swipe-Handler; neuer Bestätigungsdialog | kompakte Quellenzeile, aufklappbar bei mehreren Quellen; Touch-Ziele erhalten |
 | `public/pages/meals.js` | KWF-004: Checkbox + erste sichtbare Listenauswahl beim Create; später Kochpreview/-bestätigung | `buildModalContent` und `saveModal` senden genau einen Meal-POST; direkte Drag-/Randomizer-/Apply-Plan-Pfade importieren nicht still | sechs neue `meals.*`-Keys in 23 Locales; DE/EN fachlich vollständig; responsive Modal; native Checkbox default off |
 | `public/pages/recipes.js` | bestehende Navigation beibehalten | `add-to-meals` → Query-Flow | kein separater Kalender nötig |
-| `public/components/datepicker.js` | vorhandener Microkalender | bestehendes Grid/Keyboard/native Touch | nur optionaler, generischer Day-Marker-API nach Review |
+| `public/components/datepicker.js` | gemeinsamer Microkalender; KWF-005 öffnet das Datumspopover auch bei grobem Pointer und ergänzt Home/End-Navigation | bestehendes Grid/Keyboard; nativer Touch-Picker bleibt nur für Uhrzeit | KWF-005 nutzt vorhandene Texte; keine Marker-API ohne separaten Reviewbedarf |
 | `public/pages/pantry.js` (geplant) | Liste, Suche, Filter, CRUD, Korrektur | Modal/Drawer nach vorhandenem Muster | große Touch-Ziele, kompakte Filter, Ablauf-/Mindeststatus |
 | `public/router.js`, `public/utils/kitchen-tabs.js` | `/pantry` als Kitchen-Child | Route, Titel, Nav-Ziel, Shortcuts | `nav.pantry` in allen Locales |
 | `public/settings/pages/modules-kitchen.js` | Pantry-bezogene bestätigte Defaults, falls später nötig | keine globale Autoübernahme im MVP | explizite, sichere Defaults |
@@ -303,7 +304,7 @@ Neue i18n-Namensräume: `pantry.*`, `shopping.sources*`, `shopping.addToPantry*`
 | KWF-002 Listensortierung | Default-Helper | Reorder-Validierung | Migration 86/next order | DnD + Buttons + Default-Badge | MCP/Housekeeping/CalDAV/Meals | abgeschlossen und in `main` |
 | KWF-003 Herkunft | konservativer Import-/Source-Helper | `sources[]`, Einzel-/Wochen-/Bereichsimport | Migration 87, Backfill/FK-Löschung | eine/mehrere Quellen; Desktop/390/768 px | Search, Scopes, Permissions, SW, Kitchen, Frontend-Audit | abgeschlossen |
 | KWF-004 Direkter Import | Block-/Listenvalidierung und gemeinsamer Importservice | unverändert ohne Import; explizite Liste; Herkunft; vollständiger Rollback | keine Migration; keine halbe Speicherung | Checkbox/Select/Ein-Request-Wiring; 390/768 px | Rekurrenz nur Startinstanz; Scopes/Permissions/SW/MCP/Housekeeping/CalDAV | abgeschlossen |
-| KWF-005 Microkalender | Datepicker-Grid | – | – | Recipe-Flow, Keyboard, Touch | Datepicker/Kitchen | größtenteils vorhanden |
+| KWF-005 Microkalender | Datepicker-Grid/Plattformzweig/Home-End | – | – | Recipe-Query, ISO-POST, Keyboard, Touch, 390/768/Desktop/Landscape | Datepicker 24/24; Meals 44/44; UX 17/17; Mobile 5/5; Frontend 141/141; Browser grün | abgeschlossen, Commit/Push ausstehend |
 | KWF-006 Mengenbasis | Parser nur deterministisch | kompatible/incompatible Einheiten | additive Spalten/Legacywerte | manuelle Korrektur | alte Freitextanzeigen | geplant |
 | KWF-007 Pantry MVP | Saldo/Validierung | CRUD/Filter/Adjust | Tabellen, Seeds, Journal | responsive CRUD/Filter | Scopes/Nav/SW | geplant |
 | KWF-008 Einkauf→Vorrat | Idempotenz | Transfer/Undo/Recheck | eindeutiger Transferbezug | Bestätigungsdialog | normales Abhaken | geplant |
@@ -426,7 +427,7 @@ Neue i18n-Namensräume: `pantry.*`, `shopping.sources*`, `shopping.addToPantry*`
 - Schweregrad: mittel für spätere Upstream-Integration, niedrig für den isolierten KWF-003-Scope.
 - Auswirkung: `main` kann nicht per Fast-Forward synchronisiert werden. Vor KWF-003 betrug `main...upstream/main` 7/8 Commits; vor KWF-004 sind es nach der KWF-003-Integration 9/8 Commits. Ein ungeprüfter Merge würde Kitchen-Historie und die Upstream-v1.20.0-Änderungen vermischen.
 - Empfehlung: KWF-003 auf dem aktuellen, sauberen Fork-`main` implementieren; Upstream-Integration separat und konfliktbewusst durchführen.
-- Status: offen; für KWF-004 erneut live verifiziert, keine taskbezogene Upstream-Synchronisierung vorgenommen.
+- Status: offen; für KWF-005 erneut live mit 12/8 Commits verifiziert, keine taskbezogene Upstream-Synchronisierung vorgenommen.
 - Task: Repository-Integration, nicht KWF-003-Feature-Scope.
 
 ### KWF-FINDING-014 — KWF-004-API-Vertrag ist in der Task-2-Analyse veraltet
@@ -438,16 +439,35 @@ Neue i18n-Namensräume: `pantry.*`, `shopping.sources*`, `shopping.addToPantry*`
 - Status: **resolved durch Benutzerfreigabe und KWF-004**; zentraler Blockvertrag implementiert und Task-2-Analyse angeglichen, ohne neue Create-Idempotenz.
 - Task: KWF-004.
 
+### KWF-FINDING-015 — Grobe Pointer umgehen den Microkalender bewusst
+
+- Betroffene Dateien: `public/components/datepicker.js`, `test/test-datepicker.js`, `docs/SPEC.md`.
+- Schweregrad: hoch für KWF-005.
+- Auswirkung: Der Datepicker erkennt `(pointer: coarse)` und öffnet über `showPicker()` den nativen OS-Picker. Damit ist das gemeinsame Kalender-Grid im Recipe→Meals-Modal auf Tablet und Smartphone nicht verfügbar; der bisherige Test und die SPEC schreiben dieses Verhalten sogar fest.
+- Empfehlung: Für `type="date"` unabhängig vom Pointer immer das vorhandene Top-Layer-Popover öffnen; den nativen Touch-Pfad nur für `type="time"` beibehalten. Tests und SPEC an den neuen, taskbestätigten Vertrag anpassen.
+- Status: **resolved durch KWF-005**; Datumsfelder öffnen auch bei grobem Pointer das gemeinsame Popover, Zeitfelder behalten den nativen Touch-Picker. SPEC und Testvertrag sind angeglichen.
+- Task: KWF-005.
+
+### KWF-FINDING-016 — Datumsraster unterstützt Home/End noch nicht explizit
+
+- Betroffene Dateien: `public/components/datepicker.js`, `test/test-datepicker.js`.
+- Schweregrad: mittel für Tastatur-Akzeptanz.
+- Auswirkung: Arrow- und PageUp/PageDown-Navigation sind implementiert; Escape/Tab werden am Popover behandelt und Enter aktiviert nativ den fokussierten Button. Home/End aus dem KWF-005-Testscope fehlen jedoch im Grid-Handler.
+- Empfehlung: Home/End nach bestehendem Montag-basierten Gridmuster auf Wochenanfang/-ende abbilden und fokussierbare/gesperrte Tage weiterhin korrekt behandeln.
+- Status: **resolved durch KWF-005**; Home/End navigieren Montag-basiert zum Wochenanfang/-ende und wurden im realen Browser zusammen mit Arrow/Tab/Escape geprüft.
+- Task: KWF-005.
+
 ## 11. Session-Handoff
 
-- Letzter abgeschlossener Schritt: KWF-004 wurde vollständig implementiert, dokumentiert, fokussiert/regressiv/manuell verifiziert, mit Feature-Commit `1de88813` committed und einschließlich dieses finalen Handoff-Abschlusses zu `origin` gepusht.
-- Aktueller Branch: `feature/recipe-meal-shopping-import`, Basis Fork-`main` `29874615`; `upstream/main` wurde wegen live bestätigter 9/8-Divergenz weder gemergt noch verändert.
-- Commit-/Working-Tree-Status: Feature-Commit `1de88813` enthält ausschließlich KWF-004 sowie die vom Benutzer ausdrücklich zur Mitnahme freigegebene KWF-005-Planpräzisierung; der anschließende Commit aktualisiert nur diesen Abschlussstatus. Beide Commits sind zu `origin/feature/recipe-meal-shopping-import` gepusht; Working Tree sauber; kein Pull Request.
-- Geänderte Bereiche: neuer `server/services/meal-shopping-import.js`; Meal-Create- und Einzeltransfer-Route; Meals-Create-Modal/-CSS; OpenAPI, SPEC, Task-2-Analyse, Changelog, Plan und Memory; sechs neue Keys in allen 23 Locales; Meals-/Shopping-Tests. Keine Migration, keine Änderung an Recipes-Frontend, Scopes, Permissions oder Service Worker.
-- Bestätigte Annahmen: kanonisch ist `shopping_import:{enabled,list_id}`; bei Aktivierung ist `list_id` verpflichtend und explizit, nur das Frontend wählt die erste sortierte Liste vor; ohne/bei deaktiviertem Block bleiben Request und `data`-Response kompatibel; aktivierter Import ergänzt nur eine Summary; Freitextmengen/Snapshots bleiben unverändert; Rekurrenz importiert ausschließlich die materialisierte Startinstanz; kein Create-Idempotenzmodell wurde erfunden.
-- Tests bestanden: `test:meals` 42/42, `test:shopping` 60/60, `test:db` 39/39, `test:frontend-audit` 141/141, `test:datepicker` 21/21, `test:kitchen-tabs` 8/8, `test:token-scopes` 16/16, `test:permissions` 15/15, `test:sw-api-cache` 9/9, `test:api` 11/11, `test:mcp` 29/29, `test:housekeeping` 13/13, `test:caldav-reminders` 9/9 und `test:mobile-scroll-layout` 5/5; Syntaxchecks, Locale-JSON-/Key-Parität für 23 Dateien und finaler `git diff --check` bestanden.
-- Vollsuite: `npm test` lief einschließlich DB 39/39, Shopping 60/60, Meals 42/42 und weiterer Regressionen bis `test:task-categories` 13/13 erfolgreich und brach danach reproduzierbar mit `Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\\win\\async.c, line 76` ab; entspricht KWF-FINDING-009 und ist kein fachlicher KWF-004-Fehler.
-- Manuelle Prüfung: Modal auf 768×900 und 390×844 ohne Überlauf der neuen Controls; Checkbox standardmäßig aus und nativ fokussierbar, Select zunächst deaktiviert und mit erster Liste vorausgewählt; Aktivierung und Auswahl einer zweiten Liste geprüft; ein Create erzeugte genau dort den Artikel mit Mengen-/Meal-/Datumssnapshot und lokalisierter Erfolgsmeldung. Die Browserautomation konnte die Leertastenumschaltung nicht zuverlässig auslösen; Standard-Checkboxsemantik und Frontend-Audit sind verifiziert. Temporäre App/DB vollständig beendet bzw. entfernt.
-- Offene Findings: KWF-FINDING-009 (Windows/Node-libuv) und KWF-FINDING-013 (separate Upstream-Integration) bleiben offen; KWF-FINDING-011 bleibt nur für spätere Serienmaterialisierung/KWF-009 offen; KWF-FINDING-006 bis -010 und Cooking-Anteil von -012 gehören zu späteren Tasks. KWF-FINDING-004 und -014 sind durch KWF-004 gelöst.
-- Nächster sinnvoller Schritt nach separater Reservierung ist KWF-005. In dieser Session wurde ausschließlich dessen vom Benutzer bereits erstellte Planpräzisierung mitgeführt; keine KWF-005-Implementierung und kein anderer Folgetask wurde begonnen.
-- Nicht erneut analysieren: KWF-004-Blockvertrag, Transaktionsgrenze, gemeinsamer Einzelmeal-Importservice, Default-aus-/explizite-Listen-Semantik, Startinstanz-Regel, Locale-Key-Parität sowie Scope-/Permission-/SW-Nichtbetroffenheit sind verifiziert.
+- Letzter abgeschlossener Schritt: KWF-005 wurde implementiert, dokumentiert und mit fokussierten, regressiven sowie echten Browserprüfungen verifiziert; Commit und Push stehen als Git-Abschluss noch aus.
+- Aktueller Branch: `fix/mobile-recipe-meal-datepicker`, Basis Fork-`main` `9d4ad361`; `main` entspricht `origin/main`. `upstream/main` wurde wegen live bestätigter 12/8-Divergenz weder gemergt noch verändert.
+- Commit-/Working-Tree-Status: acht taskbezogene Dateien sind geändert und uncommitted; keine fremden Änderungen und keine untracked Task-Artefakte. Kein Pull Request, kein Merge.
+- Geänderte Dateien: `public/components/datepicker.js`, `public/styles/datepicker.css`, `test/test-datepicker.js`, `test/test-meals.js`, `test/test-ux-utils.js`, `docs/SPEC.md`, `CHANGELOG.md`, `docs/development/KITCHEN_WORKFLOW_MEMORY.md`.
+- Untersucht, aber unverändert: `public/pages/meals.js`, `public/pages/recipes.js`, `public/components/modal.js`, relevante Blöcke in `public/styles/layout.css`, `public/styles/glass.css`, `public/styles/meals.css`, `public/sw.js`, `server/openapi.js`, Scopes-/Permission-Tests und alle 23 Locale-Dateien. Keine Migration, Datenmodell-, API-, OpenAPI-, Scope-, Permission-, i18n- oder Service-Worker-Änderung erforderlich.
+- Bestätigte Annahmen: Der Recipe-Einstieg navigiert nach `/meals?recipe=<id>`, öffnet das vorhandene Create-Modal für heute und verändert den Datepicker beim Recipe-Prefill nicht; `saveModal()` liest dessen kanonischen Wert und sendet das geparste ISO-Datum im einzigen Meal-POST. Direkter Drag-and-drop auf einen konkreten Slot bleibt ohne zusätzliches Kalenderdialog. Tagesmarker sind optionaler Nicht-Basisscope und wurden nicht eingeführt.
+- Automatische Tests bestanden: Syntax `node --check` für Datepicker/Meals; `test:datepicker` 24/24, `test:ux-utils` 17/17, `test:meals` 44/44, `test:mobile-scroll-layout` 5/5, `test:frontend-audit` 141/141, `test:db` 39/39, `test:shopping` 60/60, `test:kitchen-tabs` 8/8, `test:modal-utils` 12/12, `test:sw-api-cache` 9/9, `test:token-scopes` 16/16, `test:permissions` 15/15, `test:api` 11/11, `test:settings-navigation` 65/65 und `test:changelog` 5/5; `git diff --check` bestanden.
+- Vollsuite: `npm test` bestand alle gestarteten Suiten bis einschließlich DB 39/39, Shopping 60/60, Meals 44/44, Calendar 48/48, Notes/Contacts/Budget 52/52 und Task-Categories 13/13. Danach brach Node 24.12.0 reproduzierbar mit `Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\\win\\async.c, line 76` ab; entspricht KWF-FINDING-009 und trat außerhalb der KWF-005-Suiten auf.
+- Browserprüfung: In-Memory-App/Puppeteer; Recipe-Query-Prefill, Heute-/Auswahlmarkierung, nächster Monat, Touch-Auswahl und ISO-POST `2026-08-01` bestanden. Popover vollständig im Viewport bei 390×844 (`pointer: coarse`), 768×900 (`pointer: coarse`) und 1440×900; 568×320 wurde auf 304 px Höhe begrenzt und intern scrollbar. Home→Montag, End→Sonntag, Arrow, Tab-Fokuseinschluss und Escape bestanden. Testinstanz beendet; keine Testdatei erzeugt.
+- Findings: KWF-FINDING-015 und -016 sind gelöst. Offen bleiben KWF-FINDING-009 (Windows/Node-libuv) und KWF-FINDING-013 (separate Upstream-Integration); weitere offene Findings gehören ausschließlich zu späteren Tasks.
+- Nächster sinnvoller Schritt: taskbezogenen Diff final prüfen, committen und zu `origin/fix/mobile-recipe-meal-datepicker` pushen; keinen Pull Request erstellen und keinen Folge-Task beginnen.
+- Nicht erneut analysieren: Ursache des mobilen Fallbacks, vorhandener Recipe-Query-/ISO-POST-Datenfluss, Modal-Top-Layer-/Viewport-Verhalten, Home-/End-Semantik sowie Nichtbetroffenheit von DB/API/OpenAPI/Scopes/Permissions/i18n/SW sind verifiziert.

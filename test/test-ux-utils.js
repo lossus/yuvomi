@@ -53,15 +53,17 @@ test('date inputs: accept hyphen separators for YMD dates', () => {
   assert.equal(parseDateInput('2026.05.06'), '2026-05-06');
 });
 
-test('task + recurrence date fields use the shared yuvomi-datepicker', () => {
+test('task, recurrence, and meal date fields use the shared yuvomi-datepicker', () => {
   const tasksSource = readFileSync(new URL('../public/pages/tasks.js', import.meta.url), 'utf8');
   const rruleSource = readFileSync(new URL('../public/rrule-ui.js', import.meta.url), 'utf8');
+  const mealsSource = readFileSync(new URL('../public/pages/meals.js', import.meta.url), 'utf8');
   // Freies Tippen (inkl. Trennzeichen, #442) lebt jetzt im Component; die
   // Formulare binden nur noch das gemeinsame Element ein.
   assert.match(tasksSource, /<yuvomi-datepicker type="date"[\s\S]*?name="start_date"/);
   assert.match(tasksSource, /<yuvomi-datepicker type="date"[\s\S]*?name="due_date"/);
   assert.match(tasksSource, /<yuvomi-datepicker type="time"[\s\S]*?name="due_time"/);
   assert.match(rruleSource, /<yuvomi-datepicker type="date"[\s\S]*?id="\$\{prefix\}-rrule-until"/);
+  assert.match(mealsSource, /<yuvomi-datepicker type="date" id="modal-date"/);
   assert.doesNotMatch(tasksSource, /js-date-input|js-time-input/);
 });
 
