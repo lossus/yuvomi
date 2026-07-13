@@ -347,7 +347,15 @@
         "importMealsTitle": "Importuj z planu posiłków",
         "importMealsAction": "Importuj",
         "importMealsEmpty": "Nie znaleziono składników posiłków w wybranym zakresie dat.",
-        "manageCategories": "Zarządzaj kategoriami"
+        "manageCategories": "Zarządzaj kategoriami",
+        "manageLists": "Sortuj listy",
+        "manageListsHint": "Przeciągnij listy w wybranej kolejności lub użyj przycisków. Pierwsza lista jest domyślna.",
+        "defaultList": "Domyślna",
+        "dragList": "Przeciągnij listę",
+        "moveListFirst": "Przenieś na początek",
+        "moveListUp": "Przenieś wyżej",
+        "moveListDown": "Przenieś niżej",
+        "reorderError": "Nie udało się zapisać kolejności list."
     },
     "meals": {
         "title": "Plan posiłków",

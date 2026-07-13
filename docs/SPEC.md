@@ -119,6 +119,7 @@ Points-and-rewards system. A member earns a task's `points` when the task is mar
 | Column | Type | Constraint |
 |--------|------|-----------|
 | name | TEXT | NOT NULL (e.g. "Supermarket", "Hardware store") |
+| sort_order | INTEGER | NOT NULL, default 0; lower values are shown first and the first list is the default |
 
 ### Shopping Items
 | Column | Type | Constraint |
@@ -1306,6 +1307,7 @@ Skeleton loading instead of spinners (the skeleton mirrors the default-visible w
 ### Shopping Lists (`/shopping`)
 
 - Multiple lists in parallel
+- **User-defined list order:** lists are loaded by `sort_order`, then `created_at` and `id`. The first list is the implicit default. The list manager persists drag-and-drop and touch-friendly move actions atomically through `PATCH /api/v1/shopping/reorder`.
 - Items: name, category, quantity, checkbox
 - Grouping by category (aisle logic)
 - Integration with meal plan: "Add ingredients to shopping list" transfers with source reference

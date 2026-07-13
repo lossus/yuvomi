@@ -12,6 +12,7 @@ import express from 'express';
 import * as db from '../db.js';
 import { str, oneOf, url, date, collectErrors, MAX_TITLE, MAX_SHORT, MAX_TEXT } from '../middleware/validate.js';
 import { aggregateMealIngredients } from '../services/shopping-import.js';
+import { SHOPPING_LIST_ORDER, createShoppingList } from '../services/shopping-lists.js';
 
 const log = createLogger('Shopping');
 
@@ -29,6 +30,20 @@ function loadCategories() {
 /** Kategorie-Namen-Array für Validierung. */
 function validCategoryNames() {
   return loadCategories().map((c) => c.name);
+}
+
+/** Alle Einkaufslisten inkl. ZÃ¤hler in der vom Nutzer festgelegten Reihenfolge. */
+function loadShoppingLists() {
+  return db.get().prepare(`
+    SELECT
+      sl.*,
+      COUNT(si.id)                                        AS item_total,
+      SUM(CASE WHEN si.is_checked = 1 THEN 1 ELSE 0 END) AS item_checked
+    FROM shopping_lists sl
+    LEFT JOIN shopping_items si ON si.list_id = sl.id
+    GROUP BY sl.id
+    ORDER BY sl.${SHOPPING_LIST_ORDER.replaceAll(', ', ', sl.')}
+  `).all();
 }
 
 // --------------------------------------------------------
@@ -184,6 +199,48 @@ router.patch('/categories/reorder', (req, res) => {
 });
 
 // --------------------------------------------------------
+// PATCH /api/v1/shopping/reorder
+// Reihenfolge aller Einkaufslisten atomar Ã¤ndern.
+// Body: { order: number[] } (exakt alle vorhandenen Listen-IDs)
+// Response: { data: ShoppingList[] }
+// --------------------------------------------------------
+router.patch('/reorder', (req, res) => {
+  try {
+    const { order } = req.body;
+    if (!Array.isArray(order) || order.length === 0) {
+      return res.status(400).json({ error: 'order must be a non-empty array of shopping list IDs.', code: 400 });
+    }
+    if (!order.every((id) => Number.isInteger(id) && id > 0)) {
+      return res.status(400).json({ error: 'order may only contain valid shopping list IDs.', code: 400 });
+    }
+
+    const uniqueIds = new Set(order);
+    if (uniqueIds.size !== order.length) {
+      return res.status(400).json({ error: 'order must not contain duplicate shopping list IDs.', code: 400 });
+    }
+
+    const existingIds = db.get().prepare('SELECT id FROM shopping_lists').all().map((row) => row.id);
+    const existingSet = new Set(existingIds);
+    if (order.some((id) => !existingSet.has(id))) {
+      return res.status(400).json({ error: 'order contains an unknown shopping list ID.', code: 400 });
+    }
+    if (order.length !== existingIds.length) {
+      return res.status(400).json({ error: 'order must contain every shopping list exactly once.', code: 400 });
+    }
+
+    const update = db.get().prepare('UPDATE shopping_lists SET sort_order = ? WHERE id = ?');
+    db.get().transaction(() => {
+      order.forEach((id, position) => update.run(position, id));
+    })();
+
+    res.json({ data: loadShoppingLists() });
+  } catch (err) {
+    log.error('PATCH /reorder error:', err);
+    res.status(500).json({ error: 'Internal server error.', code: 500 });
+  }
+});
+
+// --------------------------------------------------------
 // GET /api/v1/shopping/suggestions?q=…
 // Autocomplete-Vorschläge aus bisherigen Artikelnamen.
 // Response: { data: string[] }
@@ -283,17 +340,7 @@ router.delete('/items/:itemId', (req, res) => {
 // --------------------------------------------------------
 router.get('/', (req, res) => {
   try {
-    const lists = db.get().prepare(`
-      SELECT
-        sl.*,
-        COUNT(si.id)                                          AS item_total,
-        SUM(CASE WHEN si.is_checked = 1 THEN 1 ELSE 0 END)   AS item_checked
-      FROM shopping_lists sl
-      LEFT JOIN shopping_items si ON si.list_id = sl.id
-      GROUP BY sl.id
-      ORDER BY sl.created_at ASC
-    `).all();
-    res.json({ data: lists });
+    res.json({ data: loadShoppingLists() });
   } catch (err) {
     log.error('GET / error:', err);
     res.status(500).json({ error: 'Internal server error.', code: 500 });
@@ -311,13 +358,7 @@ router.post('/', (req, res) => {
     const vName = str(req.body.name, 'Name', { max: MAX_TITLE });
     if (vName.error) return res.status(400).json({ error: vName.error, code: 400 });
 
-    const result = db.get()
-      .prepare('INSERT INTO shopping_lists (name, created_by) VALUES (?, ?)')
-      .run(vName.value, req.authUserId || req.session.userId);
-
-    const list = db.get()
-      .prepare('SELECT * FROM shopping_lists WHERE id = ?')
-      .get(result.lastInsertRowid);
+    const list = createShoppingList(db.get(), vName.value, req.authUserId || req.session.userId);
     res.status(201).json({ data: list });
   } catch (err) {
     log.error('POST / error:', err);

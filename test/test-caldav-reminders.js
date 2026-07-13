@@ -60,7 +60,8 @@ describe('caldav_reminder_selection schema & upsert logic', () => {
       );
       CREATE TABLE shopping_lists (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL
+        name TEXT NOT NULL,
+        sort_order INTEGER NOT NULL DEFAULT 0
       );
       CREATE TABLE shopping_items (
         id INTEGER PRIMARY KEY AUTOINCREMENT,

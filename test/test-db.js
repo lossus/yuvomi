@@ -242,6 +242,23 @@ test('Geburtstag mit Kalender-Referenz anlegen', () => {
   assert(row.calendar_event_id === event.lastInsertRowid, 'Kalender-Referenz stimmt nicht');
 });
 
+test('Migration 86 ergänzt und initialisiert shopping_lists.sort_order', () => {
+  const shoppingDb = new DatabaseSync(':memory:');
+  shoppingDb.exec('PRAGMA foreign_keys = ON;');
+  shoppingDb.exec(MIGRATIONS_SQL[1]);
+  shoppingDb.prepare("INSERT INTO users (username, display_name, password_hash) VALUES ('sort-user', 'Sort', 'x')").run();
+  shoppingDb.prepare("INSERT INTO shopping_lists (id, name, created_by, created_at) VALUES (8, 'Später', 1, '2026-02-02T00:00:00Z')").run();
+  shoppingDb.prepare("INSERT INTO shopping_lists (id, name, created_by, created_at) VALUES (7, 'Früher', 1, '2026-02-01T00:00:00Z')").run();
+  shoppingDb.exec(MIGRATIONS_SQL[86]);
+
+  const column = shoppingDb.prepare("SELECT name, \"notnull\" AS is_not_null, dflt_value FROM pragma_table_info('shopping_lists') WHERE name = 'sort_order'").get();
+  assert(column && column.is_not_null === 1 && column.dflt_value === '0', 'sort_order muss NOT NULL DEFAULT 0 sein');
+  const rows = shoppingDb.prepare('SELECT id, sort_order FROM shopping_lists ORDER BY sort_order').all();
+  assert(rows[0].id === 7 && rows[0].sort_order === 0, 'älteste Liste muss Position 0 erhalten');
+  assert(rows[1].id === 8 && rows[1].sort_order === 1, 'nächste Liste muss Position 1 erhalten');
+  shoppingDb.close();
+});
+
 // --------------------------------------------------------
 // Ergebnis
 // --------------------------------------------------------

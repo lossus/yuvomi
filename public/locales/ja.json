@@ -340,7 +340,15 @@
         "importMealsTitle": "献立からインポート",
         "importMealsAction": "インポート",
         "importMealsEmpty": "選択した期間内に献立の材料が見つかりませんでした。",
-        "manageCategories": "カテゴリを管理"
+        "manageCategories": "カテゴリを管理",
+        "manageLists": "リストを並べ替え",
+        "manageListsHint": "リストを希望の順序にドラッグするか、ボタンを使用してください。先頭のリストがデフォルトです。",
+        "defaultList": "デフォルト",
+        "dragList": "リストをドラッグ",
+        "moveListFirst": "先頭へ移動",
+        "moveListUp": "上へ移動",
+        "moveListDown": "下へ移動",
+        "reorderError": "リストの順序を保存できませんでした。"
     },
     "meals": {
         "title": "食事計画",

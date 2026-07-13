@@ -340,7 +340,15 @@
         "importMealsTitle": "Importera från matplanen",
         "importMealsAction": "Importera",
         "importMealsEmpty": "Inga måltidsingredienser hittades i det valda intervallet.",
-        "manageCategories": "Hantera kategorier"
+        "manageCategories": "Hantera kategorier",
+        "manageLists": "Sortera listor",
+        "manageListsHint": "Dra listorna till önskad ordning eller använd knapparna. Den första listan är standardlistan.",
+        "defaultList": "Standard",
+        "dragList": "Dra lista",
+        "moveListFirst": "Flytta först",
+        "moveListUp": "Flytta upp",
+        "moveListDown": "Flytta ned",
+        "reorderError": "Listordningen kunde inte sparas."
     },
     "meals": {
         "title": "Måltidsplan",

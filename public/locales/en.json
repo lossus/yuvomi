@@ -340,7 +340,15 @@
         "importMealsTitle": "Import from meal plan",
         "importMealsAction": "Import",
         "importMealsEmpty": "No meal ingredients were found in the selected range.",
-        "manageCategories": "Manage categories"
+        "manageCategories": "Manage categories",
+        "manageLists": "Reorder lists",
+        "manageListsHint": "Drag lists into the preferred order or use the buttons. The first list is the default list.",
+        "defaultList": "Default",
+        "dragList": "Drag list",
+        "moveListFirst": "Move to first",
+        "moveListUp": "Move up",
+        "moveListDown": "Move down",
+        "reorderError": "The list order could not be saved."
     },
     "meals": {
         "title": "Meal Plan",

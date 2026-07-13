@@ -103,12 +103,13 @@ function renderTabs(container) {
   const bar = container.querySelector('#list-tabs-bar');
   if (!bar) return;
 
-  const tabsHtml = state.lists.map((list) => {
+  const tabsHtml = state.lists.map((list, index) => {
     const unchecked = list.item_total - list.item_checked;
     return `
       <button class="list-tab ${list.id === state.activeListId ? 'list-tab--active' : ''}"
               data-action="switch-list" data-id="${list.id}">
         ${esc(list.name)}
+        ${index === 0 ? `<span class="list-tab__default">${t('shopping.defaultList')}</span>` : ''}
         ${list.item_total > 0 ? `<span class="list-tab__count">${unchecked > 0 ? unchecked : '✓'}</span>` : ''}
       </button>`;
   }).join('');
@@ -119,6 +120,11 @@ function renderTabs(container) {
   bar.insertAdjacentHTML('beforeend', `
     <i data-lucide="list" class="list-tabs-bar__marker" aria-hidden="true"></i>
     ${tabsHtml}
+    ${state.lists.length > 1 ? `
+      <button class="list-tab__manage" data-action="manage-lists"
+              aria-label="${t('shopping.manageLists')}" title="${t('shopping.manageLists')}">
+        <i data-lucide="list-ordered" class="icon-md" aria-hidden="true"></i>
+      </button>` : ''}
     <button class="list-tab__new" data-action="new-list" aria-label="${t('shopping.newListButton')}">
       <i data-lucide="plus" class="icon-md" aria-hidden="true"></i>
     </button>
@@ -161,6 +167,7 @@ function renderListContent(container) {
       <span class="list-header__name" data-action="rename-list" data-id="${state.activeList.id}"
             role="button" tabindex="0" aria-label="${t('shopping.renameListLabel')}">
         ${esc(state.activeList.name)}
+        ${state.lists[0]?.id === state.activeList.id ? `<span class="list-header__default">${t('shopping.defaultList')}</span>` : ''}
         <i data-lucide="pencil" class="list-header__edit-icon" aria-hidden="true"></i>
       </span>
       <div class="list-header__actions">
@@ -836,6 +843,144 @@ function openMealPlanImport(container) {
 }
 
 // --------------------------------------------------------
+// Einkaufslisten-Reihenfolge
+// --------------------------------------------------------
+
+function listManagerRow(list, index) {
+  const isFirst = index === 0;
+  const isLast = index === state.lists.length - 1;
+  return `
+    <li class="shopping-list-order-row" data-list-id="${list.id}" draggable="true">
+      <span class="shopping-list-order-row__handle" title="${t('shopping.dragList')}" aria-hidden="true">
+        <i data-lucide="grip-vertical" class="icon-md"></i>
+      </span>
+      <span class="shopping-list-order-row__name">${esc(list.name)}</span>
+      ${isFirst ? `<span class="shopping-list-order-row__default">${t('shopping.defaultList')}</span>` : ''}
+      <div class="shopping-list-order-row__actions">
+        <button class="btn btn--icon btn--ghost" data-action="move-list-first" data-id="${list.id}"
+                aria-label="${t('shopping.moveListFirst')}" ${isFirst ? 'disabled' : ''}>
+          <i data-lucide="chevrons-up" class="icon-md" aria-hidden="true"></i>
+        </button>
+        <button class="btn btn--icon btn--ghost" data-action="move-list-up" data-id="${list.id}"
+                aria-label="${t('shopping.moveListUp')}" ${isFirst ? 'disabled' : ''}>
+          <i data-lucide="chevron-up" class="icon-md" aria-hidden="true"></i>
+        </button>
+        <button class="btn btn--icon btn--ghost" data-action="move-list-down" data-id="${list.id}"
+                aria-label="${t('shopping.moveListDown')}" ${isLast ? 'disabled' : ''}>
+          <i data-lucide="chevron-down" class="icon-md" aria-hidden="true"></i>
+        </button>
+      </div>
+    </li>`;
+}
+
+function renderListManagerRows(panel) {
+  const list = panel.querySelector('#shopping-list-order');
+  if (!list) return;
+  list.replaceChildren();
+  state.lists.forEach((entry, index) => {
+    const tmp = document.createElement('div');
+    tmp.insertAdjacentHTML('beforeend', listManagerRow(entry, index));
+    list.appendChild(tmp.firstElementChild);
+  });
+  if (window.lucide) window.lucide.createIcons({ el: list });
+}
+
+async function persistListOrder(nextLists, panel, container) {
+  if (panel.dataset.saving === 'true') return;
+  const snapshot = state.lists.map((list) => ({ ...list }));
+  state.lists = nextLists.map((list, index) => ({ ...list, sort_order: index }));
+  panel.dataset.saving = 'true';
+  renderListManagerRows(panel);
+  renderTabs(container);
+
+  try {
+    const res = await api.patch('/shopping/reorder', { order: state.lists.map((list) => list.id) });
+    state.lists = res.data ?? state.lists;
+    renderListManagerRows(panel);
+    renderTabs(container);
+    renderListContent(container);
+    wireListContentEvents(container);
+  } catch (err) {
+    state.lists = snapshot;
+    renderListManagerRows(panel);
+    renderTabs(container);
+    renderListContent(container);
+    wireListContentEvents(container);
+    window.yuvomi?.showToast(err.data?.error ?? t('shopping.reorderError'), 'danger');
+  } finally {
+    delete panel.dataset.saving;
+  }
+}
+
+function moveList(listId, targetIndex, panel, container) {
+  const fromIndex = state.lists.findIndex((list) => list.id === listId);
+  if (fromIndex < 0) return;
+  const boundedIndex = Math.max(0, Math.min(targetIndex, state.lists.length - 1));
+  if (fromIndex === boundedIndex) return;
+  const nextLists = [...state.lists];
+  const [moved] = nextLists.splice(fromIndex, 1);
+  nextLists.splice(boundedIndex, 0, moved);
+  persistListOrder(nextLists, panel, container);
+}
+
+function openListManager(container) {
+  openModal({
+    title: t('shopping.manageLists'),
+    size: 'md',
+    content: `
+      <div class="shopping-list-order-manager">
+        <p class="shopping-list-order-manager__hint">${t('shopping.manageListsHint')}</p>
+        <ul class="shopping-list-order" id="shopping-list-order"></ul>
+      </div>`,
+    onSave: (panel) => {
+      renderListManagerRows(panel);
+      const list = panel.querySelector('#shopping-list-order');
+      let draggedId = null;
+
+      list?.addEventListener('click', (event) => {
+        const target = event.target.closest('[data-action]');
+        if (!target) return;
+        const id = Number(target.dataset.id);
+        const index = state.lists.findIndex((entry) => entry.id === id);
+        if (target.dataset.action === 'move-list-first') moveList(id, 0, panel, container);
+        if (target.dataset.action === 'move-list-up') moveList(id, index - 1, panel, container);
+        if (target.dataset.action === 'move-list-down') moveList(id, index + 1, panel, container);
+      });
+
+      list?.addEventListener('dragstart', (event) => {
+        const row = event.target.closest('[data-list-id]');
+        if (!row) return;
+        draggedId = Number(row.dataset.listId);
+        row.classList.add('shopping-list-order-row--dragging');
+        event.dataTransfer.effectAllowed = 'move';
+        event.dataTransfer.setData('text/plain', row.dataset.listId);
+      });
+      list?.addEventListener('dragover', (event) => {
+        const row = event.target.closest('[data-list-id]');
+        if (!row || draggedId === null || Number(row.dataset.listId) === draggedId) return;
+        event.preventDefault();
+        list.querySelectorAll('.shopping-list-order-row--drop-target')
+          .forEach((entry) => entry.classList.remove('shopping-list-order-row--drop-target'));
+        row.classList.add('shopping-list-order-row--drop-target');
+      });
+      list?.addEventListener('drop', (event) => {
+        const row = event.target.closest('[data-list-id]');
+        if (!row || draggedId === null) return;
+        event.preventDefault();
+        const targetIndex = state.lists.findIndex((entry) => entry.id === Number(row.dataset.listId));
+        moveList(draggedId, targetIndex, panel, container);
+        draggedId = null;
+      });
+      list?.addEventListener('dragend', () => {
+        draggedId = null;
+        list.querySelectorAll('.shopping-list-order-row--dragging, .shopping-list-order-row--drop-target')
+          .forEach((entry) => entry.classList.remove('shopping-list-order-row--dragging', 'shopping-list-order-row--drop-target'));
+      });
+    },
+  });
+}
+
+// --------------------------------------------------------
 // API-Aktionen
 // --------------------------------------------------------
 
@@ -908,6 +1053,10 @@ function wireTabBar(container) {
       } catch (err) {
         window.yuvomi.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
       }
+    }
+
+    if (target.dataset.action === 'manage-lists') {
+      openListManager(container);
     }
   });
 }

@@ -340,7 +340,15 @@
         "importMealsTitle": "Importer depuis le plan de repas",
         "importMealsAction": "Importer",
         "importMealsEmpty": "Aucun ingrédient de repas n'a été trouvé dans la période sélectionnée.",
-        "manageCategories": "Gérer les catégories"
+        "manageCategories": "Gérer les catégories",
+        "manageLists": "Trier les listes",
+        "manageListsHint": "Faites glisser les listes dans l’ordre souhaité ou utilisez les boutons. La première liste est celle par défaut.",
+        "defaultList": "Par défaut",
+        "dragList": "Faire glisser la liste",
+        "moveListFirst": "Placer en premier",
+        "moveListUp": "Monter",
+        "moveListDown": "Descendre",
+        "reorderError": "L’ordre des listes n’a pas pu être enregistré."
     },
     "meals": {
         "title": "Plan de repas",

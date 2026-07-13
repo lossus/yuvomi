@@ -340,7 +340,15 @@
         "importMealsTitle": "استيراد من خطة الوجبات",
         "importMealsAction": "استيراد",
         "importMealsEmpty": "لم يتم العثور على مكونات وجبات في النطاق المحدد.",
-        "manageCategories": "إدارة الفئات"
+        "manageCategories": "إدارة الفئات",
+        "manageLists": "ترتيب القوائم",
+        "manageListsHint": "اسحب القوائم إلى الترتيب المطلوب أو استخدم الأزرار. القائمة الأولى هي الافتراضية.",
+        "defaultList": "افتراضية",
+        "dragList": "سحب القائمة",
+        "moveListFirst": "نقل إلى الأول",
+        "moveListUp": "نقل لأعلى",
+        "moveListDown": "نقل لأسفل",
+        "reorderError": "تعذر حفظ ترتيب القوائم."
     },
     "meals": {
         "title": "خطة الوجبات",

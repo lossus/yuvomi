@@ -340,7 +340,15 @@
         "importMealsTitle": "从餐食计划导入",
         "importMealsAction": "导入",
         "importMealsEmpty": "在所选范围内未找到餐食配料。",
-        "manageCategories": "管理分类"
+        "manageCategories": "管理分类",
+        "manageLists": "排序清单",
+        "manageListsHint": "拖动清单调整顺序，或使用按钮。第一份清单是默认清单。",
+        "defaultList": "默认",
+        "dragList": "拖动清单",
+        "moveListFirst": "移到最前",
+        "moveListUp": "上移",
+        "moveListDown": "下移",
+        "reorderError": "无法保存清单顺序。"
     },
     "meals": {
         "title": "饮食计划",

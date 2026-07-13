@@ -23,6 +23,7 @@
 import * as v from '../middleware/validate.js';
 import { readFileSync } from 'node:fs';
 import { buildOpenApiSpec } from '../openapi.js';
+import { SHOPPING_LIST_ORDER } from '../services/shopping-lists.js';
 import { tokenAllows } from '../scopes.js';
 import { visibilityWhere } from '../services/visibility.js';
 
@@ -112,8 +113,8 @@ function addShoppingItem(db, actorId, args) {
   if (errors.length) throw new ToolError(errors.join(' '));
 
   const list = args.list
-    ? db.prepare('SELECT id FROM shopping_lists WHERE name = ? ORDER BY id LIMIT 1').get(String(args.list).trim())
-    : db.prepare('SELECT id FROM shopping_lists ORDER BY id LIMIT 1').get();
+    ? db.prepare(`SELECT id FROM shopping_lists WHERE name = ? ORDER BY ${SHOPPING_LIST_ORDER} LIMIT 1`).get(String(args.list).trim())
+    : db.prepare(`SELECT id FROM shopping_lists ORDER BY ${SHOPPING_LIST_ORDER} LIMIT 1`).get();
 
   if (!list) {
     throw new ToolError(args.list

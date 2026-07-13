@@ -5,10 +5,14 @@
  */
 
 import { DatabaseSync } from 'node:sqlite';
-import { readFileSync } from 'node:fs';
+import fs, { readFileSync } from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import express from 'express';
 import { MIGRATIONS_SQL } from '../server/db-schema-test.js';
 import { url } from '../server/middleware/validate.js';
 import { aggregateMealIngredients } from '../server/services/shopping-import.js';
+import { defaultShoppingList } from '../server/services/shopping-lists.js';
 
 let passed = 0;
 let failed = 0;
@@ -17,7 +21,35 @@ function test(name, fn) {
   try { fn(); console.log(`  ✓ ${name}`); passed++; }
   catch (err) { console.error(`  ✗ ${name}: ${err.message}`); failed++; }
 }
+async function asyncTest(name, fn) {
+  try { await fn(); console.log(`  âœ“ ${name}`); passed++; }
+  catch (err) { console.error(`  âœ— ${name}: ${err.message}`); failed++; }
+}
 function assert(cond, msg) { if (!cond) throw new Error(msg || 'Assertion fehlgeschlagen'); }
+
+// --------------------------------------------------------
+// Migration 86: bestehende Listen stabil durchnummerieren
+// --------------------------------------------------------
+{
+  const migrationDb = new DatabaseSync(':memory:');
+  migrationDb.exec('PRAGMA foreign_keys = ON;');
+  migrationDb.exec(MIGRATIONS_SQL[1]);
+  migrationDb.prepare("INSERT INTO users (username, display_name, password_hash) VALUES ('migration-user', 'Migration', 'x')").run();
+  migrationDb.prepare("INSERT INTO shopping_lists (id, name, created_by, created_at) VALUES (30, 'SpÃ¤t', 1, '2026-03-03T00:00:00Z')").run();
+  migrationDb.prepare("INSERT INTO shopping_lists (id, name, created_by, created_at) VALUES (20, 'FrÃ¼h B', 1, '2026-03-01T00:00:00Z')").run();
+  migrationDb.prepare("INSERT INTO shopping_lists (id, name, created_by, created_at) VALUES (10, 'FrÃ¼h A', 1, '2026-03-01T00:00:00Z')").run();
+  migrationDb.exec(MIGRATIONS_SQL[86]);
+
+  test('Migration 86 sortiert Bestandslisten nach created_at und id', () => {
+    const rows = migrationDb.prepare('SELECT id, sort_order FROM shopping_lists ORDER BY sort_order').all();
+    assert(JSON.stringify(rows) === JSON.stringify([
+      { id: 10, sort_order: 0 },
+      { id: 20, sort_order: 1 },
+      { id: 30, sort_order: 2 },
+    ]), `Unerwartete Migration: ${JSON.stringify(rows)}`);
+  });
+  migrationDb.close();
+}
 
 const db = new DatabaseSync(':memory:');
 db.exec('PRAGMA foreign_keys = ON;');
@@ -26,6 +58,7 @@ db.exec(`CREATE TABLE IF NOT EXISTS schema_migrations (
   applied_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
 );`);
 db.exec(MIGRATIONS_SQL[1]);
+db.exec(MIGRATIONS_SQL[86]);
 db.exec(MIGRATIONS_SQL[44]); // FTS5 search_index + Item-Trigger (indiziert notes)
 
 const u1 = db.prepare(`INSERT INTO users (username, display_name, password_hash, role)
@@ -129,7 +162,7 @@ test('Alle Listen mit Zähler abrufbar', () => {
       SUM(CASE WHEN si.is_checked = 1 THEN 1 ELSE 0 END) AS item_checked
     FROM shopping_lists sl
     LEFT JOIN shopping_items si ON si.list_id = sl.id
-    GROUP BY sl.id ORDER BY sl.created_at ASC
+    GROUP BY sl.id ORDER BY sl.sort_order ASC, sl.created_at ASC, sl.id ASC
   `).all();
   assert(lists.length === 2, `Erwartet 2, erhalten ${lists.length}`);
   assert(lists[0].name === 'REWE');
@@ -472,6 +505,110 @@ test('shopping-Route bietet einen Datumsbereich-Import aus dem Essensplan an', (
   assert(/m\.date BETWEEN \? AND \?/.test(source), 'Import-Route muss Mahlzeiten nach Datumsbereich filtern');
   assert(/mi\.on_shopping_list = 0/.test(source), 'Bereits übertragene Zutaten dürfen nicht erneut importiert werden');
 });
+
+test('Shopping-UI bietet Drag-and-drop, Touch-Aktionen und Default-Kennzeichnung', () => {
+  const source = readFileSync(new URL('../public/pages/shopping.js', import.meta.url), 'utf8');
+  assert(/draggable="true"/.test(source), 'Listenzeilen müssen per Drag-and-drop verschiebbar sein');
+  assert(/data-action="move-list-up"/.test(source), 'Nach-oben-Aktion fehlt');
+  assert(/data-action="move-list-down"/.test(source), 'Nach-unten-Aktion fehlt');
+  assert(/data-action="move-list-first"/.test(source), 'An-erste-Stelle-Aktion fehlt');
+  assert(/api\.patch\('\/shopping\/reorder'/.test(source), 'Reihenfolge muss über den neuen Endpunkt gespeichert werden');
+  assert(/shopping\.defaultList/.test(source), 'Erste Liste muss übersetzt als Standard markiert werden');
+});
+
+// --------------------------------------------------------
+// Echte Shopping-Routen: Anlegen, Sortieren und Validierung
+// --------------------------------------------------------
+process.env.DB_PATH = path.join(os.tmpdir(), `yuvomi-shopping-order-${process.pid}.db`);
+process.env.SESSION_SECRET = 'shopping-order-test-secret-32bytes-long';
+const routeDb = await import('../server/db.js');
+const { default: shoppingRouter } = await import('../server/routes/shopping.js');
+const routeDatabase = routeDb.get();
+routeDatabase.prepare("INSERT INTO users (username, display_name, password_hash, role) VALUES ('shopping-owner', 'Owner', 'x', 'admin')").run();
+
+const app = express();
+app.use(express.json());
+app.use((req, _res, next) => {
+  req.authUserId = 1;
+  req.authRole = 'admin';
+  req.session = { userId: 1 };
+  next();
+});
+app.use('/shopping', shoppingRouter);
+const server = app.listen(0, '127.0.0.1');
+await new Promise((resolve) => server.once('listening', resolve));
+const base = `http://127.0.0.1:${server.address().port}/shopping`;
+const jget = async () => {
+  const response = await fetch(base);
+  return { status: response.status, body: await response.json() };
+};
+const jsend = async (method, body) => {
+  const response = await fetch(method === 'POST' ? base : `${base}/reorder`, {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  return { status: response.status, body: await response.json() };
+};
+
+try {
+  const createdIds = [];
+  await asyncTest('Neue Listen erhalten jeweils den nächsten sort_order', async () => {
+    for (const name of ['Markt', 'Drogerie', 'Baumarkt']) {
+      const { status, body } = await jsend('POST', { name });
+      assert(status === 201, `POST-Status ${status}`);
+      createdIds.push(body.data.id);
+    }
+    const orders = routeDatabase.prepare('SELECT sort_order FROM shopping_lists ORDER BY id').all().map((row) => row.sort_order);
+    assert(JSON.stringify(orders) === JSON.stringify([0, 1, 2]), `sort_order: ${JSON.stringify(orders)}`);
+  });
+
+  await asyncTest('GET liefert Einkaufslisten nach sort_order', async () => {
+    routeDatabase.prepare('UPDATE shopping_lists SET sort_order = 20 WHERE id = ?').run(createdIds[0]);
+    routeDatabase.prepare('UPDATE shopping_lists SET sort_order = 10 WHERE id = ?').run(createdIds[1]);
+    routeDatabase.prepare('UPDATE shopping_lists SET sort_order = 0 WHERE id = ?').run(createdIds[2]);
+    const { status, body } = await jget();
+    assert(status === 200, `GET-Status ${status}`);
+    assert(JSON.stringify(body.data.map((row) => row.id)) === JSON.stringify([createdIds[2], createdIds[1], createdIds[0]]), 'GET-Reihenfolge falsch');
+  });
+
+  const wantedOrder = [createdIds[1], createdIds[0], createdIds[2]];
+  await asyncTest('PATCH /reorder speichert und liefert die vollständige neue Reihenfolge', async () => {
+    const { status, body } = await jsend('PATCH', { order: wantedOrder });
+    assert(status === 200, `PATCH-Status ${status}`);
+    assert(JSON.stringify(body.data.map((row) => row.id)) === JSON.stringify(wantedOrder), 'Antwort ist nicht neu sortiert');
+    assert(JSON.stringify(body.data.map((row) => row.sort_order)) === JSON.stringify([0, 1, 2]), 'Positionen nicht fortlaufend');
+  });
+
+  const persistedOrder = () => routeDatabase.prepare('SELECT id FROM shopping_lists ORDER BY sort_order, created_at, id').all().map((row) => row.id);
+  await asyncTest('Reorder lehnt eine unbekannte ID ab', async () => {
+    const { status } = await jsend('PATCH', { order: [wantedOrder[0], wantedOrder[1], 999999] });
+    assert(status === 400, `Status ${status}`);
+  });
+  await asyncTest('Reorder lehnt doppelte IDs ab', async () => {
+    const { status } = await jsend('PATCH', { order: [wantedOrder[0], wantedOrder[0], wantedOrder[2]] });
+    assert(status === 400, `Status ${status}`);
+  });
+  await asyncTest('Reorder lehnt eine unvollständige Reihenfolge ab', async () => {
+    const { status } = await jsend('PATCH', { order: wantedOrder.slice(0, 2) });
+    assert(status === 400, `Status ${status}`);
+  });
+  await asyncTest('Reorder lehnt ein leeres order-Array ab', async () => {
+    const { status } = await jsend('PATCH', { order: [] });
+    assert(status === 400, `Status ${status}`);
+  });
+  await asyncTest('Ungültige Requests ändern keine sort_order teilweise', async () => {
+    assert(JSON.stringify(persistedOrder()) === JSON.stringify(wantedOrder), 'Persistierte Reihenfolge wurde trotz Fehler verändert');
+  });
+  await asyncTest('Die erste sortierte Liste wird als Default verwendet', async () => {
+    const selected = defaultShoppingList(routeDatabase);
+    assert(selected.id === wantedOrder[0], `Default-ID ${selected.id}`);
+  });
+} finally {
+  await new Promise((resolve) => server.close(resolve));
+  routeDatabase.close();
+  try { fs.unlinkSync(process.env.DB_PATH); } catch { /* bereits entfernt */ }
+}
 
 // --------------------------------------------------------
 // Ergebnis

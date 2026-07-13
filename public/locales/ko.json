@@ -347,7 +347,15 @@
         "importMealsTitle": "식단에서 가져오기",
         "importMealsAction": "가져오기",
         "importMealsEmpty": "선택한 기간에 식단 재료가 없습니다.",
-        "manageCategories": "카테고리 관리"
+        "manageCategories": "카테고리 관리",
+        "manageLists": "목록 순서 변경",
+        "manageListsHint": "목록을 원하는 순서로 끌거나 버튼을 사용하세요. 첫 번째 목록이 기본 목록입니다.",
+        "defaultList": "기본",
+        "dragList": "목록 끌기",
+        "moveListFirst": "맨 앞으로 이동",
+        "moveListUp": "위로 이동",
+        "moveListDown": "아래로 이동",
+        "reorderError": "목록 순서를 저장하지 못했습니다."
     },
     "meals": {
         "title": "식단표",

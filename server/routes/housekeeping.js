@@ -12,6 +12,7 @@ import * as db from '../db.js';
 import { normalizeAvatarData, syncFamilyMemberArtifacts } from '../auth.js';
 import { collectErrors, color, date, datetime, month, num, oneOf, str, id as validateId, MAX_SHORT, MAX_TEXT, MAX_TITLE } from '../middleware/validate.js';
 import { minutesBetween, computeHourlyAmount } from '../services/housekeeping-billing.js';
+import { createShoppingList, defaultShoppingList as findDefaultShoppingList } from '../services/shopping-lists.js';
 
 const log = createLogger('Housekeeping');
 const router = express.Router();
@@ -446,17 +447,10 @@ function defaultShoppingCategory() {
 }
 
 function defaultShoppingList(actorId) {
-  const existing = db.get().prepare(`
-    SELECT id FROM shopping_lists
-    ORDER BY created_at ASC, id ASC
-    LIMIT 1
-  `).get();
+  const existing = findDefaultShoppingList(db.get());
   if (existing) return existing.id;
 
-  const result = db.get()
-    .prepare('INSERT INTO shopping_lists (name, created_by) VALUES (?, ?)')
-    .run('Housekeeping', actorId);
-  return result.lastInsertRowid;
+  return createShoppingList(db.get(), 'Housekeeping', actorId).id;
 }
 
 router.get('/dashboard', (_req, res) => {

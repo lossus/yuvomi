@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Shopping lists can now be reordered with drag-and-drop or touch-friendly move actions. The first list is marked as the default and is used wherever Yuvomi needs an implicit shopping-list target.
+
+### Changed
+- Existing shopping lists receive a stable order during migration (`created_at`, then `id`), and new lists are appended to that order.
+
 ## [1.19.1] - 2026-07-13
 
 ### Changed
