@@ -3158,9 +3158,9 @@ function recurringDeleteChoice() {
       title: t('calendar.deleteRecurringTitle'),
       size: 'sm',
       content: `
-        <p class="form-hint" style="margin-bottom:var(--space-4)">${t('calendar.deleteRecurringHint')}</p>
+        <p class="form-hint modal-lead">${t('calendar.deleteRecurringHint')}</p>
         <div class="modal-actions modal-actions--stack">
-          <button type="button" class="btn btn--secondary" id="rds-this">${t('calendar.deleteThisOccurrence')}</button>
+          <button type="button" class="btn btn--primary" id="rds-this">${t('calendar.deleteThisOccurrence')}</button>
           <button type="button" class="btn btn--danger" id="rds-series">${t('calendar.deleteWholeSeries')}</button>
           <button type="button" class="btn btn--ghost" id="rds-cancel">${t('common.cancel')}</button>
         </div>`,

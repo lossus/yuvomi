@@ -1735,6 +1735,11 @@ html.fab-anim-done .page-fab {
   gap: var(--space-2);
 }
 
+/* Einleitender Hinweis-Text über gestapelten Modal-Aktionen (z. B. Scope-Wahl). */
+.modal-lead {
+  margin: 0 0 var(--space-4);
+}
+
 .modal-actions--stack {
   flex-direction: column;
   align-items: stretch;

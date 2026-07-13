@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.19.1] - 2026-07-13
+
+### Changed
+- The "delete recurring event" dialog now leads with the safe "Only this event" action (primary), with "Whole series" clearly marked as destructive.
+- Default reminders in Settings → Calendar are now a compact chip picker instead of a stacked checkbox list, and saving is debounced so selecting several at once confirms once instead of once per click.
+
+### Fixed
+- Accessibility: the default-reminders picker now exposes a proper group label to screen readers (`role="group"` + `aria-labelledby`).
+
 ## [1.19.0] - 2026-07-13
 
 ### Added
