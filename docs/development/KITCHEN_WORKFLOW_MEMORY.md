@@ -119,6 +119,7 @@ Analysierte Implementierungsbereiche:
 | 2026-07-13 | Hauptagent | KWF-002 / `feature/shopping-list-order` | Task-1-Dateien laut Handoff | Bestehende Implementierung analysiert und Testergebnisse dokumentiert; keine Änderung in dieser Session | implementiert, uncommittet | separater Review/Commit/Push nötig |
 | 2026-07-13 | Hauptagent | KWF-001 | `docs/development/KITCHEN_WORKFLOW_MEMORY.md` | Zentrale Wissensbasis angelegt | abgeschlossen | bei jeder Session fortschreiben |
 | 2026-07-13 | Hauptagent | KWF-001 | `docs/development/KITCHEN_WORKFLOW_PLAN.md` | Vollständige Task-Zerlegung angelegt | abgeschlossen | Architekturvorschläge im Review bestätigen |
+| 2026-07-13 | Hauptagent | KWF-001 / Agent-Handoff | `docs/development/KITCHEN_WORKFLOW_TASK_MASTER_PROMPT.md` | Wiederverwendbaren, taskgebundenen Startprompt mit Reservierungs-, Analyse-, Test-, Memory- und Git-Gates angelegt | abgeschlossen | pro Session Task-ID und optional Branch/Vorgaben einsetzen |
 
 ## 5. Architekturentscheidungen
 
@@ -419,7 +420,8 @@ Neue i18n-Namensräume: `pantry.*`, `shopping.sources*`, `shopping.addToPantry*`
 
 - Letzter abgeschlossener Schritt: vollständige Repository- und Workflow-Analyse; Memory und Taskplan erstellt.
 - Planungsbranch: `planning/kitchen-workflow`.
-- Geänderte Dateien dieser Session: nur diese Memory-Datei und `KITCHEN_WORKFLOW_PLAN.md`.
+- Geänderte Dateien der Planungs-/Handoff-Sessions: diese Memory-Datei, `KITCHEN_WORKFLOW_PLAN.md` und `KITCHEN_WORKFLOW_TASK_MASTER_PROMPT.md`; kein Featurecode.
+- Ergänzte Agentenvorlage: `KITCHEN_WORKFLOW_TASK_MASTER_PROMPT.md`; sie startet genau einen KWF-Task und verbietet ungeplante Folgeaufgaben.
 - Separater Arbeitsstand: KWF-002 auf `feature/shopping-list-order`, sicher erhalten, funktional bestätigt, noch uncommittet.
 - Offene Tests dieser Session: Dokumentationsprüfung/Git-Diff; keine Featuretests nötig, da kein Featurecode geändert wurde.
 - Offene Findings: KWF-FINDING-001 bis -012.
