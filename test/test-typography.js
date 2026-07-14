@@ -266,3 +266,9 @@ test('Such- und Schnellformular-Eingaben bleiben bei 16px', () => {
     );
   }
 });
+
+test('Pantry uses shared typography roles without sub-16px form controls', () => {
+  const pantry = readFileSync(new URL('../public/styles/pantry.css', import.meta.url), 'utf8');
+  assert.match(pantry, /\.pantry-card__name\s*\{[^}]*font-size:\s*var\(--font-size-lg\)/s);
+  assert.doesNotMatch(pantry, /\.form-input\s*\{[^}]*font-size:\s*(?:1[0-5]px|var\(--text-sm\))/s);
+});

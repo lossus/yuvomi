@@ -26,8 +26,8 @@ const { KITCHEN_ROUTES, KITCHEN_STORAGE_KEY, getLastKitchenRoute, isKitchenRoute
   return import('../public/utils/kitchen-tabs.js');
 })();
 
-test('KITCHEN_ROUTES enthält alle drei Sub-Routen', () => {
-  assert.deepEqual(KITCHEN_ROUTES, ['/meals', '/recipes', '/shopping']);
+test('KITCHEN_ROUTES enthält alle vier Sub-Routen', () => {
+  assert.deepEqual(KITCHEN_ROUTES, ['/meals', '/recipes', '/shopping', '/pantry']);
 });
 
 test('KITCHEN_ROUTES ist eingefroren (kanonische Kitchen-Routen)', () => {
@@ -57,6 +57,7 @@ test('isKitchenRoute: erkennt Kitchen-Routen', () => {
   assert.equal(isKitchenRoute('/meals'), true);
   assert.equal(isKitchenRoute('/recipes'), true);
   assert.equal(isKitchenRoute('/shopping'), true);
+  assert.equal(isKitchenRoute('/pantry'), true);
 });
 
 test('isKitchenRoute: lehnt Nicht-Kitchen-Routen ab', () => {

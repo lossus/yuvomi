@@ -166,6 +166,7 @@ test('isValidFamilyRole', () => {
 test('permissionCatalog liefert Module, Widgets, Rollen, Levels', () => {
   const cat = permissionCatalog();
   assert.ok(cat.modules.some((m) => m.key === 'budget'));
+  assert.ok(cat.modules.some((m) => m.key === 'pantry'));
   assert.ok(cat.widgets.some((w) => w.id === 'cycle' && w.module === 'health'));
   assert.ok(cat.roles.includes('child'));
   assert.deepEqual(cat.moduleAccessLevels, ['none', 'read', 'write']);

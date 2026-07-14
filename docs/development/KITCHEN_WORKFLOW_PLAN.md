@@ -40,7 +40,7 @@ Begründete Anpassung der vorgeschlagenen Reihenfolge: KWF-003 kommt vor dem dir
 | 4 | KWF-004 | atomarer Rezept→Meal→Shopping-Flow | mittel | abgeschlossen |
 | 5 | KWF-005 | bestehender Microkalender verifiziert/gezielt ergänzt | klein | größtenteils vorhanden |
 | 6 | KWF-006 | rückwärtskompatible strukturierte Mengenbasis | groß | implementiert und lokal verifiziert |
-| 7 | KWF-007 | Core-Pantry-MVP mit Bewegungsjournal | groß | geplant |
+| 7 | KWF-007 | Core-Pantry-MVP mit Bewegungsjournal | groß | implementiert und lokal verifiziert |
 | 8 | KWF-008 | idempotenter Einkauf→Vorrat-Transfer | groß | geplant |
 | 9 | KWF-009 | Kochvorgang, Verbrauch und Undo | groß | geplant |
 | 10 | KWF-010 | End-to-End-Regression und UX-Härtung | groß | geplant |
@@ -387,11 +387,11 @@ Begründete Anpassung der vorgeschlagenen Reihenfolge: KWF-003 kommt vor dem dir
 
 ## Empfohlener nächster Schritt
 
-1. KWF-004 ist auf `feature/recipe-meal-shopping-import` implementiert und lokal verifiziert; `upstream` bleibt unverändert.
-2. Erst in einer neuen, separat reservierten Session KWF-005 beginnen.
-3. Für KWF-005 den vorhandenen `public/components/datepicker.js` wiederverwenden und die im KWF-005-Abschnitt dokumentierte Drag-and-drop-Semantik beachten.
+1. KWF-007 auf `feature/pantry-mvp` extern prüfen; der Task implementiert das Core-Pantry-MVP mit Migration 89 und Bewegungsjournal.
+2. Keinen Folge-Task in derselben Session beginnen. KWF-008 erst nach externer Annahme und neuer Reservierung bearbeiten.
+3. `upstream/main` bleibt wegen der dokumentierten Divergenz unverändert; eine Integration ist ein separater Repository-Task.
 
-KWF-004 erzeugt beim bestätigten Meal-Create optional und atomar neue Einkaufsartikel mit belastbarer Herkunft. KWF-005 wurde in dieser Session nicht implementiert.
+KWF-007 enthält bewusst weder automatische Einkaufsübernahme noch Kochverbrauch. Diese Grenzen bleiben KWF-008 beziehungsweise KWF-009 vorbehalten.
 
 ## Review-Gates pro Task
 

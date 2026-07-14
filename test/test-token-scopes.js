@@ -65,6 +65,7 @@ test('moduleForPath: Pfad-Prefix ⇒ Modul (inkl. geteilter Router)', () => {
   assert.equal(moduleForPath('/birthdays'), 'calendar');
   assert.equal(moduleForPath('/split-expenses/x'), 'budget');  // split-expenses gehört zu budget
   assert.equal(moduleForPath('/recipes'), 'meals');
+  assert.equal(moduleForPath('/pantry'), 'pantry');
   assert.equal(moduleForPath('/preferences'), null);           // nicht scopebar
   assert.equal(moduleForPath('/'), null);
 });
