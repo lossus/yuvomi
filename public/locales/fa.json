@@ -3187,6 +3187,15 @@
         "toastSaved": "ذخیره شد",
         "toastRewardDeleted": "جایزه حذف شد"
     },
+    "quantity": {
+        "freeTextLabel": "مقدار با متن آزاد",
+        "freeTextPlaceholder": "مثلاً ۲ قوطی",
+        "amountLabel": "مقدار",
+        "amountPlaceholder": "عدد",
+        "unitLabel": "واحد",
+        "unitNone": "بدون واحد",
+        "invalid": "مقدار و واحد باید با هم و به صورت عدد مثبت وارد شوند."
+    },
     "datepicker": {
         "openCalendar": "باز کردن تقویم",
         "openTimePicker": "باز کردن انتخاب زمان",

@@ -3187,6 +3187,15 @@
         "toastSaved": "Gespeichert",
         "toastRewardDeleted": "Prämie gelöscht"
     },
+    "quantity": {
+        "freeTextLabel": "Freitextmenge",
+        "freeTextPlaceholder": "z. B. 2 Dosen",
+        "amountLabel": "Menge",
+        "amountPlaceholder": "Zahl",
+        "unitLabel": "Einheit",
+        "unitNone": "Keine",
+        "invalid": "Menge und Einheit müssen gemeinsam als positive Zahl angegeben werden."
+    },
     "datepicker": {
         "openCalendar": "Kalender öffnen",
         "openTimePicker": "Uhrzeit-Auswahl öffnen",

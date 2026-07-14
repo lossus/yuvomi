@@ -3187,6 +3187,15 @@
         "toastSaved": "Disimpan",
         "toastRewardDeleted": "Hadiah dihapus"
     },
+    "quantity": {
+        "freeTextLabel": "Jumlah teks bebas",
+        "freeTextPlaceholder": "mis. 2 kaleng",
+        "amountLabel": "Jumlah",
+        "amountPlaceholder": "Angka",
+        "unitLabel": "Satuan",
+        "unitNone": "Tidak ada",
+        "invalid": "Jumlah dan satuan harus diisi bersama sebagai angka positif."
+    },
     "datepicker": {
         "openCalendar": "Buka kalender",
         "openTimePicker": "Buka pemilih waktu",

@@ -3187,6 +3187,15 @@
         "toastSaved": "Saved",
         "toastRewardDeleted": "Reward deleted"
     },
+    "quantity": {
+        "freeTextLabel": "Free-text quantity",
+        "freeTextPlaceholder": "e.g. 2 cans",
+        "amountLabel": "Amount",
+        "amountPlaceholder": "Number",
+        "unitLabel": "Unit",
+        "unitNone": "None",
+        "invalid": "Amount and unit must be supplied together as a positive number."
+    },
     "datepicker": {
         "openCalendar": "Open calendar",
         "openTimePicker": "Open time picker",

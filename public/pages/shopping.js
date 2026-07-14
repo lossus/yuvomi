@@ -13,6 +13,7 @@ import { DEFAULT_CATEGORY_NAME, categoryLabel } from '/utils/shopping-categories
 import { addLocalDays, toLocalDateKey } from '/utils/date.js';
 import { renderKitchenTabsBar } from '/utils/kitchen-tabs.js';
 import '/components/shopping-category-manager.js';
+import { formatStructuredQuantity, structuredQuantityFromInput } from '/utils/quantity.js';
 
 // --------------------------------------------------------
 // Konstanten
@@ -205,7 +206,14 @@ function renderListContent(container) {
           <div class="autocomplete-dropdown" id="autocomplete-dropdown" hidden></div>
         </div>
         <input class="quick-add__qty" type="text" id="item-qty-input"
-               placeholder="${t('shopping.itemQtyPlaceholder')}" aria-label="${t('shopping.itemQtyLabel')}" autocomplete="off">
+               placeholder="${t('quantity.freeTextPlaceholder')}" aria-label="${t('quantity.freeTextLabel')}" autocomplete="off">
+        <input class="quick-add__amount" type="text" inputmode="decimal" id="item-amount-input"
+               placeholder="${t('quantity.amountPlaceholder')}" aria-label="${t('quantity.amountLabel')}" autocomplete="off">
+        <select class="quick-add__unit" id="item-unit-select" aria-label="${t('quantity.unitLabel')}">
+          <option value="">${t('quantity.unitNone')}</option>
+          <option value="g">g</option><option value="kg">kg</option>
+          <option value="ml">ml</option><option value="l">l</option>
+        </select>
         <select class="quick-add__cat" id="item-cat-select" aria-label="${t('shopping.categoryLabel')}">
           ${state.categories.map((c) => `<option value="${esc(c.name)}">${esc(categoryLabel(c.name))}</option>`).join('')}
         </select>
@@ -316,7 +324,7 @@ function renderItem(item) {
         </button>
         <div class="item-body">
           <div class="item-name">${esc(item.name)}${renderItemMeta(item)}</div>
-          ${item.quantity ? `<div class="item-quantity">${esc(item.quantity)}</div>` : ''}
+          ${(item.quantity || item.amount != null) ? `<div class="item-quantity">${esc(item.quantity || formatStructuredQuantity(item.amount, item.unit))}</div>` : ''}
           ${renderItemSources(item)}
         </div>
         <button class="item-details" data-action="item-details" data-id="${item.id}"
@@ -443,16 +451,31 @@ function wireQuickAdd(container) {
     e.preventDefault();
     const nameInput = container.querySelector('#item-name-input');
     const qtyInput  = container.querySelector('#item-qty-input');
+    const amountInput = container.querySelector('#item-amount-input');
+    const unitSelect = container.querySelector('#item-unit-select');
     const catSelect = container.querySelector('#item-cat-select');
 
     const name     = nameInput.value.trim();
     const quantity = qtyInput.value.trim() || null;
+    const structured = structuredQuantityFromInput(amountInput.value, unitSelect.value);
     const category = catSelect.value;
 
     if (!name) { nameInput.focus(); return; }
+    if (structured.error) {
+      amountInput.setAttribute('aria-invalid', 'true');
+      unitSelect.setAttribute('aria-invalid', 'true');
+      window.yuvomi.showToast(t('quantity.invalid'), 'danger');
+      return;
+    }
 
     try {
-      const data = await api.post(`/shopping/${state.activeListId}/items`, { name, quantity, category });
+      const data = await api.post(`/shopping/${state.activeListId}/items`, {
+        name,
+        quantity,
+        amount: structured.value.amount,
+        unit: structured.value.unit,
+        category,
+      });
       state.items.push(data.data);
       // Einfügen in DOM ohne komplettes Re-Render
       updateItemsList(container);
@@ -460,6 +483,10 @@ function wireQuickAdd(container) {
       renderTabs(container);
       nameInput.value = '';
       qtyInput.value  = '';
+      amountInput.value = '';
+      unitSelect.value = '';
+      amountInput.removeAttribute('aria-invalid');
+      unitSelect.removeAttribute('aria-invalid');
       // Erfolgs-Feedback auf dem +-Button (DOM-API, kein innerHTML)
       _flashAddBtn(form.querySelector('.quick-add__btn'));
       nameInput.focus();
@@ -694,6 +721,16 @@ function refreshItemMeta(container, item) {
   }
 }
 
+function refreshItemQuantity(container, item) {
+  const body = container.querySelector(`.shopping-item[data-item-id="${item.id}"] .item-body`);
+  if (!body) return;
+  body.querySelector('.item-quantity')?.remove();
+  const display = item.quantity || formatStructuredQuantity(item.amount, item.unit);
+  if (display) {
+    body.querySelector('.item-name')?.insertAdjacentHTML('afterend', `<div class="item-quantity">${esc(display)}</div>`);
+  }
+}
+
 /**
  * Detail-Drawer (Progressive Disclosure): bearbeitet die optionalen Rich-Felder
  * URL + Notiz eines Artikels. Der Quick-Add bleibt bewusst schlank; alles
@@ -718,6 +755,25 @@ function openItemDetails(itemId, container) {
     content: `
       <form id="item-details-form" class="item-details-form" novalidate autocomplete="off">
         <div class="form-group">
+          <label class="form-label" for="item-details-quantity">${t('quantity.freeTextLabel')}</label>
+          <input class="form-input" type="text" id="item-details-quantity"
+                 placeholder="${t('quantity.freeTextPlaceholder')}" value="${esc(item.quantity || '')}">
+        </div>
+        <div class="item-details__structured-quantity">
+          <div class="form-group">
+            <label class="form-label" for="item-details-amount">${t('quantity.amountLabel')}</label>
+            <input class="form-input" type="text" inputmode="decimal" id="item-details-amount"
+                   placeholder="${t('quantity.amountPlaceholder')}" value="${esc(item.amount ?? '')}">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="item-details-unit">${t('quantity.unitLabel')}</label>
+            <select class="form-input" id="item-details-unit">
+              <option value="" ${item.unit ? '' : 'selected'}>${t('quantity.unitNone')}</option>
+              ${['g', 'kg', 'ml', 'l'].map((unit) => `<option value="${unit}" ${item.unit === unit ? 'selected' : ''}>${unit}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
           <label class="form-label" for="item-details-url">${t('shopping.urlLabel')}</label>
           <input class="form-input" type="url" id="item-details-url" inputmode="url"
                  placeholder="${t('shopping.urlPlaceholder')}" value="${esc(item.url || '')}">
@@ -736,6 +792,9 @@ function openItemDetails(itemId, container) {
       const form    = panel.querySelector('#item-details-form');
       const urlEl   = panel.querySelector('#item-details-url');
       const notesEl = panel.querySelector('#item-details-notes');
+      const quantityEl = panel.querySelector('#item-details-quantity');
+      const amountEl = panel.querySelector('#item-details-amount');
+      const unitEl = panel.querySelector('#item-details-unit');
       const preview = panel.querySelector('#item-details-link');
 
       urlEl?.addEventListener('input', () => {
@@ -751,10 +810,25 @@ function openItemDetails(itemId, container) {
         e.preventDefault();
         const notes = notesEl.value.trim() || null;
         const url   = urlEl.value.trim() || null;
+        const quantity = quantityEl.value.trim() || null;
+        const structured = structuredQuantityFromInput(amountEl.value, unitEl.value);
+        if (structured.error) {
+          amountEl.setAttribute('aria-invalid', 'true');
+          unitEl.setAttribute('aria-invalid', 'true');
+          window.yuvomi.showToast(t('quantity.invalid'), 'danger');
+          return;
+        }
         try {
-          const data = await api.patch(`/shopping/items/${item.id}`, { notes, url });
+          const data = await api.patch(`/shopping/items/${item.id}`, {
+            notes,
+            url,
+            quantity,
+            amount: structured.value.amount,
+            unit: structured.value.unit,
+          });
           Object.assign(item, data.data);
           refreshItemMeta(container, item);
+          refreshItemQuantity(container, item);
           closeModal();
         } catch (err) {
           window.yuvomi.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');

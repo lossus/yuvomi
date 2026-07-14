@@ -3187,6 +3187,15 @@
         "toastSaved": "Сохранено",
         "toastRewardDeleted": "Награда удалена"
     },
+    "quantity": {
+        "freeTextLabel": "Количество свободным текстом",
+        "freeTextPlaceholder": "например, 2 банки",
+        "amountLabel": "Количество",
+        "amountPlaceholder": "Число",
+        "unitLabel": "Единица",
+        "unitNone": "Нет",
+        "invalid": "Количество и единицу нужно указать вместе как положительное число."
+    },
     "datepicker": {
         "openCalendar": "Открыть календарь",
         "openTimePicker": "Открыть выбор времени",

@@ -3187,6 +3187,15 @@
         "toastSaved": "Αποθηκεύτηκε",
         "toastRewardDeleted": "Το βραβείο διαγράφηκε"
     },
+    "quantity": {
+        "freeTextLabel": "Ποσότητα ελεύθερου κειμένου",
+        "freeTextPlaceholder": "π.χ. 2 κονσέρβες",
+        "amountLabel": "Ποσότητα",
+        "amountPlaceholder": "Αριθμός",
+        "unitLabel": "Μονάδα",
+        "unitNone": "Καμία",
+        "invalid": "Η ποσότητα και η μονάδα πρέπει να δοθούν μαζί ως θετικός αριθμός."
+    },
     "datepicker": {
         "openCalendar": "Άνοιγμα ημερολογίου",
         "openTimePicker": "Άνοιγμα επιλογής ώρας",

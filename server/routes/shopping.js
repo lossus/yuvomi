@@ -18,6 +18,7 @@ import {
   insertShoppingItemSource,
 } from '../services/shopping-item-sources.js';
 import { SHOPPING_LIST_ORDER, createShoppingList } from '../services/shopping-lists.js';
+import { validateStructuredQuantity } from '../../public/utils/quantity.js';
 
 const log = createLogger('Shopping');
 
@@ -286,12 +287,16 @@ router.patch('/items/:itemId', (req, res) => {
       is_checked = item.is_checked,
       name       = item.name,
       quantity   = item.quantity,
+      amount     = item.amount,
+      unit       = item.unit,
       category   = item.category,
       notes      = item.notes,
       url: urlVal = item.url,
     } = req.body;
 
     if (!name?.trim()) return res.status(400).json({ error: 'name darf nicht leer sein.', code: 400 });
+    const vQty = str(quantity, 'Menge', { max: MAX_SHORT, required: false });
+    const structured = validateStructuredQuantity(amount, unit);
 
     const validNames = validCategoryNames();
     if (category && !validNames.includes(category))
@@ -300,14 +305,25 @@ router.patch('/items/:itemId', (req, res) => {
     // notes/url gleich validieren wie beim Anlegen (URL nur http/https → XSS-sicher).
     const vNotes = str(notes, 'Notiz', { max: MAX_TEXT, required: false });
     const vUrl   = url(urlVal, 'URL');
-    const fieldErrors = collectErrors([vNotes, vUrl]);
+    const fieldErrors = collectErrors([vQty, vNotes, vUrl]);
+    if (structured.error) fieldErrors.push(structured.error);
     if (fieldErrors.length) return res.status(400).json({ error: fieldErrors.join(' '), code: 400 });
 
     db.get().prepare(`
       UPDATE shopping_items
-      SET is_checked = ?, name = ?, quantity = ?, category = ?, notes = ?, url = ?
+      SET is_checked = ?, name = ?, quantity = ?, amount = ?, unit = ?, category = ?, notes = ?, url = ?
       WHERE id = ?
-    `).run(is_checked ? 1 : 0, name.trim(), quantity ?? null, category, vNotes.value, vUrl.value, req.params.itemId);
+    `).run(
+      is_checked ? 1 : 0,
+      name.trim(),
+      vQty.value,
+      structured.value.amount,
+      structured.value.unit,
+      category,
+      vNotes.value,
+      vUrl.value,
+      req.params.itemId
+    );
 
     const updated = db.get()
       .prepare('SELECT * FROM shopping_items WHERE id = ?')
@@ -471,13 +487,24 @@ router.post('/:listId/items', (req, res) => {
     const vCat   = oneOf(requestedCat, validNames, 'Kategorie');
     const vNotes = str(req.body.notes, 'Notiz', { max: MAX_TEXT, required: false });
     const vUrl   = url(req.body.url, 'URL');
+    const structured = validateStructuredQuantity(req.body.amount, req.body.unit);
     const errors = collectErrors([vName, vQty, vCat, vNotes, vUrl]);
+    if (structured.error) errors.push(structured.error);
     if (errors.length) return res.status(400).json({ error: errors.join(' '), code: 400 });
 
     const result = db.get().prepare(`
-      INSERT INTO shopping_items (list_id, name, quantity, category, notes, url)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `).run(req.params.listId, vName.value, vQty.value, vCat.value || defaultCat, vNotes.value, vUrl.value);
+      INSERT INTO shopping_items (list_id, name, quantity, amount, unit, category, notes, url)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(
+      req.params.listId,
+      vName.value,
+      vQty.value,
+      structured.value.amount,
+      structured.value.unit,
+      vCat.value || defaultCat,
+      vNotes.value,
+      vUrl.value
+    );
 
     const item = db.get()
       .prepare('SELECT * FROM shopping_items WHERE id = ?')
@@ -516,6 +543,8 @@ router.post('/:listId/import-meal-plan', (req, res) => {
         mi.meal_id,
         mi.name,
         mi.quantity,
+        mi.amount,
+        mi.unit,
         mi.category,
         m.title AS source_label,
         m.date AS meal_date_snapshot,
@@ -534,14 +563,24 @@ router.post('/:listId/import-meal-plan', (req, res) => {
     const importItems = shoppingItemsFromMealIngredients(ingredients);
     const added = db.get().transaction(() => {
       const insertItem = db.get().prepare(`
-        INSERT INTO shopping_items (list_id, name, quantity, category, added_from_meal)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO shopping_items (list_id, name, quantity, amount, unit, category, added_from_meal)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
       `);
       const markDone = db.get().prepare('UPDATE meal_ingredients SET on_shopping_list = 1 WHERE id = ?');
 
       for (const item of importItems) {
-        const result = insertItem.run(req.params.listId, item.name, item.quantity, item.category, item.added_from_meal);
-        insertShoppingItemSource(db.get(), result.lastInsertRowid, item.source);
+        const result = insertItem.run(
+          req.params.listId,
+          item.name,
+          item.quantity,
+          item.amount,
+          item.unit,
+          item.category,
+          item.added_from_meal
+        );
+        for (const source of item.sources) {
+          insertShoppingItemSource(db.get(), result.lastInsertRowid, source);
+        }
       }
       for (const ingredient of ingredients) {
         markDone.run(ingredient.id);

@@ -3187,6 +3187,15 @@
         "toastSaved": "Guardado",
         "toastRewardDeleted": "Premio eliminado"
     },
+    "quantity": {
+        "freeTextLabel": "Cantidad en texto libre",
+        "freeTextPlaceholder": "p. ej., 2 latas",
+        "amountLabel": "Cantidad",
+        "amountPlaceholder": "Número",
+        "unitLabel": "Unidad",
+        "unitNone": "Ninguna",
+        "invalid": "La cantidad y la unidad deben indicarse juntas como un número positivo."
+    },
     "datepicker": {
         "openCalendar": "Abrir calendario",
         "openTimePicker": "Abrir selector de hora",

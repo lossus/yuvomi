@@ -1,6 +1,6 @@
 # Kitchen Workflow Memory
 
-Stand: 2026-07-13  
+Stand: 2026-07-14
 Verbindliche Arbeitsbasis für das Kitchen-Workflow-Vorhaben. Erkenntnisse, Entscheidungen und Handovers gehören in diese Datei, nicht ausschließlich in Agent-Chats.
 
 ## 1. Projektziel
@@ -73,11 +73,12 @@ Analysierte Implementierungsbereiche:
 - Wenn eine aggregierte Position aus mehreren Mahlzeiten stammt, wird `added_from_meal` bewusst `NULL`; Herkunft geht damit verloren.
 - Task-1-Arbeitsstand ergänzt Migration 86, `sort_order`, deterministische Legacy-Migration, zentralen Default-Listen-Helper, Reorder-API, responsive Reorder-UI und vollständige Locale-Texte. Der Benutzer hat die Funktion manuell bestätigt.
 - KWF-003 ergänzt Migration 87 und `shopping_item_sources`. Einzel-, Wochen- und Bereichsimport erzeugen Einkaufsartikel, Herkunftssnapshot und Transfer-Flag atomar. Der Bereichsimport legt bis KWF-006 jede Freitextzutat getrennt an. REST-Antworten für Einkaufsartikel enthalten rückwärtskompatibel `sources: []`; die UI zeigt eine Quelle inline und mehrere Quellen in einem nativen, zugänglichen Aufklapper.
+- KWF-006 ergänzt mit Migration 88 optionale `amount REAL`/`unit TEXT`-Felder in allen drei Ingredient-Tabellen und `shopping_items`. `quantity TEXT` bleibt unverändert. Nur `g`/`kg` sowie `ml`/`l` werden dimensionsgleich aggregiert; Freitext und inkompatible Einheiten bleiben getrennte Positionen mit allen Quellen.
 - Default-Verbraucher im Task-1-Stand: Shopping-GET, Meals-Listenauswahl über sortierte API-Reihenfolge, MCP, Housekeeping und CalDAV-Reminders.
 
 ### Datenmodell
 
-- Mengen sind in `recipe_ingredients`, `meal_ingredients`, `meal_recurrence_ingredients` und `shopping_items` als `TEXT` gespeichert.
+- Mengen sind in `recipe_ingredients`, `meal_ingredients`, `meal_recurrence_ingredients` und `shopping_items` weiterhin als `quantity TEXT` gespeichert und seit Migration 88 additiv über optionale `amount REAL`/`unit TEXT` strukturiert. Bestehende Freitextwerte wurden nicht zurückgefüllt oder interpretiert.
 - Es gibt kein Zutatenstammdatenmodell, keine Vorratstabellen, kein Bewegungsjournal und kein Cooking-Event.
 - Kategorien sind bei Zutaten/Artikeln als Text gespeichert; Shopping-Kategorien sind administrierbar und sortierbar.
 - Zeitstempel und `updated_at`-Trigger folgen einem etablierten Muster. Migrationen sind fortlaufend versioniert und werden jeweils transaktional in `schema_migrations` registriert.
@@ -86,6 +87,7 @@ Analysierte Implementierungsbereiche:
 
 - Kitchen ist eine gemeinsame Navigation aus `/meals`, `/recipes`, `/shopping`; Definitionen liegen in `public/router.js` und `public/utils/kitchen-tabs.js`.
 - Formulare verwenden das gemeinsame Modal aus `public/components/modal.js` und gemeinsame Ingredient-Row-Struktur aus `public/utils/ingredient-row.js`.
+- KWF-006 erweitert die gemeinsame Ingredient-Row sowie Shopping-Quick-Add und -Details um manuell korrigierbare strukturierte Mengen. `public/utils/quantity.js` enthält die gemeinsame Browser-Validierung, Konvertierung und Anzeigeformatierung.
 - Der gewünschte Microkalender ist in `public/components/datepicker.js` vorhanden. KWF-005 öffnet den Monatskalender mit Heute-/Auswahlmarkierung, Monatsnavigation und Tastatursteuerung für `type="date"` jetzt auf Desktop, Tablet und Smartphone; nur `type="time"` darf auf groben Pointern weiter den nativen Picker verwenden. Der Wert bleibt ISO `YYYY-MM-DD`.
 - Der Rezept→Essensplan-Flow nutzt `<yuvomi-datepicker type="date">` im bestehenden Meal-Modal. KWF-005 änderte deshalb ausschließlich die gemeinsame Datepicker-Integration und keine Meals-/Recipes-/Modal-Implementierung.
 - Shopping-Abhaken erfolgt per Klick, Tastatur oder Swipe und endet derzeit nach dem `PATCH is_checked`.
@@ -95,6 +97,7 @@ Analysierte Implementierungsbereiche:
 - Meals und Shopping haben kombinierte DB-, API-nahe und statische Frontend-Tests.
 - Eigene Suiten existieren für DB-Migrationen, Datepicker, Kitchen-Tabs, Service-Worker-Cache, Navigation, MCP, Housekeeping und CalDAV.
 - Task 1 wurde zuletzt erfolgreich geprüft mit: Shopping 51/51, DB 38/38, MCP 29/29, CalDAV-Reminders 9/9, Housekeeping 13/13, Meals 39/39, Frontend-Audit 141/141.
+- KWF-006 ergänzt die eigenständige Suite `npm run test:quantity` und erweitert DB-, Shopping- und Meals-Regressionen um Migration 88, API-Validierung, Snapshot-Propagation und Quellenaggregation.
 - `npm test` ist auf Windows/Node 24.12.0 nach erfolgreichem `test:task-categories` durch eine Node/libuv-Assertion abgebrochen; siehe KWF-FINDING-009.
 
 ### i18n
@@ -124,6 +127,7 @@ Analysierte Implementierungsbereiche:
 | 2026-07-13 | Codex | KWF-003 / `feature/shopping-item-sources` | Migration 87, Source-Service, alle drei Importpfade, Shopping-API/-UI/-CSS, OpenAPI, SPEC/Task-2-Analyse, Locales und Tests | Mehrquellenfähige Herkunft mit löschfesten Snapshots implementiert und verifiziert | extern akzeptiert; Commit `073c4d06` gepusht und ohne PR in Fork-`main` integriert | `upstream/main` bleibt 7/8 divergent und unverändert, KWF-FINDING-013 |
 | 2026-07-13 | Codex | KWF-004 / `feature/recipe-meal-shopping-import` | `server/services/meal-shopping-import.js`, `server/routes/meals.js`, `server/openapi.js`, `public/pages/meals.js`, `public/styles/meals.css`, alle 23 Locale-Dateien, `test/test-meals.js`, `test/test-shopping.js`, `docs/SPEC.md`, `docs/TASK2_RECIPE_MEAL_SHOPPING_ANALYSIS.md`, `CHANGELOG.md` und Kitchen-Doku | Atomaren Create-und-Import-Flow mit expliziter Listenauswahl implementiert, dokumentiert und verifiziert | abgeschlossen; Feature-Commit `1de88813` und finaler Handoff-Abschluss zu `origin` gepusht | Benutzeränderung im KWF-005-Abschnitt von `KITCHEN_WORKFLOW_PLAN.md` ist im Feature-Commit enthalten, ohne KWF-005 zu implementieren; Fork-`main` vs. `upstream/main` bleibt 9/8 divergent; keine Überschneidung mit aktiver Fremdreservierung |
 | 2026-07-13 | Codex | KWF-005 / `fix/mobile-recipe-meal-datepicker` | Vollständig untersucht: Datepicker JS/CSS, Meals/Recipes, Shared Modal und relevante Layout-/Glass-/Meals-Styles, SW, SPEC, Tests; geändert: Datepicker JS/CSS, Datepicker-/Meals-/UX-Tests, SPEC, Changelog und Kitchen-Memory | Gemeinsamen Microkalender auf groben Pointern aktiviert, Viewport begrenzt, Home/End ergänzt sowie Recipe-Query/ISO-Vertrag verifiziert | abgeschlossen; Feature-Commit `7ca92ac8` zu `origin` gepusht, finaler Handoff folgt als separater Doku-Commit | keine aktive Fremdreservierung; KWF-004 abgeschlossen; Fork-`main` vs. `upstream/main` live 12/8 divergent, daher kein Upstream-Merge; kein Folge-Task begonnen |
+| 2026-07-14 | Codex | KWF-006 / `feature/structured-ingredient-quantities` | Untersucht und geändert: Migration 88/Schema-Test, Quantity-Utilities/-Service, Meals-/Recipes-/Shopping-Routen und -Services, drei Kitchen-Seiten, Ingredient-Row, Layout/Shopping-CSS, alle 23 Locales, OpenAPI, SPEC, Changelog, Plan, Package-Script und DB/Meals/Shopping/Quantity-Tests | Additive Mengenbasis, deterministische dimensionsgleiche Aggregation, manuelle Korrektur und rückwärtskompatible Freitextpfade implementiert, dokumentiert und verifiziert | abgeschlossen; Feature-Commit `76475386` und Handoff-Commits zu `origin` gepusht | keine aktive Fremdreservierung; KWF-003 bis KWF-005 abgeschlossen; Fork-`main` vs. `upstream/main` live 15/10 divergent, daher kein Upstream-Merge; bestätigte Benutzeränderung in `KITCHEN_WORKFLOW_TASK_MASTER_PROMPT.md` ist isoliert und blieb unstaged |
 
 ## 5. Architekturentscheidungen
 
@@ -180,7 +184,7 @@ Analysierte Implementierungsbereiche:
 - Begründung: Keine Datenverluste und keine erfundene Interpretation.
 - Alternativen: harte Migration; automatische/KI-basierte Parsingpflicht.
 - Auswirkungen: Nur deterministisch kompatible strukturierte Mengen dürfen gerechnet werden.
-- Status: **proposed**.
+- Status: **accepted und in KWF-006 durch Migration 88 sowie gemeinsame Server-/Browser-Validatoren implementiert**.
 
 ### ADR-KITCHEN-007 — Duplikate in zwei Stufen
 
@@ -188,8 +192,8 @@ Analysierte Implementierungsbereiche:
 - Entscheidung: Stufe 1 erzeugt getrennte Shopping-Positionen mit Herkunft. Stufe 2 darf nur strukturierte, kompatible Einheiten optional aggregieren und bewahrt alle Quellen.
 - Begründung: Korrektheit vor scheinbarer Bequemlichkeit.
 - Alternativen: heutige heuristische Aggregation überall; reine Namensaggregation.
-- Auswirkungen: Bestehender Bereichsimport muss beim Herkunftstask bewusst kompatibel angepasst werden.
-- Status: **proposed**.
+- Auswirkungen: Der Bereichsimport gruppiert nur gleiche Namen/Kategorien mit kompatibler strukturierter Dimension, rechnet deterministisch über Basiseinheiten und erzeugt für jede Herkunft eine Source-Zeile. Freitext und inkompatible Werte bleiben getrennt.
+- Status: **accepted und in KWF-006 implementiert**.
 
 ### ADR-KITCHEN-008 — Kaufübernahme ist bestätigt und idempotent
 
@@ -232,13 +236,13 @@ Analysierte Implementierungsbereiche:
 | Tabelle | Zweck / wichtige Spalten | Beziehungen | Geplante Änderung | Migration / Rückwärtskompatibilität |
 |---|---|---|---|---|
 | `shopping_lists` | Listen; `id`, `name`, `created_by`, Zeitstempel; Task-1: `sort_order` | 1:n `shopping_items` | keine weitere Default-Spalte | Migration 86 backfillt 0..n-1 nach `created_at,id`; bestehende IDs bleiben |
-| `shopping_items` | Positionen; `quantity TEXT`, `category`, `is_checked`, `notes`, `url`, `added_from_meal` | Liste; optional eine Mahlzeit | Quellen über Join-Tabelle; später optionale `amount`,`unit` | `added_from_meal` vorerst behalten/deprecaten, API kompatibel halten |
+| `shopping_items` | Positionen; `quantity TEXT`, optionale `amount REAL`,`unit TEXT`, `category`, `is_checked`, `notes`, `url`, `added_from_meal` | Liste; optional eine Mahlzeit | Quellen über Join-Tabelle; KWF-006 strukturiert Mengen additiv | Migration 88 ohne Backfill; `quantity` und `added_from_meal` bleiben API-/DB-kompatibel |
 | `shopping_item_sources` | Herkunft; `shopping_item_id`, `source_type`, `meal_id`, `recipe_id`, `source_label`, `meal_date_snapshot`, `quantity_snapshot`, `created_at` | n:1 Artikel; Item `ON DELETE CASCADE`, optionale Quellen-FKs `ON DELETE SET NULL` | KWF-003 implementiert | Migration 87 backfillt `added_from_meal`; Snapshots bleiben nach FK-Verlust erhalten |
 | `meals` | geplante Instanz; Datum, Typ, Titel, Rezeptbezug, Serienbezug | Rezept/Template, Zutaten | KWF-004 ändert das Schema nicht; kein bloßes `is_cooked`; Cooking-Events | bestehende Meals und Create-Response bleiben kompatibel |
-| `meal_ingredients` | Zutaten-Snapshot; `name`, `quantity TEXT`, `category`, `on_shopping_list` | n:1 Meal | KWF-004 setzt das Flag nur für erfolgreich atomar importierte Startinstanz-Zutaten; später optionale `amount`,`unit` | Freitext bleibt unverändert; Flag bleibt kompatibel |
+| `meal_ingredients` | Zutaten-Snapshot; `name`, `quantity TEXT`, optionale `amount REAL`,`unit TEXT`, `category`, `on_shopping_list` | n:1 Meal | KWF-004 setzt das Flag nur für erfolgreich atomar importierte Startinstanz-Zutaten; KWF-006 propagiert strukturierte Snapshots | Migration 88 additiv; Freitext und Flag bleiben kompatibel |
 | `recipes` | Rezeptkopf | 1:n Zutaten; 1:n Meals | keine zwingende Änderung für KWF-004 | keine |
-| `recipe_ingredients` | Rezeptzutaten-Snapshot | n:1 Rezept | optionale `amount`,`unit` | Freitext bleibt |
-| `meal_recurrence_*` | Serienvorlage, Zutaten und Ausnahmen | materialisierte Meals | strukturierte Mengen analog; Importsemantik explizit | additive Spalten, keine Neuinterpretation alter Serien |
+| `recipe_ingredients` | Rezeptzutaten-Snapshot; `quantity TEXT`, optionale `amount REAL`,`unit TEXT` | n:1 Rezept | KWF-006 propagiert strukturierte Werte in neue Meals | Migration 88 additiv; Freitext bleibt unverändert |
+| `meal_recurrence_*` | Serienvorlage, Zutaten und Ausnahmen; Ingredient-Tabelle mit optionalen `amount REAL`,`unit TEXT` | materialisierte Meals | strukturierte Mengen werden in Instanzen/Serienbearbeitung übernommen; Importsemantik bleibt explizit | Migration 88 additiv, keine Neuinterpretation alter Serien |
 | `pantry_locations` (geplant) | anpassbare Lagerorte; `key`, `name`, `label_key`, `sort_order` | 1:n Pantry-Posten | Seeds für Kühlschrank, Gefrierschrank, Vorratsschrank, Keller, Sonstiges | neue Tabelle; Labels via i18n, Custom-Namen als Text |
 | `pantry_items` (geplant) | Bestandslos/Artikel; Name, Kategorie, Lagerort, `amount`, `unit`, `quantity_display`, Mindestbestand, Ablaufdatum | Ort; 1:n Bewegungen | neu in KWF-007 | Freitextmenge zulassen; mehrere Lose gleichen Namens möglich |
 | `inventory_movements` (geplant) | Journal; Typ, Menge/Einheit/Anzeige, Shopping-/Cooking-Bezug, Reversal, Idempotency-Key, Actor, Zeit | Pantry-Posten; optionale Quellen | neu in KWF-007/008/009 | unveränderlich; eindeutige Keys verhindern Doppelbuchung |
@@ -255,13 +259,13 @@ Technische Grenze: Ohne ein bestätigtes Zutaten-Stammdatenmodell kann ein Name 
 | `GET /api/v1/shopping` | vollständige Listen mit Counts | Task-1-Sortierung `sort_order,created_at,id` | Shopping API/DB |
 | `POST /api/v1/shopping` | `{name}` → Liste | Task 1 vergibt nächsten `sort_order` | Shopping API |
 | `PATCH /api/v1/shopping/reorder` | `{order:[ids...]}` → alle Listen | vollständige, eindeutige ID-Menge; eine Transaktion | Shopping API/DB |
-| `PATCH /api/v1/shopping/items/:id` | partielle Artikelfelder | `is_checked` ist derzeit einfache Mutation | Shopping |
-| `POST /api/v1/shopping/:listId/import-meal-plan` | `{from,to}` → Counts | Import+Flag-Updates in Transaktion; heutige Aggregation | Shopping |
+| `POST /api/v1/shopping/:listId/items`, `PATCH /api/v1/shopping/items/:id` | bestehende Felder plus optional gepaartes `amount`,`unit` | strukturierte Teilwerte, nicht-positive/nicht-endliche Werte und unbekannte Einheiten werden abgelehnt; Legacy-Requests bleiben gültig | Shopping/Quantity |
+| `POST /api/v1/shopping/:listId/import-meal-plan` | `{from,to}` → Counts | Import+Flag-Updates in Transaktion; nur `g↔kg`/`ml↔l` dimensionsgleich aggregiert, alle Quellen bewahrt | Shopping/Quantity |
 | `POST /api/v1/meals` | Meal + Zutaten + optional Wiederholung und optional `shopping_import:{enabled,list_id}`; bei aktivem Import additive Summary | Rezept und explizite Liste vor Schreibbeginn validiert; Template, Meal, Zutaten, Shopping-Items, Quellen und Flags in einer Transaktion | Meals/Shopping |
-| `POST /api/v1/meals/apply-plan` | Assignments | Batch/Replace in Transaktion | Meals |
+| `POST /api/v1/meals/apply-plan` | Assignments plus additive Zutatenfelder `amount`,`unit` | Batch/Replace in Transaktion; strukturierte Werte serverseitig validiert | Meals/Quantity |
 | `POST /api/v1/meals/:id/to-shopping-list` | `{listId}` → Count | Artikel+Flags in Transaktion | Meals |
 | `POST /api/v1/meals/week-to-shopping-list` | `{listId,week}` → Count | Artikel+Flags in Transaktion | Meals |
-| `/api/v1/recipes` CRUD | Rezept + Zutaten | Create/Update transaktional | Meals/Recipes-Frontend |
+| `/api/v1/recipes` CRUD | Rezept + Zutaten; additive `amount`,`unit` | Create/Update transaktional; strukturierte Werte serverseitig validiert | Meals/Recipes-Frontend/Quantity |
 
 ### Geplante API-Verträge
 
@@ -284,17 +288,17 @@ Alle neuen Pfade müssen in `server/openapi.js`, `server/scopes.js` und den Bere
 
 | Ansicht/Datei | Geplante Verantwortung | Handler/Formulare | i18n / Mobil-Tablet |
 |---|---|---|---|
-| `public/pages/shopping.js` | Quellen anzeigen; Kauf→Vorrat anbieten | bestehende Check-/Swipe-Handler; neuer Bestätigungsdialog | kompakte Quellenzeile, aufklappbar bei mehreren Quellen; Touch-Ziele erhalten |
-| `public/pages/meals.js` | KWF-004: Checkbox + erste sichtbare Listenauswahl beim Create; später Kochpreview/-bestätigung | `buildModalContent` und `saveModal` senden genau einen Meal-POST; direkte Drag-/Randomizer-/Apply-Plan-Pfade importieren nicht still | sechs neue `meals.*`-Keys in 23 Locales; DE/EN fachlich vollständig; responsive Modal; native Checkbox default off |
-| `public/pages/recipes.js` | bestehende Navigation beibehalten | `add-to-meals` → Query-Flow | kein separater Kalender nötig |
+| `public/pages/shopping.js` | Quellen anzeigen; KWF-006 strukturierte Menge in Quick-Add, Anzeige und Detailkorrektur; später Kauf→Vorrat | bestehende Check-/Swipe-Handler; strukturierte Felder werden gepaart validiert und per bestehendem POST/PATCH gespeichert | `quantity.*` in 23 Locales; 390/768/1440 px ohne Überlauf, Controls tastaturfokussierbar |
+| `public/pages/meals.js` | KWF-004: optionaler Import; KWF-006 strukturierte Rezept-/Meal-/Serien-Snapshots und manuelle Korrektur | `buildModalContent`/`saveModal`, Einzel-Edit, Copy/Scale/Apply-Plan propagieren `amount`,`unit`; kein stiller Freitextparser | gemeinsamer `quantity.*`-Namespace; responsive Ingredient-Row |
+| `public/pages/recipes.js` | bestehende Navigation; KWF-006 strukturierte Rezeptzutaten | Create/Update/Copy und `add-to-meals` erhalten `amount`,`unit` | gemeinsamer `quantity.*`-Namespace; Freitextanzeige bleibt Fallback |
 | `public/components/datepicker.js` | gemeinsamer Microkalender; KWF-005 öffnet das Datumspopover auch bei grobem Pointer und ergänzt Home/End-Navigation | bestehendes Grid/Keyboard; nativer Touch-Picker bleibt nur für Uhrzeit | KWF-005 nutzt vorhandene Texte; keine Marker-API ohne separaten Reviewbedarf |
 | `public/pages/pantry.js` (geplant) | Liste, Suche, Filter, CRUD, Korrektur | Modal/Drawer nach vorhandenem Muster | große Touch-Ziele, kompakte Filter, Ablauf-/Mindeststatus |
 | `public/router.js`, `public/utils/kitchen-tabs.js` | `/pantry` als Kitchen-Child | Route, Titel, Nav-Ziel, Shortcuts | `nav.pantry` in allen Locales |
 | `public/settings/pages/modules-kitchen.js` | Pantry-bezogene bestätigte Defaults, falls später nötig | keine globale Autoübernahme im MVP | explizite, sichere Defaults |
 | `public/sw.js` | neue statische Dateien; Offline-GET nur nach Entscheidung | Cachelisten/Whitelist | keine Offline-Mutationen |
-| `public/styles/*.css` | Quellen, Modalergänzungen, Pantry | bestehende Tokens/Breakpoints | Desktop, Tablet, Mobile; Reduced Motion |
+| `public/styles/*.css` | Quellen, KWF-006 Mengenfelder, spätere Pantry | bestehende Tokens/Breakpoints | Desktop, Tablet, Mobile; Reduced Motion |
 
-Neue i18n-Namensräume: `pantry.*`, `shopping.sources*`, `shopping.addToPantry*`, `meals.addIngredientsToShopping*`, `meals.cook*`. Deutsch und Englisch werden fachlich formuliert; alle 23 Locale-Dateien müssen vollständige Key-Parität behalten.
+Neue i18n-Namensräume: KWF-006 implementiert `quantity.*`; geplant bleiben `pantry.*`, `shopping.addToPantry*` und `meals.cook*`. Deutsch und Englisch werden fachlich formuliert; alle 23 Locale-Dateien müssen vollständige Key-Parität behalten.
 
 ## 9. Test-Matrix
 
@@ -305,7 +309,7 @@ Neue i18n-Namensräume: `pantry.*`, `shopping.sources*`, `shopping.addToPantry*`
 | KWF-003 Herkunft | konservativer Import-/Source-Helper | `sources[]`, Einzel-/Wochen-/Bereichsimport | Migration 87, Backfill/FK-Löschung | eine/mehrere Quellen; Desktop/390/768 px | Search, Scopes, Permissions, SW, Kitchen, Frontend-Audit | abgeschlossen |
 | KWF-004 Direkter Import | Block-/Listenvalidierung und gemeinsamer Importservice | unverändert ohne Import; explizite Liste; Herkunft; vollständiger Rollback | keine Migration; keine halbe Speicherung | Checkbox/Select/Ein-Request-Wiring; 390/768 px | Rekurrenz nur Startinstanz; Scopes/Permissions/SW/MCP/Housekeeping/CalDAV | abgeschlossen |
 | KWF-005 Microkalender | Datepicker-Grid/Plattformzweig/Home-End | – | – | Recipe-Query, ISO-POST, Keyboard, Touch, 390/768/Desktop/Landscape | Datepicker 24/24; Meals 44/44; UX 17/17; Mobile 5/5; Frontend 141/141; Browser grün | abgeschlossen; Feature-Commit `7ca92ac8` gepusht |
-| KWF-006 Mengenbasis | Parser nur deterministisch | kompatible/incompatible Einheiten | additive Spalten/Legacywerte | manuelle Korrektur | alte Freitextanzeigen | geplant |
+| KWF-006 Mengenbasis | Quantity 4/4: gepaarte Validierung, Bounds, Dimension/Konvertierung | Shopping 62/62; Meals 46/46; kompatible/incompatible Einheiten und Quellen | DB 40/40; Migration 88 additiv, kein Legacy-Backfill | Ingredient-Row, Quick-Add/Details; Browser 390/768/1440 px + Tastaturfokus | Frontend 141/141; Scopes/Permissions/SW/MCP/Kitchen grün | abgeschlossen |
 | KWF-007 Pantry MVP | Saldo/Validierung | CRUD/Filter/Adjust | Tabellen, Seeds, Journal | responsive CRUD/Filter | Scopes/Nav/SW | geplant |
 | KWF-008 Einkauf→Vorrat | Idempotenz | Transfer/Undo/Recheck | eindeutiger Transferbezug | Bestätigungsdialog | normales Abhaken | geplant |
 | KWF-009 Kochen→Verbrauch | Matching/FIFO-Vorschlag | Preview/Commit/Undo | Event+Bewegungen | Reviewdialog/Missing | Meal/Shopping/Pantry | geplant |
@@ -364,7 +368,7 @@ Neue i18n-Namensräume: `pantry.*`, `shopping.sources*`, `shopping.addToPantry*`
 - Schweregrad: hoch.
 - Auswirkung: Keine sichere Aggregation, Bestandsaddition oder Entnahme für beliebige Werte.
 - Empfehlung: additive strukturierte Felder; niemals unklare Werte raten.
-- Status: offen.
+- Status: **resolved durch KWF-006**: optionale `amount`/`unit`-Felder, strikte Paarvalidierung und ausschließlich dimensionsgleiche `g`/`kg`- bzw. `ml`/`l`-Aggregation; unklare Werte bleiben unverändert.
 - Task: KWF-006.
 
 ### KWF-FINDING-007 — Abhaken ist keine idempotente Domänenoperation
@@ -427,7 +431,7 @@ Neue i18n-Namensräume: `pantry.*`, `shopping.sources*`, `shopping.addToPantry*`
 - Schweregrad: mittel für spätere Upstream-Integration, niedrig für den isolierten KWF-003-Scope.
 - Auswirkung: `main` kann nicht per Fast-Forward synchronisiert werden. Vor KWF-003 betrug `main...upstream/main` 7/8 Commits; vor KWF-004 sind es nach der KWF-003-Integration 9/8 Commits. Ein ungeprüfter Merge würde Kitchen-Historie und die Upstream-v1.20.0-Änderungen vermischen.
 - Empfehlung: KWF-003 auf dem aktuellen, sauberen Fork-`main` implementieren; Upstream-Integration separat und konfliktbewusst durchführen.
-- Status: offen; für KWF-005 erneut live mit 12/8 Commits verifiziert, keine taskbezogene Upstream-Synchronisierung vorgenommen.
+- Status: offen; für KWF-006 erneut live mit 15/10 Commits verifiziert, keine taskbezogene Upstream-Synchronisierung vorgenommen.
 - Task: Repository-Integration, nicht KWF-003-Feature-Scope.
 
 ### KWF-FINDING-014 — KWF-004-API-Vertrag ist in der Task-2-Analyse veraltet
@@ -457,17 +461,26 @@ Neue i18n-Namensräume: `pantry.*`, `shopping.sources*`, `shopping.addToPantry*`
 - Status: **resolved durch KWF-005**; Home/End navigieren Montag-basiert zum Wochenanfang/-ende und wurden im realen Browser zusammen mit Arrow/Tab/Escape geprüft.
 - Task: KWF-005.
 
+### KWF-FINDING-017 — Parallele Benutzeränderung am Task-Master-Prompt
+
+- Betroffene Datei: `docs/development/KITCHEN_WORKFLOW_TASK_MASTER_PROMPT.md`.
+- Schweregrad: Information.
+- Auswirkung: Während KWF-006 entfernte der Benutzer den Beispielblock; die Änderung überschneidet sich nicht mit der Implementierung, darf aber nicht in den Task-Commit aufgenommen werden.
+- Empfehlung: Änderung unverändert im Working Tree belassen und beim selektiven Staging ausschließen.
+- Status: durch Benutzer als eigene Änderung bestätigt und für KWF-006 isoliert.
+- Task: Benutzeränderung außerhalb KWF-006.
+
 ## 11. Session-Handoff
 
-- Letzter abgeschlossener Schritt: KWF-005 wurde implementiert, dokumentiert, verifiziert und als Feature-Commit `7ca92ac8` zu `origin/fix/mobile-recipe-meal-datepicker` gepusht; diese Handoff-Aktualisierung ist der abschließende Doku-Schritt.
-- Aktueller Branch: `fix/mobile-recipe-meal-datepicker`, Basis Fork-`main` `9d4ad361`; `main` entspricht `origin/main`. `upstream/main` wurde wegen live bestätigter 12/8-Divergenz weder gemergt noch verändert.
-- Commit-/Working-Tree-Status: Feature-Commit `7ca92ac8` ist gepusht; vor dem finalen Doku-Commit ist ausschließlich diese Handoff-Aktualisierung geändert. Keine fremden Änderungen und keine untracked Task-Artefakte. Kein Pull Request, kein Merge.
-- Geänderte Dateien: `public/components/datepicker.js`, `public/styles/datepicker.css`, `test/test-datepicker.js`, `test/test-meals.js`, `test/test-ux-utils.js`, `docs/SPEC.md`, `CHANGELOG.md`, `docs/development/KITCHEN_WORKFLOW_MEMORY.md`.
-- Untersucht, aber unverändert: `public/pages/meals.js`, `public/pages/recipes.js`, `public/components/modal.js`, relevante Blöcke in `public/styles/layout.css`, `public/styles/glass.css`, `public/styles/meals.css`, `public/sw.js`, `server/openapi.js`, Scopes-/Permission-Tests und alle 23 Locale-Dateien. Keine Migration, Datenmodell-, API-, OpenAPI-, Scope-, Permission-, i18n- oder Service-Worker-Änderung erforderlich.
-- Bestätigte Annahmen: Der Recipe-Einstieg navigiert nach `/meals?recipe=<id>`, öffnet das vorhandene Create-Modal für heute und verändert den Datepicker beim Recipe-Prefill nicht; `saveModal()` liest dessen kanonischen Wert und sendet das geparste ISO-Datum im einzigen Meal-POST. Direkter Drag-and-drop auf einen konkreten Slot bleibt ohne zusätzliches Kalenderdialog. Tagesmarker sind optionaler Nicht-Basisscope und wurden nicht eingeführt.
-- Automatische Tests bestanden: Syntax `node --check` für Datepicker/Meals; `test:datepicker` 24/24, `test:ux-utils` 17/17, `test:meals` 44/44, `test:mobile-scroll-layout` 5/5, `test:frontend-audit` 141/141, `test:db` 39/39, `test:shopping` 60/60, `test:kitchen-tabs` 8/8, `test:modal-utils` 12/12, `test:sw-api-cache` 9/9, `test:token-scopes` 16/16, `test:permissions` 15/15, `test:api` 11/11, `test:settings-navigation` 65/65 und `test:changelog` 5/5; `git diff --check` bestanden.
-- Vollsuite: `npm test` bestand alle gestarteten Suiten bis einschließlich DB 39/39, Shopping 60/60, Meals 44/44, Calendar 48/48, Notes/Contacts/Budget 52/52 und Task-Categories 13/13. Danach brach Node 24.12.0 reproduzierbar mit `Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\\win\\async.c, line 76` ab; entspricht KWF-FINDING-009 und trat außerhalb der KWF-005-Suiten auf.
-- Browserprüfung: In-Memory-App/Puppeteer; Recipe-Query-Prefill, Heute-/Auswahlmarkierung, nächster Monat, Touch-Auswahl und ISO-POST `2026-08-01` bestanden. Popover vollständig im Viewport bei 390×844 (`pointer: coarse`), 768×900 (`pointer: coarse`) und 1440×900; 568×320 wurde auf 304 px Höhe begrenzt und intern scrollbar. Home→Montag, End→Sonntag, Arrow, Tab-Fokuseinschluss und Escape bestanden. Testinstanz beendet; keine Testdatei erzeugt.
-- Findings: KWF-FINDING-015 und -016 sind gelöst. Offen bleiben KWF-FINDING-009 (Windows/Node-libuv) und KWF-FINDING-013 (separate Upstream-Integration); weitere offene Findings gehören ausschließlich zu späteren Tasks.
-- Nächster sinnvoller Schritt: diesen finalen Handoff als reinen Doku-Commit committen und zum bereits veröffentlichten Task-Branch pushen; danach externe Prüfung abwarten, keinen Pull Request erstellen und keinen Folge-Task beginnen.
+- Letzter abgeschlossener Schritt: KWF-006 wurde implementiert, dokumentiert, verifiziert, als Feature-Commit `76475386` abgeschlossen und zusammen mit dem finalen Handoff zu `origin/feature/structured-ingredient-quantities` gepusht.
+- Aktueller Branch: `feature/structured-ingredient-quantities`, Basis Fork-`main` `fb27ab19`; `main` entspricht `origin/main`. `upstream/main` wurde wegen live bestätigter 15/10-Divergenz weder gemergt noch verändert.
+- Commit-/Working-Tree-Status: Der Task-Branch ist zu `origin` gepusht und trackt den Remote-Branch. Taskbezogen ist der Working Tree sauber; ausschließlich die vom Benutzer bestätigte, nicht zu KWF-006 gehörende Änderung in `docs/development/KITCHEN_WORKFLOW_TASK_MASTER_PROMPT.md` bleibt unstaged. Kein Pull Request, kein Merge.
+- Geänderte Task-Dateien: `server/db.js`, `server/db-schema-test.js`, `server/routes/{meals,recipes,shopping}.js`, `server/services/{ingredient-quantities,meal-shopping-import,shopping-import}.js`, `public/utils/{ingredient-row,quantity}.js`, `public/pages/{meals,recipes,shopping}.js`, `public/styles/{layout,shopping}.css`, alle 23 `public/locales/*.json`, `server/openapi.js`, `test/{test-db,test-meals,test-shopping,test-quantity}.js`, `package.json`, `docs/SPEC.md`, `CHANGELOG.md`, `docs/development/{KITCHEN_WORKFLOW_MEMORY,KITCHEN_WORKFLOW_PLAN}.md`.
+- Untersucht, aber unverändert: `public/components/modal.js`, `public/styles/{glass,meals,recipes}.css`, `public/sw.js`, `server/services/{meal-recurrence,shopping-item-sources}.js`, `server/scopes.js`, `server/mcp/tools.js`, `public/settings/pages/modules-kitchen.js` sowie Scopes-, Permissions-, MCP-, SW-, Housekeeping-, CalDAV-, Settings- und Kitchen-Tests. Keine neue Route, kein neuer Scope/Permission-Key und keine explizite SW-Änderung nötig; die neue gleiche-origin Utility nutzt das vorhandene Laufzeit-Cache-Muster.
+- Bestätigte Annahmen: `quantity` bleibt unverändert und wird nie automatisch geparst. `amount`/`unit` müssen gemeinsam vorhanden, endlich, positiv und höchstens `1e9` sein; unterstützte Einheiten sind `g`, `kg`, `ml`, `l`. Aggregation erfolgt nur bei gleichem Namen, gleicher Kategorie und gleicher Dimension; jede Source bleibt erhalten. Recipe→Meal, Rekurrenzmaterialisierung, Serienbearbeitung, Einzelbearbeitung und alle Shopping-Importpfade propagieren strukturierte Werte additiv. Bestehende Transaktionsgrenzen bleiben erhalten.
+- Automatische Tests bestanden: `test:quantity` 4/4, `test:db` 40/40, `test:shopping` 62/62, `test:meals` 46/46, `test:frontend-audit` 141/141, `test:datepicker` 24/24, `test:kitchen-tabs` 8/8, `test:sw-api-cache` 9/9, `test:token-scopes` 16/16, `test:permissions` 15/15, `test:mcp` 29/29, `test:housekeeping` 13/13, `test:caldav-reminders` 9/9, `test:settings-navigation` 65/65, `test:api` 11/11 und `test:changelog` 5/5; Syntaxchecks und Locale-JSON-Parsing bestanden; `git diff --check` bestanden.
+- Vollsuite: `npm test` bestand alle gestarteten Suiten bis einschließlich DB 40/40, Shopping 62/62, Meals 46/46, Calendar 48/48, Notes/Contacts/Budget 52/52 und Task-Categories 13/13. Danach brach Node 24.12.0 reproduzierbar mit `Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\\win\\async.c, line 76` ab; entspricht KWF-FINDING-009 und trat außerhalb der KWF-006-Suiten auf.
+- Browserprüfung: isolierte DB und lokaler Server; Recipe-Ingredient-Row sowie Shopping-Quick-Add/-Details zeigten und persistierten `1,5 kg` als strukturierte `1.5 kg`. Desktop 1440×900, Tablet 768×1024 und Mobil 390×844 ohne horizontalen Überlauf; Amount/Unit in logischer Tastaturreihenfolge und fokussierbar. Testserver beendet und Test-DB samt Sidecars entfernt. Der Login-Router blieb im Headless-Wartepunkt hängen; die API-Anmeldung war 200 und wurde für die ausschließlich Kitchen-bezogene Prüfung sessiongleich direkt verwendet.
+- Findings: KWF-FINDING-006 ist gelöst. Offen bleiben KWF-FINDING-009 (Windows/Node-libuv) und KWF-FINDING-013 (separate Upstream-Integration). KWF-FINDING-017 dokumentiert die isolierte Benutzeränderung. Weitere offene Findings gehören ausschließlich zu späteren Tasks.
+- Nächster sinnvoller Schritt: externe Prüfung des gepushten Task-Branches; keinen Pull Request erstellen, nicht nach `main` mergen und keinen Folge-Task beginnen. Die KWF-006-Analyse muss nicht erneut durchgeführt werden.
 - Nicht erneut analysieren: Ursache des mobilen Fallbacks, vorhandener Recipe-Query-/ISO-POST-Datenfluss, Modal-Top-Layer-/Viewport-Verhalten, Home-/End-Semantik sowie Nichtbetroffenheit von DB/API/OpenAPI/Scopes/Permissions/i18n/SW sind verifiziert.

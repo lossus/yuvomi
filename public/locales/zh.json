@@ -3187,6 +3187,15 @@
         "toastSaved": "已保存",
         "toastRewardDeleted": "奖品已删除"
     },
+    "quantity": {
+        "freeTextLabel": "自由文本数量",
+        "freeTextPlaceholder": "例如：2 罐",
+        "amountLabel": "数量",
+        "amountPlaceholder": "数字",
+        "unitLabel": "单位",
+        "unitNone": "无",
+        "invalid": "数量和单位必须以正数形式同时填写。"
+    },
     "datepicker": {
         "openCalendar": "打开日历",
         "openTimePicker": "打开时间选择器",

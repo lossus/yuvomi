@@ -646,7 +646,7 @@ function buildPaths() {
     },
     '/api/v1/shopping/suggestions': { get: op({ summary: 'Get shopping suggestions', tag: 'Shopping' }) },
     '/api/v1/shopping/items/{itemId}': {
-      patch: op({ summary: 'Update shopping item', tag: 'Shopping', params: [idParam('itemId', 'Item ID')], stateChanging: true, requestBody: jsonBody(null) }),
+      patch: op({ summary: 'Update shopping item', tag: 'Shopping', description: 'Keeps legacy quantity text and optionally accepts amount plus unit (g, kg, ml, l). Amount and unit must be supplied together.', params: [idParam('itemId', 'Item ID')], stateChanging: true, requestBody: jsonBody(null) }),
       delete: op({ summary: 'Delete shopping item', tag: 'Shopping', params: [idParam('itemId', 'Item ID')], stateChanging: true }),
     },
     '/api/v1/shopping/{listId}': {
@@ -654,18 +654,18 @@ function buildPaths() {
       delete: op({ summary: 'Delete shopping list', tag: 'Shopping', params: [idParam('listId', 'List ID')], stateChanging: true }),
     },
     '/api/v1/shopping/{listId}/items': {
-      get: op({ summary: 'List items in shopping list', tag: 'Shopping', description: 'Each item includes a backward-compatible sources array with durable meal/recipe provenance snapshots.', params: [idParam('listId', 'List ID')] }),
-      post: op({ summary: 'Add item to shopping list', tag: 'Shopping', params: [idParam('listId', 'List ID')], stateChanging: true, requestBody: jsonBody(null) }),
+      get: op({ summary: 'List items in shopping list', tag: 'Shopping', description: 'Each item includes legacy quantity, optional structured amount/unit, and a backward-compatible sources array with durable meal/recipe provenance snapshots.', params: [idParam('listId', 'List ID')] }),
+      post: op({ summary: 'Add item to shopping list', tag: 'Shopping', description: 'Accepts optional structured amount/unit (g, kg, ml, l) without rewriting the legacy quantity display text.', params: [idParam('listId', 'List ID')], stateChanging: true, requestBody: jsonBody(null) }),
     },
     '/api/v1/shopping/{listId}/items/checked': {
       delete: op({ summary: 'Delete checked shopping items', tag: 'Shopping', params: [idParam('listId', 'List ID')], stateChanging: true }),
     },
     '/api/v1/shopping/{listId}/import-meal-plan': {
-      post: op({ summary: 'Import a meal-plan date range into a shopping list', tag: 'Shopping', description: 'Creates one item per free-text ingredient together with a durable provenance snapshot in the same transaction.', params: [idParam('listId', 'List ID')], stateChanging: true, requestBody: jsonBody(null) }),
+      post: op({ summary: 'Import a meal-plan date range into a shopping list', tag: 'Shopping', description: 'Keeps free-text ingredients separate. Explicitly structured ingredients with the same name, category, and compatible mass/volume dimension are aggregated deterministically while every provenance source is retained in the same transaction.', params: [idParam('listId', 'List ID')], stateChanging: true, requestBody: jsonBody(null) }),
     },
     '/api/v1/meals': {
       get: op({ summary: 'List meal plan entries', tag: 'Meals' }),
-      post: op({ summary: 'Create meal plan entry', tag: 'Meals', description: 'Optionally accepts shopping_import: { enabled: true, list_id }. When enabled, the meal, optional recurrence template, concrete ingredients, shopping items, provenance snapshots, and transfer flags are created in one transaction. Only the concrete recurring start occurrence is imported.', stateChanging: true, requestBody: jsonBody(null, 'Meal fields with optional shopping_import block') }),
+      post: op({ summary: 'Create meal plan entry', tag: 'Meals', description: 'Ingredients retain legacy quantity text and may add amount/unit (g, kg, ml, l). Optionally accepts shopping_import: { enabled: true, list_id }. When enabled, the meal, optional recurrence template, concrete ingredients, shopping items, provenance snapshots, and transfer flags are created in one transaction. Only the concrete recurring start occurrence is imported.', stateChanging: true, requestBody: jsonBody(null, 'Meal fields with optional structured ingredients and shopping_import block') }),
     },
     '/api/v1/meals/suggestions': { get: op({ summary: 'Get meal suggestions', tag: 'Meals' }) },
     '/api/v1/meals/{id}': {
@@ -673,10 +673,10 @@ function buildPaths() {
       delete: op({ summary: 'Delete meal plan entry', tag: 'Meals', params: [idParam()], stateChanging: true }),
     },
     '/api/v1/meals/{id}/ingredients': {
-      post: op({ summary: 'Add meal ingredient', tag: 'Meals', params: [idParam()], stateChanging: true, requestBody: jsonBody(null) }),
+      post: op({ summary: 'Add meal ingredient', tag: 'Meals', description: 'Accepts backward-compatible quantity and optional amount/unit.', params: [idParam()], stateChanging: true, requestBody: jsonBody(null) }),
     },
     '/api/v1/meals/ingredients/{ingId}': {
-      patch: op({ summary: 'Update meal ingredient', tag: 'Meals', params: [idParam('ingId', 'Ingredient ID')], stateChanging: true, requestBody: jsonBody(null) }),
+      patch: op({ summary: 'Update meal ingredient', tag: 'Meals', description: 'Updates legacy quantity and optional structured amount/unit without implicit parsing.', params: [idParam('ingId', 'Ingredient ID')], stateChanging: true, requestBody: jsonBody(null) }),
       delete: op({ summary: 'Delete meal ingredient', tag: 'Meals', params: [idParam('ingId', 'Ingredient ID')], stateChanging: true }),
     },
     '/api/v1/meals/{id}/to-shopping-list': {
@@ -687,10 +687,10 @@ function buildPaths() {
     },
     '/api/v1/recipes': {
       get: op({ summary: 'List recipes', tag: 'Recipes' }),
-      post: op({ summary: 'Create recipe', tag: 'Recipes', stateChanging: true, requestBody: jsonBody(null) }),
+      post: op({ summary: 'Create recipe', tag: 'Recipes', description: 'Ingredients accept legacy quantity text and optional amount/unit (g, kg, ml, l).', stateChanging: true, requestBody: jsonBody(null) }),
     },
     '/api/v1/recipes/{id}': {
-      put: op({ summary: 'Update recipe', tag: 'Recipes', params: [idParam()], stateChanging: true, requestBody: jsonBody(null) }),
+      put: op({ summary: 'Update recipe', tag: 'Recipes', description: 'Replaces ingredients atomically while preserving explicit legacy and structured quantity fields.', params: [idParam()], stateChanging: true, requestBody: jsonBody(null) }),
       delete: op({ summary: 'Delete recipe', tag: 'Recipes', params: [idParam()], stateChanging: true }),
     },
     '/api/v1/calendar': {

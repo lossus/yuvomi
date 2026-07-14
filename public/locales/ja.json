@@ -3187,6 +3187,15 @@
         "toastSaved": "保存しました",
         "toastRewardDeleted": "景品を削除しました"
     },
+    "quantity": {
+        "freeTextLabel": "自由入力の数量",
+        "freeTextPlaceholder": "例: 2缶",
+        "amountLabel": "数量",
+        "amountPlaceholder": "数値",
+        "unitLabel": "単位",
+        "unitNone": "なし",
+        "invalid": "数量と単位を正の数で一緒に入力してください。"
+    },
     "datepicker": {
         "openCalendar": "カレンダーを開く",
         "openTimePicker": "時刻の選択を開く",

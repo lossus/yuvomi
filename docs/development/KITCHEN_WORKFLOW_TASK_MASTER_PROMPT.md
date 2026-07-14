@@ -253,13 +253,3 @@ Liefere im Chat:
 15. klare Aussage, dass kein Folge-Task begonnen wurde
 
 Wenn der Task nicht vollständig abgeschlossen werden kann, nenne den konkreten Blocker und den kleinsten erforderlichen nächsten manuellen Schritt. Deklariere einen teilweise umgesetzten Task niemals als abgeschlossen.
-
----
-
-## Beispiel zum Ausfüllen
-
-```text
-Task-ID: KWF-003
-Gewünschter Branch: feature/shopping-item-sources
-Zusätzliche Vorgaben: Implementieren, testen, committen und pushen; keinen Pull Request erstellen.
-```

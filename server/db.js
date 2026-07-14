@@ -3228,6 +3228,20 @@ const MIGRATIONS = [
       WHERE si.added_from_meal IS NOT NULL;
     `,
   },
+  {
+    version: 88,
+    description: 'Optional structured quantities for kitchen ingredients and shopping items',
+    up: `
+      ALTER TABLE recipe_ingredients ADD COLUMN amount REAL;
+      ALTER TABLE recipe_ingredients ADD COLUMN unit TEXT;
+      ALTER TABLE meal_ingredients ADD COLUMN amount REAL;
+      ALTER TABLE meal_ingredients ADD COLUMN unit TEXT;
+      ALTER TABLE meal_recurrence_ingredients ADD COLUMN amount REAL;
+      ALTER TABLE meal_recurrence_ingredients ADD COLUMN unit TEXT;
+      ALTER TABLE shopping_items ADD COLUMN amount REAL;
+      ALTER TABLE shopping_items ADD COLUMN unit TEXT;
+    `,
+  },
 ];
 
 /**

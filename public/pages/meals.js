@@ -15,6 +15,7 @@ import { renderKitchenTabsBar } from '/utils/kitchen-tabs.js';
 import { ingredientRowHTML } from '/utils/ingredient-row.js';
 import { addLocalDays, startOfLocalWeekKey, toLocalDateKey } from '/utils/date.js';
 import { normalizeRecipeMealTypes, recipeSupportsMealType } from '/utils/recipe-meal-types.js';
+import { structuredQuantityFromInput } from '/utils/quantity.js';
 
 // --------------------------------------------------------
 // Konstanten
@@ -101,6 +102,8 @@ function mealPayloadFromRecipe(recipe, date, mealType) {
     ingredients: (recipe.ingredients || []).map((ingredient) => ({
       name: ingredient.name,
       quantity: ingredient.quantity || null,
+      amount: ingredient.amount ?? null,
+      unit: ingredient.unit ?? null,
       category: ingredient.category || DEFAULT_CATEGORY_NAME,
     })),
   };
@@ -911,6 +914,8 @@ function openMealModal(opts) {
           .map((ing) => ingredientRowHTML({
             name: ing.name,
             quantity: scaleQuantityText(ing.quantity ?? '', factor),
+            amount: ing.amount == null ? null : Math.round(ing.amount * factor * 1e9) / 1e9,
+            unit: ing.unit ?? null,
             category: ing.category ?? DEFAULT_CATEGORY_NAME,
             categories: mealCategories(),
           }))
@@ -936,6 +941,8 @@ function openMealModal(opts) {
           .map((ing) => ingredientRowHTML({
             name: ing.name,
             quantity: scaleQuantityText(ing.quantity ?? '', Math.max(factor, 0.1)),
+            amount: ing.amount == null ? null : Math.round(ing.amount * Math.max(factor, 0.1) * 1e9) / 1e9,
+            unit: ing.unit ?? null,
             category: ing.category ?? DEFAULT_CATEGORY_NAME,
             categories: mealCategories(),
           }))
@@ -953,9 +960,16 @@ function openMealModal(opts) {
 
         const notes = panel.querySelector('#modal-notes').value.trim() || null;
         const recipe_url = panel.querySelector('#modal-recipe-url').value.trim() || null;
-        const ingredients = collectModalIngredients(panel).map((ing) => ({
+        const collected = collectModalIngredients(panel);
+        if (collected.error) {
+          window.yuvomi?.showToast(t('quantity.invalid'), 'error');
+          return;
+        }
+        const ingredients = collected.ingredients.map((ing) => ({
           name: ing.name,
           quantity: ing.quantity,
+          amount: ing.amount,
+          unit: ing.unit,
           category: ing.category,
         }));
 
@@ -1045,6 +1059,8 @@ function buildModalContent({ mode, date, mealType, meal, presetRecipeId = null }
     ? meal.ingredients.map((ing) => ingredientRowHTML({
         name: ing.name,
         quantity: ing.quantity ?? '',
+        amount: ing.amount ?? null,
+        unit: ing.unit ?? null,
         id: ing.id,
         category: ing.category ?? DEFAULT_CATEGORY_NAME,
         categories: mealCategories(),
@@ -1211,7 +1227,12 @@ async function saveModal(overlay) {
     return;
   }
 
-  const ingredients = collectModalIngredients(overlay);
+  const collected = collectModalIngredients(overlay);
+  if (collected.error) {
+    window.yuvomi?.showToast(t('quantity.invalid'), 'error');
+    return;
+  }
+  const ingredients = collected.ingredients;
 
   saveBtn.disabled    = true;
   saveBtn.textContent = '…';
@@ -1264,7 +1285,12 @@ async function saveModal(overlay) {
           if (!keptIds.has(id)) await api.delete(`/meals/ingredients/${id}`);
         }
         for (const ing of ingredients) {
-          if (!ing.id) await api.post(`/meals/${meal.id}/ingredients`, { name: ing.name, quantity: ing.quantity, category: ing.category });
+          const payload = { name: ing.name, quantity: ing.quantity, amount: ing.amount, unit: ing.unit, category: ing.category };
+          if (!ing.id) {
+            await api.post(`/meals/${meal.id}/ingredients`, payload);
+          } else {
+            await api.patch(`/meals/ingredients/${ing.id}`, payload);
+          }
         }
       }
 
@@ -1289,13 +1315,28 @@ async function saveModal(overlay) {
 
 function collectModalIngredients(overlay) {
   const ingredients = [];
+  let error = null;
   overlay.querySelectorAll('.ingredient-row').forEach((row) => {
     const name = row.querySelector('.ingredient-row__name').value.trim();
     const qty = row.querySelector('.ingredient-row__qty').value.trim() || null;
+    const structured = structuredQuantityFromInput(
+      row.querySelector('.ingredient-row__amount')?.value,
+      row.querySelector('.ingredient-row__unit')?.value
+    );
+    row.querySelector('.ingredient-row__amount')?.toggleAttribute('aria-invalid', Boolean(structured.error));
+    row.querySelector('.ingredient-row__unit')?.toggleAttribute('aria-invalid', Boolean(structured.error));
+    if (structured.error) error = structured.error;
     const category = row.querySelector('.ingredient-row__cat')?.value || DEFAULT_CATEGORY_NAME;
-    if (name) ingredients.push({ name, quantity: qty, category, id: row.dataset.ingId || null });
+    if (name && !structured.error) ingredients.push({
+      name,
+      quantity: qty,
+      amount: structured.value.amount,
+      unit: structured.value.unit,
+      category,
+      id: row.dataset.ingId || null,
+    });
   });
-  return ingredients;
+  return { ingredients, error };
 }
 
 // --------------------------------------------------------

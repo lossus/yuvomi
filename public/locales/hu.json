@@ -3187,6 +3187,15 @@
         "toastSaved": "Mentve",
         "toastRewardDeleted": "Jutalom törölve"
     },
+    "quantity": {
+        "freeTextLabel": "Szabad szöveges mennyiség",
+        "freeTextPlaceholder": "pl. 2 konzerv",
+        "amountLabel": "Mennyiség",
+        "amountPlaceholder": "Szám",
+        "unitLabel": "Egység",
+        "unitNone": "Nincs",
+        "invalid": "A mennyiséget és az egységet együtt, pozitív számként kell megadni."
+    },
     "datepicker": {
         "openCalendar": "Naptár megnyitása",
         "openTimePicker": "Időpontválasztó megnyitása",
