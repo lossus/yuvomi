@@ -85,32 +85,29 @@ export async function render(container) {
   container.replaceChildren();
   container.insertAdjacentHTML('beforeend', `
     <div class="documents-page">
-      <div class="page-toolbar documents-toolbar">
+      <div class="page-toolbar page-toolbar--wrap documents-toolbar">
         <h1 class="page-toolbar__title">${t('documents.title')}</h1>
-        ${renderPageSearch({ id: 'documents-search', label: t('documents.searchPlaceholder'), placeholder: t('documents.searchPlaceholder'), value: state.query, clearLabel: t('common.searchClear'), className: 'documents-toolbar__search' })}
-        <details class="documents-secondary-controls">
-          <summary class="btn btn--secondary btn--icon documents-secondary-controls__trigger" aria-label="${t('nav.more')}">
-            <i data-lucide="sliders-horizontal" class="icon-md" aria-hidden="true"></i>
-          </summary>
-          <div class="documents-secondary-controls__panel">
-            <div class="documents-view-toggle" role="group" aria-label="${t('documents.viewToggle')}">
-              <button class="documents-view-toggle__btn ${state.view === 'grid' ? 'documents-view-toggle__btn--active' : ''}" data-view="grid" aria-label="${t('documents.gridView')}" aria-pressed="${state.view === 'grid'}">
-                <i data-lucide="layout-grid" aria-hidden="true"></i>
-              </button>
-              <button class="documents-view-toggle__btn ${state.view === 'list' ? 'documents-view-toggle__btn--active' : ''}" data-view="list" aria-label="${t('documents.listView')}" aria-pressed="${state.view === 'list'}">
-                <i data-lucide="list" aria-hidden="true"></i>
-              </button>
-            </div>
-            <div class="documents-filter-group" id="documents-status" role="group" aria-label="${t('documents.statusLabel')}">
-              <button type="button" class="documents-filter-chip${state.status === 'active' ? ' documents-filter-chip--active' : ''}" data-status="active" aria-pressed="${state.status === 'active'}">${t('documents.statusActive')}</button>
-              <button type="button" class="documents-filter-chip${state.status === 'archived' ? ' documents-filter-chip--active' : ''}" data-status="archived" aria-pressed="${state.status === 'archived'}">${t('documents.statusArchived')}</button>
-            </div>
-            <div class="documents-filter-chips" id="documents-category" role="group" aria-label="${t('documents.categoryLabel')}">
-              <button type="button" class="documents-filter-chip${!state.category ? ' documents-filter-chip--active' : ''}" data-category="" aria-pressed="${!state.category}">${t('documents.allCategories')}</button>
-              ${CATEGORIES.map((category) => `<button type="button" class="documents-filter-chip${state.category === category ? ' documents-filter-chip--active' : ''}" data-category="${esc(category)}" aria-pressed="${state.category === category}"><i data-lucide="${CATEGORY_ICONS[category] || 'folder'}" class="icon-md" aria-hidden="true"></i>${esc(categoryLabels()[category])}</button>`).join('')}
-            </div>
+        ${renderPageSearch({ id: 'documents-search', label: t('documents.searchPlaceholder'), placeholder: t('documents.searchPlaceholder'), value: state.query, clearLabel: t('common.searchClear'), className: 'documents-toolbar__search page-toolbar__center' })}
+        <div class="page-toolbar__actions">
+          <div class="documents-view-toggle" role="group" aria-label="${t('documents.viewToggle')}">
+            <button class="documents-view-toggle__btn ${state.view === 'grid' ? 'documents-view-toggle__btn--active' : ''}" data-view="grid" aria-label="${t('documents.gridView')}" aria-pressed="${state.view === 'grid'}">
+              <i data-lucide="layout-grid" aria-hidden="true"></i>
+            </button>
+            <button class="documents-view-toggle__btn ${state.view === 'list' ? 'documents-view-toggle__btn--active' : ''}" data-view="list" aria-label="${t('documents.listView')}" aria-pressed="${state.view === 'list'}">
+              <i data-lucide="list" aria-hidden="true"></i>
+            </button>
           </div>
-        </details>
+        </div>
+      </div>
+      <div class="documents-filters">
+        <div class="documents-filter-group" id="documents-status" role="group" aria-label="${t('documents.statusLabel')}">
+          <button type="button" class="documents-filter-chip${state.status === 'active' ? ' documents-filter-chip--active' : ''}" data-status="active" aria-pressed="${state.status === 'active'}">${t('documents.statusActive')}</button>
+          <button type="button" class="documents-filter-chip${state.status === 'archived' ? ' documents-filter-chip--active' : ''}" data-status="archived" aria-pressed="${state.status === 'archived'}">${t('documents.statusArchived')}</button>
+        </div>
+        <div class="documents-filter-chips" id="documents-category" role="group" aria-label="${t('documents.categoryLabel')}">
+          <button type="button" class="documents-filter-chip${!state.category ? ' documents-filter-chip--active' : ''}" data-category="" aria-pressed="${!state.category}">${t('documents.allCategories')}</button>
+          ${CATEGORIES.map((category) => `<button type="button" class="documents-filter-chip${state.category === category ? ' documents-filter-chip--active' : ''}" data-category="${esc(category)}" aria-pressed="${state.category === category}"><i data-lucide="${CATEGORY_ICONS[category] || 'folder'}" class="icon-md" aria-hidden="true"></i>${esc(categoryLabels()[category])}</button>`).join('')}
+        </div>
       </div>
       <div class="documents-browser-layout">
         <aside class="documents-folder-browser" aria-label="${t('documents.folderBrowserTitle')}">
@@ -186,9 +183,10 @@ function renderDmsHeaderBtn() {
   btn.append(icon);
   btn.append(document.createTextNode(t('documents.linkFromDms')));
   btn.addEventListener('click', () => openDmsLinkModal());
-  // Vor die Sekundär-Steuerung (Slider) hängen, damit die Toolbar-Reihenfolge stimmt.
-  const secondary = toolbar.querySelector('.documents-secondary-controls');
-  if (secondary) secondary.insertAdjacentElement('beforebegin', btn);
+  // In den Aktions-Slot des Kopfes hängen (vor die Ansicht-Umschaltung), damit die
+  // Toolbar-Reihenfolge stimmt und der Button rechtsbündig neben der Ansicht steht.
+  const actions = toolbar.querySelector('.page-toolbar__actions');
+  if (actions) actions.insertAdjacentElement('afterbegin', btn);
   else toolbar.append(btn);
   if (window.lucide) lucide.createIcons({ el: btn });
 }
@@ -207,29 +205,6 @@ function bindPageEvents() {
   _container.querySelector('#documents-folder-add')?.addEventListener('click', () => openFolderModal());
   _container.querySelector('#fab-new-document')?.addEventListener('click', () => openDocumentModal());
 
-  // Sekundär-Steuerung (<details>-Slider, nur auf Mobile als Overlay-Panel):
-  // per Außenklick oder Escape schließbar machen — sonst bleibt das Panel über
-  // dem Inhalt liegen, bis der kleine Summary-Trigger erneut getroffen wird.
-  // Listener nur im geöffneten Zustand aktiv (kein Dauer-Leak); auf Desktop
-  // bleibt das Summary ausgeblendet, das Panel öffnet dort nie.
-  const secondary = _container.querySelector('.documents-secondary-controls');
-  if (secondary) {
-    const onOutside = (e) => { if (!secondary.contains(e.target)) secondary.removeAttribute('open'); };
-    const onKey = (e) => {
-      if (e.key !== 'Escape') return;
-      secondary.removeAttribute('open');
-      secondary.querySelector('summary')?.focus();
-    };
-    secondary.addEventListener('toggle', () => {
-      if (secondary.open) {
-        document.addEventListener('click', onOutside, true);
-        document.addEventListener('keydown', onKey, true);
-      } else {
-        document.removeEventListener('click', onOutside, true);
-        document.removeEventListener('keydown', onKey, true);
-      }
-    });
-  }
   wirePageSearch(_container, {
     id: 'documents-search',
     onQuery: (value) => {

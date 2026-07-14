@@ -1371,13 +1371,15 @@ test('responsive adaptation uses tablet space without crowding module toolbars',
   const documents = read('../public/styles/documents.css');
   const settings = read('../public/styles/settings.css');
 
+  // Der Dokument-Kopf lehnt sich am kanonischen page-toolbar--wrap-Muster an
+  // (Titel + Suche + Aktionen brechen bei Bedarf um), die Filter leben in einer
+  // eigenen Zeile darunter — kein in die Kopfzeile gequetschter Filter-Block (#506).
+  const documentsPageSrc = read('../public/pages/documents.js');
+  assert.match(documentsPageSrc, /class="page-toolbar page-toolbar--wrap documents-toolbar"/);
+  assert.match(documentsPageSrc, /<div class="documents-filters">/);
   assert.match(
     documents,
-    /@media \(min-width:\s*768px\) and \(max-width:\s*1023px\)[\s\S]*\.documents-toolbar\s*\{[\s\S]*flex-wrap:\s*wrap/
-  );
-  assert.match(
-    documents,
-    /@media \(min-width:\s*768px\) and \(max-width:\s*1023px\)[\s\S]*\.documents-toolbar__search\s*\{[\s\S]*flex-basis:\s*100%/
+    /\.documents-filters\s*\{[\s\S]*overflow-x:\s*auto/
   );
   assert.match(
     settings,
@@ -2488,20 +2490,18 @@ test('documents and navigation settings use progressive disclosure instead of st
   const navigationPage = read('../public/settings/pages/modules-navigation.js');
   const settingsCss = read('../public/styles/settings.css');
 
-  assert.match(documentsPage, /<details class="documents-secondary-controls"/);
-  assert.match(documentsPage, /<summary[^>]*documents-secondary-controls__trigger/);
+  // Dokumente folgen dem Kontakte-Muster (Issue #506): Filter leben in einer
+  // eigenen, horizontal scrollenden Zeile unter dem Kopf — nicht mehr hinter
+  // einem <details>-Slider in die Kopfzeile gequetscht.
+  assert.doesNotMatch(documentsPage, /documents-secondary-controls/);
+  assert.match(documentsPage, /<div class="documents-filters">/);
+  assert.match(documentsPage, /class="documents-filter-group" id="documents-status"/);
+  assert.match(documentsPage, /class="documents-filter-chips" id="documents-category"/);
   assert.match(
     documentsCss,
-    /@media \(max-width:\s*767px\)[\s\S]*\.documents-secondary-controls__panel\s*\{[\s\S]*display:\s*none/,
+    /\.documents-filters\s*\{[\s\S]*overflow-x:\s*auto[\s\S]*\}/,
   );
-  assert.match(
-    documentsCss,
-    /@media \(max-width:\s*767px\)[\s\S]*\.documents-secondary-controls\s*\{[\s\S]*position:\s*static/,
-  );
-  assert.match(
-    documentsCss,
-    /@media \(max-width:\s*767px\)[\s\S]*\.documents-secondary-controls__panel\s*\{[\s\S]*inset-inline:\s*var\(--space-4\)[\s\S]*width:\s*auto/,
-  );
+  assert.doesNotMatch(documentsCss, /documents-secondary-controls/);
   assert.match(navigationPage, /class="settings-navigation-panel"/);
   assert.doesNotMatch(navigationPage, /<div class="settings-card">/);
   assert.match(settingsCss, /\.settings-navigation-panel\s*\{[\s\S]*border-bottom:\s*var\(--space-px\)\s+solid\s+var\(--color-border-subtle\)/);

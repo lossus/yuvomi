@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.22.2] - 2026-07-14
+
+### Fixed
+- Documents toolbar: on desktop the search box overlapped the title, the category chips were cut off at the right edge, and the status filters landed in the wrong row. The toolbar had crammed the title, search, view toggle, status filters, and all category chips into a single header row behind a collapsible slider, with no layout rule for wide screens. The filters now live in their own row beneath the header (matching the Contacts module): the header holds the title, search, and view toggle, while the status and category chips share a separate horizontally scrolling filter bar.
+
 ## [1.22.1] - 2026-07-14
 
 ### Fixed
