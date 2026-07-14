@@ -284,6 +284,26 @@ test('Migration 87 backfillt Herkunft und bewahrt Snapshots nach Quellenlöschun
   sourceDb.close();
 });
 
+test('Migration 88 ergänzt strukturierte Mengen additiv ohne Legacy-Backfill', () => {
+  const quantityDb = new DatabaseSync(':memory:');
+  quantityDb.exec('PRAGMA foreign_keys = ON;');
+  quantityDb.exec(MIGRATIONS_SQL[1]);
+  quantityDb.exec(MIGRATIONS_SQL[13]);
+  quantityDb.exec(MIGRATIONS_SQL[64]);
+  quantityDb.prepare("INSERT INTO users (username, display_name, password_hash) VALUES ('quantity-user', 'Quantity', 'x')").run();
+  const recipeId = quantityDb.prepare("INSERT INTO recipes (title, created_by) VALUES ('Legacy recipe', 1)").run().lastInsertRowid;
+  quantityDb.prepare("INSERT INTO recipe_ingredients (recipe_id, name, quantity) VALUES (?, 'Flour', 'some')").run(recipeId);
+
+  quantityDb.exec(MIGRATIONS_SQL[88]);
+  for (const table of ['recipe_ingredients', 'meal_ingredients', 'meal_recurrence_ingredients', 'shopping_items']) {
+    const columns = quantityDb.prepare(`SELECT name FROM pragma_table_info('${table}') WHERE name IN ('amount', 'unit') ORDER BY name`).all();
+    assert(columns.length === 2, `${table} muss amount und unit enthalten`);
+  }
+  const legacy = quantityDb.prepare("SELECT quantity, amount, unit FROM recipe_ingredients WHERE name = 'Flour'").get();
+  assert(legacy.quantity === 'some' && legacy.amount === null && legacy.unit === null, 'Legacy-Freitext darf nicht interpretiert werden');
+  quantityDb.close();
+});
+
 // --------------------------------------------------------
 // Ergebnis
 // --------------------------------------------------------

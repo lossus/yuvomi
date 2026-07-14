@@ -11,6 +11,7 @@ import { renderKitchenTabsBar } from '/utils/kitchen-tabs.js';
 import { ingredientRowHTML } from '/utils/ingredient-row.js';
 import { normalizeRecipeMealTypes, RECIPE_MEAL_TYPE_KEYS } from '/utils/recipe-meal-types.js';
 import { renderSkeletonList } from '/utils/skeleton.js';
+import { formatStructuredQuantity, structuredQuantityFromInput } from '/utils/quantity.js';
 
 let _container = null;
 
@@ -203,7 +204,8 @@ function renderRecipeList() {
       for (const ing of ingredients.slice(0, MAX_INGREDIENTS)) {
         const li = document.createElement('li');
         li.className = 'recipe-card__ingredient';
-        const qty = ing.quantity ? `${ing.quantity} · ` : '';
+        const quantityDisplay = ing.quantity || formatStructuredQuantity(ing.amount, ing.unit);
+        const qty = quantityDisplay ? `${quantityDisplay} · ` : '';
         li.textContent = `${qty}${ing.name}`;
         ul.appendChild(li);
       }
@@ -318,6 +320,8 @@ function openRecipeModal(mode, recipe = null) {
         ingList.insertAdjacentHTML('beforeend', recipe.ingredients.map((i) => ingredientRowHTML({
           name: i.name,
           quantity: i.quantity ?? '',
+          amount: i.amount ?? null,
+          unit: i.unit ?? null,
           category: i.category ?? DEFAULT_CATEGORY_NAME,
           categories: mealCategories(),
         })).join(''));
@@ -359,12 +363,31 @@ async function saveRecipe(panel, mode, recipe) {
   }
 
   const ingredients = [];
+  let quantityError = false;
   panel.querySelectorAll('.ingredient-row').forEach((row) => {
     const name = row.querySelector('.ingredient-row__name')?.value.trim() || '';
     const quantity = row.querySelector('.ingredient-row__qty')?.value.trim() || null;
+    const structured = structuredQuantityFromInput(
+      row.querySelector('.ingredient-row__amount')?.value,
+      row.querySelector('.ingredient-row__unit')?.value
+    );
+    row.querySelector('.ingredient-row__amount')?.toggleAttribute('aria-invalid', Boolean(structured.error));
+    row.querySelector('.ingredient-row__unit')?.toggleAttribute('aria-invalid', Boolean(structured.error));
+    if (structured.error) quantityError = true;
     const category = row.querySelector('.ingredient-row__cat')?.value || DEFAULT_CATEGORY_NAME;
-    if (name) ingredients.push({ name, quantity, category });
+    if (name && !structured.error) ingredients.push({
+      name,
+      quantity,
+      amount: structured.value.amount,
+      unit: structured.value.unit,
+      category,
+    });
   });
+
+  if (quantityError) {
+    window.yuvomi?.showToast(t('quantity.invalid'), 'error');
+    return;
+  }
 
   saveBtn.disabled = true;
 
@@ -418,6 +441,8 @@ async function duplicateRecipe(recipe) {
   const ingredients = (recipe.ingredients || []).map((ing) => ({
     name: ing.name,
     quantity: ing.quantity || null,
+    amount: ing.amount ?? null,
+    unit: ing.unit ?? null,
     category: ing.category || DEFAULT_CATEGORY_NAME,
   }));
 

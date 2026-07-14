@@ -2059,7 +2059,19 @@ html.fab-anim-done .page-fab {
 }
 
 .ingredient-row__qty {
-  flex: 1;
+  min-width: 0;
+}
+
+.ingredient-row__quantities {
+  flex: 2.2;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(72px, 0.8fr) minmax(70px, 0.7fr);
+  gap: var(--space-1);
+}
+
+.ingredient-row__amount,
+.ingredient-row__unit {
   min-width: 0;
 }
 
@@ -2093,6 +2105,26 @@ html.fab-anim-done .page-fab {
 
 .ingredient-row__remove:hover {
   color: var(--color-danger);
+}
+
+@media (max-width: 640px) {
+  .ingredient-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 32px;
+    align-items: start;
+  }
+
+  .ingredient-row__name,
+  .ingredient-row__quantities,
+  .ingredient-row__cat {
+    grid-column: 1;
+    width: 100%;
+  }
+
+  .ingredient-row__remove {
+    grid-column: 2;
+    grid-row: 1;
+  }
 }
 
 .meal-type-badge {

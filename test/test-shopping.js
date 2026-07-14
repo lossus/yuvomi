@@ -502,8 +502,8 @@ test('shopping-Route validiert und persistiert notes/url', () => {
   const source = readFileSync(new URL('../server/routes/shopping.js', import.meta.url), 'utf8');
   assert(/import\s*\{[^}]*\burl\b[^}]*\}\s*from\s*'\.\.\/middleware\/validate\.js'/.test(source), 'Route muss den url()-Validator importieren');
   assert(/url\(req\.body\.url,\s*'URL'\)/.test(source), 'POST muss req.body.url über url() validieren');
-  assert(/INSERT INTO shopping_items \(list_id, name, quantity, category, notes, url\)/.test(source), 'INSERT muss notes/url enthalten');
-  assert(/SET is_checked = \?, name = \?, quantity = \?, category = \?, notes = \?, url = \?/.test(source), 'UPDATE muss notes/url enthalten');
+  assert(/INSERT INTO shopping_items \(list_id, name, quantity, amount, unit, category, notes, url\)/.test(source), 'INSERT muss strukturierte Menge sowie notes/url enthalten');
+  assert(/SET is_checked = \?, name = \?, quantity = \?, amount = \?, unit = \?, category = \?, notes = \?, url = \?/.test(source), 'UPDATE muss strukturierte Menge sowie notes/url enthalten');
 });
 
 test('shopping-Route bietet einen Datumsbereich-Import aus dem Essensplan an', () => {
@@ -624,7 +624,7 @@ try {
         recipe_id: recipeId,
         ingredients: [
           { name: 'KWF004 tomatoes', quantity: '2 cans', category: 'Sonstiges' },
-          { name: 'KWF004 pasta', quantity: '500 g', category: 'Sonstiges' },
+          { name: 'KWF004 pasta', quantity: '500 g', amount: 500, unit: 'g', category: 'Sonstiges' },
         ],
         shopping_import: { enabled: true, list_id: createdIds[1] },
       }),
@@ -636,8 +636,10 @@ try {
 
     const ingredients = routeDatabase.prepare('SELECT * FROM meal_ingredients WHERE meal_id = ? ORDER BY id').all(body.data.id);
     assert(ingredients.length === 2 && ingredients.every((ingredient) => ingredient.on_shopping_list === 1), 'Alle konkreten Meal-Zutaten müssen markiert sein');
+    assert(ingredients.some((ingredient) => ingredient.name === 'KWF004 pasta' && ingredient.amount === 500 && ingredient.unit === 'g'), 'Meal-Strukturwerte fehlen');
     const items = routeDatabase.prepare("SELECT * FROM shopping_items WHERE added_from_meal = ? ORDER BY id").all(body.data.id);
     assert(items.length === 2 && items.every((item) => item.list_id === createdIds[1]), 'Items müssen in der expliziten Liste liegen');
+    assert(items.some((item) => item.name === 'KWF004 pasta' && item.amount === 500 && item.unit === 'g'), 'Shopping-Strukturwerte fehlen');
     const sources = routeDatabase.prepare('SELECT * FROM shopping_item_sources WHERE meal_id = ? ORDER BY id').all(body.data.id);
     assert(sources.length === 2, 'Jedes Item braucht eine Herkunft');
     assert(sources.every((source) => source.recipe_id === recipeId && source.source_label === 'KWF004 direct import'), 'Recipe-Link und Titel-Snapshot fehlen');
@@ -783,6 +785,46 @@ try {
     assert(tomatoes.every((item) => item.sources.length === 1), 'Jedes Item braucht genau eine Quelle');
     assert(tomatoes.every((item) => item.sources[0].meal_id === null && item.sources[0].recipe_id === null), 'Gelöschte FKs müssen null sein');
     assert(tomatoes.every((item) => item.sources[0].source_label === 'Tomato dinner' && item.sources[0].meal_date_snapshot === '2026-07-13'), 'Snapshots müssen erhalten bleiben');
+  });
+
+  await asyncTest('Shopping-API persistiert strukturierte Menge und weist Teilwerte ab', async () => {
+    const valid = await fetch(`${base}/${createdIds[0]}/items`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: 'Structured milk', quantity: 'one bottle', amount: 1.5, unit: 'l' }),
+    });
+    const validBody = await valid.json();
+    assert(valid.status === 201, `POST-Status ${valid.status}: ${JSON.stringify(validBody)}`);
+    assert(validBody.data.quantity === 'one bottle', 'Legacy-Anzeige muss erhalten bleiben');
+    assert(validBody.data.amount === 1.5 && validBody.data.unit === 'l', 'Strukturwerte fehlen');
+
+    const invalid = await fetch(`${base}/${createdIds[0]}/items`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: 'Invalid structured', amount: 2 }),
+    });
+    assert(invalid.status === 400, `Teilwert muss 400 liefern, erhalten ${invalid.status}`);
+    assert(!routeDatabase.prepare("SELECT id FROM shopping_items WHERE name = 'Invalid structured'").get(), 'Ungültiger Strukturwert darf nichts schreiben');
+  });
+
+  await asyncTest('Bereichsimport aggregiert kompatible strukturierte Mengen mit allen Quellen', async () => {
+    const firstMeal = routeDatabase.prepare("INSERT INTO meals (date, meal_type, title, created_by) VALUES ('2026-07-14', 'dinner', 'Bread', 1)").run().lastInsertRowid;
+    const secondMeal = routeDatabase.prepare("INSERT INTO meals (date, meal_type, title, created_by) VALUES ('2026-07-15', 'dinner', 'Cake', 1)").run().lastInsertRowid;
+    routeDatabase.prepare("INSERT INTO meal_ingredients (meal_id, name, quantity, amount, unit) VALUES (?, 'Flour', '1000 g', 1000, 'g')").run(firstMeal);
+    routeDatabase.prepare("INSERT INTO meal_ingredients (meal_id, name, quantity, amount, unit) VALUES (?, 'flour', '1 kg', 1, 'kg')").run(secondMeal);
+
+    const imported = await fetch(`${base}/${createdIds[0]}/import-meal-plan`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ from: '2026-07-14', to: '2026-07-15' }),
+    });
+    const body = await imported.json();
+    assert(imported.status === 200, `Import-Status ${imported.status}`);
+    assert(body.data.transferred === 2 && body.data.added === 1, `Import-Counts ${JSON.stringify(body.data)}`);
+    const item = routeDatabase.prepare("SELECT * FROM shopping_items WHERE lower(name) = 'flour' ORDER BY id DESC LIMIT 1").get();
+    assert(item.amount === 2 && item.unit === 'kg' && item.quantity === '2 kg', `Aggregat falsch: ${JSON.stringify(item)}`);
+    const sources = routeDatabase.prepare('SELECT * FROM shopping_item_sources WHERE shopping_item_id = ? ORDER BY id').all(item.id);
+    assert(sources.length === 2, `Alle Quellen müssen erhalten bleiben: ${sources.length}`);
   });
 
   await asyncTest('GET liefert Einkaufslisten nach sort_order', async () => {

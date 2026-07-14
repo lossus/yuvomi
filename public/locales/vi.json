@@ -3187,6 +3187,15 @@
         "toastSaved": "Đã lưu",
         "toastRewardDeleted": "Đã xóa phần thưởng"
     },
+    "quantity": {
+        "freeTextLabel": "Số lượng dạng văn bản",
+        "freeTextPlaceholder": "ví dụ: 2 hộp",
+        "amountLabel": "Số lượng",
+        "amountPlaceholder": "Số",
+        "unitLabel": "Đơn vị",
+        "unitNone": "Không có",
+        "invalid": "Số lượng và đơn vị phải được nhập cùng nhau dưới dạng số dương."
+    },
     "datepicker": {
         "openCalendar": "Mở lịch",
         "openTimePicker": "Mở bộ chọn giờ",

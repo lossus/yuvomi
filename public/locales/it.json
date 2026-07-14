@@ -3187,6 +3187,15 @@
         "toastSaved": "Salvato",
         "toastRewardDeleted": "Premio eliminato"
     },
+    "quantity": {
+        "freeTextLabel": "Quantità in testo libero",
+        "freeTextPlaceholder": "es. 2 lattine",
+        "amountLabel": "Quantità",
+        "amountPlaceholder": "Numero",
+        "unitLabel": "Unità",
+        "unitNone": "Nessuna",
+        "invalid": "Quantità e unità devono essere indicate insieme come numero positivo."
+    },
     "datepicker": {
         "openCalendar": "Apri calendario",
         "openTimePicker": "Apri selettore orario",

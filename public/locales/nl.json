@@ -3187,6 +3187,15 @@
         "toastSaved": "Opgeslagen",
         "toastRewardDeleted": "Beloning verwijderd"
     },
+    "quantity": {
+        "freeTextLabel": "Hoeveelheid als vrije tekst",
+        "freeTextPlaceholder": "bijv. 2 blikken",
+        "amountLabel": "Hoeveelheid",
+        "amountPlaceholder": "Getal",
+        "unitLabel": "Eenheid",
+        "unitNone": "Geen",
+        "invalid": "Hoeveelheid en eenheid moeten samen als positief getal worden opgegeven."
+    },
     "datepicker": {
         "openCalendar": "Kalender openen",
         "openTimePicker": "Tijdkiezer openen",

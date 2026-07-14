@@ -14,10 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Shopping lists can now be reordered with drag-and-drop or touch-friendly move actions. The first list is marked as the default and is used wherever Yuvomi needs an implicit shopping-list target.
 - Shopping items imported from meals now retain durable one-to-many provenance snapshots and show their source meal and date in the list.
 - Meal creation can now optionally add the concrete meal's ingredients to a selected shopping list in the same atomic request, including provenance snapshots and recurring-start-instance semantics.
+- Recipe, meal, recurring-meal, and shopping quantities can now optionally store an explicit positive amount with `g`, `kg`, `ml`, or `l`, while legacy free-text quantities remain editable and unchanged.
 
 ### Changed
 - Existing shopping lists receive a stable order during migration (`created_at`, then `id`), and new lists are appended to that order.
-- Meal-plan range imports keep free-text ingredient quantities as separate items until structured quantity aggregation is available.
+- Meal-plan imports keep free-text quantities separate but deterministically aggregate explicit compatible mass or volume values while retaining every provenance source.
 
 ## [1.19.1] - 2026-07-13
 

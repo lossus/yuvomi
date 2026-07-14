@@ -14,6 +14,8 @@ import { DEFAULT_CATEGORY_NAME, categoryLabel } from '/utils/shopping-categories
  * @param {object} opts
  * @param {string} [opts.name]       Zutatenname
  * @param {string} [opts.quantity]   Menge
+ * @param {number|string|null} [opts.amount] Strukturierte Zahl
+ * @param {string|null} [opts.unit]  Strukturierte Einheit
  * @param {number|string|null} [opts.id]  Bestehende Zutaten-ID (für Update-Sync)
  * @param {string} [opts.category]   Wunsch-Kategorie
  * @param {Array<{name:string}>} [opts.categories]  Verfügbare Kategorien (bereits gefiltert)
@@ -22,6 +24,8 @@ import { DEFAULT_CATEGORY_NAME, categoryLabel } from '/utils/shopping-categories
 export function ingredientRowHTML({
   name = '',
   quantity = '',
+  amount = null,
+  unit = null,
   id = null,
   category = DEFAULT_CATEGORY_NAME,
   categories = [],
@@ -39,7 +43,14 @@ export function ingredientRowHTML({
   return `
     <div class="ingredient-row" data-ing-id="${id ?? ''}">
       <input type="text" class="form-input ingredient-row__name" placeholder="${t('meals.ingredientNamePlaceholder')}" value="${esc(name)}">
-      <input type="text" class="form-input ingredient-row__qty" placeholder="${t('meals.ingredientQtyPlaceholder')}" value="${esc(quantity)}">
+      <div class="ingredient-row__quantities">
+        <input type="text" class="form-input ingredient-row__qty" placeholder="${t('quantity.freeTextPlaceholder')}" aria-label="${t('quantity.freeTextLabel')}" value="${esc(quantity)}">
+        <input type="text" inputmode="decimal" class="form-input ingredient-row__amount" placeholder="${t('quantity.amountPlaceholder')}" aria-label="${t('quantity.amountLabel')}" value="${esc(amount ?? '')}">
+        <select class="form-input ingredient-row__unit" aria-label="${t('quantity.unitLabel')}">
+          <option value="" ${unit ? '' : 'selected'}>${t('quantity.unitNone')}</option>
+          ${['g', 'kg', 'ml', 'l'].map((value) => `<option value="${value}" ${unit === value ? 'selected' : ''}>${value}</option>`).join('')}
+        </select>
+      </div>
       <select class="form-input ingredient-row__cat" aria-label="${t('meals.ingredientCategoryLabel')}">${catOptions}</select>
       <button class="ingredient-row__remove" data-action="remove-ingredient" type="button" aria-label="${t('meals.removeIngredient')}">
         <i data-lucide="x" class="icon-sm" aria-hidden="true"></i>

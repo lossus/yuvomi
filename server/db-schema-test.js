@@ -926,6 +926,16 @@ const MIGRATIONS_SQL = {
     JOIN meals m ON m.id = si.added_from_meal
     WHERE si.added_from_meal IS NOT NULL;
   `,
+  88: `
+    ALTER TABLE recipe_ingredients ADD COLUMN amount REAL;
+    ALTER TABLE recipe_ingredients ADD COLUMN unit TEXT;
+    ALTER TABLE meal_ingredients ADD COLUMN amount REAL;
+    ALTER TABLE meal_ingredients ADD COLUMN unit TEXT;
+    ALTER TABLE meal_recurrence_ingredients ADD COLUMN amount REAL;
+    ALTER TABLE meal_recurrence_ingredients ADD COLUMN unit TEXT;
+    ALTER TABLE shopping_items ADD COLUMN amount REAL;
+    ALTER TABLE shopping_items ADD COLUMN unit TEXT;
+  `,
 };
 
 export { MIGRATIONS_SQL };

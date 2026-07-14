@@ -32,6 +32,7 @@ db.exec(MIGRATIONS_SQL[13]);
 db.exec(MIGRATIONS_SQL[64]);
 db.exec(MIGRATIONS_SQL[73]);
 db.exec(MIGRATIONS_SQL[87]);
+db.exec(MIGRATIONS_SQL[88]);
 
 // Test-Benutzer
 const u1 = db.prepare(`INSERT INTO users (username, display_name, password_hash, role)
@@ -445,6 +446,16 @@ test('Rezepte speichern passende meal_types für Planer-Features', () => {
   assert(recipe.meal_types === 'breakfast,snack', `meal_types gespeichert: ${recipe.meal_types}`);
 });
 
+test('Strukturierte Mengen bleiben beim Recipe-zu-Meal-Snapshot additiv erhalten', () => {
+  const payload = mealsUi.mealPayloadFromRecipe({
+    id: 77,
+    title: 'Structured recipe',
+    ingredients: [{ name: 'Flour', quantity: 'one bag', amount: 1.5, unit: 'kg', category: 'Sonstiges' }],
+  }, '2026-07-14', 'dinner');
+  assert(payload.ingredients[0].quantity === 'one bag', 'Legacy-Freitext muss unverändert bleiben');
+  assert(payload.ingredients[0].amount === 1.5 && payload.ingredients[0].unit === 'kg', 'Strukturwerte müssen kopiert werden');
+});
+
 test('Randomize-Helfer plant nur kompatible Rezepte in freie Slots', () => {
   const plan = mealsUi.buildRandomMealAssignments({
     weekStart: '2026-03-23',
@@ -546,6 +557,16 @@ test('Meal-Create-Modal sendet optionalen Shopping-Import in genau einem Request
   assert(/state\.lists\.map/.test(source), 'Ziellisten müssen aus der bereits sortierten Shopping-Antwort stammen');
   assert(/modal-shopping-import-list" disabled/.test(source), 'Zielliste muss standardmäßig deaktiviert sein');
   assert(!/id="modal-shopping-import"[^>]*checked/.test(source), 'Import-Checkbox muss standardmäßig aus sein');
+});
+
+test('Meal- und Recipe-UI bieten strukturierte Menge mit manueller Korrektur', () => {
+  const meals = readFileSync(new URL('../public/pages/meals.js', import.meta.url), 'utf8');
+  const recipes = readFileSync(new URL('../public/pages/recipes.js', import.meta.url), 'utf8');
+  const row = readFileSync(new URL('../public/utils/ingredient-row.js', import.meta.url), 'utf8');
+  assert(/ingredient-row__amount/.test(row) && /ingredient-row__unit/.test(row), 'Geteilte Zutatenzeile braucht Amount und Unit');
+  assert(/structuredQuantityFromInput/.test(meals) && /structuredQuantityFromInput/.test(recipes), 'Beide Modals müssen Strukturwerte validieren');
+  assert(/amount:\s*structured\.value\.amount/.test(meals) && /unit:\s*structured\.value\.unit/.test(meals), 'Meal-Payload muss Strukturwerte senden');
+  assert(/amount:\s*structured\.value\.amount/.test(recipes) && /unit:\s*structured\.value\.unit/.test(recipes), 'Recipe-Payload muss Strukturwerte senden');
 });
 
 test('Recipe-Query öffnet dasselbe Meal-Modal mit heutigem ISO-Datum', () => {

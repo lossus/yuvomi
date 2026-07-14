@@ -3187,6 +3187,15 @@
         "toastSaved": "Sparat",
         "toastRewardDeleted": "Belöning borttagen"
     },
+    "quantity": {
+        "freeTextLabel": "Mängd som fritext",
+        "freeTextPlaceholder": "t.ex. 2 burkar",
+        "amountLabel": "Mängd",
+        "amountPlaceholder": "Tal",
+        "unitLabel": "Enhet",
+        "unitNone": "Ingen",
+        "invalid": "Mängd och enhet måste anges tillsammans som ett positivt tal."
+    },
     "datepicker": {
         "openCalendar": "Öppna kalender",
         "openTimePicker": "Öppna tidväljare",

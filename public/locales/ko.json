@@ -3187,6 +3187,15 @@
         "toastSaved": "저장됨",
         "toastRewardDeleted": "상품이 삭제됨"
     },
+    "quantity": {
+        "freeTextLabel": "자유 텍스트 수량",
+        "freeTextPlaceholder": "예: 캔 2개",
+        "amountLabel": "수량",
+        "amountPlaceholder": "숫자",
+        "unitLabel": "단위",
+        "unitNone": "없음",
+        "invalid": "수량과 단위를 양수로 함께 입력해야 합니다."
+    },
     "datepicker": {
         "openCalendar": "캘린더 열기",
         "openTimePicker": "시간 선택 열기",

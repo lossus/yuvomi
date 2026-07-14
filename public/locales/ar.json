@@ -3187,6 +3187,15 @@
         "toastSaved": "تم الحفظ",
         "toastRewardDeleted": "تم حذف الجائزة"
     },
+    "quantity": {
+        "freeTextLabel": "كمية بنص حر",
+        "freeTextPlaceholder": "مثال: علبتان",
+        "amountLabel": "الكمية",
+        "amountPlaceholder": "رقم",
+        "unitLabel": "الوحدة",
+        "unitNone": "بدون",
+        "invalid": "يجب إدخال الكمية والوحدة معًا كرقم موجب."
+    },
     "datepicker": {
         "openCalendar": "فتح التقويم",
         "openTimePicker": "فتح منتقي الوقت",

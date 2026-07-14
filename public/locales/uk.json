@@ -3187,6 +3187,15 @@
         "toastSaved": "Збережено",
         "toastRewardDeleted": "Нагороду видалено"
     },
+    "quantity": {
+        "freeTextLabel": "Кількість довільним текстом",
+        "freeTextPlaceholder": "наприклад, 2 банки",
+        "amountLabel": "Кількість",
+        "amountPlaceholder": "Число",
+        "unitLabel": "Одиниця",
+        "unitNone": "Немає",
+        "invalid": "Кількість і одиницю потрібно вказати разом як додатне число."
+    },
     "datepicker": {
         "openCalendar": "Відкрити календар",
         "openTimePicker": "Відкрити вибір часу",

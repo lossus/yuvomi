@@ -3187,6 +3187,15 @@
         "toastSaved": "Kaydedildi",
         "toastRewardDeleted": "Ödül silindi"
     },
+    "quantity": {
+        "freeTextLabel": "Serbest metin miktarı",
+        "freeTextPlaceholder": "örn. 2 kutu",
+        "amountLabel": "Miktar",
+        "amountPlaceholder": "Sayı",
+        "unitLabel": "Birim",
+        "unitNone": "Yok",
+        "invalid": "Miktar ve birim pozitif bir sayı olarak birlikte girilmelidir."
+    },
     "datepicker": {
         "openCalendar": "Takvimi aç",
         "openTimePicker": "Saat seçiciyi aç",

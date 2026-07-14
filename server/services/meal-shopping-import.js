@@ -25,8 +25,8 @@ function importMealIngredientsToShoppingList(database, { mealId, listId }) {
   if (!items.length) return 0;
 
   const insertItem = database.prepare(`
-    INSERT INTO shopping_items (list_id, name, quantity, category, added_from_meal)
-    VALUES (?, ?, ?, ?, ?)
+    INSERT INTO shopping_items (list_id, name, quantity, amount, unit, category, added_from_meal)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
   `);
   const markDone = database.prepare(`
     UPDATE meal_ingredients SET on_shopping_list = 1 WHERE id = ?
@@ -37,10 +37,14 @@ function importMealIngredientsToShoppingList(database, { mealId, listId }) {
       listId,
       item.name,
       item.quantity,
+      item.amount,
+      item.unit,
       item.category,
       item.added_from_meal
     );
-    insertShoppingItemSource(database, result.lastInsertRowid, item.source);
+    for (const source of item.sources) {
+      insertShoppingItemSource(database, result.lastInsertRowid, source);
+    }
     for (const ingredientId of item.ingredientIds) markDone.run(ingredientId);
   }
 

@@ -23,6 +23,7 @@
     "test:contact-categories": "node --experimental-sqlite test/test-contact-categories.js",
     "test:rewards": "node --experimental-sqlite test/test-rewards.js",
     "test:shopping": "node --experimental-sqlite test/test-shopping.js",
+    "test:quantity": "node --test test/test-quantity.js",
     "test:meals": "node --loader ./test/test-browser-loader.mjs --experimental-sqlite test/test-meals.js",
     "test:calendar": "node --loader ./test/test-browser-loader.mjs --experimental-sqlite test/test-calendar.js",
     "test:ncb": "node --experimental-sqlite test/test-notes-contacts-budget.js",

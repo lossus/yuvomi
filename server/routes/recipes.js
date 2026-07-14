@@ -9,6 +9,7 @@ import express from 'express';
 import * as db from '../db.js';
 import { str, num, collectErrors, MAX_TITLE, MAX_TEXT, MAX_SHORT } from '../middleware/validate.js';
 import { normalizeRecipeMealTypes } from '../../public/utils/recipe-meal-types.js';
+import { sanitizeKitchenIngredients } from '../services/ingredient-quantities.js';
 
 const log = createLogger('Recipes');
 const router = express.Router();
@@ -77,8 +78,10 @@ router.post('/', (req, res) => {
     const vNotes = str(req.body.notes, 'Notizen', { max: MAX_TEXT, required: false });
     const vRecipeUrl = str(req.body.recipe_url, 'Rezept-URL', { max: MAX_TEXT, required: false });
     const mealTypes = normalizeRecipeMealTypes(req.body.meal_types);
+    const cleanIngredients = sanitizeKitchenIngredients(ingredients, { maxTitle: MAX_TITLE, maxShort: MAX_SHORT });
 
     const errors = collectErrors([vTitle, vNotes, vRecipeUrl]);
+    if (cleanIngredients.error) errors.push(cleanIngredients.error);
     if (errors.length) return res.status(400).json({ error: errors.join(' '), code: 400 });
 
     const recipeId = db.transaction(() => {
@@ -89,15 +92,12 @@ router.post('/', (req, res) => {
 
       const rid = Number(result.lastInsertRowid);
       const insertIng = db.get().prepare(`
-        INSERT INTO recipe_ingredients (recipe_id, name, quantity, category)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO recipe_ingredients (recipe_id, name, quantity, amount, unit, category)
+        VALUES (?, ?, ?, ?, ?, ?)
       `);
 
-      for (const ing of ingredients) {
-        const name = String(ing.name || '').trim().slice(0, MAX_TITLE);
-        const quantity = String(ing.quantity || '').trim().slice(0, MAX_SHORT) || null;
-        const category = String(ing.category || '').trim().slice(0, MAX_SHORT) || 'Sonstiges';
-        if (name) insertIng.run(rid, name, quantity, category);
+      for (const ing of cleanIngredients.value) {
+        insertIng.run(rid, ing.name, ing.quantity, ing.amount, ing.unit, ing.category);
       }
 
       return rid;
@@ -126,7 +126,9 @@ router.put('/:id', (req, res) => {
     const vNotes = str(req.body.notes, 'Notizen', { max: MAX_TEXT, required: false });
     const vRecipeUrl = str(req.body.recipe_url, 'Rezept-URL', { max: MAX_TEXT, required: false });
     const mealTypes = normalizeRecipeMealTypes(req.body.meal_types);
+    const cleanIngredients = sanitizeKitchenIngredients(ingredients, { maxTitle: MAX_TITLE, maxShort: MAX_SHORT });
     const errors = collectErrors([vTitle, vNotes, vRecipeUrl]);
+    if (cleanIngredients.error) errors.push(cleanIngredients.error);
     if (errors.length) return res.status(400).json({ error: errors.join(' '), code: 400 });
 
     db.transaction(() => {
@@ -139,15 +141,12 @@ router.put('/:id', (req, res) => {
       db.get().prepare('DELETE FROM recipe_ingredients WHERE recipe_id = ?').run(id);
 
       const insertIng = db.get().prepare(`
-        INSERT INTO recipe_ingredients (recipe_id, name, quantity, category)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO recipe_ingredients (recipe_id, name, quantity, amount, unit, category)
+        VALUES (?, ?, ?, ?, ?, ?)
       `);
 
-      for (const ing of ingredients) {
-        const name = String(ing.name || '').trim().slice(0, MAX_TITLE);
-        const quantity = String(ing.quantity || '').trim().slice(0, MAX_SHORT) || null;
-        const category = String(ing.category || '').trim().slice(0, MAX_SHORT) || 'Sonstiges';
-        if (name) insertIng.run(id, name, quantity, category);
+      for (const ing of cleanIngredients.value) {
+        insertIng.run(id, ing.name, ing.quantity, ing.amount, ing.unit, ing.category);
       }
     });
 

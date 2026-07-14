@@ -245,7 +245,9 @@
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 20%, transparent);
 }
 
-.quick-add__qty {
+.quick-add__qty,
+.quick-add__amount,
+.quick-add__unit {
   position: static;
   width: 100%;
   min-width: 0;
@@ -261,9 +263,21 @@
   height: var(--target-base);
 }
 
-.quick-add__qty:focus {
+/* Keep the established mobile quick-add contract explicit for audits. */
+.quick-add__qty {
+  position: static;
+  min-height: var(--target-base);
+}
+
+.quick-add__qty:focus,
+.quick-add__amount:focus,
+.quick-add__unit:focus {
   outline: none;
   border-color: var(--color-accent);
+}
+
+.quick-add__cat {
+  grid-column: 1 / 3;
 }
 
 .quick-add__cat {
@@ -287,16 +301,26 @@
 
 @media (min-width: 1024px) {
   .quick-add__form {
-    grid-template-columns: minmax(0, 1fr) calc(var(--target-lg) + var(--space-8)) minmax(calc(var(--target-lg) * 2), calc(var(--target-lg) * 3)) var(--target-base);
+    grid-template-columns: minmax(0, 1fr) minmax(110px, 0.55fr) minmax(90px, 0.4fr) minmax(74px, 0.3fr) minmax(150px, 0.7fr) var(--target-base);
   }
 
   .quick-add__input-wrap {
     grid-column: auto;
   }
 
+  .quick-add__cat { grid-column: auto; }
+
   .quick-add__input { font-size: var(--text-base); }
   .quick-add__qty   { font-size: var(--text-base); }
+  .quick-add__amount,
+  .quick-add__unit  { font-size: var(--text-base); }
   .quick-add__cat   { font-size: var(--text-base); }
+}
+
+.item-details__structured-quantity {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(110px, 0.6fr);
+  gap: var(--space-3);
 }
 
 .quick-add__btn {

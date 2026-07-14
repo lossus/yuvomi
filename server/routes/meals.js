@@ -11,6 +11,9 @@ import { str, oneOf, date, num, collectErrors, MAX_TITLE, MAX_TEXT, MAX_SHORT, D
 import { addDays, mealWeekday, datesForTemplateInRange } from '../services/meal-recurrence.js';
 import { insertShoppingItemSource } from '../services/shopping-item-sources.js';
 import { importMealIngredientsToShoppingList } from '../services/meal-shopping-import.js';
+import { shoppingItemsFromMealIngredients } from '../services/shopping-import.js';
+import { sanitizeKitchenIngredients } from '../services/ingredient-quantities.js';
+import { validateStructuredQuantity } from '../../public/utils/quantity.js';
 
 const log = createLogger('Meals');
 
@@ -47,22 +50,16 @@ function weekEnd(dateStr) {
 
 function insertMealIngredients(mealId, ingredients) {
   const insertIng = db.get().prepare(`
-    INSERT INTO meal_ingredients (meal_id, name, quantity, category) VALUES (?, ?, ?, ?)
+    INSERT INTO meal_ingredients (meal_id, name, quantity, amount, unit, category) VALUES (?, ?, ?, ?, ?, ?)
   `);
 
   for (const ing of ingredients) {
-    insertIng.run(mealId, ing.name, ing.quantity, ing.category || 'Sonstiges');
+    insertIng.run(mealId, ing.name, ing.quantity, ing.amount, ing.unit, ing.category || 'Sonstiges');
   }
 }
 
 function sanitizedIngredients(ingredients) {
-  return ingredients
-    .map((ing) => ({
-      name: String(ing.name || '').trim().slice(0, MAX_TITLE),
-      quantity: String(ing.quantity || '').trim().slice(0, MAX_SHORT) || null,
-      category: String(ing.category || '').trim().slice(0, MAX_SHORT) || 'Sonstiges',
-    }))
-    .filter((ing) => ing.name);
+  return sanitizeKitchenIngredients(ingredients, { maxTitle: MAX_TITLE, maxShort: MAX_SHORT });
 }
 
 function validateShoppingImport(value) {
@@ -111,7 +108,7 @@ function createMealRecord({ date, meal_type, title, notes, recipe_url, recipe_id
     INSERT INTO meals (date, meal_type, title, notes, recipe_url, recipe_id, created_by)
     VALUES (?, ?, ?, ?, ?, ?, ?)
   `).run(date, meal_type, title, notes, recipe_url, recipe_id, actorId);
-  insertMealIngredients(result.lastInsertRowid, cleanIngredients);
+  insertMealIngredients(result.lastInsertRowid, cleanIngredients.value);
   return loadMealWithIngredients(result.lastInsertRowid);
 }
 
@@ -137,7 +134,7 @@ function materializeRecurringMeals(from, to) {
       WHERE recurrence_template_id = ? AND date = ?
     `);
     const templateIngredients = db.get().prepare(`
-      SELECT name, quantity, category
+      SELECT name, quantity, amount, unit, category
       FROM meal_recurrence_ingredients
       WHERE template_id = ?
       ORDER BY id ASC
@@ -290,9 +287,11 @@ router.post('/', (req, res) => {
     const vRecipeUrl  = str(req.body.recipe_url, 'Rezept-URL', { max: MAX_TEXT, required: false });
     const vRecipeId   = num(req.body.recipe_id, 'Rezept-ID', { required: false });
     const repeatWeekly = req.body.repeat_weekly === true;
+    const cleanIngredients = sanitizedIngredients(ingredients);
     const errors = collectErrors([vDate, vType, vTitle, vNotes, vRecipeUrl, vRecipeId]);
     if (!req.body.meal_type) errors.push('Mahlzeit-Typ ist erforderlich.');
     if (shoppingImport.error) errors.push(shoppingImport.error);
+    if (cleanIngredients.error) errors.push(cleanIngredients.error);
     if (errors.length) return res.status(400).json({ error: errors.join(' '), code: 400 });
 
     if (vRecipeId.value !== null) {
@@ -306,7 +305,6 @@ router.post('/', (req, res) => {
     }
 
     const created = db.transaction(() => {
-      const cleanIngredients = sanitizedIngredients(ingredients);
       let recurrenceTemplateId = null;
 
       if (repeatWeekly) {
@@ -327,11 +325,11 @@ router.post('/', (req, res) => {
         recurrenceTemplateId = template.lastInsertRowid;
 
         const insertTemplateIng = db.get().prepare(`
-          INSERT INTO meal_recurrence_ingredients (template_id, name, quantity, category)
-          VALUES (?, ?, ?, ?)
+          INSERT INTO meal_recurrence_ingredients (template_id, name, quantity, amount, unit, category)
+          VALUES (?, ?, ?, ?, ?, ?)
         `);
-        for (const ing of cleanIngredients) {
-          insertTemplateIng.run(recurrenceTemplateId, ing.name, ing.quantity, ing.category);
+        for (const ing of cleanIngredients.value) {
+          insertTemplateIng.run(recurrenceTemplateId, ing.name, ing.quantity, ing.amount, ing.unit, ing.category);
         }
       }
 
@@ -342,7 +340,7 @@ router.post('/', (req, res) => {
 
       const mealId = result.lastInsertRowid;
 
-      insertMealIngredients(mealId, cleanIngredients);
+      insertMealIngredients(mealId, cleanIngredients.value);
 
       const transferred = shoppingImport.enabled
         ? importMealIngredientsToShoppingList(db.get(), { mealId, listId: shoppingImport.listId })
@@ -384,8 +382,10 @@ router.post('/apply-plan', (req, res) => {
       const vNotes = str(assignment.notes, 'Notizen', { max: MAX_TEXT, required: false });
       const vRecipeUrl = str(assignment.recipe_url, 'Rezept-URL', { max: MAX_TEXT, required: false });
       const vRecipeId = num(assignment.recipe_id, 'Rezept-ID', { required: false });
+      const cleanIngredients = sanitizedIngredients(assignment.ingredients || []);
       const errors = collectErrors([vDate, vType, vTitle, vNotes, vRecipeUrl, vRecipeId]);
       if (!assignment.meal_type) errors.push('Mahlzeit-Typ ist erforderlich.');
+      if (cleanIngredients.error) errors.push(cleanIngredients.error);
       if (errors.length) return res.status(400).json({ error: errors.join(' '), code: 400 });
       if (vRecipeId.value !== null) recipeIds.add(vRecipeId.value);
       prepared.push({
@@ -395,7 +395,7 @@ router.post('/apply-plan', (req, res) => {
         notes: vNotes.value,
         recipe_url: vRecipeUrl.value,
         recipe_id: vRecipeId.value,
-        ingredients: assignment.ingredients || [],
+        ingredients: cleanIngredients.value,
       });
     }
 
@@ -465,6 +465,12 @@ router.put('/:id', (req, res) => {
       const nNotes     = req.body.notes      !== undefined ? (req.body.notes      || null)       : tpl.notes;
       const nRecipeUrl = req.body.recipe_url !== undefined ? (req.body.recipe_url || null)       : tpl.recipe_url;
       const nRecipeId  = req.body.recipe_id  !== undefined ? (req.body.recipe_id  || null)       : tpl.recipe_id;
+      const cleanIngredients = Array.isArray(req.body.ingredients)
+        ? sanitizedIngredients(req.body.ingredients)
+        : null;
+      if (cleanIngredients?.error) {
+        return res.status(400).json({ error: cleanIngredients.error, code: 400 });
+      }
 
       db.transaction(() => {
         db.get().prepare(`
@@ -480,22 +486,20 @@ router.put('/:id', (req, res) => {
         `).run(nMealType, nTitle, nNotes, nRecipeUrl, nRecipeId, templateId);
 
         if (Array.isArray(req.body.ingredients)) {
-          const cleanIngredients = sanitizedIngredients(req.body.ingredients);
-
           db.get().prepare('DELETE FROM meal_recurrence_ingredients WHERE template_id = ?').run(templateId);
           const insertTemplateIng = db.get().prepare(`
-            INSERT INTO meal_recurrence_ingredients (template_id, name, quantity, category)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO meal_recurrence_ingredients (template_id, name, quantity, amount, unit, category)
+            VALUES (?, ?, ?, ?, ?, ?)
           `);
-          for (const ing of cleanIngredients) {
-            insertTemplateIng.run(templateId, ing.name, ing.quantity, ing.category);
+          for (const ing of cleanIngredients.value) {
+            insertTemplateIng.run(templateId, ing.name, ing.quantity, ing.amount, ing.unit, ing.category);
           }
 
           const instances = db.get().prepare('SELECT id FROM meals WHERE recurrence_template_id = ?').all(templateId);
           const deleteIng  = db.get().prepare('DELETE FROM meal_ingredients WHERE meal_id = ?');
           for (const inst of instances) {
             deleteIng.run(inst.id);
-            insertMealIngredients(inst.id, cleanIngredients);
+            insertMealIngredients(inst.id, cleanIngredients.value);
           }
         }
       });
@@ -587,13 +591,22 @@ router.post('/:id/ingredients', (req, res) => {
     const meal   = db.get().prepare('SELECT id FROM meals WHERE id = ?').get(mealId);
     if (!meal) return res.status(404).json({ error: 'Mahlzeit nicht gefunden', code: 404 });
 
-    const { name, quantity = null, category = 'Sonstiges' } = req.body;
+    const { name, quantity = null, amount = null, unit = null, category = 'Sonstiges' } = req.body;
     if (!name || !name.trim())
       return res.status(400).json({ error: 'Name ist erforderlich', code: 400 });
+    const structured = validateStructuredQuantity(amount, unit);
+    if (structured.error) return res.status(400).json({ error: structured.error, code: 400 });
 
     const result = db.get().prepare(`
-      INSERT INTO meal_ingredients (meal_id, name, quantity, category) VALUES (?, ?, ?, ?)
-    `).run(mealId, name.trim(), quantity?.trim() || null, String(category || '').trim() || 'Sonstiges');
+      INSERT INTO meal_ingredients (meal_id, name, quantity, amount, unit, category) VALUES (?, ?, ?, ?, ?, ?)
+    `).run(
+      mealId,
+      name.trim(),
+      String(quantity || '').trim().slice(0, MAX_SHORT) || null,
+      structured.value.amount,
+      structured.value.unit,
+      String(category || '').trim() || 'Sonstiges'
+    );
 
     const ing = db.get().prepare(
       'SELECT * FROM meal_ingredients WHERE id = ?'
@@ -618,18 +631,27 @@ router.patch('/ingredients/:ingId', (req, res) => {
     const ing   = db.get().prepare('SELECT * FROM meal_ingredients WHERE id = ?').get(ingId);
     if (!ing) return res.status(404).json({ error: 'Zutat nicht gefunden', code: 404 });
 
-    const { name, quantity, on_shopping_list, category } = req.body;
+    const { name, quantity, amount, unit, on_shopping_list, category } = req.body;
+    const structured = validateStructuredQuantity(
+      amount !== undefined ? amount : ing.amount,
+      unit !== undefined ? unit : ing.unit
+    );
+    if (structured.error) return res.status(400).json({ error: structured.error, code: 400 });
 
     db.get().prepare(`
       UPDATE meal_ingredients
       SET name             = COALESCE(?, name),
           quantity         = ?,
+          amount           = ?,
+          unit             = ?,
           category         = COALESCE(?, category),
           on_shopping_list = COALESCE(?, on_shopping_list)
       WHERE id = ?
     `).run(
       name?.trim() ?? null,
-      quantity !== undefined ? (quantity?.trim() || null) : ing.quantity,
+      quantity !== undefined ? (String(quantity || '').trim().slice(0, MAX_SHORT) || null) : ing.quantity,
+      structured.value.amount,
+      structured.value.unit,
       category !== undefined ? (String(category || '').trim() || 'Sonstiges') : null,
       on_shopping_list !== undefined ? (on_shopping_list ? 1 : 0) : null,
       ingId
@@ -736,28 +758,22 @@ router.post('/week-to-shopping-list', (req, res) => {
 
     const transferred = db.transaction(() => {
       const insertItem = db.get().prepare(`
-        INSERT INTO shopping_items (list_id, name, quantity, category, added_from_meal)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO shopping_items (list_id, name, quantity, amount, unit, category, added_from_meal)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
       `);
       const markDone = db.get().prepare(`
         UPDATE meal_ingredients SET on_shopping_list = 1 WHERE id = ?
       `);
 
-      let count = 0;
-      for (const ing of ingredients) {
-        const item = insertItem.run(listId, ing.name, ing.quantity, ing.category || 'Sonstiges', ing.meal_id);
-        insertShoppingItemSource(db.get(), item.lastInsertRowid, {
-          source_type: 'meal',
-          meal_id: ing.meal_id,
-          recipe_id: ing.recipe_id,
-          source_label: ing.source_label,
-          meal_date_snapshot: ing.meal_date_snapshot,
-          quantity_snapshot: ing.quantity,
-        });
-        markDone.run(ing.id);
-        count++;
+      const importItems = shoppingItemsFromMealIngredients(ingredients);
+      for (const item of importItems) {
+        const inserted = insertItem.run(listId, item.name, item.quantity, item.amount, item.unit, item.category, item.added_from_meal);
+        for (const source of item.sources) {
+          insertShoppingItemSource(db.get(), inserted.lastInsertRowid, source);
+        }
+        for (const ingredientId of item.ingredientIds) markDone.run(ingredientId);
       }
-      return count;
+      return importItems.length;
     });
 
     res.json({ data: { transferred } });

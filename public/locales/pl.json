@@ -3187,6 +3187,15 @@
         "toastSaved": "Zapisano",
         "toastRewardDeleted": "Nagroda usunięta"
     },
+    "quantity": {
+        "freeTextLabel": "Ilość w tekście dowolnym",
+        "freeTextPlaceholder": "np. 2 puszki",
+        "amountLabel": "Ilość",
+        "amountPlaceholder": "Liczba",
+        "unitLabel": "Jednostka",
+        "unitNone": "Brak",
+        "invalid": "Ilość i jednostkę należy podać razem jako liczbę dodatnią."
+    },
     "datepicker": {
         "openCalendar": "Otwórz kalendarz",
         "openTimePicker": "Otwórz wybór godziny",

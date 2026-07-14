@@ -127,6 +127,8 @@ Points-and-rewards system. A member earns a task's `points` when the task is mar
 | list_id | INTEGER | FK → Shopping Lists, NOT NULL |
 | name | TEXT | NOT NULL |
 | quantity | TEXT | e.g. "500g", "2 pieces" |
+| amount | REAL | Optional explicit positive numeric amount; nullable |
+| unit | TEXT | Optional structured unit (`g`, `kg`, `ml`, `l`); nullable and paired with `amount` |
 | category | TEXT | FK → Shopping Categories (by name) |
 | is_checked | INTEGER | 0/1 |
 | added_from_meal | INTEGER | FK → Meals, nullable |
@@ -197,6 +199,8 @@ Ingredient snapshot copied to each generated weekly meal occurrence.
 | template_id | INTEGER | FK → Meal Recurrence Templates (CASCADE delete), NOT NULL |
 | name | TEXT | NOT NULL |
 | quantity | TEXT | |
+| amount | REAL | Optional explicit positive numeric amount; nullable |
+| unit | TEXT | Optional structured unit (`g`, `kg`, `ml`, `l`); nullable |
 | category | TEXT | NOT NULL (default 'Sonstiges') |
 
 ### Meal Recurrence Exceptions
@@ -226,6 +230,8 @@ Reusable recipe cards that can be pre-filled into meal slots.
 | recipe_id | INTEGER | FK → Recipes (CASCADE delete), NOT NULL |
 | name | TEXT | NOT NULL |
 | quantity | TEXT | |
+| amount | REAL | Optional explicit positive numeric amount; nullable |
+| unit | TEXT | Optional structured unit (`g`, `kg`, `ml`, `l`); nullable |
 | category | TEXT | NOT NULL (default 'Sonstiges') |
 
 ### Meal Ingredients
@@ -234,7 +240,15 @@ Reusable recipe cards that can be pre-filled into meal slots.
 | meal_id | INTEGER | FK → Meals, NOT NULL |
 | name | TEXT | NOT NULL |
 | quantity | TEXT | |
+| amount | REAL | Optional explicit positive numeric amount; nullable |
+| unit | TEXT | Optional structured unit (`g`, `kg`, `ml`, `l`); nullable |
 | on_shopping_list | INTEGER | 0/1 |
+
+### Structured Kitchen Quantities (migration v88)
+
+Recipe, meal, recurrence, and shopping records retain `quantity TEXT` as their backward-compatible display/legacy snapshot. Optional `amount` and `unit` fields are additive and are never inferred from legacy text. Both structured fields must be supplied together; amounts must be finite, positive, and at most 1,000,000,000. The deliberately small safe unit catalog contains mass (`g`, `kg`) and volume (`ml`, `l`) only.
+
+Meal-to-shopping imports aggregate only explicit structured values with the same case-insensitive ingredient name, category, and compatible dimension. Conversion uses grams or millilitres as deterministic base units (`1000 g = 1 kg`, `1000 ml = 1 l`). Free-text, partial, unknown, or incompatible values remain separate, and every aggregated shopping item retains all provenance rows. The shared ingredient UI and shopping item detail modal always allow manual correction of free text, amount, and unit.
 
 ### Calendar Events
 | Column | Type | Constraint |
@@ -1326,7 +1340,7 @@ Skeleton loading instead of spinners (the skeleton mirrors the default-visible w
 - Items: name, category, quantity, checkbox
 - Grouping by category (aisle logic)
 - Integration with meal plan: "Add ingredients to shopping list" transfers each ingredient with normalized source IDs plus durable title/date/quantity snapshots. One or multiple sources are exposed as `sources[]` and rendered below the item; deleting a meal or recipe does not erase the snapshot.
-- **Bulk import from meal plan (v1.3.0, provenance update):** a "From meal plan" action in the list header opens a date-range dialog (defaults to the next 7 days) and imports the ingredients of every planned meal in that range into the active list. Until the structured quantity model is available, every free-text ingredient remains a separate shopping item; no quantity compatibility is guessed. Already-transferred ingredients are skipped via the existing `on_shopping_list` flag (`POST /api/v1/shopping/:listId/import-meal-plan`).
+- **Bulk import from meal plan (v1.3.0, provenance + structured quantities):** a "From meal plan" action in the list header opens a date-range dialog (defaults to the next 7 days) and imports the ingredients of every planned meal in that range into the active list. Free-text ingredients remain separate; only explicitly structured compatible mass/volume values are aggregated, with all source snapshots retained. Already-transferred ingredients are skipped via the existing `on_shopping_list` flag (`POST /api/v1/shopping/:listId/import-meal-plan`).
 - Checked items shown with strikethrough + moved to bottom
 - "Clear list" = remove checked items only
 - Autocomplete from previous entries (local)

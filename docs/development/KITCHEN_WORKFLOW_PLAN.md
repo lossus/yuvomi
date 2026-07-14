@@ -39,7 +39,7 @@ Begründete Anpassung der vorgeschlagenen Reihenfolge: KWF-003 kommt vor dem dir
 | 3 | KWF-003 | mehrquellenfähige Einkaufsartikel-Herkunft | groß | abgeschlossen |
 | 4 | KWF-004 | atomarer Rezept→Meal→Shopping-Flow | mittel | abgeschlossen |
 | 5 | KWF-005 | bestehender Microkalender verifiziert/gezielt ergänzt | klein | größtenteils vorhanden |
-| 6 | KWF-006 | rückwärtskompatible strukturierte Mengenbasis | groß | geplant |
+| 6 | KWF-006 | rückwärtskompatible strukturierte Mengenbasis | groß | implementiert und lokal verifiziert |
 | 7 | KWF-007 | Core-Pantry-MVP mit Bewegungsjournal | groß | geplant |
 | 8 | KWF-008 | idempotenter Einkauf→Vorrat-Transfer | groß | geplant |
 | 9 | KWF-009 | Kochvorgang, Verbrauch und Undo | groß | geplant |

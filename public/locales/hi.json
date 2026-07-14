@@ -3187,6 +3187,15 @@
         "toastSaved": "सहेजा गया",
         "toastRewardDeleted": "इनाम हटाया गया"
     },
+    "quantity": {
+        "freeTextLabel": "मुक्त-पाठ मात्रा",
+        "freeTextPlaceholder": "जैसे 2 डिब्बे",
+        "amountLabel": "मात्रा",
+        "amountPlaceholder": "संख्या",
+        "unitLabel": "इकाई",
+        "unitNone": "कोई नहीं",
+        "invalid": "मात्रा और इकाई को धनात्मक संख्या के रूप में साथ देना आवश्यक है।"
+    },
     "datepicker": {
         "openCalendar": "कैलेंडर खोलें",
         "openTimePicker": "समय चयनकर्ता खोलें",

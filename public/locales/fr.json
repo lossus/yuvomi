@@ -3187,6 +3187,15 @@
         "toastSaved": "Enregistré",
         "toastRewardDeleted": "Récompense supprimée"
     },
+    "quantity": {
+        "freeTextLabel": "Quantité en texte libre",
+        "freeTextPlaceholder": "p. ex. 2 boîtes",
+        "amountLabel": "Quantité",
+        "amountPlaceholder": "Nombre",
+        "unitLabel": "Unité",
+        "unitNone": "Aucune",
+        "invalid": "La quantité et l’unité doivent être indiquées ensemble avec un nombre positif."
+    },
     "datepicker": {
         "openCalendar": "Ouvrir le calendrier",
         "openTimePicker": "Ouvrir le sélecteur d'heure",

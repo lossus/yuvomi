@@ -3187,6 +3187,15 @@
         "toastSaved": "Uloženo",
         "toastRewardDeleted": "Odměna smazána"
     },
+    "quantity": {
+        "freeTextLabel": "Množství volným textem",
+        "freeTextPlaceholder": "např. 2 plechovky",
+        "amountLabel": "Množství",
+        "amountPlaceholder": "Číslo",
+        "unitLabel": "Jednotka",
+        "unitNone": "Žádná",
+        "invalid": "Množství a jednotka musí být zadány společně jako kladné číslo."
+    },
     "datepicker": {
         "openCalendar": "Otevřít kalendář",
         "openTimePicker": "Otevřít výběr času",
