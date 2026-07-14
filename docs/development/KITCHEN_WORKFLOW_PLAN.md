@@ -41,7 +41,7 @@ Begründete Anpassung der vorgeschlagenen Reihenfolge: KWF-003 kommt vor dem dir
 | 5 | KWF-005 | bestehender Microkalender verifiziert/gezielt ergänzt | klein | größtenteils vorhanden |
 | 6 | KWF-006 | rückwärtskompatible strukturierte Mengenbasis | groß | implementiert und lokal verifiziert |
 | 7 | KWF-007 | Core-Pantry-MVP mit Bewegungsjournal | groß | implementiert und lokal verifiziert |
-| 8 | KWF-008 | idempotenter Einkauf→Vorrat-Transfer | groß | implementiert und lokal verifiziert |
+| 8 | KWF-008 | idempotenter Einkauf→Vorrat-Transfer | groß | abgeschlossen und in `main` |
 | 9 | KWF-009 | Kochvorgang, Verbrauch und Undo | groß | geplant |
 | 10 | KWF-010 | End-to-End-Regression und UX-Härtung | groß | geplant |
 
@@ -387,8 +387,8 @@ Begründete Anpassung der vorgeschlagenen Reihenfolge: KWF-003 kommt vor dem dir
 
 ## Empfohlener nächster Schritt
 
-1. KWF-008 auf `feature/shopping-to-pantry` extern prüfen; der Task implementiert Migration 90, expliziten atomaren Transfer, aktive Idempotenz und journalisiertes Undo/Redo.
-2. Keinen Folge-Task in derselben Session beginnen. KWF-009 erst nach externer Annahme und neuer Reservierung bearbeiten.
+1. KWF-008 ist extern akzeptiert und über Merge-Commit `245538f0` in Fork-`main` integriert.
+2. Keinen Folge-Task in derselben Session beginnen. KWF-009 erst in einer neuen Session reservieren und analysieren.
 3. `upstream/main` bleibt wegen der dokumentierten Divergenz unverändert; eine Integration ist ein separater Repository-Task.
 
 KWF-008 enthält bewusst keine automatische Einkaufsübernahme, keine Freitextinterpretation und keinen Kochverbrauch. Diese Grenzen bleiben sichere Opt-out-Semantik beziehungsweise KWF-009 vorbehalten.
