@@ -295,7 +295,9 @@ function openAdjustModal(container, item) {
 }
 
 function movementLabel(movement) {
-  const key = `pantry.movement.${movement.movement_type}`;
+  const key = movement.shopping_item_id
+    ? 'pantry.movement.purchase'
+    : `pantry.movement.${movement.movement_type}`;
   if (movement.amount_delta !== null) {
     const prefix = movement.amount_delta > 0 ? '+' : '';
     return `${t(key)} · ${prefix}${movement.amount_delta} ${movement.unit}`;

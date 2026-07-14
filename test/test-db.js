@@ -325,6 +325,20 @@ test('Migration 89 creates Pantry lots, stable locations, and movement constrain
   pantryDb.close();
 });
 
+test('Migration 90 links purchase movements to shopping items without backfill', () => {
+  const transferDb = new DatabaseSync(':memory:');
+  transferDb.exec('PRAGMA foreign_keys = ON;');
+  transferDb.exec(MIGRATIONS_SQL[1]);
+  transferDb.exec(MIGRATIONS_SQL[89]);
+  transferDb.exec(MIGRATIONS_SQL[90]);
+  const column = transferDb.prepare("SELECT * FROM pragma_table_info('inventory_movements') WHERE name = 'shopping_item_id'").get();
+  assert(column, 'shopping_item_id fehlt an inventory_movements');
+  const index = transferDb.prepare("SELECT name FROM sqlite_master WHERE type = 'index' AND name = 'idx_inventory_movements_shopping_item'").get();
+  assert(index, 'Shopping-Transferindex fehlt');
+  assert(transferDb.prepare('SELECT COUNT(*) AS count FROM inventory_movements WHERE shopping_item_id IS NOT NULL').get().count === 0, 'Bestehende Bewegungen dürfen nicht backfillt werden');
+  transferDb.close();
+});
+
 // --------------------------------------------------------
 // Ergebnis
 // --------------------------------------------------------

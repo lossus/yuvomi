@@ -649,12 +649,18 @@ function buildPaths() {
       patch: op({ summary: 'Update shopping item', tag: 'Shopping', description: 'Keeps legacy quantity text and optionally accepts amount plus unit (g, kg, ml, l). Amount and unit must be supplied together.', params: [idParam('itemId', 'Item ID')], stateChanging: true, requestBody: jsonBody(null) }),
       delete: op({ summary: 'Delete shopping item', tag: 'Shopping', params: [idParam('itemId', 'Item ID')], stateChanging: true }),
     },
+    '/api/v1/shopping/items/{itemId}/to-pantry': {
+      post: op({ summary: 'Confirm shopping purchase into pantry', tag: 'Shopping', description: 'Requires both shopping:write and pantry:write. Atomically checks the shopping item, creates or explicitly increases a pantry lot, and appends one shopping-linked inventory movement. Active transfers are replay-safe; free-text quantities are never parsed.', params: [idParam('itemId', 'Item ID')], stateChanging: true, requestBody: jsonBody(null, 'Confirmed amount/unit or explicit quantity_display, location_id for a new lot, optional pantry_item_id for a confirmed merge, and optional reason') }),
+    },
+    '/api/v1/shopping/items/{itemId}/to-pantry/undo': {
+      post: op({ summary: 'Reverse active shopping-to-pantry transfer', tag: 'Shopping', description: 'Requires both shopping:write and pantry:write. Appends an immutable counter-movement without deleting purchase history; the shopping check state is left unchanged and a later confirmed transfer may be created again.', params: [idParam('itemId', 'Item ID')], stateChanging: true, requestBody: jsonBody(null, 'Optional reversal reason') }),
+    },
     '/api/v1/shopping/{listId}': {
       put: op({ summary: 'Rename shopping list', tag: 'Shopping', params: [idParam('listId', 'List ID')], stateChanging: true, requestBody: jsonBody(null) }),
       delete: op({ summary: 'Delete shopping list', tag: 'Shopping', params: [idParam('listId', 'List ID')], stateChanging: true }),
     },
     '/api/v1/shopping/{listId}/items': {
-      get: op({ summary: 'List items in shopping list', tag: 'Shopping', description: 'Each item includes legacy quantity, optional structured amount/unit, and a backward-compatible sources array with durable meal/recipe provenance snapshots.', params: [idParam('listId', 'List ID')] }),
+      get: op({ summary: 'List items in shopping list', tag: 'Shopping', description: 'Each item includes legacy quantity, optional structured amount/unit, a backward-compatible sources array with durable meal/recipe provenance snapshots, and the additive pantry_transfer_active status.', params: [idParam('listId', 'List ID')] }),
       post: op({ summary: 'Add item to shopping list', tag: 'Shopping', description: 'Accepts optional structured amount/unit (g, kg, ml, l) without rewriting the legacy quantity display text.', params: [idParam('listId', 'List ID')], stateChanging: true, requestBody: jsonBody(null) }),
     },
     '/api/v1/shopping/{listId}/items/checked': {

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The shared meal-planning microcalendar now remains available inside the recipe-to-meal dialog on tablets and phones, stays within small viewports, and supports Home/End keyboard navigation without replacing the calendar with the native date field.
 
 ### Added
+- Checked shopping items can now be explicitly transferred into a new or selected Pantry stock lot. The confirmed operation is atomic, dual-permission guarded, replay-safe, journaled, reversible with a counter-movement, and never parses free-text quantities automatically; ordinary check/uncheck behavior remains unchanged.
 - A new Pantry Kitchen area tracks stock lots by location, category, minimum level, and expiry date. Manual additions, corrections, and reversals are recorded in an immutable, idempotent movement journal; search and filters, read-only permissions, responsive controls, API scopes, and OpenAPI documentation are included.
 - Shopping lists can now be reordered with drag-and-drop or touch-friendly move actions. The first list is marked as the default and is used wherever Yuvomi needs an implicit shopping-list target.
 - Shopping items imported from meals now retain durable one-to-many provenance snapshots and show their source meal and date in the list.

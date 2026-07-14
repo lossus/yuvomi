@@ -14,6 +14,7 @@ import { addLocalDays, toLocalDateKey } from '/utils/date.js';
 import { renderKitchenTabsBar } from '/utils/kitchen-tabs.js';
 import '/components/shopping-category-manager.js';
 import { formatStructuredQuantity, structuredQuantityFromInput } from '/utils/quantity.js';
+import { moduleAccess } from '/permissions.js';
 
 // --------------------------------------------------------
 // Konstanten
@@ -44,6 +45,7 @@ const state = {
   items:         [],
   activeList:    null,
   categories:    [],   // { id, name, icon, sort_order }[]
+  canTransferToPantry: false,
 };
 
 // --------------------------------------------------------
@@ -303,6 +305,23 @@ function renderItemSources(item) {
     </details>`;
 }
 
+function renderPantryTransfer(item) {
+  if (item.pantry_transfer_active) {
+    return `
+      <div class="item-pantry-transfer item-pantry-transfer--active" data-pantry-transfer>
+        <span><i data-lucide="box" aria-hidden="true"></i>${t('shopping.pantryTransferred')}</span>
+        ${state.canTransferToPantry ? `<button class="btn btn--ghost" type="button" data-action="undo-pantry-transfer" data-id="${item.id}">${t('shopping.pantryUndo')}</button>` : ''}
+      </div>`;
+  }
+  if (!state.canTransferToPantry || !item.is_checked) return '';
+  return `
+    <div class="item-pantry-transfer" data-pantry-transfer>
+      <button class="btn btn--ghost" type="button" data-action="to-pantry" data-id="${item.id}">
+        <i data-lucide="package-plus" aria-hidden="true"></i>${t('shopping.addToPantry')}
+      </button>
+    </div>`;
+}
+
 function renderItem(item) {
   const isDone = Boolean(item.is_checked);
   return `
@@ -326,6 +345,7 @@ function renderItem(item) {
           <div class="item-name">${esc(item.name)}${renderItemMeta(item)}</div>
           ${(item.quantity || item.amount != null) ? `<div class="item-quantity">${esc(item.quantity || formatStructuredQuantity(item.amount, item.unit))}</div>` : ''}
           ${renderItemSources(item)}
+          ${renderPantryTransfer(item)}
         </div>
         <button class="item-details" data-action="item-details" data-id="${item.id}"
                 aria-label="${t('shopping.detailsLabel', { name: esc(item.name) })}">
@@ -702,6 +722,14 @@ function updateItemRow(container, item) {
       <span>${isDone ? t('shopping.swipeBack') : t('shopping.swipeCheck')}</span>`);
     if (window.lucide) window.lucide.createIcons({ el: reveal });
   }
+
+  const body = row.querySelector('.item-body');
+  body?.querySelector('[data-pantry-transfer]')?.remove();
+  const transfer = renderPantryTransfer(item);
+  if (body && transfer) {
+    body.insertAdjacentHTML('beforeend', transfer);
+    if (window.lucide) window.lucide.createIcons({ el: body });
+  }
 }
 
 /**
@@ -836,6 +864,127 @@ function openItemDetails(itemId, container) {
       });
     },
   });
+}
+
+function pantryTargetOptions(items) {
+  return items.map((item) => {
+    const stock = item.quantity_display || formatStructuredQuantity(item.amount, item.unit) || t('pantry.quantityUnknown');
+    return `<option value="${item.id}">${esc(item.name)} · ${esc(stock)}</option>`;
+  }).join('');
+}
+
+async function openPantryTransfer(item, container) {
+  try {
+    const [pantryResponse, locationsResponse] = await Promise.all([
+      api.get('/pantry'),
+      api.get('/pantry/locations'),
+    ]);
+    const pantryItems = pantryResponse.data || [];
+    const locations = locationsResponse.data || [];
+    openModal({
+      title: t('shopping.pantryTransferTitle', { name: item.name }),
+      size: 'md',
+      content: `
+        <form id="shopping-pantry-form" class="shopping-pantry-form" novalidate>
+          <p class="shopping-pantry-form__hint">${t('shopping.pantryTransferHint')}</p>
+          <div class="form-group">
+            <label class="form-label" for="shopping-pantry-target">${t('shopping.pantryTarget')}</label>
+            <select class="form-input" id="shopping-pantry-target">
+              <option value="">${t('shopping.pantryNewItem')}</option>
+              ${pantryTargetOptions(pantryItems)}
+            </select>
+          </div>
+          <div class="shopping-pantry-form__quantity">
+            <div class="form-group">
+              <label class="form-label" for="shopping-pantry-amount">${t('quantity.amountLabel')}</label>
+              <input class="form-input" id="shopping-pantry-amount" inputmode="decimal" value="${esc(item.amount ?? '')}">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="shopping-pantry-unit">${t('quantity.unitLabel')}</label>
+              <select class="form-input" id="shopping-pantry-unit">
+                <option value="">${t('quantity.unitNone')}</option>
+                ${['g', 'kg', 'ml', 'l'].map((unit) => `<option value="${unit}"${item.unit === unit ? ' selected' : ''}>${unit}</option>`).join('')}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="shopping-pantry-display">${t('shopping.pantryConfirmedDisplay')}</label>
+            <input class="form-input" id="shopping-pantry-display" maxlength="100" value="${esc(item.quantity || formatStructuredQuantity(item.amount, item.unit) || '')}">
+            <p class="form-hint">${t('shopping.pantryDisplayHint')}</p>
+          </div>
+          <div class="form-group" id="shopping-pantry-location-group">
+            <label class="form-label" for="shopping-pantry-location">${t('shopping.pantryLocation')}</label>
+            <select class="form-input" id="shopping-pantry-location" required>
+              ${locations.map((location) => `<option value="${location.id}">${esc(location.name || t(location.label_key))}</option>`).join('')}
+            </select>
+          </div>
+          <div class="modal-actions">
+            <button class="btn btn--secondary" type="button" id="shopping-pantry-skip">${t('shopping.onlyCheck')}</button>
+            <button class="btn btn--primary" type="submit">${t('shopping.addToPantry')}</button>
+          </div>
+        </form>`,
+      onSave: (panel) => {
+        const form = panel.querySelector('#shopping-pantry-form');
+        const target = panel.querySelector('#shopping-pantry-target');
+        const locationGroup = panel.querySelector('#shopping-pantry-location-group');
+        const syncTarget = () => { locationGroup.hidden = Boolean(target.value); };
+        target.addEventListener('change', syncTarget);
+        syncTarget();
+        panel.querySelector('#shopping-pantry-skip')?.addEventListener('click', () => closeModal());
+        form?.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          const structured = structuredQuantityFromInput(
+            panel.querySelector('#shopping-pantry-amount').value,
+            panel.querySelector('#shopping-pantry-unit').value,
+          );
+          if (structured.error) {
+            window.yuvomi.showToast(t('quantity.invalid'), 'danger');
+            return;
+          }
+          const quantityDisplay = panel.querySelector('#shopping-pantry-display').value.trim();
+          if (structured.value.amount == null && !quantityDisplay) {
+            window.yuvomi.showToast(t('shopping.pantryQuantityRequired'), 'danger');
+            return;
+          }
+          if (target.value && structured.value.amount == null) {
+            window.yuvomi.showToast(t('shopping.pantryExistingStructuredRequired'), 'danger');
+            return;
+          }
+          const payload = {
+            pantry_item_id: target.value ? Number(target.value) : null,
+            location_id: target.value ? null : Number(panel.querySelector('#shopping-pantry-location').value),
+            amount: structured.value.amount,
+            unit: structured.value.unit,
+            quantity_display: quantityDisplay || null,
+            reason: t('shopping.pantryTransferReason'),
+          };
+          try {
+            await api.post(`/shopping/items/${item.id}/to-pantry`, payload);
+            item.is_checked = 1;
+            item.pantry_transfer_active = true;
+            updateItemRow(container, item);
+            await closeModal({ force: true });
+            window.yuvomi.showToast(t('shopping.pantryTransferSuccess'), 'success');
+          } catch (error) {
+            window.yuvomi.showToast(error.data?.error ?? t('common.errorGeneric'), 'danger');
+          }
+        });
+      },
+    });
+  } catch (error) {
+    window.yuvomi.showToast(error.data?.error ?? t('common.errorGeneric'), 'danger');
+  }
+}
+
+async function undoPantryTransfer(item, container) {
+  try {
+    await api.post(`/shopping/items/${item.id}/to-pantry/undo`, { reason: t('shopping.pantryUndoReason') });
+    item.pantry_transfer_active = false;
+    updateItemRow(container, item);
+    window.yuvomi.showToast(t('shopping.pantryUndoSuccess'), 'success');
+  } catch (error) {
+    window.yuvomi.showToast(error.data?.error ?? t('common.errorGeneric'), 'danger');
+  }
 }
 
 function updateItemsList(container) {
@@ -1201,6 +1350,16 @@ function wireListContentEvents(container) {
       openItemDetails(Number(target.dataset.id), container);
     }
 
+    if (action === 'to-pantry') {
+      const item = state.items.find((entry) => entry.id === Number(target.dataset.id));
+      if (item) await openPantryTransfer(item, container);
+    }
+
+    if (action === 'undo-pantry-transfer') {
+      const item = state.items.find((entry) => entry.id === Number(target.dataset.id));
+      if (item) await undoPantryTransfer(item, container);
+    }
+
     // ---- Artikel löschen (mit Undo, 5s Fenster) ----
     if (action === 'delete-item') {
       const id        = Number(target.dataset.id);
@@ -1425,6 +1584,7 @@ async function openCategoryManager(container, { fromDeepLink = false } = {}) {
 // --------------------------------------------------------
 
 export async function render(container, { user }) {
+  state.canTransferToPantry = moduleAccess('shopping') === 'write' && moduleAccess('pantry') === 'write';
   container.replaceChildren();
   container.insertAdjacentHTML('beforeend', `
     <div class="shopping-page">

@@ -165,7 +165,7 @@ Custom, household-wide category list for shopping items. Replaces the old hardco
 | created_at | TEXT | |
 | updated_at | TEXT | |
 
-### Pantry (migration v89)
+### Pantry (migrations v89-v90)
 
 Pantry items represent stock lots, so the same product may exist more than once with different locations or expiry dates. Structured amounts use `g`, `kg`, `ml`, or `l`; explicit free-text quantities remain available and are never interpreted automatically.
 
@@ -173,7 +173,7 @@ Pantry items represent stock lots, so the same product may exist more than once 
 |-------|-------------------------|
 | `pantry_locations` | Stable `key`, translated `label_key` or custom `name`, and `sort_order`; seeded with fridge, freezer, cupboard, cellar, and other. |
 | `pantry_items` | Stock-lot metadata, location FK, cached non-negative structured balance or free-text display, optional minimum and expiry date, soft-delete timestamp. |
-| `inventory_movements` | Immutable initial, adjustment, correction, and reversal journal with actor, reason, balance snapshot, unique idempotency key, and at most one reversal per movement. |
+| `inventory_movements` | Immutable initial, adjustment, correction, and reversal journal with actor, reason, balance snapshot, unique idempotency key, and at most one reversal per movement. Migration 90 adds an optional Shopping Item FK (`ON DELETE SET NULL`) for purchase provenance and indexed active-transfer lookup. |
 
 The stock cache and its journal entry are always written in the same SQLite transaction. Metadata updates cannot mutate stock; deletion hides the lot but retains its history.
 
@@ -744,7 +744,7 @@ Birthday records with optional profile photo and automatic calendar event + remi
 ### API Tokens
 Named Bearer / X-API-Key tokens for non-interactive external integrations. Admin-only creation and revocation. Token values are SHA-256-hashed at rest; the plaintext is shown only once after creation.
 
-Tokens can optionally be **scoped** to individual modules and access levels — a least-privilege allow-list that matters most for tokens handed to an off-device AI/MCP client. Each scope is `<module>:read` or `<module>:write` (write implies read); modules cover `tasks`, `shopping`, `meals`, `calendar`, `notes`, `contacts`, `budget`, `documents`, `health`, `rewards`, `housekeeping`, `weather`, `family`, `dashboard`, `search`. A `NULL` scopes value means no scoping — full role-based access (the default, and the state of every token created before this feature). A scoped token can only reach modules on its allow-list; every other `/api/v1` path is denied. Enforcement is shared across the REST API and MCP: the MCP core tools are checked in-process, `tools/list` hides tools the token cannot use, and the OpenAPI bridge inherits the same limits because it loops back through the REST layer with the same token.
+Tokens can optionally be **scoped** to individual modules and access levels — a least-privilege allow-list that matters most for tokens handed to an off-device AI/MCP client. Each scope is `<module>:read` or `<module>:write` (write implies read); modules cover `tasks`, `shopping`, `meals`, `pantry`, `calendar`, `notes`, `contacts`, `budget`, `documents`, `health`, `rewards`, `housekeeping`, `weather`, `family`, `dashboard`, `search`. A `NULL` scopes value means no scoping — full role-based access (the default, and the state of every token created before this feature). A scoped token can only reach modules on its allow-list; every other `/api/v1` path is denied. Enforcement is shared across the REST API and MCP: the MCP core tools are checked in-process, `tools/list` hides tools the token cannot use, and the OpenAPI bridge inherits the same limits because it loops back through the REST layer with the same token.
 
 | Column | Type | Constraint |
 |--------|------|-----------|
@@ -1354,6 +1354,7 @@ Skeleton loading instead of spinners (the skeleton mirrors the default-visible w
 - Integration with meal plan: "Add ingredients to shopping list" transfers each ingredient with normalized source IDs plus durable title/date/quantity snapshots. One or multiple sources are exposed as `sources[]` and rendered below the item; deleting a meal or recipe does not erase the snapshot.
 - **Bulk import from meal plan (v1.3.0, provenance + structured quantities):** a "From meal plan" action in the list header opens a date-range dialog (defaults to the next 7 days) and imports the ingredients of every planned meal in that range into the active list. Free-text ingredients remain separate; only explicitly structured compatible mass/volume values are aggregated, with all source snapshots retained. Already-transferred ingredients are skipped via the existing `on_shopping_list` flag (`POST /api/v1/shopping/:listId/import-meal-plan`).
 - Checked items shown with strikethrough + moved to bottom
+- **Confirmed purchase to Pantry:** checking remains unchanged and never creates stock on its own. A checked item can explicitly open the shared confirmation dialog, keep or correct its structured/free-text quantity, create a new stock lot at a selected location, or add to a selected compatible structured lot. `POST /api/v1/shopping/items/:id/to-pantry` requires both Shopping and Pantry write access and atomically checks the item, changes stock, and writes one Shopping-linked movement. Replays and parallel requests return the active transfer without duplication. `POST .../undo` appends a counter-movement, keeps the Shopping check unchanged, and permits a later confirmed redo. The additive `pantry_transfer_active` response flag drives the inline status and Undo action.
 - "Clear list" = remove checked items only
 - Autocomplete from previous entries (local)
 - **Category management lives in Shopping** (no longer in Settings): a "Manage categories" action opens the `oikos-shopping-category-manager` component (also reachable directly via `/shopping?manage=categories`) for add, rename, reorder, and delete, preserving the API's last-category-deletion guard. The legacy Settings → Shopping tab redirects here.
@@ -1364,7 +1365,7 @@ Skeleton loading instead of spinners (the skeleton mirrors the default-visible w
 
 The fourth Kitchen child provides manual stock-lot CRUD, name/category search, location/category filtering, low-stock and expiry filters, and journaled balance corrections. Add, edit, adjust, history, reversal, and soft-delete actions use the shared modal and permission patterns. The layout adapts to desktop, tablet, and phone widths and retains keyboard-visible labels and touch-safe controls.
 
-REST API: `GET/POST /api/v1/pantry`, `GET/PATCH/DELETE /api/v1/pantry/:id`, `POST /api/v1/pantry/:id/adjust`, and read-only `GET /api/v1/pantry/locations`. Adjustment requests require an idempotency key. Pantry has its own `pantry:read`/`pantry:write` token scope and module permission. Static page assets are precached, but Pantry API reads and every mutation remain network-only to avoid retaining stale household inventory offline.
+REST API: `GET/POST /api/v1/pantry`, `GET/PATCH/DELETE /api/v1/pantry/:id`, `POST /api/v1/pantry/:id/adjust`, read-only `GET /api/v1/pantry/locations`, and the dual-gated Shopping purchase/Undo endpoints described above. Adjustment requests require an idempotency key. Pantry has its own `pantry:read`/`pantry:write` token scope and module permission. Static page assets are precached, but Pantry API reads and every mutation remain network-only to avoid retaining stale household inventory offline.
 
 ### Meal Plan (`/meals`)
 

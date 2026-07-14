@@ -559,6 +559,61 @@
   color: var(--color-text-disabled);
 }
 
+.item-pantry-transfer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+}
+
+.item-pantry-transfer > span,
+.item-pantry-transfer .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.item-pantry-transfer svg {
+  width: 1em;
+  height: 1em;
+}
+
+.item-pantry-transfer .btn {
+  min-height: var(--target-sm);
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-xs);
+}
+
+.item-pantry-transfer--active {
+  color: var(--color-success);
+}
+
+.shopping-pantry-form {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.shopping-pantry-form__hint,
+.shopping-pantry-form .form-hint {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+}
+
+.shopping-pantry-form__quantity {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(110px, 0.5fr);
+  gap: var(--space-3);
+}
+
+@media (max-width: 480px) {
+  .shopping-pantry-form__quantity {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Löschen-Button */
 .item-delete {
   width: var(--target-base);

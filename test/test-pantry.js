@@ -133,6 +133,7 @@ test('Pantry frontend reuses shared modal, escaping, Kitchen tabs, and journal e
   assert.match(source, /openModal/);
   assert.match(source, /esc\(/);
   assert.match(source, /idempotency_key/);
+  assert.match(source, /pantry\.movement\.purchase/, 'shopping-linked movements need a purchase label');
   assert.match(source, /\[\+-\]\?\\d\+/, 'signed manual stock deltas must be accepted by the Pantry input parser');
   assert.doesNotMatch(source, /\.innerHTML\s*=/);
 });
