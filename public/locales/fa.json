@@ -1,5 +1,6 @@
 {
     "common": {
+        "searchClear": "پاک کردن جستجو",
         "save": "ذخیره",
         "cancel": "لغو",
         "delete": "حذف",
@@ -296,6 +297,13 @@
         "showFuture": "نمایش برنامه‌ریزی‌شده‌ها",
         "pointsLabel": "امتیاز",
         "pointsHint": "امتیازها هنگام تکمیل ثبت می‌شوند.",
+        "documentsLabel": "اسناد",
+        "documentsHint": "اسناد ماژول اسناد را به این وظیفه پیوند دهید.",
+        "documentAdd": "پیوند سند",
+        "documentAddPlaceholder": "یک سند انتخاب کنید…",
+        "documentRemove": "حذف پیوند",
+        "documentsEmpty": "هنوز سندی پیوند داده نشده است.",
+        "documentsCount": "{{count}} سند",
         "assignedToMe": "واگذارشده به من"
     },
     "shopping": {
@@ -1569,6 +1577,9 @@
         "holidaySubdivisionLabel": "استان / منطقه",
         "holidaySubdivisionNone": "کل کشور",
         "holidaySubdivisionPlaceholder": "انتخاب استان…",
+        "holidayGroupLabel": "منطقه تعطیلات مدرسه",
+        "holidayGroupNone": "نمایش همه",
+        "holidayGroupHint": "برخی از کانتون‌های چندزبانه بسته به منطقه زبانی تاریخ‌های تعطیلات مدرسه متفاوتی دارند. برای تاریخ‌های درست، منطقه مناسب را انتخاب کنید.",
         "holidayPublicLabel": "نمایش تعطیلات رسمی",
         "holidaySchoolLabel": "نمایش تعطیلات مدرسه",
         "holidayPublicColor": "رنگ تعطیلات رسمی",
@@ -2144,7 +2155,7 @@
         "moreUsers": "بیشتر"
     },
     "housekeeping": {
-        "title": "ناحیه نظافت",
+        "title": "خدمتکار خانه",
         "bottomNav": "ناوبری خدمتکار خانه",
         "home": "شروع",
         "tasks": "کارها",

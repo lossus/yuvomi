@@ -138,6 +138,7 @@ Analysierte Implementierungsbereiche:
 | 2026-07-14 | Codex | KWF-009 / `feature/meal-cooking-consumption` | Untersucht und geändert: Migration 91/Schema-Test, Meals-Route, Inventory-/Cooking-Service, OpenAPI, Meals-UI/-CSS, `meals.cook*` in 23 Locales, DB-/Meals-/Pantry-/Shopping-/Frontend-Regressionen, SPEC/Changelog/Plan/Memory | Cooking-Event mit read-only Preview, exakten kompatiblen FIFO-Vorschlägen, manueller Mehrfachlos-Allokation, atomarem Verbrauch und optionalem Missing→Shopping sowie journalisiertem Undo implementiert, dokumentiert und automatisch/im Browser verifiziert | extern akzeptiert und über Merge-Commit `f89b2ec6` in Fork-`main` integriert | `main` wird mit diesem Integrations-Handoff zu `origin/main` gepusht; `upstream/main` bleibt unverändert; KWF-FINDING-009 offen, kein KWF-010-Scope begonnen |
 | 2026-07-14 | Codex | KWF-010 / `feature/kitchen-workflow-integration` | Untersucht: Migrationen 86–91, DB-/Route-/Service-/OpenAPI-/Scope-/Permission-/SW-/Locale-Verträge und KWF-002–009-Suiten; geändert: produktive Cross-Domain-/Upgrade-Suite, Datepicker-Escape/Fokus-Vertrag, Package-Script, SPEC/Changelog/Plan/Memory | Gesamtworkflow, Legacy-Upgrade, Rollbacks, Idempotenz, Undo und Verträge automatisiert; verschachteltes Escape im realen Browser gefunden und behoben; Desktop/Tablet/Mobil verifiziert | extern akzeptiert und über Merge-Commit `070f47a0` in Fork-`main` integriert | `main` und `origin/main` nach Merge-Push synchron; `upstream/main` blieb unverändert; KWF-FINDING-009 reproduziert, KWF-FINDING-022/-023 gelöst; kein Folge-Task |
 | 2026-07-14 | Codex | KWF-FINDING-009 / `fix/windows-category-test-cleanup` | Untersucht und geändert: Task-/Contact-Categories-Harnesses, Admin-Passwort-Reset-/Setup-Entrypoint-Tests, exportierter Server-Handle und unrefte Calendar-Sync-Timer; fokussierte Reproduktion und Vollsuite | nicht abgewartetes `server.close()`, sofortiges `process.exit()` sowie ein nicht schließbarer echter Server-/Backup-Scheduler-Lifecycle waren die Ursache; keine Fachlogik betroffen | implementiert und lokal verifiziert; `npm test` Exit 0 | KWF-FINDING-013 folgt separat auf eigenem Integrationsbranch; keine aktive Fremdreservierung |
+| 2026-07-14 | Codex | KWF-FINDING-013 / `integration/upstream-v1.22.2` | Untersucht und integriert: 20 Upstream-Commits, 285 Upstream-Dateien, 94 Fork-Dateien, 36 Überschneidungen; Package/Changelog/SPEC/DB/Routes/UI/CSS/Locales/SW/Tests sowie Upstream-Screenshots/-Site | vier Textkonflikte aufgelöst; Fork-Migrationen 86–91 bewahrt, Upstream-Funktionen als 92/93 integriert; Holidays-Test auf isolierte DB korrigiert; automatische Vollsuite und Browser-Smoke grün | implementiert und lokal vollständig verifiziert; Merge-/Push-Abschluss folgt | keine aktive Fremdreservierung; `upstream` bleibt read-only; direkte Upstream-v1.22.x-DB→Fork-Lineage bleibt gemäß ADR-KITCHEN-012 außerhalb des Scope |
 
 ## 5. Architekturentscheidungen
 
@@ -242,6 +243,15 @@ Analysierte Implementierungsbereiche:
 - Auswirkungen: Eine Präferenz ist ein separater späterer UX-Task.
 - Status: **accepted und in KWF-004 implementiert**.
 
+### ADR-KITCHEN-012 — Upstream-Funktionalität in der Fork-Migrationslinie fortführen
+
+- Problem: Fork und Upstream haben die Migrationsnummern 86/87 bereits mit unterschiedlichen Inhalten veröffentlicht.
+- Entscheidung: Die bestehende Fork-/Kitchen-Linie 86–91 bleibt unverändert. Die Upstream-Funktionen `task_documents` und `holiday_cache.group_code` werden im Fork additiv als Migration 92 beziehungsweise 93 integriert. Unterstützt werden bestehende Fork-Datenbanken bis v91 und frische Installationen; der direkte Wechsel einer bereits auf Upstream v1.22.x migrierten Datenbank in diesen Fork ist ausdrücklich nicht Teil dieses Integrations-Scope.
+- Begründung: Sämtliche Kitchen-Daten und veröffentlichte Fork-Upgrades bleiben sicher, während keine wichtige Upstream-Funktionalität verloren geht. `upstream` bleibt read-only; die Integration wird ausschließlich im Fork fortgeführt.
+- Alternativen: veröffentlichte Fork-Migrationen umschreiben; Upstream-Funktionen auslassen; bidirektionale Lineage-Reconciliation. Alle drei wurden für diesen Scope verworfen.
+- Auswirkungen: DB-/Schema-Tests müssen v91→v93 und Fresh→v93 abdecken. Upstream-Migrationstexte werden nur im Fork-Integrationsresultat umnummeriert; ihre Tabellen-/Spaltensemantik bleibt unverändert.
+- Status: **accepted durch Benutzerentscheidung am 2026-07-14**.
+
 ## 6. Datenmodell-Mapping
 
 | Tabelle | Zweck / wichtige Spalten | Beziehungen | Geplante Änderung | Migration / Rückwärtskompatibilität |
@@ -260,6 +270,8 @@ Analysierte Implementierungsbereiche:
 | `meal_cooking_events` | bestätigter Kochvorgang; konkretes Meal, Status, Meal-/Recipe-/Datums-/Typ-Snapshots, Actor, Bestätigungs-/Undozeit | Meal/Recipe optional `SET NULL`; 1:n Zutaten-Snapshots | in KWF-009 implementiert | Migration 91 additiv; bestehende Meals bleiben ungekocht; partieller Unique-Index erlaubt höchstens ein aktives Event je Meal |
 | `meal_cooking_ingredients` | unveränderlicher Zutaten-Snapshot mit Name, Freitext-/Strukturmenge, Kategorie, Ergebnis und optional erzeugtem Missing-Shopping-Artikel | n:1 Cooking-Event; optionale Originalzutat/Shopping-Position `SET NULL` | in KWF-009 implementiert | bewahrt fachlichen Zustand nach Meal-/Recipe-/Shopping-Löschung |
 | `meal_cooking_allocations` | bestätigte Pantry-Los-, Mengen-, Einheiten- und Bewegungs-Snapshots | n:1 Cooking-Ingredient; optionale Pantry-Referenz `SET NULL`; Movement `RESTRICT` | in KWF-009 implementiert | jede Entnahme ist genau einer Allocation und Journalbewegung zugeordnet |
+| `task_documents` | Dokumentanhänge für Aufgaben; Task-/Dokumentbezug, Anzeigename und Zeitstempel | n:1 Task und n:1 `family_documents`, jeweils `ON DELETE CASCADE`; eindeutiger Task-/Dokumentbezug | aus Upstream v1.21.0 übernommen | Fork-Migration 92 additiv; bestehende Fork-/Fresh-Datenbanken bleiben kompatibel |
+| `holiday_cache` | Feiertags-Cache; zusätzlich optionaler `group_code` für mehrsprachige Kantonsgruppen | bestehender Holiday-Service und Preferences-API | aus Upstream v1.22.0 übernommen | Fork-Migration 93 additiv; bestehende Cachezeilen behalten `NULL` |
 
 Technische Grenze: Ohne ein bestätigtes Zutaten-Stammdatenmodell kann ein Name wie „Tomate“ nicht sicher automatisch einem Pantry-Posten „Tomaten“ zugeordnet werden. MVP-Matching muss als Vorschlag sichtbar und vom Benutzer bestätigbar sein; Einheit und Menge werden nicht geraten.
 
@@ -300,6 +312,8 @@ Die KWF-009-Pfade sind in `server/openapi.js` dokumentiert und verwenden die vor
 
 KWF-010 fand keinen Datenmodell-, Migrations-, API-, OpenAPI-, Scope-, Permission- oder Service-Worker-Drift. Die produktiven Migrationen 86–91 aktualisieren eine mit Legacy-Rezept, -Meal und -Shoppingdaten belegte v85-DB verlustfrei; der gemeinsame Route-Level-Test bestätigt die vorhandenen Transaktionsgrenzen und unveränderten Verträge. Daher wurde bewusst keine Migration und kein API-Vertrag ergänzt oder umgeschrieben.
 
+Die Upstream-v1.22.2-Integration ergänzt Aufgaben-Dokumente über die vorhandenen Tasks-/Documents-Routen und `holiday_group` über die bestehende Preferences-API. OpenAPI, Token-Scopes (`tasks`, `documents`) und Mitgliederrechte bleiben in ihren vorhandenen Domänen; es wurden keine neuen Scope-Keys oder Cross-Domain-Transaktionsgrenzen eingeführt. Die Fork-Migrationsnummern 92/93 ersetzen ausschließlich die kollidierenden Upstream-Nummern, nicht deren Fachsemantik.
+
 ## 8. Frontend-Mapping
 
 | Ansicht/Datei | Geplante Verantwortung | Handler/Formulare | i18n / Mobil-Tablet |
@@ -313,6 +327,8 @@ KWF-010 fand keinen Datenmodell-, Migrations-, API-, OpenAPI-, Scope-, Permissio
 | `public/settings/pages/modules-kitchen.js` | Pantry-bezogene bestätigte Defaults, falls später nötig | keine globale Autoübernahme im MVP | explizite, sichere Defaults |
 | `public/sw.js` | Pantry-JS/CSS als statische Assets; Pantry-API bewusst nicht in der GET-Whitelist | Cachelisten/Network-only-API | keine Offline-Mutationen und keine veralteten Bestände im API-Cache |
 | `public/styles/*.css` | Quellen, KWF-006 Mengenfelder, spätere Pantry | bestehende Tokens/Breakpoints | Desktop, Tablet, Mobile; Reduced Motion |
+| `public/pages/tasks.js`, `public/pages/documents.js` | Upstream-Aufgaben-Dokumente mit bestehendem Dokumentpicker/-download | vorhandene Task- und Dokument-Modals sowie API-Utility; keine neue UI-Bibliothek | vorhandene `tasks.documents*`-Keys in allen 23 Locales; Desktop/Tablet/Mobil im Smoke-Test |
+| `public/utils/page-search.js`, `public/styles/page-search.css`, `public/styles/category-manager.css` | gemeinsame Upstream-Suche und konsolidierte Manager-Styles | bestehende Seitenhandler für Birthdays, Budget, Contacts, Documents und Notes | Locale-Parität und Responsive-Verhalten durch Frontend-Audit/Browser bestätigt |
 
 Neue i18n-Namensräume: KWF-006 implementiert `quantity.*`; KWF-007 implementiert `nav.pantry` und `pantry.*`; KWF-008 ergänzt `shopping.toPantry*` und `pantry.movement.purchase`; KWF-009 ergänzt 29 `meals.cook*`-Keys. Deutsch/Englisch sind fachlich vollständig, alle 23 Locale-Dateien haben Key-Parität.
 
@@ -330,6 +346,7 @@ Neue i18n-Namensräume: KWF-006 implementiert `quantity.*`; KWF-007 implementier
 | KWF-008 Einkauf→Vorrat | Transfermenge, aktiver Bezug, Reversal | Transfer/Undo/Redo/Recheck, Zweitrechteprüfung, Parallel-Replay und Rollback 8/8 | DB 42/42; Migration 90 additiv, kein Backfill | Bestätigungsdialog, Zielauswahl, Freitextkorrektur; Desktop/768/390 px + Tastatur | Shopping 62/62, Pantry 11/11, Scopes/Permissions/SW/MCP/Frontend grün | implementiert und lokal verifiziert |
 | KWF-009 Kochen→Verbrauch | exaktes Matching, kompatible Dimension, FIFO-Vorschlag | Cooking 8/8: Preview/Commit/Undo, Rechte, Parallelität, Missing, Rollback, Rekurrenz/Delete | DB 43/43; Migration 91, Event-/Ingredient-/Allocation-Snapshots und Journal-FK | Shared Reviewdialog, editierbare Mehrfachlose/Missing; Desktop/768/390 px + Tastatur | Meals 48/48, Shopping 62/62, Pantry 11/11, Scopes/Permissions/SW/MCP/Frontend grün | implementiert und lokal verifiziert |
 | KWF-010 Integration | produktive Verträge/Replay/Rollback | 3/3: gemeinsamer Route-Level-Flow, OpenAPI/Scopes/Permissions/PWA/Locales | belegte v85→v91-DB, Legacy-Daten/FKs/Snapshots | Datepicker-Escape/Fokus 25/25; Browser 1440/768/390 px, Touch-/Tastaturpfad, keine Console-Fehler | fokussierte Kitchen-/MCP-/Housekeeping-/CalDAV-/Installer-/Frontend-Suiten grün; `npm test` auf Windows/Node 24 nach KWF-FINDING-009-Fix vollständig mit Exit 0 | implementiert und lokal verifiziert |
+| Upstream v1.22.2 / KWF-FINDING-013 | Holidays 27/27; Task-Documents 9/9 | Tasks 18/18; Documents 2/2; OpenAPI/MCP grün | DB 44/44; Fork v91→v93 und Fresh→v93; Migrationen 92/93 | Frontend-Audit 143/143; Browser 3 Viewports × 5 Seiten ohne Fehler/Überlauf | alle fokussierten Kitchen-, Rechte-, SW-, Settings-, Housekeeping- und CalDAV-Suiten grün; vollständiges `npm test` Exit 0 | implementiert und lokal vollständig verifiziert |
 
 ## 10. Offene Findings
 
@@ -447,8 +464,26 @@ Neue i18n-Namensräume: KWF-006 implementiert `quantity.*`; KWF-007 implementier
 - Schweregrad: mittel für spätere Upstream-Integration, niedrig für den isolierten KWF-003-Scope.
 - Auswirkung: `main` kann nicht per Fast-Forward synchronisiert werden. Vor KWF-003 betrug `main...upstream/main` 7/8 Commits; vor KWF-004 sind es nach der KWF-003-Integration 9/8 Commits. Ein ungeprüfter Merge würde Kitchen-Historie und die Upstream-v1.20.0-Änderungen vermischen.
 - Empfehlung: KWF-003 auf dem aktuellen, sauberen Fork-`main` implementieren; Upstream-Integration separat und konfliktbewusst durchführen.
-- Status: offen; vor KWF-010 live mit 32/20 Commits verifiziert, keine taskbezogene Upstream-Synchronisierung vorgenommen.
+- Status: **resolved durch die Fork-Integration von Upstream v1.22.2**; 20 Upstream-Commits wurden konfliktbewusst übernommen, die Fork-Linie blieb kanonisch und `upstream` wurde nicht beschrieben.
 - Task: Repository-Integration, nicht KWF-003-Feature-Scope.
+
+### KWF-FINDING-024 — Fork und Upstream haben Migration 86/87 unterschiedlich veröffentlicht
+
+- Betroffen: `server/db.js`, `server/db-schema-test.js` und jeder Upgradepfad zwischen Fork-Kitchen und Upstream v1.21.0/v1.22.x.
+- Schweregrad: hoch für die Repository-Integration.
+- Auswirkung: Im Fork sind 86 `shopping_lists.sort_order` und 87 `shopping_item_sources`; Upstream verwendet 86 für `task_documents` und 87 für `holiday_cache.group_code`. Ein normaler Merge kann nur eine Bedeutung je Versionsnummer behalten. Einfaches Umnummerieren der Upstream-Migrationen auf 92/93 schützt bestehende Fork-Datenbanken und frische Installationen, unterstützt aber ohne zusätzliche Reconciliation keinen Wechsel einer bereits auf Upstream 1.22.x migrierten Datenbank zum Fork: Dort würden die Kitchen-Migrationen 86/87 wegen der belegten Versionsnummern übersprungen und spätere abhängige Migrationen könnten scheitern.
+- Empfehlung: Vor der Integration explizit entscheiden, ob ausschließlich bestehende Fork-/Fresh-Install-Upgrades unterstützt werden (Upstream 86/87 werden 92/93) oder ob zusätzlich ein bidirektionaler Lineage-Reconciliation-Pfad für bereits migrierte Upstream-Datenbanken entworfen und getestet werden muss. Keine veröffentlichte Migration stillschweigend umschreiben.
+- Status: **Entscheidung getroffen**: Option 1 ist bestätigt. Fork 86–91 bleibt kanonisch, Upstream-Funktionalität folgt als 92/93; direkte Upstream-v1.22.x→Fork-Datenbankmigration bleibt außerhalb des Scope.
+- Task: KWF-FINDING-013 Repository-Integration.
+
+### KWF-FINDING-025 — Holidays-Test öffnete vor der DB-Isolation die lokale Datenbank
+
+- Betroffen: `test/test-holidays.js`, statische Imports von `server/db.js` und `server/services/holidays.js`.
+- Schweregrad: mittel für lokale Testisolation, keine verlorene Produktfunktion.
+- Auswirkung: Der erste Integrationslauf öffnete die ignorierte lokale `yuvomi.db` und führte die vorgesehenen Migrationen 92/93 aus, bevor der Test seine In-Memory-DB setzte. Die Datenbank wurde weder gelöscht noch zurückgesetzt; spätere ältere Harnesses öffnen sie weiterhin auf Schema v93.
+- Empfehlung: `DB_PATH=':memory:'` vor dynamischen Imports setzen und per Wiederholung sicherstellen, dass die lokale DB-Zeitmarke unverändert bleibt.
+- Status: **resolved in der Upstream-v1.22.2-Integration**; der Holidays-Test importiert DB und Service erst nach gesetztem In-Memory-Pfad, 27/27 Tests bestanden und der Kontrolllauf bestätigte `LOCAL_DB_UNCHANGED=True`.
+- Task: KWF-FINDING-013 Repository-Integration.
 
 ### KWF-FINDING-014 — KWF-004-API-Vertrag ist in der Task-2-Analyse veraltet
 
@@ -616,7 +651,7 @@ Neue i18n-Namensräume: KWF-006 implementiert `quantity.*`; KWF-007 implementier
 - Nächster sinnvoller Schritt: Der geplante Kitchen-Workflow KWF-001 bis KWF-010 ist abgeschlossen. Nur auf neue ausdrückliche Anweisung einen weiteren Task beginnen.
 - Nicht erneut analysieren: produktiver v85→v91-Upgradepfad, Recipe→Meal→Shopping→Pantry→Cook/Undo-Datenfluss, bestehende Transaktions-/Rollback-/Replay-Grenzen, OpenAPI-/Scope-/Permission-Zuordnung, Network-only-Pantry-API, vollständiges Locale-Keyset und verschachteltes Datepicker-Escape/Fokusverhalten sind geklärt.
 
-### Aktueller Handoff — KWF-FINDING-009
+### Vorheriger Handoff — KWF-FINDING-009
 
 - Letzter abgeschlossener Schritt: Der Windows/Node-24-Prozessabbruch wurde in den vier betroffenen Test-Harnesses und im Server-Lifecycle behoben; der vollständige `npm test`-Lauf endete mit Exit 0.
 - Aktueller Branch: `main`; der Fix-Branch `fix/windows-category-test-cleanup` wurde über Merge-Commit `9a4d6a94` integriert. `upstream/main` wurde nur gefetcht und nicht verändert.
@@ -628,3 +663,16 @@ Neue i18n-Namensräume: KWF-006 implementiert `quantity.*`; KWF-007 implementier
 - Offene Findings: KWF-FINDING-009 ist gelöst. KWF-FINDING-013 (Fork-/Upstream-Divergenz) bleibt als separater Repository-Integrations-Follow-up offen.
 - Nächster sinnvoller Schritt: Diesen Handoff committen, `main` zu `origin` pushen und danach KWF-FINDING-013 auf einem eigenen Integrationsbranch analysieren.
 - Nicht erneut analysieren: libuv-Reproduktion, Category-Harness-Ursache, Entrypoint-Test-Lifecycle, Server-/Backup-Scheduler-Cleanup und Nichtbetroffenheit der Fachverträge sind geklärt.
+
+### Aktueller Handoff — KWF-FINDING-013
+
+- Letzter abgeschlossener Schritt: Upstream v1.22.2 wurde nach bestätigter Option 1 konfliktbewusst in den Fork-Branch integriert; vier Konflikte wurden gelöst, Migrationen 92/93 und zusätzliche Upgrade-Tests wurden ergänzt, sämtliche fokussierten Tests, die Vollsuite und der Browser-Smoke bestanden.
+- Aktueller Branch: `integration/upstream-v1.22.2`, erstellt von Fork-`main` bei `1dc7cafd`; der Merge-Commit und Push des Integrationsbranches sowie anschließend der Merge nach Fork-`main` stehen unmittelbar bevor.
+- Commit-/Working-Tree-Status: Der laufende `--no-commit`-Merge enthält die 285 Upstream-Dateien sowie die taskbezogenen Konfliktlösungen, Tests und diesen Memory-Abschluss. `upstream/main` steht unverändert auf `dfa6729e` und wurde ausschließlich gelesen.
+- Geänderte/integrierte Kernbereiche: Version 1.22.2 und Helmet 8.3.0; Migrationen 92/93 und Schema-Tests; Task-Dokumente in Route/UI/OpenAPI; mehrsprachige Holiday-Gruppen in Service/Preferences/Settings; gemeinsame Seitensuche und Category-Manager-Styles; responsive CSS, SW, alle 23 Locales, Docs/Site/Screenshots und Upstream-Release-Dokumentation. Fork-Kitchen 86–91 und sämtliche Fork-Testskripte bleiben erhalten.
+- Bestätigte Annahmen/Entscheidungen: ADR-KITCHEN-012 ist umgesetzt. Bestehende Fork-DBs v91 und frische Installationen migrieren additiv auf v93; direkte bereits migrierte Upstream-v1.22.x-DBs sind nicht Teil dieses Vertrages. API-Verträge, Scope-Namen und Mitgliederrechte bleiben rückwärtskompatibel. Keine neue Abhängigkeit außer dem Upstream-Update von Helmet 8.1.0 auf 8.3.0.
+- Automatische Tests bestanden: DB 44/44, Kitchen-Workflow 3/3, Task-Documents 9/9, Holidays 27/27, Tasks 18/18, Documents 2/2, Frontend-Audit 143/143, Settings 65/65, SW 9/9, Changelog 5/5, Shopping 62/62, Shopping→Pantry 8/8, Pantry 11/11, Meal-Cooking 8/8, Meals 48/48, Datepicker 25/25, Kitchen-Tabs 8/8, Permissions 15/15, Token-Scopes 16/16, MCP 29/29, Housekeeping 13/13, CalDAV-Reminders 9/9, Mobile-Layout 6/6 und Typography 12/12. `npm test` lief vollständig mit Exit 0; JSON-/Syntaxchecks sowie `git diff --check` bestanden.
+- Browserprüfung: temporäre isolierte DB und lokaler Server; Dashboard, Tasks, Documents, Shopping und Calendar-Settings bei 1440×900, 768×1024 und 390×844 geprüft. Alle 15 Kombinationen hatten Inhalt, keinen Login-/Setup-Rückfall, keine Console-/Page-Errors und keinen horizontalen Überlauf. Testserver und temporäre DB samt Sidecars wurden entfernt.
+- Findings: KWF-FINDING-013 und KWF-FINDING-024 sind gelöst. KWF-FINDING-025 dokumentiert den beim ersten Holidays-Lauf gefundenen lokalen DB-Zugriff und ist durch dynamische Imports gelöst; die ignorierte lokale `yuvomi.db` wurde auf das vorgesehene Schema v93 migriert, nicht gelöscht oder zurückgesetzt.
+- Nächster sinnvoller Schritt: Merge-Commit erstellen, Integrationsbranch zu `origin` pushen, anschließend ausschließlich in Fork-`main` mergen, Post-Merge-Smokes ausführen und `origin/main` pushen. Kein Pull Request und kein Push/Merge zu `upstream`.
+- Nicht erneut analysieren: Commitliste, Merge-Base, 39/20-Ausgangsdivergenz, 285/94/36-Dateimengen, Konfliktauflösung, Migrationsnummerierung 92/93, Task-Documents-/Holiday-Verträge, Locale-/SW-Parität und Browser-Viewports sind verifiziert.

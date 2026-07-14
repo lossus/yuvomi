@@ -1,5 +1,6 @@
 {
     "common": {
+        "searchClear": "Clear search",
         "save": "Save",
         "cancel": "Cancel",
         "delete": "Delete",
@@ -289,6 +290,13 @@
         "navLabelOverdue": "Tasks, {{count}} overdue",
         "pointsLabel": "Points",
         "pointsHint": "Points are credited on completion.",
+        "documentsLabel": "Documents",
+        "documentsHint": "Link documents from the Documents module to this task.",
+        "documentAdd": "Link document",
+        "documentAddPlaceholder": "Select a document…",
+        "documentRemove": "Remove link",
+        "documentsEmpty": "No documents linked yet.",
+        "documentsCount": "{{count}} documents",
         "assignedToMe": "Assigned to me"
     },
     "shopping": {
@@ -1562,6 +1570,9 @@
         "holidaySubdivisionLabel": "State / Region",
         "holidaySubdivisionNone": "Entire country",
         "holidaySubdivisionPlaceholder": "Select a state…",
+        "holidayGroupLabel": "School-holiday region",
+        "holidayGroupNone": "Show all",
+        "holidayGroupHint": "Some multilingual cantons have different school-holiday dates depending on the language region. Choose the matching region for correct dates.",
         "holidayPublicLabel": "Show public holidays",
         "holidaySchoolLabel": "Show school holidays",
         "holidayPublicColor": "Public holiday color",
@@ -2140,7 +2151,7 @@
         "dmsAccountLabel": "DMS account"
     },
     "housekeeping": {
-        "title": "Cleaner workspace",
+        "title": "Housekeeping",
         "bottomNav": "Housekeeping navigation",
         "home": "Home",
         "tasks": "Tasks",

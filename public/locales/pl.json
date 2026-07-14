@@ -1,5 +1,6 @@
 {
     "common": {
+        "searchClear": "Wyczyść wyszukiwanie",
         "save": "Zapisz",
         "cancel": "Anuluj",
         "delete": "Usuń",
@@ -296,6 +297,13 @@
         "showFuture": "Pokaż zaplanowane",
         "pointsLabel": "Punkty",
         "pointsHint": "Punkty są przyznawane po ukończeniu.",
+        "documentsLabel": "Dokumenty",
+        "documentsHint": "Powiąż dokumenty z modułu Dokumenty z tym zadaniem.",
+        "documentAdd": "Powiąż dokument",
+        "documentAddPlaceholder": "Wybierz dokument…",
+        "documentRemove": "Usuń powiązanie",
+        "documentsEmpty": "Brak powiązanych dokumentów.",
+        "documentsCount": "Dokumenty: {{count}}",
         "assignedToMe": "Przypisane do mnie"
     },
     "shopping": {
@@ -1569,6 +1577,9 @@
         "holidaySubdivisionLabel": "Region / województwo",
         "holidaySubdivisionNone": "Cały kraj",
         "holidaySubdivisionPlaceholder": "Wybierz region…",
+        "holidayGroupLabel": "Region ferii szkolnych",
+        "holidayGroupNone": "Pokaż wszystkie",
+        "holidayGroupHint": "Niektóre wielojęzyczne kantony mają różne terminy ferii szkolnych w zależności od regionu językowego. Wybierz odpowiedni region, aby zobaczyć poprawne daty.",
         "holidayPublicLabel": "Pokaż święta",
         "holidaySchoolLabel": "Pokaż ferie szkolne",
         "holidayPublicColor": "Kolor świąt",
@@ -2144,7 +2155,7 @@
         "moreUsers": "więcej"
     },
     "housekeeping": {
-        "title": "Strefa sprzątania",
+        "title": "Sprzątanie",
         "bottomNav": "Nawigacja sprzątania",
         "home": "Start",
         "tasks": "Zadania",

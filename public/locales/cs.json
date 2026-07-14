@@ -1,5 +1,6 @@
 {
     "common": {
+        "searchClear": "Vymazat hledání",
         "save": "Uložit",
         "cancel": "Zrušit",
         "delete": "Smazat",
@@ -289,6 +290,13 @@
         "navLabelOverdue": "Úkoly, {{count}} po termínu",
         "pointsLabel": "Body",
         "pointsHint": "Body se připíší po splnění.",
+        "documentsLabel": "Dokumenty",
+        "documentsHint": "Propojte dokumenty z modulu Dokumenty s tímto úkolem.",
+        "documentAdd": "Propojit dokument",
+        "documentAddPlaceholder": "Vyberte dokument…",
+        "documentRemove": "Odebrat propojení",
+        "documentsEmpty": "Zatím nejsou propojeny žádné dokumenty.",
+        "documentsCount": "Dokumenty: {{count}}",
         "assignedToMe": "Přiřazeno mně"
     },
     "shopping": {
@@ -1562,6 +1570,9 @@
         "holidaySubdivisionLabel": "Region / kraj",
         "holidaySubdivisionNone": "Celá země",
         "holidaySubdivisionPlaceholder": "Vyberte region…",
+        "holidayGroupLabel": "Region školních prázdnin",
+        "holidayGroupNone": "Zobrazit vše",
+        "holidayGroupHint": "Některé vícejazyčné kantony mají různá data školních prázdnin podle jazykové oblasti. Vyberte odpovídající region pro správná data.",
         "holidayPublicLabel": "Zobrazit státní svátky",
         "holidaySchoolLabel": "Zobrazit školní prázdniny",
         "holidayPublicColor": "Barva státních svátků",
@@ -1931,7 +1942,7 @@
         "moreUsers": "další"
     },
     "housekeeping": {
-        "title": "Oblast úklidu",
+        "title": "Domácí práce",
         "bottomNav": "Navigace domácí péče",
         "home": "Domů",
         "tasks": "Úkoly",

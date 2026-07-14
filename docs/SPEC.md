@@ -68,6 +68,17 @@ Join table for multi-person task assignment (migration v32). Existing `assigned_
 | user_id | INTEGER | FK → Users (CASCADE delete), NOT NULL |
 | PRIMARY KEY | | (task_id, user_id) |
 
+### Task Documents (migration v86)
+Join table linking documents from the Documents module to a task, so the information needed to complete a task (manuals, policies, service instructions) lives alongside the task itself. Managed from the task modal; linked documents show as chips (opening the document preview/download) and the task card carries a paperclip badge with the count. Both foreign keys cascade on delete — removing either the task or the document drops the link, the other side is untouched. Document visibility from the Documents module is enforced: only documents the current user may see are listed or linkable (no admin bypass), and a replace-set update leaves links to documents the user cannot see intact.
+
+| Column | Type | Constraint |
+|--------|------|-----------|
+| task_id | INTEGER | FK → Tasks (CASCADE delete), NOT NULL |
+| document_id | INTEGER | FK → Family Documents (CASCADE delete), NOT NULL |
+| created_by | INTEGER | FK → Users (SET NULL) — who linked it |
+| created_at | TEXT | |
+| PRIMARY KEY | | (task_id, document_id) |
+
 ### Rewards (migration v70)
 
 Points-and-rewards system. A member earns a task's `points` when the task is marked done (awarded to its assigned members; if unassigned, to the acting user — useful for a wall-mounted kiosk tablet on a single account). Participation is **opt-in per member**; redemptions require **parent/admin approval** by default — an admin can disable this household-wide (`rewards_require_approval` preference, Settings → Modules → Rewards) so redemptions are granted immediately. The Rewards module itself is toggleable in Settings → Modules → Rewards (nav visibility). A member's balance is always `SUM(delta)` over `reward_ledger` — there is no separately stored balance that could drift. Point award is idempotent (partial unique index) and reversed when a task leaves the `done` state.
@@ -345,6 +356,12 @@ by the auto-sync scheduler (covers previous, current, and next two years). Displ
 overlay in the calendar; layer visibility is toggled client-side. Outbound requests carry only the
 country/subdivision code — no household data leaves the server.
 
+Some multilingual subdivisions (e.g. the Swiss canton `CH-BE`) run more than one school-holiday
+regime with differing dates, distinguished only by an OpenHolidays *group* (`CH-BE-VS` German-speaking
+vs. `CH-BE-EO` French-speaking Bernese Jura). When such a subdivision is configured, the settings page
+offers an optional school-holiday-group picker; the chosen group filters the overlay to that regime so
+the calendar shows the correct dates instead of the union of both.
+
 | Column | Type | Constraint |
 |--------|------|-----------|
 | id | INTEGER | PRIMARY KEY AUTOINCREMENT |
@@ -355,9 +372,10 @@ country/subdivision code — no household data leaves the server.
 | end_date | TEXT | YYYY-MM-DD, NOT NULL |
 | name | TEXT | Localized holiday name, NOT NULL |
 | year | INTEGER | Source year (used for scoped re-sync), NOT NULL |
+| group_code | TEXT | School-holiday group (e.g. `CH-BE-VS`) for multilingual subdivisions; nullable (applies to the whole subdivision, e.g. public holidays) |
 
 Indexes: `idx_holiday_cache_dates (start_date, end_date)`, `idx_holiday_cache_lookup (type, country, subdivision, year)`.
-Configuration lives in `sync_config`: `holiday_country`, `holiday_subdivision`, `holiday_show_public`,
+Configuration lives in `sync_config`: `holiday_country`, `holiday_subdivision`, `holiday_group`, `holiday_show_public`,
 `holiday_show_school`, `holiday_public_color`, `holiday_school_color`, `holiday_last_sync` (all admin-only).
 
 ### CalDAV Accounts
@@ -1344,6 +1362,7 @@ Skeleton loading instead of spinners (the skeleton mirrors the default-visible w
 - **"Assigned to me" quick filter:** a toggle chip in the filter bar limits the list to tasks assigned to the current user (a shortcut for the person filter); the choice is remembered per device. Shown only in multi-member households.
 - **Per-task visibility:** an "all / assignees only / private" selector in the task dialog controls who can see the task (server-enforced, no admin bypass — see [Tasks data model](#tasks)); restricted tasks carry a lock/people icon in the list.
 - **Customizable categories:** a "Manage categories" action in the toolbar opens the shared `oikos-category-manager` modal to add, rename, reorder, and delete task categories (predefined set localized, custom categories added inline). Deletion is blocked while a category is in use or when it is the last one — see [Task Categories data model](#task-categories-migration-v83).
+- **Linked documents:** documents from the Documents module can be optionally linked to a task from the task dialog, so supporting information (manuals, policies, service instructions) is reachable directly from the task. Linked documents appear as chips that open the document preview/download; a paperclip badge with the count shows on the task card. Only documents the user may see are listed or linkable (document visibility enforced, no admin bypass) — see [Task Documents data model](#task-documents-migration-v86).
 - **Responsive toolbar:** secondary controls collapse into a single overflow trigger through phone and tablet widths (≤ 1023px); bulk actions remain hidden until at least one task is selected. Checkbox and row actions use the shared touch-target tokens.
 - Mobile swipe: left = done, right = edit
 - Badge for overdue tasks
@@ -1879,7 +1898,7 @@ Additive CSS file loaded globally after `layout.css`. Implements a Liquid Glass 
 - **Module accent colors:** `--module-accent` is applied on three visual layers - (1) active nav tab (bottom bar + sidebar stripe), (2) toolbar `border-top: 3px`, (3) cards/rows `border-left: 3px`. The active accent is written to `--active-module-accent` on `:root` on every navigation change. Falls back to `--color-accent` for pages without a module context.
 - **Navigation:** The persistent mobile bottom bar contains exactly five destinations: fixed Overview, three configurable favorites (default Calendar, Tasks, Kitchen), and fixed More. Inactive buttons are neutral; the active module alone supplies color to the icon and 200 ms sliding indicator. The desktop sidebar uses the same glass surface and groups entries under localized headings — Overview (Dashboard), Plan (Calendar, Tasks, Notes), Home (Kitchen, Contacts, Birthdays, Budget, Documents, Housekeeping), and Custom modules when enabled third-party modules are loaded — with Settings pinned at the end. Ordering is user-specific and limited to each group. Custom monoline SVG icons are served from `public/nav-icons.js` (DOM API, no `innerHTML`); Lucide is the fallback. Kitchen and More keep stable visible labels/icons; active subsections use localized `aria-label`/`aria-current`. **Collapsible sidebar (desktop only):** a toggle button collapses the sidebar to icon-only mode (56 px); state persists in `yuvomi.sidebar.collapsed`, and native title tooltips preserve discoverability.
 - **Sub-tabs:** `public/utils/sub-tabs.js` renders the sticky pill-style tab bar for Kitchen. It wires `role="tablist"`, `aria-selected`, `aria-controls`, `aria-labelledby`, keyboard arrow navigation, and panel focus coordination from one shared helper. (Settings no longer uses sub-tabs; it has its own responsive shell — see the Settings section.)
-- **Tablist behavior:** `public/utils/tablist.js` (`wireTablist`) is the shared WAI-ARIA tablist behavior — roving tabindex, arrow/Home/End keys, `aria-selected`/`aria-current` — for tab navs that live inside a module's `page-toolbar` rather than a standalone sub-tab bar (Rewards, Housekeeping, and the Calendar month/week/day/agenda view-switcher). It complements `sub-tabs.js` so every tab surface shares one interaction grammar (v0.94.0).
+- **Tablist behavior:** `public/utils/tablist.js` (`wireTablist`) is the shared WAI-ARIA tablist behavior — roving tabindex, arrow/Home/End keys, `aria-selected`/`aria-current` — for tab navs that live inside a module's `page-toolbar` rather than a standalone sub-tab bar (Budget, Rewards, Housekeeping, and the Calendar month/week/day/agenda view-switcher). It complements `sub-tabs.js` so every tab surface shares one interaction grammar (v0.94.0).
 - **Transitions:** Directional slide-X animation on page change (forward = from right, back = from left, 200ms) with spring easing. Respects `prefers-reduced-motion`.
 - **Empty states:** Consistent `.empty-state` class across all modules (icon + title + description, centered). Compact variant `.empty-state--compact` for meal slots.
 - **Modals:** Centered panel on desktop with glass overlay. On mobile (< 768px) bottom sheet - spring slide-in from below, sheet handle visible, swipe-to-close (> 80px downward). `focusin` scrolls inputs into view when the virtual keyboard is open. The modal lifecycle is managed as an explicit state machine (`idle → open → confirming → closing`) with encapsulated suspend/restore helpers, hardening the unsaved-changes confirmation against double-close and back-navigation races (v0.55.0). Modal titles and `selectModal` option labels are HTML-escaped centrally to prevent XSS from raw user data reused as modal headings.

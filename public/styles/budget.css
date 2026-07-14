@@ -120,55 +120,21 @@
   -webkit-mask-image: linear-gradient(to right, transparent, #000 var(--space-6), #000 calc(100% - var(--space-6)), transparent);
 }
 
-.budget-tab {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  height: var(--target-base);
-  padding: 0 var(--space-3);
-  border: 0;
-  border-radius: var(--radius-full);
-  background: transparent;
-  color: var(--color-text-secondary);
-  cursor: pointer;
-  font-family: inherit;
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-medium);
-  flex-shrink: 0;
-  white-space: nowrap;
+/* Tab-Buttons nutzen die geteilte .sub-tab-Pillen-Grammatik (sub-tabs.css) und
+ * das wireTablist-Verhalten (utils/tablist.js) — wie Belohnungen/Haushaltshilfe.
+ * Budget-spezifisch bleiben hier nur das Scroll-Snapping der scrollbaren Leiste
+ * und die pro-Sub-Domäne-Aktiv-Tönung. Der Default (.sub-tab--active) folgt
+ * bereits dem Modul-Akzent (--active-module-accent = --module-budget). Nur Tabs,
+ * die eine ANDERE Modul-Identität tragen, überschreiben den Tint. */
+.budget-tabs .sub-tab {
   scroll-snap-align: start;
-  transition: background-color var(--transition-fast), color var(--transition-fast);
-  -webkit-tap-highlight-color: transparent;
 }
 
-.budget-tab:active {
-  transform: scale(0.96);
-  transition-duration: 0.06s;
-}
-
-/* Aktiver Tab: getönte Pille (wie .sub-tab--active). Jede Budget-Sub-Domäne
- * behält ihre eigene Akzentfarbe als Tint — die Farbcodierung trägt der
- * Hintergrund. Das Label bleibt Ink + semibold, da Akzent-Text auf Hell nur
- * ~3.5:1 erreicht (unter AA 4.5). */
-.budget-tab--active {
-  background-color: color-mix(in srgb, var(--color-accent) 14%, transparent);
-  color: var(--color-text-primary);
-  font-weight: var(--font-weight-semibold);
-}
-
-.budget-tab[data-tab="budget"].budget-tab--active {
-  background-color: color-mix(in srgb, var(--module-budget) 14%, transparent);
-}
-
-.budget-tab[data-tab="loans"].budget-tab--active {
+.budget-tabs .sub-tab[data-tab-id="loans"].sub-tab--active {
   background-color: color-mix(in srgb, var(--color-info) 14%, transparent);
 }
 
-.budget-tab[data-tab="subscriptions"].budget-tab--active {
-  background-color: color-mix(in srgb, var(--color-accent) 14%, transparent);
-}
-
-.budget-tab[data-tab="split-expenses"].budget-tab--active {
+.budget-tabs .sub-tab[data-tab-id="split-expenses"].sub-tab--active {
   background-color: color-mix(in srgb, var(--module-split-expenses) 14%, transparent);
 }
 
@@ -319,7 +285,7 @@
 .budget-account__body {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--space-0h);
   min-width: 0;
   flex: 1 1 auto;
 }
@@ -358,7 +324,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 2px;
+  gap: var(--space-0h);
   flex: 0 1 auto;
   min-width: 0;
 }
@@ -403,7 +369,7 @@
 .budget-entry__account {
   display: inline-flex;
   align-items: center;
-  gap: 3px;
+  gap: var(--space-1);
 }
 
 /* Konto-Filter-Chip in der Transaktionsliste (Drilldown-Kontext) */
@@ -629,13 +595,13 @@
 .budget-loans__summary {
   font-size: var(--text-sm);
   color: var(--color-text-secondary);
-  margin-top: 2px;
+  margin-top: var(--space-0h);
 }
 
 .budget-loans__filters {
   display: flex;
   gap: var(--space-1);
-  padding: 2px;
+  padding: var(--space-0h);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   background: var(--color-surface-2);
@@ -656,7 +622,7 @@
 .budget-loans__filter i {
   width: 14px;
   height: 14px;
-  margin-right: 4px;
+  margin-right: var(--space-1);
   vertical-align: -2px;
 }
 
@@ -694,7 +660,7 @@
   font-size: var(--text-base);
   font-variant-numeric: tabular-nums;
   color: var(--color-text-primary);
-  margin-top: 2px;
+  margin-top: var(--space-0h);
   white-space: nowrap;
 }
 
@@ -849,7 +815,7 @@
 
 .budget-loan-transaction span {
   display: block;
-  margin-top: 2px;
+  margin-top: var(--space-0h);
   color: var(--color-text-secondary);
   font-size: var(--text-xs);
 }
@@ -874,7 +840,7 @@
 }
 
 .loan-report__title {
-  margin-top: 2px;
+  margin-top: var(--space-0h);
 }
 
 .loan-report__status {
@@ -911,7 +877,7 @@
   display: block;
   color: var(--color-text-secondary);
   font-size: var(--text-xs);
-  margin-bottom: 2px;
+  margin-bottom: var(--space-0h);
 }
 
 .budget-page .form-grid-2 {
@@ -981,7 +947,7 @@
 .budget-list-header__filter {
   color: var(--color-text-secondary);
   font-size: var(--text-xs);
-  margin-top: 2px;
+  margin-top: var(--space-0h);
 }
 
 .budget-list-header__title {
@@ -997,8 +963,10 @@
 }
 
 .budget-recur-mark {
-  font-size: var(--text-xs);
-  vertical-align: baseline;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: -0.15em;
+  color: var(--color-text-tertiary);
 }
 
 .budget-list {
@@ -1088,60 +1056,9 @@
 .budget-entry__amount--income   { color: var(--color-success); }
 .budget-entry__amount--expenses { color: var(--color-danger);  }
 
-/* Neutrale Basis für alle Icon-Buttons einer Zeile (Löschen UND Bearbeiten).
- * Die Delete-Semantik (roter Hover) liegt separat auf .budget-entry__delete. */
-.budget-entry__action {
-  width: var(--target-base);
-  height: var(--target-base);
-  min-width: var(--target-base);
-  min-height: var(--target-base);
-  border-radius: var(--radius-sm);
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-text-disabled);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity var(--transition-fast), color var(--transition-fast);
-  position: relative;
-}
-
-.budget-entry__actions {
-  display: flex;
-  align-items: center;
-  gap: var(--space-1);
-  flex-shrink: 0;
-}
-
-.budget-entry__action::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-}
-
-.budget-entry:hover .budget-entry__action {
-  opacity: 1;
-}
-
-.budget-entry--loan .budget-entry__action {
-  opacity: 1;
-}
-
-@media (hover: none), (max-width: 640px) {
-  .budget-entry__action {
-    opacity: 1;
-  }
-}
-
-.budget-entry__action:hover {
-  color: var(--color-text-secondary);
-}
-
-.budget-entry__delete:hover {
-  color: var(--color-danger);
-}
+/* Zeilen-Aktionen (Bearbeiten/Löschen) nutzen die geteilte .row-action-
+ * Grammatik aus layout.css (Audit F1) — immer sichtbar (auch Desktop), 48px
+ * Touch-Fläche, Löschen als row-action--danger. */
 
 /* --------------------------------------------------------
  * Mobil-Reflow (≤640px)

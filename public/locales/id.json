@@ -1,5 +1,6 @@
 {
     "common": {
+        "searchClear": "Hapus pencarian",
         "save": "Simpan",
         "cancel": "Batal",
         "delete": "Hapus",
@@ -296,6 +297,13 @@
         "showFuture": "Tampilkan yang terjadwal",
         "pointsLabel": "Poin",
         "pointsHint": "Poin dikreditkan saat selesai.",
+        "documentsLabel": "Dokumen",
+        "documentsHint": "Tautkan dokumen dari modul Dokumen ke tugas ini.",
+        "documentAdd": "Tautkan dokumen",
+        "documentAddPlaceholder": "Pilih dokumen…",
+        "documentRemove": "Hapus tautan",
+        "documentsEmpty": "Belum ada dokumen yang ditautkan.",
+        "documentsCount": "{{count}} dokumen",
         "assignedToMe": "Ditugaskan ke saya"
     },
     "shopping": {
@@ -1569,6 +1577,9 @@
         "holidaySubdivisionLabel": "Provinsi / Wilayah",
         "holidaySubdivisionNone": "Seluruh negara",
         "holidaySubdivisionPlaceholder": "Pilih provinsi…",
+        "holidayGroupLabel": "Wilayah libur sekolah",
+        "holidayGroupNone": "Tampilkan semua",
+        "holidayGroupHint": "Beberapa kanton multibahasa memiliki tanggal libur sekolah yang berbeda tergantung wilayah bahasa. Pilih wilayah yang sesuai untuk tanggal yang benar.",
         "holidayPublicLabel": "Tampilkan hari libur",
         "holidaySchoolLabel": "Tampilkan libur sekolah",
         "holidayPublicColor": "Warna hari libur",
@@ -2144,7 +2155,7 @@
         "moreUsers": "lagi"
     },
     "housekeeping": {
-        "title": "Area Pembersihan",
+        "title": "Asisten Rumah Tangga",
         "bottomNav": "Navigasi asisten rumah tangga",
         "home": "Mulai",
         "tasks": "Tugas",

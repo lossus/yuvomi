@@ -1,5 +1,6 @@
 {
     "common": {
+        "searchClear": "Suche leeren",
         "save": "Speichern",
         "cancel": "Abbrechen",
         "delete": "Löschen",
@@ -296,6 +297,13 @@
         "showFuture": "Geplante anzeigen",
         "pointsLabel": "Punkte",
         "pointsHint": "Punkte werden beim Erledigen gutgeschrieben.",
+        "documentsLabel": "Dokumente",
+        "documentsHint": "Verknüpfe Dokumente aus dem Dokumente-Modul mit dieser Aufgabe.",
+        "documentAdd": "Dokument verknüpfen",
+        "documentAddPlaceholder": "Dokument auswählen…",
+        "documentRemove": "Verknüpfung entfernen",
+        "documentsEmpty": "Noch keine Dokumente verknüpft.",
+        "documentsCount": "{{count}} Dokumente",
         "assignedToMe": "Mir zugewiesen"
     },
     "shopping": {
@@ -1569,6 +1577,9 @@
         "holidaySubdivisionLabel": "Bundesland / Region",
         "holidaySubdivisionNone": "Gesamtes Land",
         "holidaySubdivisionPlaceholder": "Bundesland auswählen…",
+        "holidayGroupLabel": "Schulferien-Region",
+        "holidayGroupNone": "Alle anzeigen",
+        "holidayGroupHint": "Einige mehrsprachige Kantone haben je nach Sprachregion unterschiedliche Schulferien-Termine. Wähle die passende Region für korrekte Daten.",
         "holidayPublicLabel": "Feiertage anzeigen",
         "holidaySchoolLabel": "Schulferien anzeigen",
         "holidayPublicColor": "Farbe Feiertage",
@@ -2144,7 +2155,7 @@
         "moreUsers": "weitere"
     },
     "housekeeping": {
-        "title": "Reinigungsbereich",
+        "title": "Haushaltshilfe",
         "bottomNav": "Hauspflege-Navigation",
         "home": "Start",
         "tasks": "Aufgaben",

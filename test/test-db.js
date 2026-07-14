@@ -371,6 +371,34 @@ test('Migration 91 adds durable cooking snapshots and one active event per meal'
   cookingDb.close();
 });
 
+test('Migrations 92 and 93 preserve the Fork lineage while adding upstream schema', () => {
+  const upstreamDb = new DatabaseSync(':memory:');
+  upstreamDb.exec('PRAGMA foreign_keys = ON;');
+  upstreamDb.exec(MIGRATIONS_SQL[1]);
+  upstreamDb.exec(MIGRATIONS_SQL[19]);
+  upstreamDb.exec(MIGRATIONS_SQL[92]);
+  const taskDocuments = upstreamDb.prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'task_documents'").get();
+  assert(taskDocuments, 'task_documents fehlt nach Migration 92');
+  const taskDocumentIndex = upstreamDb.prepare("SELECT name FROM sqlite_master WHERE type = 'index' AND name = 'idx_task_documents_document'").get();
+  assert(taskDocumentIndex, 'Task-Document-Index fehlt nach Migration 92');
+
+  upstreamDb.exec(`
+    CREATE TABLE holiday_cache (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      type TEXT NOT NULL,
+      country TEXT NOT NULL,
+      start_date TEXT NOT NULL,
+      end_date TEXT NOT NULL,
+      name TEXT NOT NULL,
+      year INTEGER NOT NULL
+    );
+  `);
+  upstreamDb.exec(MIGRATIONS_SQL[93]);
+  const groupColumn = upstreamDb.prepare("SELECT name FROM pragma_table_info('holiday_cache') WHERE name = 'group_code'").get();
+  assert(groupColumn, 'holiday_cache.group_code fehlt nach Migration 93');
+  upstreamDb.close();
+});
+
 // --------------------------------------------------------
 // Ergebnis
 // --------------------------------------------------------

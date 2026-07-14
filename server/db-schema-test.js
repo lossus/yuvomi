@@ -1056,6 +1056,19 @@ const MIGRATIONS_SQL = {
     CREATE INDEX IF NOT EXISTS idx_meal_cooking_allocations_ingredient ON meal_cooking_allocations(cooking_ingredient_id, id);
     CREATE INDEX IF NOT EXISTS idx_inventory_movements_cooking_event ON inventory_movements(cooking_event_id, created_at DESC, id DESC) WHERE cooking_event_id IS NOT NULL;
   `,
+  92: `
+    CREATE TABLE IF NOT EXISTS task_documents (
+      task_id     INTEGER NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
+      document_id INTEGER NOT NULL REFERENCES family_documents(id) ON DELETE CASCADE,
+      created_by  INTEGER REFERENCES users(id) ON DELETE SET NULL,
+      created_at  TEXT    NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+      PRIMARY KEY (task_id, document_id)
+    );
+    CREATE INDEX IF NOT EXISTS idx_task_documents_document ON task_documents(document_id);
+  `,
+  93: `
+    ALTER TABLE holiday_cache ADD COLUMN group_code TEXT;
+  `,
 };
 
 export { MIGRATIONS_SQL };

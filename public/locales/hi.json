@@ -1,5 +1,6 @@
 {
     "common": {
+        "searchClear": "खोज साफ़ करें",
         "save": "सहेजें",
         "cancel": "रद्द करें",
         "delete": "हटाएं",
@@ -289,6 +290,13 @@
         "selectTask": "Select task",
         "pointsLabel": "अंक",
         "pointsHint": "कार्य पूरा होने पर अंक जमा होते हैं।",
+        "documentsLabel": "दस्तावेज़",
+        "documentsHint": "दस्तावेज़ मॉड्यूल से दस्तावेज़ इस कार्य से लिंक करें।",
+        "documentAdd": "दस्तावेज़ लिंक करें",
+        "documentAddPlaceholder": "एक दस्तावेज़ चुनें…",
+        "documentRemove": "लिंक हटाएँ",
+        "documentsEmpty": "अभी तक कोई दस्तावेज़ लिंक नहीं है।",
+        "documentsCount": "{{count}} दस्तावेज़",
         "assignedToMe": "मुझे सौंपे गए"
     },
     "shopping": {
@@ -1562,6 +1570,9 @@
         "holidaySubdivisionLabel": "राज्य / क्षेत्र",
         "holidaySubdivisionNone": "पूरा देश",
         "holidaySubdivisionPlaceholder": "एक राज्य चुनें…",
+        "holidayGroupLabel": "स्कूल अवकाश क्षेत्र",
+        "holidayGroupNone": "सभी दिखाएँ",
+        "holidayGroupHint": "कुछ बहुभाषी कैंटन में भाषा क्षेत्र के अनुसार स्कूल अवकाश की तिथियाँ भिन्न होती हैं। सही तिथियों के लिए उपयुक्त क्षेत्र चुनें।",
         "holidayPublicLabel": "सार्वजनिक अवकाश दिखाएँ",
         "holidaySchoolLabel": "स्कूल की छुट्टियाँ दिखाएँ",
         "holidayPublicColor": "सार्वजनिक अवकाश का रंग",
@@ -2140,7 +2151,7 @@
         "goHealth": "स्वास्थ्य"
     },
     "housekeeping": {
-        "title": "Cleaner workspace",
+        "title": "गृहकार्य",
         "bottomNav": "Housekeeping navigation",
         "home": "Home",
         "tasks": "Tasks",

@@ -1,5 +1,6 @@
 {
     "common": {
+        "searchClear": "مسح البحث",
         "save": "حفظ",
         "cancel": "إلغاء",
         "delete": "حذف",
@@ -289,6 +290,13 @@
         "selectTask": "Select task",
         "pointsLabel": "النقاط",
         "pointsHint": "تُضاف النقاط عند الإكمال.",
+        "documentsLabel": "المستندات",
+        "documentsHint": "اربط مستندات من وحدة المستندات بهذه المهمة.",
+        "documentAdd": "ربط مستند",
+        "documentAddPlaceholder": "اختر مستندًا…",
+        "documentRemove": "إزالة الرابط",
+        "documentsEmpty": "لا توجد مستندات مرتبطة بعد.",
+        "documentsCount": "{{count}} مستندات",
         "assignedToMe": "المُسندة إليّ"
     },
     "shopping": {
@@ -1562,6 +1570,9 @@
         "holidaySubdivisionLabel": "الولاية / المنطقة",
         "holidaySubdivisionNone": "الدولة بأكملها",
         "holidaySubdivisionPlaceholder": "اختر منطقة…",
+        "holidayGroupLabel": "منطقة العطلة المدرسية",
+        "holidayGroupNone": "عرض الكل",
+        "holidayGroupHint": "بعض الكانتونات متعددة اللغات لها مواعيد عطل مدرسية مختلفة حسب المنطقة اللغوية. اختر المنطقة المناسبة للحصول على تواريخ صحيحة.",
         "holidayPublicLabel": "إظهار العطلات الرسمية",
         "holidaySchoolLabel": "إظهار العطلات المدرسية",
         "holidayPublicColor": "لون العطلات الرسمية",
@@ -2140,7 +2151,7 @@
         "goHealth": "الصحة"
     },
     "housekeeping": {
-        "title": "Cleaner workspace",
+        "title": "التدبير المنزلي",
         "bottomNav": "Housekeeping navigation",
         "home": "Home",
         "tasks": "Tasks",
