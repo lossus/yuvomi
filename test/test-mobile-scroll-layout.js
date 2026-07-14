@@ -99,3 +99,10 @@ test('closed dashboard speed dial cannot capture first-scroll gestures', () => {
   assert.match(mainRule, /pointer-events:\s*auto/);
   assert.match(dashboardCss, /\.fab-actions--visible\s*\{[^}]*pointer-events:\s*auto/s);
 });
+
+test('Pantry mobile layout stays single-column with stable touch targets', () => {
+  const pantryCss = readFileSync(new URL('../public/styles/pantry.css', import.meta.url), 'utf8');
+  assert.match(pantryCss, /@media \(max-width:\s*767px\)[\s\S]*\.pantry-list\s*\{\s*grid-template-columns:\s*1fr/);
+  assert.match(pantryCss, /\.pantry-card__actions \.btn\s*\{[^}]*min-height:\s*var\(--target-base\)/s);
+  assert.doesNotMatch(pantryCss, /width:\s*3[0-9]px|height:\s*3[0-9]px/);
+});

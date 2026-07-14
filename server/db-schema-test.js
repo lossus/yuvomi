@@ -936,6 +936,73 @@ const MIGRATIONS_SQL = {
     ALTER TABLE shopping_items ADD COLUMN amount REAL;
     ALTER TABLE shopping_items ADD COLUMN unit TEXT;
   `,
+  89: `
+    CREATE TABLE IF NOT EXISTS pantry_locations (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      key TEXT NOT NULL UNIQUE,
+      name TEXT,
+      label_key TEXT,
+      sort_order INTEGER NOT NULL DEFAULT 0,
+      created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+      updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+      CHECK(name IS NOT NULL OR label_key IS NOT NULL)
+    );
+    CREATE TABLE IF NOT EXISTS pantry_items (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      category TEXT,
+      location_id INTEGER NOT NULL REFERENCES pantry_locations(id) ON DELETE RESTRICT,
+      amount REAL,
+      unit TEXT,
+      quantity_display TEXT,
+      minimum_amount REAL,
+      expiry_date TEXT,
+      notes TEXT,
+      created_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
+      deleted_at TEXT,
+      created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+      updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+      CHECK((amount IS NULL AND unit IS NULL) OR (amount IS NOT NULL AND amount >= 0 AND unit IN ('g', 'kg', 'ml', 'l'))),
+      CHECK(minimum_amount IS NULL OR minimum_amount >= 0)
+    );
+    CREATE TABLE IF NOT EXISTS inventory_movements (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      pantry_item_id INTEGER NOT NULL REFERENCES pantry_items(id) ON DELETE RESTRICT,
+      movement_type TEXT NOT NULL CHECK(movement_type IN ('initial', 'adjustment', 'correction', 'reversal')),
+      amount_delta REAL,
+      unit TEXT,
+      balance_after REAL,
+      quantity_display_before TEXT,
+      quantity_display_after TEXT,
+      reason TEXT,
+      idempotency_key TEXT UNIQUE,
+      reverses_movement_id INTEGER REFERENCES inventory_movements(id) ON DELETE RESTRICT,
+      actor_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+      created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+      CHECK((amount_delta IS NULL AND unit IS NULL) OR (amount_delta IS NOT NULL AND unit IN ('g', 'kg', 'ml', 'l'))),
+      CHECK(balance_after IS NULL OR balance_after >= 0)
+    );
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_inventory_movements_reversal
+      ON inventory_movements(reverses_movement_id) WHERE reverses_movement_id IS NOT NULL;
+    CREATE INDEX IF NOT EXISTS idx_pantry_items_lookup
+      ON pantry_items(name COLLATE NOCASE, category, location_id, expiry_date) WHERE deleted_at IS NULL;
+    CREATE INDEX IF NOT EXISTS idx_pantry_items_low_stock
+      ON pantry_items(minimum_amount, amount) WHERE deleted_at IS NULL AND minimum_amount IS NOT NULL;
+    CREATE INDEX IF NOT EXISTS idx_inventory_movements_item_created
+      ON inventory_movements(pantry_item_id, created_at DESC, id DESC);
+    CREATE TRIGGER IF NOT EXISTS trg_pantry_locations_updated_at
+      AFTER UPDATE ON pantry_locations FOR EACH ROW
+      BEGIN UPDATE pantry_locations SET updated_at = strftime('%Y-%m-%dT%H:%M:%SZ', 'now') WHERE id = OLD.id; END;
+    CREATE TRIGGER IF NOT EXISTS trg_pantry_items_updated_at
+      AFTER UPDATE ON pantry_items FOR EACH ROW
+      BEGIN UPDATE pantry_items SET updated_at = strftime('%Y-%m-%dT%H:%M:%SZ', 'now') WHERE id = OLD.id; END;
+    INSERT INTO pantry_locations (key, label_key, sort_order) VALUES
+      ('fridge', 'pantry.locations.fridge', 0),
+      ('freezer', 'pantry.locations.freezer', 1),
+      ('cupboard', 'pantry.locations.cupboard', 2),
+      ('cellar', 'pantry.locations.cellar', 3),
+      ('other', 'pantry.locations.other', 4);
+  `,
 };
 
 export { MIGRATIONS_SQL };

@@ -1,4 +1,4 @@
-export const KITCHEN_CHILD_IDS = Object.freeze(['meals', 'recipes', 'shopping']);
+export const KITCHEN_CHILD_IDS = Object.freeze(['meals', 'recipes', 'shopping', 'pantry']);
 export const DEFAULT_MOBILE_NAV_ORDER = Object.freeze(['calendar', 'tasks', 'kitchen']);
 export const NAV_SECTION = Object.freeze({
   overview: 0,
@@ -13,7 +13,7 @@ const KITCHEN_CHILD_ID_SET = new Set(KITCHEN_CHILD_IDS);
 const PLAN_MODULE_IDS = new Set(['calendar', 'tasks', 'notes']);
 // Ehemals ein einziger „Zuhause"-Sammeltopf (8 Module) — aufgeteilt in semantische
 // Gruppen ≤5, damit die Sidebar-Sektion eine Bedeutung trägt statt „nicht Plan/Übersicht".
-const HOUSEHOLD_MODULE_IDS = new Set(['kitchen', 'meals', 'recipes', 'shopping', 'housekeeping', 'documents', 'rewards']);
+const HOUSEHOLD_MODULE_IDS = new Set(['kitchen', 'meals', 'recipes', 'shopping', 'pantry', 'housekeeping', 'documents', 'rewards']);
 const PEOPLE_MODULE_IDS = new Set(['contacts', 'birthdays', 'health']);
 const FINANCE_MODULE_IDS = new Set(['budget']);
 const MOBILE_NAV_ID_RE = /^[a-z0-9][a-z0-9-]*$/;

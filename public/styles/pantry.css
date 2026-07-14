@@ -1,0 +1,116 @@
+.pantry-page {
+  --module-accent: var(--module-pantry);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  max-width: 1180px;
+  margin-inline: auto;
+}
+
+.pantry-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.pantry-header p { color: var(--color-text-secondary); margin-top: var(--space-1); }
+.pantry-header .btn { min-height: var(--target-base); flex: 0 0 auto; }
+
+.pantry-filters {
+  display: grid;
+  grid-template-columns: minmax(220px, 2fr) repeat(2, minmax(150px, 1fr));
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-elevated);
+}
+
+.pantry-search { position: relative; }
+.pantry-search > i { position: absolute; inset-inline-start: var(--space-3); top: 50%; width: 18px; transform: translateY(-50%); color: var(--color-text-secondary); }
+.pantry-search input { padding-inline-start: calc(var(--space-3) + 24px); width: 100%; }
+.pantry-filters .form-input { min-height: var(--target-base); }
+
+.pantry-filter-check,
+.pantry-filter-date {
+  min-height: var(--target-base);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-text-secondary);
+}
+.pantry-filter-date .form-input { width: auto; min-width: 150px; }
+
+.pantry-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(285px, 1fr)); gap: var(--space-3); }
+.pantry-card {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-top: 3px solid var(--module-pantry);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-elevated);
+  box-shadow: var(--shadow-sm);
+}
+.pantry-card__heading { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-2); }
+.pantry-card__name { min-width: 0; overflow-wrap: anywhere; font-size: var(--font-size-lg); }
+.pantry-card__badges { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--space-1); }
+.pantry-card__stock { margin-top: var(--space-1); font-size: var(--font-size-xl); font-weight: var(--font-weight-semibold); color: var(--module-pantry); }
+.pantry-badge { display: inline-flex; padding: 2px var(--space-2); border-radius: var(--radius-full); font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold); }
+.pantry-badge--low { color: var(--color-warning); background: color-mix(in srgb, var(--color-warning) 12%, transparent); }
+.pantry-badge--expired { color: var(--color-danger); background: color-mix(in srgb, var(--color-danger) 10%, transparent); }
+.pantry-card__meta { display: grid; gap: var(--space-1); margin-top: var(--space-3); }
+.pantry-card__meta > div { display: flex; justify-content: space-between; gap: var(--space-2); }
+.pantry-card__meta dt { color: var(--color-text-secondary); }
+.pantry-card__meta dd { min-width: 0; text-align: end; overflow-wrap: anywhere; }
+.pantry-card__actions { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: var(--space-2); }
+.pantry-card__actions .btn { min-height: var(--target-base); }
+.pantry-card__actions .btn--ghost { min-width: var(--target-base); padding: var(--space-2); }
+
+.pantry-empty { grid-column: 1 / -1; display: grid; justify-items: center; gap: var(--space-2); padding: var(--space-8) var(--space-4); text-align: center; color: var(--color-text-secondary); }
+.pantry-empty > i { width: 42px; height: 42px; color: var(--module-pantry); }
+
+.pantry-form { display: grid; gap: var(--space-3); }
+.pantry-form__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
+.pantry-form__fieldset,
+.pantry-adjust-modes { border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-3); }
+.pantry-form__fieldset > legend,
+.pantry-adjust-modes > legend { padding-inline: var(--space-1); font-weight: var(--font-weight-semibold); }
+.pantry-adjust-modes { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+.pantry-adjust-modes label { min-height: var(--target-base); display: inline-flex; align-items: center; gap: var(--space-2); }
+.pantry-adjust-current { padding: var(--space-3); border-radius: var(--radius-md); background: color-mix(in srgb, var(--module-pantry) 10%, transparent); }
+
+.pantry-history { display: grid; gap: var(--space-2); }
+.pantry-history__entry { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-3); padding: var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); }
+.pantry-history__entry time { display: block; margin-top: var(--space-1); color: var(--color-text-secondary); font-size: var(--font-size-sm); }
+.pantry-history__entry p { margin-top: var(--space-2); overflow-wrap: anywhere; }
+.pantry-history__entry .btn { min-height: var(--target-base); flex: 0 0 auto; }
+
+@media (max-width: 767px) {
+  .pantry-page { padding: var(--space-3); }
+  .pantry-header { align-items: stretch; }
+  .pantry-header > div { min-width: 0; }
+  .pantry-header .btn { width: var(--target-base); padding-inline: 0; font-size: 0; }
+  .pantry-header .btn i { width: 20px; height: 20px; }
+  .pantry-filters { grid-template-columns: 1fr; }
+  .pantry-filter-date { justify-content: space-between; }
+  .pantry-filter-date .form-input { min-width: 0; flex: 1; }
+  .pantry-list { grid-template-columns: 1fr; }
+  .pantry-form__grid { grid-template-columns: 1fr; }
+  .pantry-form__grid--quantity { grid-template-columns: minmax(0, 2fr) minmax(100px, 1fr); }
+  .pantry-history__entry { align-items: stretch; flex-direction: column; }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .pantry-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pantry-search { grid-column: 1 / -1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pantry-card, .pantry-card__actions .btn { transition: none; }
+}

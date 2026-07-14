@@ -304,6 +304,27 @@ test('Migration 88 ergänzt strukturierte Mengen additiv ohne Legacy-Backfill', 
   quantityDb.close();
 });
 
+test('Migration 89 creates Pantry lots, stable locations, and movement constraints', () => {
+  const pantryDb = new DatabaseSync(':memory:');
+  pantryDb.exec('PRAGMA foreign_keys = ON;');
+  pantryDb.exec(MIGRATIONS_SQL[1]);
+  pantryDb.exec(MIGRATIONS_SQL[89]);
+  const locations = pantryDb.prepare('SELECT key, label_key FROM pantry_locations ORDER BY sort_order').all();
+  assert(locations.length === 5 && locations[0].key === 'fridge' && locations[4].key === 'other', 'Default pantry locations missing');
+  const columns = pantryDb.prepare("SELECT name FROM pragma_table_info('pantry_items')").all().map((row) => row.name);
+  assert(columns.includes('minimum_amount') && columns.includes('expiry_date') && columns.includes('deleted_at'), 'Pantry filter/history columns missing');
+  const movementColumns = pantryDb.prepare("SELECT name FROM pragma_table_info('inventory_movements')").all().map((row) => row.name);
+  assert(movementColumns.includes('idempotency_key') && movementColumns.includes('reverses_movement_id'), 'Movement idempotency missing');
+  let negativeStockRejected = false;
+  try {
+    pantryDb.prepare("INSERT INTO pantry_items (name, location_id, amount, unit) VALUES ('Bad', 1, -1, 'g')").run();
+  } catch (error) {
+    negativeStockRejected = /CHECK/.test(error.message);
+  }
+  assert(negativeStockRejected, 'Negative stock must fail');
+  pantryDb.close();
+});
+
 // --------------------------------------------------------
 // Ergebnis
 // --------------------------------------------------------

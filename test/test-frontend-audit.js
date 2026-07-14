@@ -1135,7 +1135,7 @@ test('bottom-nav labels wrap to two lines instead of clipping across locales', (
   const NAV_KEYS = [
     'dashboard', 'calendar', 'tasks', 'notes', 'kitchen', 'contacts', 'birthdays',
     'budget', 'documents', 'housekeeping', 'rewards', 'health', 'settings', 'more',
-    'shopping', 'meals', 'recipes',
+    'shopping', 'meals', 'recipes', 'pantry',
   ];
   const localeFiles = readdirSync(new URL('../public/locales/', import.meta.url)).filter((f) => f.endsWith('.json'));
   const offenders = [];
@@ -1651,6 +1651,7 @@ test('phase 4 touched icon markup uses icon classes instead of inline icon sizin
     '../public/pages/meals.js',
     '../public/pages/recipes.js',
     '../public/pages/shopping.js',
+    '../public/pages/pantry.js',
   ];
 
   for (const file of files) {
@@ -2601,4 +2602,21 @@ test('login keeps username-style input hints, not email (audit 1.6 — login is 
   assert.match(input[0], /autocapitalize="none"/);
   assert.match(input[0], /autocorrect="off"/);
   assert.doesNotMatch(input[0], /type="email"|inputmode="email"/, 'must not use email keyboard for username login');
+});
+
+test('Pantry MVP is wired as a responsive, accessible Kitchen child', () => {
+  const page = read('../public/pages/pantry.js');
+  const css = read('../public/styles/pantry.css');
+  const router = read('../public/router.js');
+  const sw = read('../public/sw.js');
+  assert.match(router, /path:\s*'\/pantry'[\s\S]*page:\s*'\/pages\/pantry\.js'[\s\S]*module:\s*'pantry'/);
+  assert.match(page, /renderKitchenTabsBar\(container, '\/pantry'\)/);
+  assert.match(page, /role="search"/);
+  assert.match(page, /aria-live="polite"/);
+  assert.doesNotMatch(page, /\.innerHTML\s*=/);
+  assert.match(css, /@media \(max-width:\s*767px\)/);
+  assert.match(css, /min-height:\s*var\(--target-base\)/);
+  assert.match(sw, /'\/pages\/pantry\.js'/);
+  assert.match(sw, /'\/styles\/pantry\.css'/);
+  assert.doesNotMatch(sw, /API_CACHE_WHITELIST\s*=\s*\[[^\]]*'\/pantry'/s);
 });

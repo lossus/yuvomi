@@ -61,11 +61,24 @@
   );
 }
 
+.has-kitchen-tabs .pantry-page {
+  min-height: calc(
+    100dvh
+    - var(--nav-bottom-height)
+    - var(--safe-area-inset-bottom)
+    - var(--kitchen-tabs-height)
+  );
+}
+
 /* Mahlzeiten + Rezepte + Einkauf: Viewport-Höhe (Desktop) */
 @media (min-width: 1024px) {
   .has-kitchen-tabs .meals-page,
   .has-kitchen-tabs .recipes-page,
   .has-kitchen-tabs .shopping-page {
     height: calc(100dvh - var(--kitchen-tabs-height));
+  }
+
+  .has-kitchen-tabs .pantry-page {
+    min-height: calc(100dvh - var(--kitchen-tabs-height));
   }
 }

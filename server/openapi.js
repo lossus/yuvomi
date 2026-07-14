@@ -663,6 +663,21 @@ function buildPaths() {
     '/api/v1/shopping/{listId}/import-meal-plan': {
       post: op({ summary: 'Import a meal-plan date range into a shopping list', tag: 'Shopping', description: 'Keeps free-text ingredients separate. Explicitly structured ingredients with the same name, category, and compatible mass/volume dimension are aggregated deterministically while every provenance source is retained in the same transaction.', params: [idParam('listId', 'List ID')], stateChanging: true, requestBody: jsonBody(null) }),
     },
+    '/api/v1/pantry': {
+      get: op({ summary: 'List pantry stock lots', tag: 'Pantry', description: 'Supports q, category, location, low_stock, and expires_before filters. Pantry reads are intentionally network-only in the MVP.' }),
+      post: op({ summary: 'Create pantry stock lot', tag: 'Pantry', description: 'Creates the stock lot and its immutable initial inventory movement in one transaction. Structured amount/unit are optional; explicit free-text quantity remains supported.', stateChanging: true, requestBody: jsonBody(null) }),
+    },
+    '/api/v1/pantry/locations': {
+      get: op({ summary: 'List pantry locations', tag: 'Pantry' }),
+    },
+    '/api/v1/pantry/{id}': {
+      get: op({ summary: 'Get pantry stock lot with movement history', tag: 'Pantry', params: [idParam()] }),
+      patch: op({ summary: 'Update pantry stock metadata', tag: 'Pantry', description: 'Stock amount and display fields cannot be mutated here; use the journaled adjust endpoint.', params: [idParam()], stateChanging: true, requestBody: jsonBody(null) }),
+      delete: op({ summary: 'Remove pantry stock lot', tag: 'Pantry', description: 'Soft-deletes the lot while retaining its movement history.', params: [idParam()], stateChanging: true }),
+    },
+    '/api/v1/pantry/{id}/adjust': {
+      post: op({ summary: 'Adjust or reverse pantry stock', tag: 'Pantry', description: 'Requires an idempotency_key. Delta, absolute correction, free-text correction, and reversal update the cached balance and append an immutable movement atomically.', params: [idParam()], stateChanging: true, requestBody: jsonBody(null) }),
+    },
     '/api/v1/meals': {
       get: op({ summary: 'List meal plan entries', tag: 'Meals' }),
       post: op({ summary: 'Create meal plan entry', tag: 'Meals', description: 'Ingredients retain legacy quantity text and may add amount/unit (g, kg, ml, l). Optionally accepts shopping_import: { enabled: true, list_id }. When enabled, the meal, optional recurrence template, concrete ingredients, shopping items, provenance snapshots, and transfer flags are created in one transaction. Only the concrete recurring start occurrence is imported.', stateChanging: true, requestBody: jsonBody(null, 'Meal fields with optional structured ingredients and shopping_import block') }),
@@ -1689,6 +1704,7 @@ function buildOpenApiSpec(req, appVersion) {
       { name: 'Dashboard' },
       { name: 'Tasks' },
       { name: 'Shopping' },
+      { name: 'Pantry' },
       { name: 'Meals' },
       { name: 'Recipes' },
       { name: 'Calendar' },

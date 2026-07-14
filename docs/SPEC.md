@@ -165,6 +165,18 @@ Custom, household-wide category list for shopping items. Replaces the old hardco
 | created_at | TEXT | |
 | updated_at | TEXT | |
 
+### Pantry (migration v89)
+
+Pantry items represent stock lots, so the same product may exist more than once with different locations or expiry dates. Structured amounts use `g`, `kg`, `ml`, or `l`; explicit free-text quantities remain available and are never interpreted automatically.
+
+| Table | Purpose and constraints |
+|-------|-------------------------|
+| `pantry_locations` | Stable `key`, translated `label_key` or custom `name`, and `sort_order`; seeded with fridge, freezer, cupboard, cellar, and other. |
+| `pantry_items` | Stock-lot metadata, location FK, cached non-negative structured balance or free-text display, optional minimum and expiry date, soft-delete timestamp. |
+| `inventory_movements` | Immutable initial, adjustment, correction, and reversal journal with actor, reason, balance snapshot, unique idempotency key, and at most one reversal per movement. |
+
+The stock cache and its journal entry are always written in the same SQLite transaction. Metadata updates cannot mutate stock; deletion hides the lot but retains its history.
+
 ### Meals
 | Column | Type | Constraint |
 |--------|------|-----------|
@@ -1348,6 +1360,12 @@ Skeleton loading instead of spinners (the skeleton mirrors the default-visible w
 - Mobile quick-add form uses a resilient grid: item name spans the row, quantity/category/add controls remain touch-safe at 390px width, and autocomplete stays anchored to the input.
 - Mobile swipe: left = check/uncheck, right = delete; × delete button hidden on mobile (swipe takes over)
 
+### Pantry (`/pantry`)
+
+The fourth Kitchen child provides manual stock-lot CRUD, name/category search, location/category filtering, low-stock and expiry filters, and journaled balance corrections. Add, edit, adjust, history, reversal, and soft-delete actions use the shared modal and permission patterns. The layout adapts to desktop, tablet, and phone widths and retains keyboard-visible labels and touch-safe controls.
+
+REST API: `GET/POST /api/v1/pantry`, `GET/PATCH/DELETE /api/v1/pantry/:id`, `POST /api/v1/pantry/:id/adjust`, and read-only `GET /api/v1/pantry/locations`. Adjustment requests require an idempotency key. Pantry has its own `pantry:read`/`pantry:write` token scope and module permission. Static page assets are precached, but Pantry API reads and every mutation remain network-only to avoid retaining stale household inventory offline.
+
 ### Meal Plan (`/meals`)
 
 **Desktop:** full weekly grid (Mon–Sun), slots: breakfast / lunch / dinner / snack. **Mobile:** the same full week (Mon–Sun) stacked vertically and scrollable, auto-scrolled to today on open.
@@ -1510,7 +1528,7 @@ User management and app configuration. Logged-in users only.
 - **Profile:** change display name, avatar color, password
 - **User management (admin):** create new users, edit/delete existing users, assign roles (admin/member)
 - **Roles and permissions (admin, Settings → Administration → Roles and permissions, #467):** granular, backend-enforced access control per **family role** (the default) and per **member** (an override that wins over the role). Each module is set to `No access`, `Read only`, or `Full`, and each dashboard widget to `Available` or `Blocked`; widgets inherit their module's lock and can also be blocked on their own (e.g. hiding the cycle widget for some members without disabling Health). Configuration is **sparse** — only deviations from the default (full access) are stored, so unset roles/members keep full access and existing installs are unchanged. **Admins always bypass** the system (no self-lockout). Enforcement is **server-side** — the same scope layer that guards API tokens returns 403 on a disallowed module/method; the client mirrors it by hiding blocked modules from navigation and the dashboard, and a **read-only module** hides its create affordance (the FAB) and shows an explanatory banner. Stored in `access_permissions`. The settings page shows a role/member switch, a deviation overview, and per-module/-widget access as icon controls with widgets nested under their module. API: `GET /api/v1/permissions/catalog`, `GET/PUT /api/v1/permissions/role/:familyRole`, `GET/PUT /api/v1/permissions/user/:userId` (admin-only); the resolved permission map also ships on `GET /api/v1/auth/me`.
-- **Navigation and module controls (admin, Settings → Modules → Navigation):** individual modules (Tasks, Calendar, Shopping, Meals, Recipes, Birthdays, Notes, Contacts, Budget, Documents, Housekeeping) can be disabled to hide them from navigation. Data is preserved and reappears when re-enabled. Dashboard and Settings remain essential and cannot be disabled. Stored as `disabled_modules` in `sync_config`. **Kitchen grouping:** Meals, Recipes, and Shopping are presented as one global **Kitchen** destination with three individually toggleable children; local pages keep their individual routes. The web navigation is grouped into Overview, Plan, Home, and Custom modules, and `module_order:user:<id>` only changes order inside each group; Dashboard and Settings stay pinned. The Custom modules group is shown only when enabled third-party modules are loaded. The mobile bottom bar has five stable slots — Overview, three configurable favorites, and More. Favorites default to Calendar, Tasks, and Kitchen, are stored per user as `mobile_nav_order:user:<id>`, and automatically fall back to enabled destinations when a selected module becomes unavailable.
+- **Navigation and module controls (admin, Settings → Modules → Navigation):** individual modules (Tasks, Calendar, Shopping, Meals, Recipes, Pantry, Birthdays, Notes, Contacts, Budget, Documents, Housekeeping) can be disabled to hide them from navigation. Data is preserved and reappears when re-enabled. Dashboard and Settings remain essential and cannot be disabled. Stored as `disabled_modules` in `sync_config`. **Kitchen grouping:** Meals, Recipes, Shopping, and Pantry are presented as one global **Kitchen** destination with four individually toggleable children; local pages keep their individual routes. The web navigation is grouped into Overview, Plan, Home, and Custom modules, and `module_order:user:<id>` only changes order inside each group; Dashboard and Settings stay pinned. The Custom modules group is shown only when enabled third-party modules are loaded. The mobile bottom bar has five stable slots — Overview, three configurable favorites, and More. Favorites default to Calendar, Tasks, and Kitchen, are stored per user as `mobile_nav_order:user:<id>`, and automatically fall back to enabled destinations when a selected module becomes unavailable.
 - **Housekeeping (admin):** toggle for automatic payment task creation on work session check-in.
 - **Synchronization (Settings → Sync):** organized by data type into three dedicated pages — Calendar, Contacts, and Reminders — each opening with a status summary before any setup forms:
   - **Calendar sync (`/settings/sync/calendar`):** CalDAV accounts and Webcal/ICS subscriptions are primary. Manage multiple CalDAV accounts (iCloud, Nextcloud, Radicale, Baikal) with per-account calendar selection via checkboxes, two-way sync, and a unified per-event sync-target picker; manage ICS URL subscriptions (add, delete, sync now, set color and visibility); configure sync interval. Google Calendar (OAuth 2.0, multi-calendar selection, read-only mode) and Apple/iCloud CalDAV live inside an accessible **"More providers"** disclosure that always shows current connection state; Apple carries a **legacy** badge directing new iCloud users to the generic CalDAV setup. OAuth callbacks (`sync_ok` / `sync_error`) render a localized banner, expand the matching provider disclosure, and are then stripped from the URL.

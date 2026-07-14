@@ -216,7 +216,7 @@ test('Mutationen werden nie gecacht und nicht angefasst', async () => {
 
 test('Nicht-Whitelist- und /auth/*-GETs werden durchgereicht', async () => {
   const env = loadSw();
-  for (const path of ['/auth/me', '/auth/users', '/budget', '/preferences', '/documents/meta/options']) {
+  for (const path of ['/auth/me', '/auth/users', '/budget', '/pantry', '/preferences', '/documents/meta/options']) {
     const req = new MockRequest(apiUrl(path), { method: 'GET' });
     const { responded } = dispatchFetch(env, req);
     assert.equal(responded, false, `${path} darf nicht gecacht werden`);
