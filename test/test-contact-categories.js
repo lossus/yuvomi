@@ -150,9 +150,10 @@ try {
     assert(status === 409, `Status ${status}`);
   });
 } finally {
-  server.close();
+  await new Promise((resolve, reject) => server.close((err) => err ? reject(err) : resolve()));
+  database.close();
   try { fs.unlinkSync(process.env.DB_PATH); } catch { /* egal */ }
 }
 
 console.log(`\n[Contact-Categories-Test] Ergebnis: ${passed} bestanden, ${failed} fehlgeschlagen\n`);
-process.exit(failed > 0 ? 1 : 0);
+process.exitCode = failed > 0 ? 1 : 0;

@@ -12,7 +12,7 @@ process.env.SESSION_SECURE = 'false';
 process.env.PORT = '13099';
 
 // Dynamic import so env vars are set before module initialization
-const { default: app } = await import('../server/index.js');
+const { server } = await import('../server/index.js');
 await new Promise(r => setTimeout(r, 400));
 
 const BASE = 'http://localhost:13099';
@@ -25,9 +25,13 @@ function cookieHeader(setCookie) {
     .join('; ');
 }
 
-after(() => {
+after(async () => {
+  const { stopScheduler } = await import('../server/services/backup-scheduler.js');
+  stopScheduler();
+  await new Promise((resolve, reject) => server.close((err) => err ? reject(err) : resolve()));
+  const database = await import('../server/db.js');
+  database.get().close();
   rmSync(tmpDir, { recursive: true, force: true });
-  process.exit(0);
 });
 
 // Validation tests run first (DB is empty at this point)

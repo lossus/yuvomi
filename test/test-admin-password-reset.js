@@ -17,7 +17,7 @@ process.env.DB_PATH = join(tmpDir, 'test.db');
 process.env.SESSION_SECURE = 'false';
 process.env.PORT = '13098';
 
-const { default: app } = await import('../server/index.js');
+const { server } = await import('../server/index.js');
 await new Promise((r) => setTimeout(r, 400));
 
 const BASE = 'http://localhost:13098';
@@ -30,9 +30,13 @@ function cookieHeader(setCookie) {
     .join('; ');
 }
 
-after(() => {
+after(async () => {
+  const { stopScheduler } = await import('../server/services/backup-scheduler.js');
+  stopScheduler();
+  await new Promise((resolve, reject) => server.close((err) => err ? reject(err) : resolve()));
+  const database = await import('../server/db.js');
+  database.get().close();
   rmSync(tmpDir, { recursive: true, force: true });
-  process.exit(0);
 });
 
 async function login(username, password) {

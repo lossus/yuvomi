@@ -385,7 +385,7 @@ Begründete Anpassung der vorgeschlagenen Reihenfolge: KWF-003 kommt vor dem dir
 - Komplexität: groß.
 - Empfohlene Reihenfolge: 10; **extern akzeptiert und über Merge-Commit `070f47a0` in Fork-`main` integriert**.
 - Umsetzungsergebnis: Eine produktive v85→v91-Upgrade- und Cross-Domain-Routensuite deckt Recipe→Meal→Shopping→Pantry→Cook sowie Purchase-/Cooking-Undo, Rollback, Idempotenz, OpenAPI, Scopes/Permissions, PWA und exakte Locale-Parität ab. Die reale Browsermatrix fand und schloss KWF-FINDING-023 (verschachteltes Datepicker-Escape mit Fokusrückgabe). Es waren keine Schema-, Migrations-, API-, OpenAPI-, Scope-, Permission-, Service-Worker- oder Locale-Änderungen nötig.
-- Verifikation: alle fokussierten KWF- und betroffenen Regressionstests bestanden; Desktop 1440×900, Tablet 768×1024 und Mobil 390×844 ohne horizontalen Überlauf oder Browserfehler. `npm test` reproduziert auf der einzigen installierten Node-LTS-Version 24.12.0 nach bestandenem `test:task-categories` ausschließlich KWF-FINDING-009 (Node/libuv-Assertion), während die taskrelevanten späteren Suiten separat bestehen.
+- Verifikation: alle fokussierten KWF- und betroffenen Regressionstests bestanden; Desktop 1440×900, Tablet 768×1024 und Mobil 390×844 ohne horizontalen Überlauf oder Browserfehler. KWF-FINDING-009 wurde am 2026-07-14 durch sauberes Schließen der Testserver/-datenbanken und Entrypoint-Scheduler gelöst; `npm test` besteht auf der einzigen installierten Node-LTS-Version 24.12.0 vollständig mit Exit 0.
 
 ## Empfohlener nächster Schritt
 
