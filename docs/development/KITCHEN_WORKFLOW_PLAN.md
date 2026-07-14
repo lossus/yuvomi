@@ -43,7 +43,7 @@ Begründete Anpassung der vorgeschlagenen Reihenfolge: KWF-003 kommt vor dem dir
 | 7 | KWF-007 | Core-Pantry-MVP mit Bewegungsjournal | groß | implementiert und lokal verifiziert |
 | 8 | KWF-008 | idempotenter Einkauf→Vorrat-Transfer | groß | abgeschlossen und in `main` |
 | 9 | KWF-009 | Kochvorgang, Verbrauch und Undo | groß | abgeschlossen und in `main` |
-| 10 | KWF-010 | End-to-End-Regression und UX-Härtung | groß | geplant |
+| 10 | KWF-010 | End-to-End-Regression und UX-Härtung | groß | implementiert und lokal verifiziert |
 
 ## KWF-001 — Repository- und Architektur-Baseline
 
@@ -383,15 +383,17 @@ Begründete Anpassung der vorgeschlagenen Reihenfolge: KWF-003 kommt vor dem dir
   - Alle lokal ausführbaren Tests bestehen; Umgebungsfehler sind isoliert und vollständig dokumentiert.
 - Branch: `feature/kitchen-workflow-integration`.
 - Komplexität: groß.
-- Empfohlene Reihenfolge: 10.
+- Empfohlene Reihenfolge: 10; **implementiert und lokal verifiziert auf `feature/kitchen-workflow-integration`**.
+- Umsetzungsergebnis: Eine produktive v85→v91-Upgrade- und Cross-Domain-Routensuite deckt Recipe→Meal→Shopping→Pantry→Cook sowie Purchase-/Cooking-Undo, Rollback, Idempotenz, OpenAPI, Scopes/Permissions, PWA und exakte Locale-Parität ab. Die reale Browsermatrix fand und schloss KWF-FINDING-023 (verschachteltes Datepicker-Escape mit Fokusrückgabe). Es waren keine Schema-, Migrations-, API-, OpenAPI-, Scope-, Permission-, Service-Worker- oder Locale-Änderungen nötig.
+- Verifikation: alle fokussierten KWF- und betroffenen Regressionstests bestanden; Desktop 1440×900, Tablet 768×1024 und Mobil 390×844 ohne horizontalen Überlauf oder Browserfehler. `npm test` reproduziert auf der einzigen installierten Node-LTS-Version 24.12.0 nach bestandenem `test:task-categories` ausschließlich KWF-FINDING-009 (Node/libuv-Assertion), während die taskrelevanten späteren Suiten separat bestehen.
 
 ## Empfohlener nächster Schritt
 
-1. KWF-009 ist extern akzeptiert und über Merge-Commit `f89b2ec6` in Fork-`main` integriert.
-2. Keinen Folge-Task in derselben Session beginnen. KWF-010 erst in einer neuen Session reservieren und analysieren.
+1. KWF-010 ist auf `feature/kitchen-workflow-integration` implementiert, dokumentiert und lokal verifiziert; externe Prüfung bleibt die nächste Freigabegrenze.
+2. Keinen Folge-Task in derselben Session beginnen und KWF-010 nicht selbst nach `main` mergen.
 3. `upstream/main` bleibt wegen der dokumentierten Divergenz unverändert; eine Integration ist ein separater Repository-Task.
 
-KWF-009 interpretiert weiterhin keine Freitextmenge und führt keinen unbestätigten Verbrauch aus. Vorschläge sind deterministisch und editierbar; jede Bestätigung und jedes Undo bleibt journalisiert.
+KWF-010 bestätigt die bestehenden Grenzen: Freitextmengen werden nicht interpretiert, Bestandsänderungen bleiben explizit und journalisiert, Pantry-API-Daten bleiben network-only und Cross-Domain-Schreibvorgänge sind atomar.
 
 ## Review-Gates pro Task
 

@@ -70,6 +70,16 @@ test('Kalenderraster unterstützt Arrow, Home, End und Monatswechsel per Tastatu
   assert(/e\.key\s*===\s*'Home'\s*\?\s*-weekday\s*:\s*6\s*-\s*weekday/.test(comp),
     'Home/End müssen Montag-basiert zum Wochenanfang/-ende navigieren');
 });
+
+test('Escape schließt nur den Picker und nicht ein übergeordnetes Modal', () => {
+  const escapeHandler = comp.match(/el\.addEventListener\('keydown',[\s\S]*?if \(e\.key === 'Tab'\)/)?.[0] ?? '';
+  assert(/e\.preventDefault\(\)/.test(escapeHandler), 'Escape muss das Browser-Default unterbinden');
+  assert(/e\.stopPropagation\(\)/.test(escapeHandler), 'Escape darf nicht zum Modal-Handler weiterlaufen');
+  assert(/const trigger = this\._activeSub\?\.trigger/.test(escapeHandler),
+    'Escape muss den Trigger vor dem Schließen sichern');
+  assert(/this\._closePopover\(\)/.test(escapeHandler), 'Escape muss den Picker schließen');
+  assert(/trigger\?\.focus\(\)/.test(escapeHandler), 'Escape muss den Fokus zum Trigger zurückführen');
+});
 test('Tagesbuttons bleiben native Buttons für Enter und Touch-Klick', () => {
   assert(/btn\.type\s*=\s*'button'/.test(comp), 'Tage müssen native Buttons sein');
   assert(/btn\.addEventListener\('click'/.test(comp), 'Tage brauchen den gemeinsamen Klick-/Touch-Pfad');
