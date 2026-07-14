@@ -619,12 +619,12 @@ Neue i18n-Namensräume: KWF-006 implementiert `quantity.*`; KWF-007 implementier
 ### Aktueller Handoff — KWF-FINDING-009
 
 - Letzter abgeschlossener Schritt: Der Windows/Node-24-Prozessabbruch wurde in den vier betroffenen Test-Harnesses und im Server-Lifecycle behoben; der vollständige `npm test`-Lauf endete mit Exit 0.
-- Aktueller Branch: `fix/windows-category-test-cleanup`; `main` und `origin/main` waren bei Branch-Erstellung auf `6bccad89` synchron. `upstream/main` wurde nur gefetcht und nicht verändert.
-- Commit-/Working-Tree-Status: Änderungen sind lokal, noch nicht committed oder gepusht. Vor dem Commit folgen `git status`, `git diff --check` und `git diff --stat`.
+- Aktueller Branch: `main`; der Fix-Branch `fix/windows-category-test-cleanup` wurde über Merge-Commit `9a4d6a94` integriert. `upstream/main` wurde nur gefetcht und nicht verändert.
+- Commit-/Working-Tree-Status: Feature-Commit `bb72733f` ist zu `origin/fix/windows-category-test-cleanup` gepusht und über `9a4d6a94` in `main` integriert; dieser Handoff-Abgleich folgt als reiner Dokumentationscommit vor dem Push von `origin/main`.
 - Geänderte Dateien: `server/index.js`, `test/test-task-categories.js`, `test/test-contact-categories.js`, `test/test-admin-password-reset.js`, `test/test-setup.js`, Kitchen-Plan und -Memory.
 - Untersucht, aber fachlich unverändert: Task-/Contact-Category-Routen und Datenmodelle, Auth-/Setup-API, Calendar-Sync-Aufgaben, Push-/Medication-/Split-Expense-Scheduler sowie sämtliche durch `npm test` abgedeckten Fachbereiche.
 - Bestätigte Annahmen/Entscheidungen: Der Fehler war ein Test-Lifecycle-Problem, kein Kitchen-Fachfehler. Abgewartetes `server.close()`, geschlossene SQLite-Verbindungen und `process.exitCode` verhindern die libuv-Assertion. Der bestehende HTTP-Listen-Handle kann additiv exportiert werden; `unref()` ändert Scheduler-Ausführung bei laufendem Server nicht, verhindert aber künstliches Offenhalten nach dessen Schließung. Keine neue ADR, Migration, API-, OpenAPI-, Scope-, Permission-, Frontend-, i18n- oder Service-Worker-Änderung war nötig.
 - Automatische Tests bestanden: `npm run test:task-categories` 13/13, `npm run test:contact-categories` 12/12, `npm run test:admin-password-reset` 3/3 und `npm run test:setup` 13/13, jeweils unter Windows/Node 24.12.0; `npm test` vollständig mit Exit 0. `git diff --check` bestand.
 - Offene Findings: KWF-FINDING-009 ist gelöst. KWF-FINDING-013 (Fork-/Upstream-Divergenz) bleibt als separater Repository-Integrations-Follow-up offen.
-- Nächster sinnvoller Schritt: Fix committen, zu `origin` pushen und nach erfolgreicher Post-Merge-Prüfung in Fork-`main` integrieren; danach KWF-FINDING-013 auf einem eigenen Integrationsbranch analysieren.
+- Nächster sinnvoller Schritt: Diesen Handoff committen, `main` zu `origin` pushen und danach KWF-FINDING-013 auf einem eigenen Integrationsbranch analysieren.
 - Nicht erneut analysieren: libuv-Reproduktion, Category-Harness-Ursache, Entrypoint-Test-Lifecycle, Server-/Backup-Scheduler-Cleanup und Nichtbetroffenheit der Fachverträge sind geklärt.
