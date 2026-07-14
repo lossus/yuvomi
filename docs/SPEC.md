@@ -165,7 +165,7 @@ Custom, household-wide category list for shopping items. Replaces the old hardco
 | created_at | TEXT | |
 | updated_at | TEXT | |
 
-### Pantry (migrations v89-v90)
+### Pantry and Cooking Journal (migrations v89-v91)
 
 Pantry items represent stock lots, so the same product may exist more than once with different locations or expiry dates. Structured amounts use `g`, `kg`, `ml`, or `l`; explicit free-text quantities remain available and are never interpreted automatically.
 
@@ -173,7 +173,10 @@ Pantry items represent stock lots, so the same product may exist more than once 
 |-------|-------------------------|
 | `pantry_locations` | Stable `key`, translated `label_key` or custom `name`, and `sort_order`; seeded with fridge, freezer, cupboard, cellar, and other. |
 | `pantry_items` | Stock-lot metadata, location FK, cached non-negative structured balance or free-text display, optional minimum and expiry date, soft-delete timestamp. |
-| `inventory_movements` | Immutable initial, adjustment, correction, and reversal journal with actor, reason, balance snapshot, unique idempotency key, and at most one reversal per movement. Migration 90 adds an optional Shopping Item FK (`ON DELETE SET NULL`) for purchase provenance and indexed active-transfer lookup. |
+| `inventory_movements` | Immutable initial, adjustment, correction, and reversal journal with actor, reason, balance snapshot, unique idempotency key, and at most one reversal per movement. Migration 90 adds optional Shopping Item provenance; migration 91 adds optional Cooking Event provenance. Cooking consumption remains an `adjustment`, avoiding a destructive rebuild of the published movement-type CHECK. |
+| `meal_cooking_events` | Confirmed or undone cooking event for one concrete Meal instance, with durable meal title/date/type snapshots, actor, timestamps, and at most one active event per existing Meal. |
+| `meal_cooking_ingredients` | Immutable meal-ingredient requirement snapshot and outcome (`consumed`, `partial`, `missing`, `unknown`), optionally linked to a Missing-to-Shopping item. |
+| `meal_cooking_allocations` | Confirmed positive amount/unit assigned to a Pantry lot, with lot-name snapshot and unique immutable movement reference. |
 
 The stock cache and its journal entry are always written in the same SQLite transaction. Metadata updates cannot mutate stock; deletion hides the lot but retains its history.
 
@@ -1382,6 +1385,7 @@ REST API: `GET/POST /api/v1/pantry`, `GET/PATCH/DELETE /api/v1/pantry/:id`, `POS
 - **Recipe integration:** Select a saved recipe from the meal modal to auto-fill title, notes, URL, and ingredients. Scale ingredient quantities by a numeric factor. Save the current meal as a new recipe with one click.
 - **Optional direct shopping import:** The create dialog can add the concrete meal's ingredients to a selected shopping list in the same request. The option is off by default, preselects the first visibly ordered shopping list, and atomically creates the meal, shopping items, provenance snapshots, and transfer flags. A recurring meal imports only its concrete start occurrence; future occurrences are never imported implicitly.
 - **Weekly meal repeats:** New meals can be marked as weekly repeats from the advanced meal dialog. Yuvomi stores a recurrence template, materializes future occurrences for each loaded week, shows a repeat badge on generated meals, and records per-date skip exceptions when a single occurrence is deleted. Editing or deleting a recurring meal offers a scope choice — **this date only** or the **whole series**: series edits propagate the content fields and ingredients to the template and every materialized occurrence, while series deletion removes the template together with all of its occurrences. (v0.78.1, series scope v1.1.0)
+- **Confirmed cooking and Pantry consumption:** a writable Meal card can open a read-only review through `POST /api/v1/meals/:id/cook-preview`. Suggestions only use exact case-insensitive ingredient names, compatible explicit mass/volume units, and earliest expiry first. Users may edit partial allocations across multiple Pantry lots or explicitly allocate an otherwise unknown free-text requirement; no free text or fuzzy name is interpreted automatically. `POST /api/v1/meals/:id/cook` requires Pantry write access and atomically creates the event, snapshots, journaled withdrawals, and optional selected Missing-to-Shopping items with provenance (which additionally require Shopping write). A unique active-event rule prevents duplicate/parallel consumption and recurring Meals are scoped to the concrete instance. `POST /api/v1/meals/:id/cook/undo` restores every consumed amount through immutable counter-movements; audit snapshots and previously created Shopping items remain. Meal GET responses add a nullable `cooking_event` without changing existing fields.
 - **Customizable meal visibility:** In Settings, users can toggle which meal types (breakfast, lunch, dinner, snack) are shown in the planner and the dashboard's Today Meals widget. Stored as household-wide preference in `sync_config` (key: `visible_meal_types`). At least one type must remain active.
 
 ### Recipes (`/recipes`)

@@ -1010,6 +1010,52 @@ const MIGRATIONS_SQL = {
       ON inventory_movements(shopping_item_id, created_at DESC, id DESC)
       WHERE shopping_item_id IS NOT NULL;
   `,
+  91: `
+    CREATE TABLE IF NOT EXISTS meal_cooking_events (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      meal_id INTEGER REFERENCES meals(id) ON DELETE SET NULL,
+      recipe_id INTEGER REFERENCES recipes(id) ON DELETE SET NULL,
+      meal_title_snapshot TEXT NOT NULL,
+      meal_date_snapshot TEXT NOT NULL,
+      meal_type_snapshot TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'confirmed' CHECK(status IN ('confirmed', 'undone')),
+      actor_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+      undone_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
+      cooked_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+      undone_at TEXT,
+      created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+    );
+    CREATE TABLE IF NOT EXISTS meal_cooking_ingredients (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      cooking_event_id INTEGER NOT NULL REFERENCES meal_cooking_events(id) ON DELETE CASCADE,
+      meal_ingredient_id INTEGER REFERENCES meal_ingredients(id) ON DELETE SET NULL,
+      name_snapshot TEXT NOT NULL,
+      quantity_snapshot TEXT,
+      amount_snapshot REAL,
+      unit_snapshot TEXT,
+      category_snapshot TEXT,
+      outcome TEXT NOT NULL CHECK(outcome IN ('consumed', 'partial', 'missing', 'unknown')),
+      missing_shopping_item_id INTEGER REFERENCES shopping_items(id) ON DELETE SET NULL,
+      created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+      CHECK((amount_snapshot IS NULL AND unit_snapshot IS NULL) OR (amount_snapshot IS NOT NULL AND amount_snapshot > 0 AND unit_snapshot IN ('g', 'kg', 'ml', 'l')))
+    );
+    CREATE TABLE IF NOT EXISTS meal_cooking_allocations (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      cooking_ingredient_id INTEGER NOT NULL REFERENCES meal_cooking_ingredients(id) ON DELETE CASCADE,
+      pantry_item_id INTEGER REFERENCES pantry_items(id) ON DELETE SET NULL,
+      pantry_item_name_snapshot TEXT NOT NULL,
+      amount REAL NOT NULL CHECK(amount > 0),
+      unit TEXT NOT NULL CHECK(unit IN ('g', 'kg', 'ml', 'l')),
+      movement_id INTEGER NOT NULL UNIQUE REFERENCES inventory_movements(id) ON DELETE RESTRICT,
+      created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+    );
+    ALTER TABLE inventory_movements ADD COLUMN cooking_event_id INTEGER REFERENCES meal_cooking_events(id) ON DELETE SET NULL;
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_meal_cooking_events_active ON meal_cooking_events(meal_id) WHERE status = 'confirmed' AND meal_id IS NOT NULL;
+    CREATE INDEX IF NOT EXISTS idx_meal_cooking_events_meal_created ON meal_cooking_events(meal_id, created_at DESC, id DESC);
+    CREATE INDEX IF NOT EXISTS idx_meal_cooking_ingredients_event ON meal_cooking_ingredients(cooking_event_id, id);
+    CREATE INDEX IF NOT EXISTS idx_meal_cooking_allocations_ingredient ON meal_cooking_allocations(cooking_ingredient_id, id);
+    CREATE INDEX IF NOT EXISTS idx_inventory_movements_cooking_event ON inventory_movements(cooking_event_id, created_at DESC, id DESC) WHERE cooking_event_id IS NOT NULL;
+  `,
 };
 
 export { MIGRATIONS_SQL };
