@@ -138,6 +138,7 @@ Analysierte Implementierungsbereiche:
 | 2026-07-14 | Codex | KWF-009 / `feature/meal-cooking-consumption` | Untersucht und geändert: Migration 91/Schema-Test, Meals-Route, Inventory-/Cooking-Service, OpenAPI, Meals-UI/-CSS, `meals.cook*` in 23 Locales, DB-/Meals-/Pantry-/Shopping-/Frontend-Regressionen, SPEC/Changelog/Plan/Memory | Cooking-Event mit read-only Preview, exakten kompatiblen FIFO-Vorschlägen, manueller Mehrfachlos-Allokation, atomarem Verbrauch und optionalem Missing→Shopping sowie journalisiertem Undo implementiert, dokumentiert und automatisch/im Browser verifiziert | extern akzeptiert und über Merge-Commit `f89b2ec6` in Fork-`main` integriert | `main` wird mit diesem Integrations-Handoff zu `origin/main` gepusht; `upstream/main` bleibt unverändert; KWF-FINDING-009 offen, kein KWF-010-Scope begonnen |
 | 2026-07-14 | Codex | KWF-010 / `feature/kitchen-workflow-integration` | Untersucht: Migrationen 86–91, DB-/Route-/Service-/OpenAPI-/Scope-/Permission-/SW-/Locale-Verträge und KWF-002–009-Suiten; geändert: produktive Cross-Domain-/Upgrade-Suite, Datepicker-Escape/Fokus-Vertrag, Package-Script, SPEC/Changelog/Plan/Memory | Gesamtworkflow, Legacy-Upgrade, Rollbacks, Idempotenz, Undo und Verträge automatisiert; verschachteltes Escape im realen Browser gefunden und behoben; Desktop/Tablet/Mobil verifiziert | extern akzeptiert und über Merge-Commit `070f47a0` in Fork-`main` integriert | `main` und `origin/main` nach Merge-Push synchron; `upstream/main` blieb unverändert; KWF-FINDING-009 reproduziert, KWF-FINDING-022/-023 gelöst; kein Folge-Task |
 | 2026-07-14 | Codex | KWF-FINDING-009 / `fix/windows-category-test-cleanup` | Untersucht und geändert: Task-/Contact-Categories-Harnesses, Admin-Passwort-Reset-/Setup-Entrypoint-Tests, exportierter Server-Handle und unrefte Calendar-Sync-Timer; fokussierte Reproduktion und Vollsuite | nicht abgewartetes `server.close()`, sofortiges `process.exit()` sowie ein nicht schließbarer echter Server-/Backup-Scheduler-Lifecycle waren die Ursache; keine Fachlogik betroffen | implementiert und lokal verifiziert; `npm test` Exit 0 | KWF-FINDING-013 folgt separat auf eigenem Integrationsbranch; keine aktive Fremdreservierung |
+| 2026-07-14 | Codex | KWF-FINDING-013 / `integration/upstream-v1.22.2` | Untersucht: 20 Upstream-Commits, 285 Upstream-Dateien, 94 Fork-Dateien, 36 Überschneidungen und Merge-Tree; reserviert bleiben Package/Changelog/SPEC/DB/Routes/UI/CSS/Locales/SW/Tests sowie Upstream-Screenshots/-Site | nur vier Textkonflikte, aber veröffentlichte Upstream-Migrationen 86/87 kollidieren semantisch mit veröffentlichten Fork-Kitchen-Migrationen 86/87; siehe KWF-FINDING-024 | Analyse angehalten / Architekturentscheidung erforderlich | keine aktive Fremdreservierung; `upstream` bleibt read-only, kein Merge gestartet |
 
 ## 5. Architekturentscheidungen
 
@@ -450,6 +451,15 @@ Neue i18n-Namensräume: KWF-006 implementiert `quantity.*`; KWF-007 implementier
 - Status: offen; vor KWF-010 live mit 32/20 Commits verifiziert, keine taskbezogene Upstream-Synchronisierung vorgenommen.
 - Task: Repository-Integration, nicht KWF-003-Feature-Scope.
 
+### KWF-FINDING-024 — Fork und Upstream haben Migration 86/87 unterschiedlich veröffentlicht
+
+- Betroffen: `server/db.js`, `server/db-schema-test.js` und jeder Upgradepfad zwischen Fork-Kitchen und Upstream v1.21.0/v1.22.x.
+- Schweregrad: hoch für die Repository-Integration.
+- Auswirkung: Im Fork sind 86 `shopping_lists.sort_order` und 87 `shopping_item_sources`; Upstream verwendet 86 für `task_documents` und 87 für `holiday_cache.group_code`. Ein normaler Merge kann nur eine Bedeutung je Versionsnummer behalten. Einfaches Umnummerieren der Upstream-Migrationen auf 92/93 schützt bestehende Fork-Datenbanken und frische Installationen, unterstützt aber ohne zusätzliche Reconciliation keinen Wechsel einer bereits auf Upstream 1.22.x migrierten Datenbank zum Fork: Dort würden die Kitchen-Migrationen 86/87 wegen der belegten Versionsnummern übersprungen und spätere abhängige Migrationen könnten scheitern.
+- Empfehlung: Vor der Integration explizit entscheiden, ob ausschließlich bestehende Fork-/Fresh-Install-Upgrades unterstützt werden (Upstream 86/87 werden 92/93) oder ob zusätzlich ein bidirektionaler Lineage-Reconciliation-Pfad für bereits migrierte Upstream-Datenbanken entworfen und getestet werden muss. Keine veröffentlichte Migration stillschweigend umschreiben.
+- Status: offen; Merge vor jeder Konfliktauflösung angehalten.
+- Task: KWF-FINDING-013 Repository-Integration.
+
 ### KWF-FINDING-014 — KWF-004-API-Vertrag ist in der Task-2-Analyse veraltet
 
 - Betroffene Dateien: `docs/TASK2_RECIPE_MEAL_SHOPPING_ANALYSIS.md`, `docs/development/KITCHEN_WORKFLOW_PLAN.md`, geplant `server/routes/meals.js` und `public/pages/meals.js`.
@@ -616,7 +626,7 @@ Neue i18n-Namensräume: KWF-006 implementiert `quantity.*`; KWF-007 implementier
 - Nächster sinnvoller Schritt: Der geplante Kitchen-Workflow KWF-001 bis KWF-010 ist abgeschlossen. Nur auf neue ausdrückliche Anweisung einen weiteren Task beginnen.
 - Nicht erneut analysieren: produktiver v85→v91-Upgradepfad, Recipe→Meal→Shopping→Pantry→Cook/Undo-Datenfluss, bestehende Transaktions-/Rollback-/Replay-Grenzen, OpenAPI-/Scope-/Permission-Zuordnung, Network-only-Pantry-API, vollständiges Locale-Keyset und verschachteltes Datepicker-Escape/Fokusverhalten sind geklärt.
 
-### Aktueller Handoff — KWF-FINDING-009
+### Vorheriger Handoff — KWF-FINDING-009
 
 - Letzter abgeschlossener Schritt: Der Windows/Node-24-Prozessabbruch wurde in den vier betroffenen Test-Harnesses und im Server-Lifecycle behoben; der vollständige `npm test`-Lauf endete mit Exit 0.
 - Aktueller Branch: `main`; der Fix-Branch `fix/windows-category-test-cleanup` wurde über Merge-Commit `9a4d6a94` integriert. `upstream/main` wurde nur gefetcht und nicht verändert.
@@ -628,3 +638,15 @@ Neue i18n-Namensräume: KWF-006 implementiert `quantity.*`; KWF-007 implementier
 - Offene Findings: KWF-FINDING-009 ist gelöst. KWF-FINDING-013 (Fork-/Upstream-Divergenz) bleibt als separater Repository-Integrations-Follow-up offen.
 - Nächster sinnvoller Schritt: Diesen Handoff committen, `main` zu `origin` pushen und danach KWF-FINDING-013 auf einem eigenen Integrationsbranch analysieren.
 - Nicht erneut analysieren: libuv-Reproduktion, Category-Harness-Ursache, Entrypoint-Test-Lifecycle, Server-/Backup-Scheduler-Cleanup und Nichtbetroffenheit der Fachverträge sind geklärt.
+
+### Aktueller Handoff — KWF-FINDING-013
+
+- Letzter abgeschlossener Schritt: `origin/main` und `upstream/main` wurden gefetcht; Divergenz, Upstream-Commits, vollständige Dateimenge, Überschneidungen und ein read-only Merge-Tree wurden analysiert. Kein Merge wurde gestartet.
+- Aktueller Branch: `integration/upstream-v1.22.2`, erstellt von Fork-`main` bei `1dc7cafd`; `main...origin/main` war 0/0, `main...upstream/main` 39/20.
+- Commit-/Working-Tree-Status: Nur diese Reservierungs-/Finding-Dokumentation ist uncommitted. `upstream` wurde nicht verändert oder beschrieben.
+- Untersuchte Dateien/Bereiche: alle 20 Upstream-Commits bis `dfa6729e` (v1.22.2), 285 Upstream-geänderte und 94 Fork-geänderte Dateien seit Merge-Base `e8e799bc`; 36 überlappende Pfade. Der Merge-Tree meldet nur `CHANGELOG.md`, `package.json`, `server/db.js` und `server/db-schema-test.js` als Textkonflikte.
+- Bestätigte Annahmen: UI-/Locale-/CSS-/SW-/OpenAPI-Überschneidungen sind syntaktisch automatisch kombinierbar, müssen nach einem Merge aber fachlich regressiv getestet werden. `package.json` muss Fork-Testskripte und Upstream-`test:task-documents` zusammenführen sowie Version 1.22.2/Helmet 8.3.0 übernehmen. Changelog-Einträge beider Linien müssen erhalten bleiben.
+- Blocker/Finding: KWF-FINDING-024. Fork und Upstream haben jeweils unterschiedliche Migrationen 86/87 veröffentlicht. Die Wahl zwischen Fork-/Fresh-only-Upgrade und zusätzlicher Upstream→Fork-Lineage-Reconciliation verändert den unterstützten Upgradevertrag und darf nicht stillschweigend getroffen werden.
+- Ausgeführte Tests: Noch keine Implementierungstests, da vor dem Merge angehalten wurde. Read-only `git merge-tree --write-tree main upstream/main` bestätigte vier Konfliktdateien; KWF-FINDING-009 war zuvor mit vollständigem `npm test` Exit 0 abgeschlossen.
+- Nächster sinnvoller Schritt: Architekturentscheidung zum Migrations-Lineage-Support treffen; danach erst Merge durchführen, Migrationen konfliktfrei abbilden und DB-/Task-Documents-/Holidays-/Kitchen-/Frontend-/Vollsuite ausführen.
+- Nicht erneut analysieren: Commitliste, Merge-Base, 39/20-Divergenz, 285/94/36-Dateimengen und die vier reinen Textkonflikte sind verifiziert. Neu zu entwerfen ist ausschließlich der Migrations-Reconciliation-Vertrag.
