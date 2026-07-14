@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.22.1] - 2026-07-14
+
+### Fixed
+- Category manager (Contacts, Budget, Tasks): category names were shown in black and became unreadable in dark mode. The reusable category-manager component's styles lived only in the settings stylesheet, which is not loaded on those pages, so the names fell back to the browser default color. The styles are now loaded globally, so category names use the correct theme text color everywhere.
+
 ## [1.22.0] - 2026-07-14
 
 ### Added
