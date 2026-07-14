@@ -16,6 +16,7 @@ import { ingredientRowHTML } from '/utils/ingredient-row.js';
 import { addLocalDays, startOfLocalWeekKey, toLocalDateKey } from '/utils/date.js';
 import { normalizeRecipeMealTypes, recipeSupportsMealType } from '/utils/recipe-meal-types.js';
 import { structuredQuantityFromInput } from '/utils/quantity.js';
+import { moduleAccess } from '/permissions.js';
 
 // --------------------------------------------------------
 // Konstanten
@@ -402,6 +403,8 @@ function renderSlot(date, type, mealsForDay) {
     const ingLabel    = ingCount > 0 ? (ingCount !== 1 ? t('meals.ingredientCountPlural', { count: ingCount }) : t('meals.ingredientCount', { count: ingCount })) : '';
     const ingDoneLabel = ingCount > 0 && ingDone === ingCount ? ' ✓' : '';
     const canTransfer  = ingCount > 0 && ingDone < ingCount;
+    const canCook = moduleAccess('meals') === 'write' && moduleAccess('pantry') === 'write';
+    const cookingEvent = meal.cooking_event;
     const recurrenceBadge = meal.recurrence_template_id
       ? `<span class="meal-card__recurrence" aria-label="${t('meals.recurrenceBadge')}"><i data-lucide="repeat-2" class="icon-sm" aria-hidden="true"></i></span>`
       : '';
@@ -412,8 +415,9 @@ function renderSlot(date, type, mealsForDay) {
            data-meal-id="${meal.id}"
            role="button" tabindex="0">
         <div class="meal-card__title"><span class="meal-card__title-text">${esc(meal.title)}</span>${recurrenceBadge}</div>
-        ${ingLabel ? `<div class="meal-card__meta">
-          <span class="meal-card__ingredients-count">${ingLabel}${esc(ingDoneLabel)}</span>
+        ${ingLabel || cookingEvent ? `<div class="meal-card__meta">
+          ${ingLabel ? `<span class="meal-card__ingredients-count">${ingLabel}${esc(ingDoneLabel)}</span>` : ''}
+          ${cookingEvent ? `<span class="meal-card__cooked"><i data-lucide="check-circle-2" class="icon-sm" aria-hidden="true"></i>${t('meals.cooked')}</span>` : ''}
         </div>` : ''}
         <div class="meal-card__actions">
           ${meal.recipe_url ? `<a class="meal-card__action-btn meal-card__action-btn--recipe"
@@ -428,6 +432,11 @@ function renderSlot(date, type, mealsForDay) {
             data-meal-id="${meal.id}"
             aria-label="${t('meals.transferToShoppingList')}"
           ><i data-lucide="shopping-cart" class="icon-sm" aria-hidden="true"></i></button>` : ''}
+          ${canCook ? `<button class="meal-card__action-btn meal-card__action-btn--cook${cookingEvent ? ' is-active' : ''}"
+            data-action="${cookingEvent ? 'undo-cook' : 'cook-meal'}"
+            data-meal-id="${meal.id}"
+            aria-label="${cookingEvent ? t('meals.cookUndo') : t('meals.cookAction')}"
+          ><i data-lucide="${cookingEvent ? 'undo-2' : 'chef-hat'}" class="icon-sm" aria-hidden="true"></i></button>` : ''}
           <button class="meal-card__action-btn"
             data-action="delete-meal"
             data-meal-id="${meal.id}"
@@ -526,13 +535,23 @@ function wireGrid(grid) {
 
     if (action === 'transfer-meal') {
       await transferMeal(parseInt(btn.dataset.mealId, 10));
+      return;
+    }
+
+    if (action === 'cook-meal') {
+      await openCookingReview(parseInt(btn.dataset.mealId, 10));
+      return;
+    }
+
+    if (action === 'undo-cook') {
+      await undoCooking(parseInt(btn.dataset.mealId, 10));
     }
   });
 
   grid.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
       const card = e.target.closest('[data-action="edit-meal"]');
-      if (card) { e.preventDefault(); card.click(); }
+      if (card && e.target === card) { e.preventDefault(); card.click(); }
     }
   });
 
@@ -678,7 +697,7 @@ function wireDragDrop(grid) {
   grid.addEventListener('pointerdown', (e) => {
     const card = e.target.closest('.meal-card');
     if (!card) return;
-    if (e.target.closest('[data-action="delete-meal"], [data-action="transfer-meal"], [data-action="open-recipe"]')) return;
+    if (e.target.closest('[data-action="delete-meal"], [data-action="transfer-meal"], [data-action="open-recipe"], [data-action="cook-meal"], [data-action="undo-cook"]')) return;
 
     const slot = card.closest('.meal-slot');
     if (!slot) return;
@@ -783,7 +802,224 @@ async function moveMeal(mealId, targetDate, targetType) {
 }
 
 // --------------------------------------------------------
-// Modal
+// Cooking review / Pantry consumption
+// --------------------------------------------------------
+
+function cookStatusLabel(status) {
+  const keys = {
+    matched: 'meals.cookStatusMatched',
+    partial: 'meals.cookStatusPartial',
+    missing: 'meals.cookStatusMissing',
+    unknown: 'meals.cookStatusUnknown',
+  };
+  return t(keys[status] || keys.unknown);
+}
+
+function cookingLotLabel(candidate) {
+  const location = candidate.location_label_key
+    ? t(candidate.location_label_key)
+    : candidate.location_name || '';
+  const expiry = candidate.expiry_date ? ` · ${t('meals.cookExpires')} ${formatDate(candidate.expiry_date)}` : '';
+  return `${candidate.name} · ${candidate.amount} ${candidate.unit}${location ? ` · ${location}` : ''}${expiry}`;
+}
+
+function cookingAllocationRow(ingredient, selectedId = null, amount = '') {
+  const candidates = ingredient.candidates || [];
+  if (!candidates.length) return '';
+  const selected = candidates.find((candidate) => candidate.pantry_item_id === selectedId) || candidates[0];
+  const options = candidates.map((candidate) => `
+    <option value="${candidate.pantry_item_id}" data-unit="${candidate.unit}" data-available="${candidate.amount}"
+      ${candidate.pantry_item_id === selected.pantry_item_id ? 'selected' : ''}>${esc(cookingLotLabel(candidate))}</option>
+  `).join('');
+  return `
+    <div class="cook-allocation-row">
+      <select class="form-input cook-allocation-row__lot" aria-label="${t('meals.cookPantryLot')}">${options}</select>
+      <label class="cook-allocation-row__amount-label">
+        <span class="sr-only">${t('meals.cookAmount')}</span>
+        <input class="form-input cook-allocation-row__amount" type="number" min="0" step="any"
+          value="${amount === '' ? '' : esc(String(amount))}" inputmode="decimal" aria-label="${t('meals.cookAmount')}">
+        <span class="cook-allocation-row__unit">${selected.unit}</span>
+      </label>
+      <button class="btn btn--icon cook-allocation-row__remove" type="button" aria-label="${t('meals.cookRemoveAllocation')}">
+        <i data-lucide="x" class="icon-sm" aria-hidden="true"></i>
+      </button>
+    </div>`;
+}
+
+function cookingIngredientHTML(ingredient) {
+  const suggested = (ingredient.suggested_allocations || []).map((allocation) =>
+    cookingAllocationRow(ingredient, allocation.pantry_item_id, allocation.amount)
+  ).join('');
+  const quantity = ingredient.amount !== null && ingredient.unit
+    ? `${ingredient.amount} ${ingredient.unit}`
+    : ingredient.quantity || t('meals.cookQuantityUnknown');
+  return `
+    <section class="cook-ingredient" data-ingredient-id="${ingredient.ingredient_id}">
+      <div class="cook-ingredient__header">
+        <div>
+          <strong>${esc(ingredient.name)}</strong>
+          <span class="cook-ingredient__quantity">${esc(quantity)}</span>
+        </div>
+        <span class="cook-status cook-status--${ingredient.status}">${cookStatusLabel(ingredient.status)}</span>
+      </div>
+      <div class="cook-ingredient__allocations">${suggested}</div>
+      ${ingredient.candidates?.length ? `
+        <button class="btn btn--secondary cook-ingredient__add" type="button">
+          <i data-lucide="plus" class="icon-sm" aria-hidden="true"></i>${t('meals.cookAddAllocation')}
+        </button>` : `<p class="form-hint">${t('meals.cookNoCompatibleStock')}</p>`}
+      <label class="cook-ingredient__missing">
+        <input type="checkbox" class="cook-ingredient__missing-check">
+        <span>${t('meals.cookAddMissingToShopping')}</span>
+      </label>
+    </section>`;
+}
+
+function wireCookingAllocationRow(row) {
+  const select = row.querySelector('.cook-allocation-row__lot');
+  const amount = row.querySelector('.cook-allocation-row__amount');
+  const unit = row.querySelector('.cook-allocation-row__unit');
+  select?.addEventListener('change', () => {
+    const option = select.selectedOptions[0];
+    if (unit) unit.textContent = option?.dataset.unit || '';
+    if (amount && option?.dataset.available) amount.max = option.dataset.available;
+  });
+  select?.dispatchEvent(new Event('change'));
+  row.querySelector('.cook-allocation-row__remove')?.addEventListener('click', () => row.remove());
+}
+
+async function openCookingReview(mealId) {
+  try {
+    const response = await api.post(`/meals/${mealId}/cook-preview`, {});
+    const preview = response.data;
+    const canShop = moduleAccess('shopping') === 'write' && state.lists.length > 0;
+    const listOptions = state.lists.map((list) => `<option value="${list.id}">${esc(list.name)}</option>`).join('');
+    openSharedModal({
+      title: t('meals.cookTitle', { title: preview.meal.title }),
+      size: 'lg',
+      content: `
+        <div class="cook-review">
+          <p class="form-hint cook-review__hint">${t('meals.cookReviewHint')}</p>
+          <div class="cook-review__ingredients">
+            ${preview.ingredients.length
+              ? preview.ingredients.map(cookingIngredientHTML).join('')
+              : `<p class="empty-state__text">${t('meals.cookNoIngredients')}</p>`}
+          </div>
+          <div class="cook-missing-shopping">
+            <label class="toggle">
+              <input type="checkbox" id="cook-missing-enabled" ${canShop ? '' : 'disabled'}>
+              <span class="toggle__track"></span>
+              <span>${t('meals.cookMissingToShopping')}</span>
+            </label>
+            <label class="form-group" for="cook-missing-list">
+              <span class="form-label">${t('meals.shoppingImportListLabel')}</span>
+              <select class="form-input" id="cook-missing-list" disabled>${listOptions || `<option>${t('meals.noShoppingLists')}</option>`}</select>
+            </label>
+            <p class="form-hint">${canShop ? t('meals.cookMissingHint') : t('meals.cookMissingUnavailable')}</p>
+          </div>
+          <div class="modal-panel__footer cook-review__footer" style="border:none;padding:0">
+            <button class="btn btn--secondary" id="cook-cancel" type="button">${t('common.cancel')}</button>
+            <button class="btn btn--primary" id="cook-confirm" type="button">${t('meals.cookConfirm')}</button>
+          </div>
+        </div>`,
+      onSave(panel) {
+        panel.querySelectorAll('.cook-allocation-row').forEach(wireCookingAllocationRow);
+        panel.querySelectorAll('.cook-ingredient').forEach((section) => {
+          const ingredient = preview.ingredients.find((entry) => entry.ingredient_id === Number(section.dataset.ingredientId));
+          section.querySelector('.cook-ingredient__add')?.addEventListener('click', () => {
+            const list = section.querySelector('.cook-ingredient__allocations');
+            list.insertAdjacentHTML('beforeend', cookingAllocationRow(ingredient));
+            wireCookingAllocationRow(list.lastElementChild);
+            window.lucide?.createIcons();
+          });
+        });
+        const missingEnabled = panel.querySelector('#cook-missing-enabled');
+        const missingList = panel.querySelector('#cook-missing-list');
+        const syncMissing = () => {
+          if (missingList) missingList.disabled = !missingEnabled?.checked;
+          panel.querySelectorAll('.cook-ingredient__missing-check').forEach((checkbox) => {
+            checkbox.disabled = !missingEnabled?.checked;
+          });
+        };
+        missingEnabled?.addEventListener('change', syncMissing);
+        syncMissing();
+        panel.querySelector('#cook-cancel')?.addEventListener('click', () => closeSharedModal());
+        panel.querySelector('#cook-confirm')?.addEventListener('click', async () => {
+          const confirm = panel.querySelector('#cook-confirm');
+          const allocations = [];
+          let invalid = false;
+          panel.querySelectorAll('.cook-ingredient').forEach((section) => {
+            const ingredientId = Number(section.dataset.ingredientId);
+            section.querySelectorAll('.cook-allocation-row').forEach((row) => {
+              const option = row.querySelector('.cook-allocation-row__lot')?.selectedOptions[0];
+              const amountInput = row.querySelector('.cook-allocation-row__amount');
+              const amount = amountInput?.valueAsNumber;
+              const valid = Number.isFinite(amount) && amount > 0;
+              amountInput?.toggleAttribute('aria-invalid', !valid);
+              if (!valid || !option) { invalid = true; return; }
+              allocations.push({
+                ingredient_id: ingredientId,
+                pantry_item_id: Number(option.value),
+                amount,
+                unit: option.dataset.unit,
+              });
+            });
+          });
+          if (invalid) {
+            window.yuvomi?.showToast(t('meals.cookAllocationInvalid'), 'error');
+            return;
+          }
+          const missingIngredientIds = [...panel.querySelectorAll('.cook-ingredient')]
+            .filter((section) => section.querySelector('.cook-ingredient__missing-check')?.checked)
+            .map((section) => Number(section.dataset.ingredientId));
+          confirm.disabled = true;
+          try {
+            const result = await api.post(`/meals/${mealId}/cook`, {
+              allocations,
+              missing_to_shopping: missingEnabled?.checked
+                ? { enabled: true, list_id: Number(missingList?.value), ingredient_ids: missingIngredientIds }
+                : { enabled: false },
+            });
+            await loadWeek(state.currentWeek);
+            closeSharedModal({ force: true });
+            renderWeekGrid();
+            window.yuvomi?.showToast(
+              result.data.shopping_items_created
+                ? t('meals.cookSuccessWithShopping', { count: result.data.shopping_items_created })
+                : t('meals.cookSuccess'),
+              'success'
+            );
+          } catch (error) {
+            window.yuvomi?.showToast(error.data?.error ?? t('meals.cookError'), 'error');
+            confirm.disabled = false;
+          }
+        });
+      },
+    });
+  } catch (error) {
+    window.yuvomi?.showToast(error.data?.error ?? t('meals.cookError'), 'error');
+  }
+}
+
+async function undoCooking(mealId) {
+  const confirmed = await confirmModal(t('meals.cookUndoConfirm'), { confirmLabel: t('meals.cookUndo') });
+  if (!confirmed) return;
+  try {
+    const response = await api.post(`/meals/${mealId}/cook/undo`, {});
+    await loadWeek(state.currentWeek);
+    renderWeekGrid();
+    window.yuvomi?.showToast(
+      response.data.shopping_items_retained
+        ? t('meals.cookUndoSuccessShoppingRetained')
+        : t('meals.cookUndoSuccess'),
+      'success'
+    );
+  } catch (error) {
+    window.yuvomi?.showToast(error.data?.error ?? t('meals.cookError'), 'error');
+  }
+}
+
+// --------------------------------------------------------
+// Meal create/edit modal
 // --------------------------------------------------------
 
 function openMealModal(opts) {

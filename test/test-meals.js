@@ -594,6 +594,30 @@ test('Direktes Recipe-Drop und apply-plan aktivieren keinen stillen Shopping-Imp
   assert(!/shopping_import/.test(runRandomize), 'Randomizer darf nicht still importieren');
 });
 
+test('Cooking-Review bleibt explizit, editierbar und berechtigungsgebunden', () => {
+  const source = readFileSync(new URL('../public/pages/meals.js', import.meta.url), 'utf8');
+  assert(/data-action="\$\{cookingEvent \? 'undo-cook' : 'cook-meal'\}"/.test(source), 'Meal-Karte braucht Cook-/Undo-Aktion');
+  assert(/api\.post\(`\/meals\/\$\{mealId\}\/cook-preview`/.test(source), 'Review muss read-only Preview laden');
+  assert(/cook-allocation-row__lot/.test(source) && /cook-allocation-row__amount/.test(source), 'Los und Teilmenge müssen editierbar sein');
+  assert(/missing_to_shopping/.test(source) && /cook-ingredient__missing-check/.test(source), 'Missing→Shopping muss explizit auswählbar sein');
+  assert(/moduleAccess\('pantry'\) === 'write'/.test(source), 'Cook-Aktion muss Pantry-Schreibrecht berücksichtigen');
+  assert(/api\.post\(`\/meals\/\$\{mealId\}\/cook\/undo`/.test(source), 'Undo muss den journalisierten Endpunkt verwenden');
+  assert(!/parse.*ingredient\.quantity/i.test(source), 'Freitextmengen dürfen nicht automatisch interpretiert werden');
+});
+
+test('Cooking-i18n-Keys sind in allen Locales paritätisch', () => {
+  const localeDir = new URL('../public/locales/', import.meta.url);
+  const localeNames = ['ar', 'cs', 'de', 'el', 'en', 'es', 'fa', 'fr', 'hi', 'hu', 'id', 'it', 'ja', 'ko', 'nl', 'pl', 'pt', 'ru', 'sv', 'tr', 'uk', 'vi', 'zh'];
+  const expected = Object.keys(JSON.parse(readFileSync(new URL('de.json', localeDir), 'utf8')).meals)
+    .filter((key) => key.startsWith('cook')).sort();
+  assert(expected.length >= 29, 'Cooking-Keyset ist unvollständig');
+  for (const locale of localeNames) {
+    const keys = Object.keys(JSON.parse(readFileSync(new URL(`${locale}.json`, localeDir), 'utf8')).meals)
+      .filter((key) => key.startsWith('cook')).sort();
+    assert(JSON.stringify(keys) === JSON.stringify(expected), `${locale}: Cooking-Key-Parität fehlt`);
+  }
+});
+
 // --------------------------------------------------------
 // Mehrere Mahlzeiten pro Slot
 // --------------------------------------------------------

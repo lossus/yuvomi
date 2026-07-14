@@ -78,8 +78,8 @@ function insertMovement(database, movement) {
     INSERT INTO inventory_movements (
       pantry_item_id, movement_type, amount_delta, unit, balance_after,
       quantity_display_before, quantity_display_after, reason,
-      idempotency_key, reverses_movement_id, actor_id, shopping_item_id
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      idempotency_key, reverses_movement_id, actor_id, shopping_item_id, cooking_event_id
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).run(
     movement.itemId,
     movement.type,
@@ -93,6 +93,7 @@ function insertMovement(database, movement) {
     movement.reversesMovementId,
     movement.actorId,
     movement.shoppingItemId ?? null,
+    movement.cookingEventId ?? null,
   );
   return database.prepare('SELECT * FROM inventory_movements WHERE id = ?').get(result.lastInsertRowid);
 }

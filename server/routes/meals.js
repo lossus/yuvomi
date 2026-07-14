@@ -14,6 +14,15 @@ import { importMealIngredientsToShoppingList } from '../services/meal-shopping-i
 import { shoppingItemsFromMealIngredients } from '../services/shopping-import.js';
 import { sanitizeKitchenIngredients } from '../services/ingredient-quantities.js';
 import { validateStructuredQuantity } from '../../public/utils/quantity.js';
+import { tokenAllows } from '../scopes.js';
+import {
+  MealCookingError,
+  activeCookingEvent,
+  attachCookingEvents,
+  cookMeal,
+  cookingPreview,
+  undoCookedMeal,
+} from '../services/meal-cooking.js';
 
 const log = createLogger('Meals');
 
@@ -88,7 +97,34 @@ function loadMealWithIngredients(id) {
   `).get(id);
   if (!meal) return null;
   const ingredients = db.get().prepare('SELECT * FROM meal_ingredients WHERE meal_id = ? ORDER BY id ASC').all(id);
-  return { ...meal, ingredients }; 
+  return attachCookingEvents(db.get(), [{ ...meal, ingredients }])[0];
+}
+
+function requireCrossModuleAccess(req, res, moduleKey, access) {
+  if (req.authMethod === 'api_token' && req.authScopes != null
+      && !tokenAllows(req.authScopes, moduleKey, access)) {
+    res.status(403).json({ error: `Token scope does not permit this ${moduleKey} operation.`, code: 403 });
+    return false;
+  }
+  const level = req.sessionModuleAccess?.[moduleKey];
+  if (level === 'none' || (access === 'write' && level === 'read')) {
+    res.status(403).json({
+      error: level === 'read'
+        ? `You have read-only access to the ${moduleKey} module.`
+        : `You do not have access to the ${moduleKey} module.`,
+      code: 403,
+    });
+    return false;
+  }
+  return true;
+}
+
+function cookingError(res, error, context) {
+  if (error instanceof MealCookingError || Number.isInteger(error?.status)) {
+    return res.status(error.status || 400).json({ error: error.message, code: error.status || 400 });
+  }
+  log.error(context, error);
+  return res.status(500).json({ error: 'Interner Fehler', code: 500 });
 }
 
 function deleteMealOccurrence(meal, actorId) {
@@ -259,7 +295,7 @@ router.get('/', (req, res) => {
       ingredients: ingredientMap[m.id] || [],
     }));
 
-    res.json({ data: result, weekStart: from, weekEnd: to });
+    res.json({ data: attachCookingEvents(db.get(), result), weekStart: from, weekEnd: to });
   } catch (err) {
     log.error('', err);
     res.status(500).json({ error: 'Interner Fehler', code: 500 });
@@ -426,6 +462,46 @@ router.post('/apply-plan', (req, res) => {
   }
 });
 
+router.post('/:id/cook-preview', (req, res) => {
+  if (!requireCrossModuleAccess(req, res, 'pantry', 'read')) return;
+  try {
+    res.json({ data: cookingPreview(db.get(), req.params.id) });
+  } catch (error) {
+    cookingError(res, error, 'POST /:id/cook-preview');
+  }
+});
+
+router.post('/:id/cook', (req, res) => {
+  if (!requireCrossModuleAccess(req, res, 'pantry', 'write')) return;
+  if (req.body?.missing_to_shopping?.enabled === true
+      && !requireCrossModuleAccess(req, res, 'shopping', 'write')) return;
+  try {
+    const result = cookMeal(
+      db.get(),
+      req.params.id,
+      req.body,
+      req.authUserId || req.session?.userId || null,
+    );
+    res.status(201).json({ data: result });
+  } catch (error) {
+    cookingError(res, error, 'POST /:id/cook');
+  }
+});
+
+router.post('/:id/cook/undo', (req, res) => {
+  if (!requireCrossModuleAccess(req, res, 'pantry', 'write')) return;
+  try {
+    const result = undoCookedMeal(
+      db.get(),
+      req.params.id,
+      req.authUserId || req.session?.userId || null,
+    );
+    res.status(201).json({ data: result });
+  } catch (error) {
+    cookingError(res, error, 'POST /:id/cook/undo');
+  }
+});
+
 /**
  * PUT /api/v1/meals/:id
  * Mahlzeit bearbeiten (Titel, Notizen, Datum, Typ).
@@ -557,6 +633,16 @@ router.delete('/:id', (req, res) => {
     // dem Template explizit gelöscht werden, sonst blieben sie als Einzel-Mahlzeiten zurück.
     if (req.query.scope === 'series' && meal.recurrence_template_id) {
       const templateId = meal.recurrence_template_id;
+      const activeCooking = db.get().prepare(`
+        SELECT 1
+        FROM meal_cooking_events mce
+        JOIN meals m ON m.id = mce.meal_id
+        WHERE m.recurrence_template_id = ? AND mce.status = 'confirmed'
+        LIMIT 1
+      `).get(templateId);
+      if (activeCooking) {
+        return res.status(409).json({ error: 'Undo active cooking events before deleting this meal series.', code: 409 });
+      }
       db.transaction(() => {
         db.get().prepare('DELETE FROM meals WHERE recurrence_template_id = ?').run(templateId);
         db.get().prepare('DELETE FROM meal_recurrence_templates WHERE id = ?').run(templateId);
@@ -564,6 +650,9 @@ router.delete('/:id', (req, res) => {
       return res.status(204).end();
     }
 
+    if (activeCookingEvent(db.get(), meal.id)) {
+      return res.status(409).json({ error: 'Undo the active cooking event before deleting this meal.', code: 409 });
+    }
     deleteMealOccurrence(meal, req.authUserId || req.session.userId);
     const result = { changes: 1 };
     if (result.changes === 0)

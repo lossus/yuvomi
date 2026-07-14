@@ -339,6 +339,38 @@ test('Migration 90 links purchase movements to shopping items without backfill',
   transferDb.close();
 });
 
+test('Migration 91 adds durable cooking snapshots and one active event per meal', () => {
+  const cookingDb = new DatabaseSync(':memory:');
+  cookingDb.exec('PRAGMA foreign_keys = ON;');
+  cookingDb.exec(MIGRATIONS_SQL[1]);
+  cookingDb.exec(MIGRATIONS_SQL[13]);
+  cookingDb.exec(MIGRATIONS_SQL[89]);
+  cookingDb.exec(MIGRATIONS_SQL[90]);
+  cookingDb.exec(MIGRATIONS_SQL[91]);
+  cookingDb.prepare("INSERT INTO users (username, display_name, password_hash) VALUES ('cook-user', 'Cook', 'x')").run();
+  const mealId = cookingDb.prepare("INSERT INTO meals (date, meal_type, title, created_by) VALUES ('2026-07-14', 'dinner', 'Soup', 1)").run().lastInsertRowid;
+  const eventId = cookingDb.prepare(`
+    INSERT INTO meal_cooking_events (meal_id, meal_title_snapshot, meal_date_snapshot, meal_type_snapshot, actor_id)
+    VALUES (?, 'Soup', '2026-07-14', 'dinner', 1)
+  `).run(mealId).lastInsertRowid;
+  let duplicateRejected = false;
+  try {
+    cookingDb.prepare(`
+      INSERT INTO meal_cooking_events (meal_id, meal_title_snapshot, meal_date_snapshot, meal_type_snapshot, actor_id)
+      VALUES (?, 'Soup again', '2026-07-14', 'dinner', 1)
+    `).run(mealId);
+  } catch (error) {
+    duplicateRejected = /UNIQUE/.test(error.message);
+  }
+  assert(duplicateRejected, 'Nur ein aktives Cooking-Event je Meal darf bestehen');
+  const movementColumn = cookingDb.prepare("SELECT name FROM pragma_table_info('inventory_movements') WHERE name = 'cooking_event_id'").get();
+  assert(movementColumn, 'cooking_event_id fehlt an inventory_movements');
+  cookingDb.prepare('DELETE FROM meals WHERE id = ?').run(mealId);
+  const snapshot = cookingDb.prepare('SELECT meal_id, meal_title_snapshot FROM meal_cooking_events WHERE id = ?').get(eventId);
+  assert(snapshot.meal_id === null && snapshot.meal_title_snapshot === 'Soup', 'Meal-Löschung muss Event-Snapshot bewahren');
+  cookingDb.close();
+});
+
 // --------------------------------------------------------
 // Ergebnis
 // --------------------------------------------------------

@@ -685,7 +685,7 @@ function buildPaths() {
       post: op({ summary: 'Adjust or reverse pantry stock', tag: 'Pantry', description: 'Requires an idempotency_key. Delta, absolute correction, free-text correction, and reversal update the cached balance and append an immutable movement atomically.', params: [idParam()], stateChanging: true, requestBody: jsonBody(null) }),
     },
     '/api/v1/meals': {
-      get: op({ summary: 'List meal plan entries', tag: 'Meals' }),
+      get: op({ summary: 'List meal plan entries', tag: 'Meals', description: 'Each meal keeps its existing fields and adds cooking_event when one confirmed, not-yet-undone cooking event is active for that concrete meal instance.' }),
       post: op({ summary: 'Create meal plan entry', tag: 'Meals', description: 'Ingredients retain legacy quantity text and may add amount/unit (g, kg, ml, l). Optionally accepts shopping_import: { enabled: true, list_id }. When enabled, the meal, optional recurrence template, concrete ingredients, shopping items, provenance snapshots, and transfer flags are created in one transaction. Only the concrete recurring start occurrence is imported.', stateChanging: true, requestBody: jsonBody(null, 'Meal fields with optional structured ingredients and shopping_import block') }),
     },
     '/api/v1/meals/suggestions': { get: op({ summary: 'Get meal suggestions', tag: 'Meals' }) },
@@ -695,6 +695,15 @@ function buildPaths() {
     },
     '/api/v1/meals/{id}/ingredients': {
       post: op({ summary: 'Add meal ingredient', tag: 'Meals', description: 'Accepts backward-compatible quantity and optional amount/unit.', params: [idParam()], stateChanging: true, requestBody: jsonBody(null) }),
+    },
+    '/api/v1/meals/{id}/cook-preview': {
+      post: op({ summary: 'Preview pantry consumption for a meal', tag: 'Meals', description: 'Requires Meals write and Pantry read access. Read-only: exact case-insensitive ingredient-name matches with compatible structured units are suggested in earliest-expiry order. Free text and uncertain names are never interpreted.', params: [idParam()], stateChanging: true, requestBody: jsonBody(null, 'Optional future preview overrides; the current request may be empty') }),
+    },
+    '/api/v1/meals/{id}/cook': {
+      post: op({ summary: 'Confirm meal cooking and pantry consumption', tag: 'Meals', description: 'Requires Meals and Pantry write access; optional missing_to_shopping additionally requires Shopping write. Creates the cooking event, immutable ingredient/allocation snapshots, inventory adjustments, and selected missing shopping items with provenance in one transaction. One active event per concrete meal prevents duplicate consumption.', params: [idParam()], stateChanging: true, requestBody: jsonBody(null, 'allocations: [{ingredient_id, pantry_item_id, amount, unit}], optional missing_to_shopping: {enabled, list_id, ingredient_ids}') }),
+    },
+    '/api/v1/meals/{id}/cook/undo': {
+      post: op({ summary: 'Undo active meal cooking consumption', tag: 'Meals', description: 'Requires Meals and Pantry write access. Appends exact inventory counter-movements and marks the cooking event undone; immutable history and previously created missing-shopping items are retained.', params: [idParam()], stateChanging: true, requestBody: jsonBody(null) }),
     },
     '/api/v1/meals/ingredients/{ingId}': {
       patch: op({ summary: 'Update meal ingredient', tag: 'Meals', description: 'Updates legacy quantity and optional structured amount/unit without implicit parsing.', params: [idParam('ingId', 'Ingredient ID')], stateChanging: true, requestBody: jsonBody(null) }),
