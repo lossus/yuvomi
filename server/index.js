@@ -492,16 +492,16 @@ async function runSync() {
 // --------------------------------------------------------
 // Server starten
 // --------------------------------------------------------
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   logYuvomi.info(`Server running on port ${PORT} | Version ${APP_VERSION}`);
   logYuvomi.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
 
   // Erster Sync nach 10 Sekunden (warten bis DB vollständig initialisiert)
   setTimeout(() => {
     runSync();
-    setInterval(runSync, SYNC_INTERVAL_MS);
+    setInterval(runSync, SYNC_INTERVAL_MS).unref();
     logSync.info(`Auto-sync active every ${SYNC_INTERVAL_MS / 60_000} minutes.`);
-  }, 10_000);
+  }, 10_000).unref();
 
   // Backup-Scheduler starten
   startBackupScheduler();
@@ -510,4 +510,5 @@ app.listen(PORT, () => {
   startMedicationScheduler();
 });
 
+export { server };
 export default app;

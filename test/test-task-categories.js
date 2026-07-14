@@ -160,9 +160,10 @@ try {
     assert(bad.status === 400, `unbekannte Kategorie sollte 400 sein, war ${bad.status}`);
   });
 } finally {
-  server.close();
+  await new Promise((resolve, reject) => server.close((err) => err ? reject(err) : resolve()));
+  database.close();
   try { fs.unlinkSync(process.env.DB_PATH); } catch { /* egal */ }
 }
 
 console.log(`\n[Task-Categories-Test] Ergebnis: ${passed} bestanden, ${failed} fehlgeschlagen\n`);
-process.exit(failed > 0 ? 1 : 0);
+process.exitCode = failed > 0 ? 1 : 0;
