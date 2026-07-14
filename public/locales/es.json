@@ -1,5 +1,6 @@
 {
     "common": {
+        "searchClear": "Borrar búsqueda",
         "save": "Guardar",
         "cancel": "Cancelar",
         "delete": "Eliminar",
@@ -289,6 +290,13 @@
         "selectTask": "Select task",
         "pointsLabel": "Puntos",
         "pointsHint": "Los puntos se acreditan al completar.",
+        "documentsLabel": "Documentos",
+        "documentsHint": "Vincula documentos del módulo Documentos a esta tarea.",
+        "documentAdd": "Vincular documento",
+        "documentAddPlaceholder": "Selecciona un documento…",
+        "documentRemove": "Quitar vínculo",
+        "documentsEmpty": "Aún no hay documentos vinculados.",
+        "documentsCount": "{{count}} documentos",
         "assignedToMe": "Asignado a mí"
     },
     "shopping": {
@@ -1562,6 +1570,9 @@
         "holidaySubdivisionLabel": "Estado / Región",
         "holidaySubdivisionNone": "Todo el país",
         "holidaySubdivisionPlaceholder": "Seleccionar una región…",
+        "holidayGroupLabel": "Región de vacaciones escolares",
+        "holidayGroupNone": "Mostrar todo",
+        "holidayGroupHint": "Algunos cantones plurilingües tienen fechas de vacaciones escolares distintas según la región lingüística. Elige la región correspondiente para ver las fechas correctas.",
         "holidayPublicLabel": "Mostrar días festivos",
         "holidaySchoolLabel": "Mostrar vacaciones escolares",
         "holidayPublicColor": "Color de días festivos",
@@ -2140,7 +2151,7 @@
         "goHealth": "Salud"
     },
     "housekeeping": {
-        "title": "Área de limpieza",
+        "title": "Limpieza",
         "bottomNav": "Navegación de limpieza",
         "home": "Inicio",
         "tasks": "Tareas",

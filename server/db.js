@@ -3396,6 +3396,37 @@ const MIGRATIONS = [
         WHERE cooking_event_id IS NOT NULL;
     `,
   },
+  {
+    version: 92,
+    description: 'Link family documents to tasks (#503)',
+    up: `
+      -- Verknüpft Dokumente aus dem Dokumente-Modul mit Aufgaben (n:m, #503).
+      -- ON DELETE CASCADE auf beiden Seiten: löscht die Verknüpfung, wenn entweder
+      -- die Aufgabe oder das Dokument entfernt wird (das jeweils andere bleibt
+      -- bestehen). created_by hält fest, wer verknüpft hat.
+      CREATE TABLE IF NOT EXISTS task_documents (
+        task_id     INTEGER NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
+        document_id INTEGER NOT NULL REFERENCES family_documents(id) ON DELETE CASCADE,
+        created_by  INTEGER REFERENCES users(id) ON DELETE SET NULL,
+        created_at  TEXT    NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+        PRIMARY KEY (task_id, document_id)
+      );
+      CREATE INDEX IF NOT EXISTS idx_task_documents_document ON task_documents(document_id);
+    `,
+  },
+  {
+    version: 93,
+    description: 'School-holiday group code for multilingual cantons (#434)',
+    up: `
+      -- OpenHolidays modelliert innerhalb EINER Subdivision teils mehrere
+      -- Schulferien-Regime (z. B. Kanton Bern: deutschsprachige Region CH-BE-VS
+      -- vs. französischsprachiger Berner Jura CH-BE-EO), unterschieden nur über
+      -- das "groups"-Feld. group_code hält diesen Gruppen-Code je Cache-Zeile,
+      -- damit die konfigurierte Ferien-Gruppe lese-seitig gefiltert werden kann
+      -- (NULL = gilt für die gesamte Subdivision, z. B. Feiertage). (#434)
+      ALTER TABLE holiday_cache ADD COLUMN group_code TEXT;
+    `,
+  },
 ];
 
 /**

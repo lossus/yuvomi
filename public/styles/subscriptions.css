@@ -15,6 +15,12 @@
   margin-bottom: var(--space-3);
 }
 
+/* Desktop: Wrapper ist transparent — die beiden Icon-Buttons bleiben direkte
+ * Grid-Items in den letzten zwei auto-Spalten. */
+.subscriptions-toolbar__actions {
+  display: contents;
+}
+
 .subscriptions-search {
   position: relative;
 }
@@ -36,6 +42,23 @@
   border-radius: var(--radius-md);
   background: var(--glass-bg-card);
   color: var(--color-text);
+  /* Drop WebKit's native type=search magnifier; the explicit leading icon is
+   * the only magnifier this field should show. */
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.subscriptions-search input::-webkit-search-decoration,
+.subscriptions-search input::-webkit-search-results-decoration,
+.subscriptions-search input::-webkit-search-results-button,
+.subscriptions-search input::-webkit-search-cancel-button,
+.subscriptions-combobox__control .form-input::-webkit-search-decoration,
+.subscriptions-combobox__control .form-input::-webkit-search-results-decoration,
+.subscriptions-combobox__control .form-input::-webkit-search-results-button,
+.subscriptions-combobox__control .form-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
 }
 
 .subscriptions-filter {
@@ -327,7 +350,7 @@
 
 .subscription-card__meta span {
   display: inline-flex;
-  gap: 4px;
+  gap: var(--space-1);
   align-items: center;
 }
 
@@ -448,7 +471,7 @@
 
 .subscription-logo-picker small {
   display: inline-flex;
-  gap: 5px;
+  gap: var(--space-1);
   align-items: center;
   color: var(--color-text-secondary);
   text-align: center;
@@ -519,6 +542,10 @@
 
 .subscriptions-combobox__control .form-input {
   padding-left: calc(var(--space-3) + 22px);
+  /* Drop WebKit's native type=search magnifier; the explicit leading icon is
+   * the only magnifier this field should show. */
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .subscriptions-combobox__options {
@@ -559,7 +586,7 @@
 
 .subscriptions-enabled-row > div {
   display: grid;
-  gap: 2px;
+  gap: var(--space-0h);
 }
 
 .subscriptions-enabled-row small {
@@ -776,9 +803,14 @@
   }
 
   .subscriptions-toolbar,
-  .subscriptions-summary,
   .subscriptions-metadata {
     grid-template-columns: 1fr;
+  }
+
+  /* Kennzahlen bleiben zweispaltig (kompakte Bento-Dichte statt vier
+   * vollbreiter Einzelwert-Karten, Audit F5). */
+  .subscriptions-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .subscriptions-notifications li {
@@ -789,8 +821,15 @@
     grid-column: span 1;
   }
 
-  .subscriptions-toolbar .btn--icon {
-    width: 100%;
+  /* Mobile: die beiden Aktions-Icons teilen sich eine kompakte Zeile statt je
+   * eine vollbreite leere Pille zu bilden (Audit F8). */
+  .subscriptions-toolbar__actions {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .subscriptions-toolbar__actions .btn--icon {
+    flex: 1;
   }
 
   .subscription-card {

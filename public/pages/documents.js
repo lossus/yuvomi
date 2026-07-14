@@ -10,6 +10,7 @@ import { t, formatDate } from '/i18n.js';
 import { esc } from '/utils/html.js';
 import { stagger } from '/utils/ux.js';
 import { renderSkeletonList } from '/utils/skeleton.js';
+import { renderPageSearch, wirePageSearch } from '/utils/page-search.js';
 
 const CATEGORIES = ['medical', 'school', 'identity', 'insurance', 'finance', 'home', 'vehicle', 'legal', 'travel', 'pets', 'warranty', 'taxes', 'work', 'other'];
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -45,6 +46,15 @@ function categoryLabels() {
   return Object.fromEntries(CATEGORIES.map((category) => [category, t(`documents.category.${category}`)]));
 }
 
+// Aktiven Zustand einer Chip-Gruppe umschalten (aria-pressed + Modifier).
+function setActiveChip(active, groupSelector) {
+  _container.querySelectorAll(`${groupSelector} .documents-filter-chip`).forEach((chip) => {
+    const on = chip === active;
+    chip.classList.toggle('documents-filter-chip--active', on);
+    chip.setAttribute('aria-pressed', String(on));
+  });
+}
+
 // Nutzerfreundliche Fehlermeldung: strukturierte Server-Meldung (err.data.error)
 // bevorzugt; lokalisierte Client-Validierungsfehler (plain Error mit t()-Text)
 // bleiben erhalten; technische ApiError-Strings („HTTP 500"/„offline") werden auf
@@ -75,44 +85,29 @@ export async function render(container) {
   container.replaceChildren();
   container.insertAdjacentHTML('beforeend', `
     <div class="documents-page">
-      <div class="page-toolbar documents-toolbar">
+      <div class="page-toolbar page-toolbar--wrap documents-toolbar">
         <h1 class="page-toolbar__title">${t('documents.title')}</h1>
-        <label class="documents-toolbar__search" for="documents-search">
-          <span class="documents-toolbar__search-label sr-only">${t('documents.searchPlaceholder')}</span>
-          <span class="documents-toolbar__search-control">
-            <i data-lucide="search" class="documents-toolbar__search-icon" aria-hidden="true"></i>
-            <input class="documents-toolbar__search-input" id="documents-search" type="search" placeholder="${t('documents.searchPlaceholder')}" autocomplete="off">
-          </span>
-        </label>
-        <details class="documents-secondary-controls">
-          <summary class="btn btn--secondary btn--icon documents-secondary-controls__trigger" aria-label="${t('nav.more')}">
-            <i data-lucide="sliders-horizontal" class="icon-md" aria-hidden="true"></i>
-          </summary>
-          <div class="documents-secondary-controls__panel">
-            <div class="documents-view-toggle" role="group" aria-label="${t('documents.viewToggle')}">
-              <button class="documents-view-toggle__btn ${state.view === 'grid' ? 'documents-view-toggle__btn--active' : ''}" data-view="grid" aria-label="${t('documents.gridView')}" aria-pressed="${state.view === 'grid'}">
-                <i data-lucide="layout-grid" aria-hidden="true"></i>
-              </button>
-              <button class="documents-view-toggle__btn ${state.view === 'list' ? 'documents-view-toggle__btn--active' : ''}" data-view="list" aria-label="${t('documents.listView')}" aria-pressed="${state.view === 'list'}">
-                <i data-lucide="list" aria-hidden="true"></i>
-              </button>
-            </div>
-            <label class="documents-filter-field" for="documents-status">
-              <span>${t('documents.statusLabel')}</span>
-              <select class="input documents-filter-select" id="documents-status">
-                <option value="active">${t('documents.statusActive')}</option>
-                <option value="archived">${t('documents.statusArchived')}</option>
-              </select>
-            </label>
-            <label class="documents-filter-field" for="documents-category">
-              <span>${t('documents.categoryLabel')}</span>
-              <select class="input documents-filter-select" id="documents-category">
-                <option value="">${t('documents.allCategories')}</option>
-                ${CATEGORIES.map((category) => `<option value="${category}">${categoryLabels()[category]}</option>`).join('')}
-              </select>
-            </label>
+        ${renderPageSearch({ id: 'documents-search', label: t('documents.searchPlaceholder'), placeholder: t('documents.searchPlaceholder'), value: state.query, clearLabel: t('common.searchClear'), className: 'documents-toolbar__search page-toolbar__center' })}
+        <div class="page-toolbar__actions">
+          <div class="documents-view-toggle" role="group" aria-label="${t('documents.viewToggle')}">
+            <button class="documents-view-toggle__btn ${state.view === 'grid' ? 'documents-view-toggle__btn--active' : ''}" data-view="grid" aria-label="${t('documents.gridView')}" aria-pressed="${state.view === 'grid'}">
+              <i data-lucide="layout-grid" aria-hidden="true"></i>
+            </button>
+            <button class="documents-view-toggle__btn ${state.view === 'list' ? 'documents-view-toggle__btn--active' : ''}" data-view="list" aria-label="${t('documents.listView')}" aria-pressed="${state.view === 'list'}">
+              <i data-lucide="list" aria-hidden="true"></i>
+            </button>
           </div>
-        </details>
+        </div>
+      </div>
+      <div class="documents-filters">
+        <div class="documents-filter-group" id="documents-status" role="group" aria-label="${t('documents.statusLabel')}">
+          <button type="button" class="documents-filter-chip${state.status === 'active' ? ' documents-filter-chip--active' : ''}" data-status="active" aria-pressed="${state.status === 'active'}">${t('documents.statusActive')}</button>
+          <button type="button" class="documents-filter-chip${state.status === 'archived' ? ' documents-filter-chip--active' : ''}" data-status="archived" aria-pressed="${state.status === 'archived'}">${t('documents.statusArchived')}</button>
+        </div>
+        <div class="documents-filter-chips" id="documents-category" role="group" aria-label="${t('documents.categoryLabel')}">
+          <button type="button" class="documents-filter-chip${!state.category ? ' documents-filter-chip--active' : ''}" data-category="" aria-pressed="${!state.category}">${t('documents.allCategories')}</button>
+          ${CATEGORIES.map((category) => `<button type="button" class="documents-filter-chip${state.category === category ? ' documents-filter-chip--active' : ''}" data-category="${esc(category)}" aria-pressed="${state.category === category}"><i data-lucide="${CATEGORY_ICONS[category] || 'folder'}" class="icon-md" aria-hidden="true"></i>${esc(categoryLabels()[category])}</button>`).join('')}
+        </div>
       </div>
       <div class="documents-browser-layout">
         <aside class="documents-folder-browser" aria-label="${t('documents.folderBrowserTitle')}">
@@ -188,9 +183,10 @@ function renderDmsHeaderBtn() {
   btn.append(icon);
   btn.append(document.createTextNode(t('documents.linkFromDms')));
   btn.addEventListener('click', () => openDmsLinkModal());
-  // Vor die Sekundär-Steuerung (Slider) hängen, damit die Toolbar-Reihenfolge stimmt.
-  const secondary = toolbar.querySelector('.documents-secondary-controls');
-  if (secondary) secondary.insertAdjacentElement('beforebegin', btn);
+  // In den Aktions-Slot des Kopfes hängen (vor die Ansicht-Umschaltung), damit die
+  // Toolbar-Reihenfolge stimmt und der Button rechtsbündig neben der Ansicht steht.
+  const actions = toolbar.querySelector('.page-toolbar__actions');
+  if (actions) actions.insertAdjacentElement('afterbegin', btn);
   else toolbar.append(btn);
   if (window.lucide) lucide.createIcons({ el: btn });
 }
@@ -209,47 +205,30 @@ function bindPageEvents() {
   _container.querySelector('#documents-folder-add')?.addEventListener('click', () => openFolderModal());
   _container.querySelector('#fab-new-document')?.addEventListener('click', () => openDocumentModal());
 
-  // Sekundär-Steuerung (<details>-Slider, nur auf Mobile als Overlay-Panel):
-  // per Außenklick oder Escape schließbar machen — sonst bleibt das Panel über
-  // dem Inhalt liegen, bis der kleine Summary-Trigger erneut getroffen wird.
-  // Listener nur im geöffneten Zustand aktiv (kein Dauer-Leak); auf Desktop
-  // bleibt das Summary ausgeblendet, das Panel öffnet dort nie.
-  const secondary = _container.querySelector('.documents-secondary-controls');
-  if (secondary) {
-    const onOutside = (e) => { if (!secondary.contains(e.target)) secondary.removeAttribute('open'); };
-    const onKey = (e) => {
-      if (e.key !== 'Escape') return;
-      secondary.removeAttribute('open');
-      secondary.querySelector('summary')?.focus();
-    };
-    secondary.addEventListener('toggle', () => {
-      if (secondary.open) {
-        document.addEventListener('click', onOutside, true);
-        document.addEventListener('keydown', onKey, true);
-      } else {
-        document.removeEventListener('click', onOutside, true);
-        document.removeEventListener('keydown', onKey, true);
-      }
-    });
-  }
-  let documentsSearchTimer;
-  _container.querySelector('#documents-search')?.addEventListener('input', (e) => {
-    const value = e.target.value.trim().toLowerCase();
-    clearTimeout(documentsSearchTimer);
-    documentsSearchTimer = setTimeout(() => {
-      state.query = value;
+  wirePageSearch(_container, {
+    id: 'documents-search',
+    onQuery: (value) => {
+      state.query = value.trim().toLowerCase();
       renderDocuments();
-    }, 200);
+    },
   });
-  _container.querySelector('#documents-status')?.addEventListener('change', async (e) => {
-    state.status = e.target.value;
+  _container.querySelector('#documents-status')?.addEventListener('click', async (e) => {
+    const chip = e.target.closest('[data-status]');
+    if (!chip || chip.dataset.status === state.status) return;
+    state.status = chip.dataset.status;
+    setActiveChip(chip, '#documents-status');
     showDocumentsLoading();
     await loadDocuments();
     renderFolderBrowser();
     renderDocuments();
   });
-  _container.querySelector('#documents-category')?.addEventListener('change', async (e) => {
-    state.category = e.target.value;
+  _container.querySelector('#documents-category')?.addEventListener('click', async (e) => {
+    const chip = e.target.closest('[data-category]');
+    if (!chip) return;
+    const next = chip.dataset.category;
+    if (next === state.category) return;
+    state.category = next;
+    setActiveChip(chip, '#documents-category');
     showDocumentsLoading();
     await loadDocuments();
     renderFolderBrowser();
@@ -1130,7 +1109,7 @@ function openDocumentViewer(doc) {
     : '';
 
   openSharedModal({
-    title: esc(doc.name),
+    title: doc.name,
     size: 'xl',
     content: `
       <div class="document-viewer">

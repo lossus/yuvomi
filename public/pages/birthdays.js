@@ -5,6 +5,7 @@ import { t, formatDate, parseDateInput, isDateInputValid } from '/i18n.js';
 import { esc } from '/utils/html.js';
 import { renderSkeletonList } from '/utils/skeleton.js';
 import { toLocalDateKey } from '/utils/date.js';
+import { renderPageSearch, wirePageSearch } from '/utils/page-search.js';
 
 let state = {
   birthdays: [],
@@ -146,12 +147,12 @@ function birthdayItemHtml(birthday) {
         <div class="birthday-item__meta">${esc(ageMeta(birthday))}</div>
         ${birthday.notes ? `<div class="birthday-item__notes">${esc(birthday.notes)}</div>` : ''}
       </div>
-      <div class="birthday-item__actions">
-        <button class="birthday-action-btn" type="button" data-action="edit" data-id="${birthday.id}" aria-label="${t('common.edit')}">
-          <i data-lucide="pencil" style="width:18px;height:18px;" aria-hidden="true"></i>
+      <div class="row-actions birthday-item__actions">
+        <button class="row-action" type="button" data-action="edit" data-id="${birthday.id}" aria-label="${t('common.edit')}">
+          <i data-lucide="pencil" aria-hidden="true"></i>
         </button>
-        <button class="birthday-action-btn" type="button" data-action="delete" data-id="${birthday.id}" aria-label="${t('common.delete')}">
-          <i data-lucide="trash-2" style="width:18px;height:18px;" aria-hidden="true"></i>
+        <button class="row-action row-action--danger" type="button" data-action="delete" data-id="${birthday.id}" aria-label="${t('common.delete')}">
+          <i data-lucide="trash-2" aria-hidden="true"></i>
         </button>
       </div>
     </article>`;
@@ -207,14 +208,7 @@ function renderPage() {
     <div class="birthdays-page">
       <div class="page-toolbar page-toolbar--wrap birthdays-toolbar">
         <h1 class="page-toolbar__title">${t('birthdays.title')}</h1>
-        <label class="birthdays-toolbar__search page-toolbar__center" for="birthdays-search">
-          <span class="sr-only">${t('birthdays.searchPlaceholder')}</span>
-          <span class="birthdays-toolbar__search-control">
-            <i data-lucide="search" class="birthdays-toolbar__search-icon" aria-hidden="true"></i>
-            <input type="search" class="birthdays-toolbar__search-input" id="birthdays-search"
-                   placeholder="${t('birthdays.searchPlaceholder')}" autocomplete="off" value="${esc(state.query)}">
-          </span>
-        </label>
+        ${renderPageSearch({ id: 'birthdays-search', label: t('birthdays.searchPlaceholder'), placeholder: t('birthdays.searchPlaceholder'), value: state.query, clearLabel: t('common.searchClear'), className: 'birthdays-toolbar__search page-toolbar__center' })}
       </div>
 
       <p class="birthdays-hint">${t('birthdays.calendarHint')}</p>
@@ -234,10 +228,13 @@ function renderPage() {
 function bindEvents() {
   _container.querySelector('#fab-new-birthday').addEventListener('click', () => openBirthdayModal({ mode: 'create' }));
 
-  const search = _container.querySelector('#birthdays-search');
-  search.addEventListener('input', (e) => {
-    state.query = e.target.value;
-    renderList();
+  wirePageSearch(_container, {
+    id: 'birthdays-search',
+    delay: 0,
+    onQuery: (value) => {
+      state.query = value;
+      renderList();
+    },
   });
 
   _container.querySelector('#birthdays-list').addEventListener('click', async (e) => {

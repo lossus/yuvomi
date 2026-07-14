@@ -1,5 +1,6 @@
 {
     "common": {
+        "searchClear": "Aramayı temizle",
         "save": "Kaydet",
         "cancel": "İptal",
         "delete": "Sil",
@@ -289,6 +290,13 @@
         "selectTask": "Select task",
         "pointsLabel": "Puan",
         "pointsHint": "Puanlar tamamlandığında hesaba geçer.",
+        "documentsLabel": "Belgeler",
+        "documentsHint": "Belgeler modülündeki belgeleri bu göreve bağlayın.",
+        "documentAdd": "Belge bağla",
+        "documentAddPlaceholder": "Bir belge seçin…",
+        "documentRemove": "Bağlantıyı kaldır",
+        "documentsEmpty": "Henüz bağlı belge yok.",
+        "documentsCount": "{{count}} belge",
         "assignedToMe": "Bana atananlar"
     },
     "shopping": {
@@ -1562,6 +1570,9 @@
         "holidaySubdivisionLabel": "Eyalet / Bölge",
         "holidaySubdivisionNone": "Tüm ülke",
         "holidaySubdivisionPlaceholder": "Bir bölge seçin…",
+        "holidayGroupLabel": "Okul tatili bölgesi",
+        "holidayGroupNone": "Tümünü göster",
+        "holidayGroupHint": "Bazı çok dilli kantonlarda okul tatili tarihleri dil bölgesine göre değişir. Doğru tarihler için uygun bölgeyi seç.",
         "holidayPublicLabel": "Resmi tatilleri göster",
         "holidaySchoolLabel": "Okul tatillerini göster",
         "holidayPublicColor": "Resmi tatil rengi",
@@ -2140,7 +2151,7 @@
         "goHealth": "Sağlık"
     },
     "housekeeping": {
-        "title": "Cleaner workspace",
+        "title": "Ev işleri",
         "bottomNav": "Housekeeping navigation",
         "home": "Home",
         "tasks": "Tasks",

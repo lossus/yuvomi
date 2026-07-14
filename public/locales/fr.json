@@ -1,5 +1,6 @@
 {
     "common": {
+        "searchClear": "Effacer la recherche",
         "save": "Enregistrer",
         "cancel": "Annuler",
         "delete": "Supprimer",
@@ -289,6 +290,13 @@
         "selectTask": "Select task",
         "pointsLabel": "Points",
         "pointsHint": "Les points sont crédités à la fin de la tâche.",
+        "documentsLabel": "Documents",
+        "documentsHint": "Associez des documents du module Documents à cette tâche.",
+        "documentAdd": "Associer un document",
+        "documentAddPlaceholder": "Sélectionner un document…",
+        "documentRemove": "Retirer le lien",
+        "documentsEmpty": "Aucun document associé pour l’instant.",
+        "documentsCount": "{{count}} documents",
         "assignedToMe": "Attribués à moi"
     },
     "shopping": {
@@ -1562,6 +1570,9 @@
         "holidaySubdivisionLabel": "Région / État",
         "holidaySubdivisionNone": "Pays entier",
         "holidaySubdivisionPlaceholder": "Sélectionner une région…",
+        "holidayGroupLabel": "Région de vacances scolaires",
+        "holidayGroupNone": "Tout afficher",
+        "holidayGroupHint": "Certains cantons plurilingues ont des dates de vacances scolaires différentes selon la région linguistique. Choisissez la région correspondante pour des dates correctes.",
         "holidayPublicLabel": "Afficher les jours fériés",
         "holidaySchoolLabel": "Afficher les vacances scolaires",
         "holidayPublicColor": "Couleur des jours fériés",
@@ -2140,7 +2151,7 @@
         "goHealth": "Santé"
     },
     "housekeeping": {
-        "title": "Espace ménage",
+        "title": "Ménage",
         "bottomNav": "Navigation ménage",
         "home": "Accueil",
         "tasks": "Tâches",

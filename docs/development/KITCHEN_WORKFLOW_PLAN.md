@@ -390,8 +390,9 @@ Begründete Anpassung der vorgeschlagenen Reihenfolge: KWF-003 kommt vor dem dir
 ## Empfohlener nächster Schritt
 
 1. KWF-010 ist extern akzeptiert und über Merge-Commit `070f47a0` in Fork-`main` integriert.
-2. Der geplante Kitchen-Workflow KWF-001 bis KWF-010 ist abgeschlossen; keinen ungeplanten Folge-Task in derselben Session beginnen.
-3. `upstream/main` bleibt wegen der dokumentierten Divergenz unverändert; eine Integration ist ein separater Repository-Task.
+2. Der geplante Kitchen-Workflow KWF-001 bis KWF-010 ist abgeschlossen; keinen ungeplanten Folge-Task beginnen.
+3. Der separate Repository-Follow-up KWF-FINDING-013 integriert Upstream v1.22.2 gemäß ADR-KITCHEN-012 ausschließlich in den Fork: Kitchen-Migrationen 86–91 bleiben kanonisch, Upstream-Funktionen folgen additiv als 92/93, und `upstream` bleibt read-only.
+4. Nach dem Integrations-Push sind keine bekannten Kitchen- oder Upstream-Follow-ups offen; neue Arbeit nur auf ausdrückliche Anweisung reservieren.
 
 KWF-010 bestätigt die bestehenden Grenzen: Freitextmengen werden nicht interpretiert, Bestandsänderungen bleiben explizit und journalisiert, Pantry-API-Daten bleiben network-only und Cross-Domain-Schreibvorgänge sind atomar.
 

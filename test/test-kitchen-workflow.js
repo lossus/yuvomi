@@ -40,7 +40,7 @@ function applyMigrations(database, predicate = () => true) {
   for (const migration of MIGRATIONS.filter(predicate)) applyMigration(database, migration);
 }
 
-test('production migrations upgrade populated schema v85 to v91 without rewriting legacy kitchen data', () => {
+test('production migrations upgrade populated schema v85 to v93 without rewriting legacy kitchen data', () => {
   const legacy = new Database(':memory:');
   legacy.pragma('foreign_keys = ON');
   createMigrationTable(legacy);
@@ -72,7 +72,7 @@ test('production migrations upgrade populated schema v85 to v91 without rewritin
 
   applyMigrations(legacy, (migration) => migration.version >= 86);
 
-  assert.equal(legacy.prepare('SELECT MAX(version) AS version FROM schema_migrations').get().version, 91);
+  assert.equal(legacy.prepare('SELECT MAX(version) AS version FROM schema_migrations').get().version, 93);
   assert.deepEqual(
     legacy.prepare('SELECT name, quantity, amount, unit, added_from_meal FROM shopping_items WHERE id = ?').get(itemId),
     { name: 'Tomatoes', quantity: '2 cans', amount: null, unit: null, added_from_meal: mealId },
@@ -101,6 +101,11 @@ test('production migrations upgrade populated schema v85 to v91 without rewritin
   assert.equal(legacy.prepare('SELECT COUNT(*) AS count FROM pantry_items').get().count, 0);
   assert.equal(legacy.prepare('SELECT COUNT(*) AS count FROM inventory_movements').get().count, 0);
   assert.equal(legacy.prepare('SELECT COUNT(*) AS count FROM meal_cooking_events').get().count, 0);
+  assert.equal(legacy.prepare('SELECT COUNT(*) AS count FROM task_documents').get().count, 0);
+  assert.ok(
+    legacy.prepare("SELECT name FROM pragma_table_info('holiday_cache') WHERE name = 'group_code'").get(),
+    'holiday_cache.group_code must be present after migration 93',
+  );
   assert.equal(legacy.pragma('foreign_key_check').length, 0);
   legacy.close();
 });

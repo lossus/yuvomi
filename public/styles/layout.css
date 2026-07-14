@@ -1164,9 +1164,19 @@ html.fab-anim-done .page-fab {
     transition: opacity 0.12s ease;
   }
 
+  /* Eingeklappt stapelt der Footer vertikal. align-items:stretch dehnt die
+   * drei Items auf volle Rail-Breite (statt sie zentriert je nach verstecktem
+   * Label-Rest unterschiedlich breit zu lassen — sonst landeten ihre Icons an
+   * verschiedenen X-Positionen, #501). padding-inline:0 + padding-left:15px an
+   * den Items setzt die Icon-Flucht deckungsgleich mit den Body-Items. */
   html.sidebar-collapsed .nav-sidebar .nav-sidebar__footer-actions {
     flex-direction: column;
-    padding-inline: var(--space-1);
+    align-items: stretch;
+    padding-inline: 0;
+  }
+
+  html.sidebar-collapsed .nav-sidebar__footer-actions .nav-item {
+    padding-left: 15px;
   }
 
   /* Eingeklappt stapelt der Footer bereits vertikal (icon-only) — der
@@ -1177,8 +1187,16 @@ html.fab-anim-done .page-fab {
     margin-top: var(--space-0h);
   }
 
+  /* Eingeklappt: anders als die Nav-Item-Labels (die neben ihrem Icon in
+   * derselben Zeile sitzen und nur ausgeblendet werden müssen) belegt ein
+   * Sektionslabel eine eigene Zeile — bliebe es nur per opacity verborgen,
+   * klaffte zwischen den Icon-Gruppen eine leere Zeile (#501). Daher zusätzlich
+   * die Box auf null Höhe kollabieren; der Flyout (Hover/Fokus) stellt sie her. */
   html.sidebar-collapsed .nav-sidebar .nav-section-label {
     opacity: 0;
+    height: 0;
+    padding-block: 0;
+    overflow: hidden;
     transition: opacity 0.12s ease;
   }
 
@@ -1213,6 +1231,14 @@ html.fab-anim-done .page-fab {
     transition: opacity 0.18s ease 0.22s;
   }
 
+  /* Flyout: die eingeklappt auf null Höhe kollabierten Sektionslabels wieder
+   * als eigene Zeile aufspannen (Gegenstück zur Kollaps-Regel oben). */
+  html.sidebar-collapsed:not(.sidebar-collapse-pointer-lock) .nav-sidebar:hover .nav-section-label,
+  html.sidebar-collapsed .nav-sidebar:focus-within .nav-section-label {
+    height: auto;
+    padding-block: var(--space-3) var(--space-1);
+  }
+
   /* Beim Aufklappen (Hover/Fokus) muss der Footer das Expanded-Layout annehmen:
    * Zeile statt Spalte, Abmelden bricht als volle Zeile um. Ohne dies blieben
    * Hilfe/Änderungen/Abmelden in der eingeklappten, zentrierten Spalte stehen
@@ -1220,6 +1246,15 @@ html.fab-anim-done .page-fab {
   html.sidebar-collapsed:not(.sidebar-collapse-pointer-lock) .nav-sidebar:hover .nav-sidebar__footer-actions,
   html.sidebar-collapsed .nav-sidebar:focus-within .nav-sidebar__footer-actions {
     flex-direction: row;
+    align-items: center;
+    padding-inline: var(--space-1);
+  }
+
+  /* Flyout: den 15px-Icon-Einzug der eingeklappten Spalte zurücknehmen, damit
+   * Hilfe/Änderungen wie im gepinnten Expanded-Zustand bündig stehen. */
+  html.sidebar-collapsed:not(.sidebar-collapse-pointer-lock) .nav-sidebar:hover .nav-sidebar__footer-actions .nav-item,
+  html.sidebar-collapsed .nav-sidebar:focus-within .nav-sidebar__footer-actions .nav-item {
+    padding-left: var(--space-1);
   }
 
   html.sidebar-collapsed:not(.sidebar-collapse-pointer-lock) .nav-sidebar:hover .nav-sidebar__footer-actions .nav-item.nav-item--logout,
@@ -1909,6 +1944,72 @@ html.fab-anim-done .page-fab {
   opacity: 0.4;
   cursor: not-allowed;
   pointer-events: none;
+}
+
+/* ================================================================
+ * Zeilen-Aktionen — geteilte Grammatik (Audit F1)
+ *
+ * EIN Stil für Bearbeiten/Löschen/Mehr-Aktionen in allen Listen und Karten:
+ * nackter Icon-Button, ruhiger Grundzustand, klare 44px-Touch-Fläche, ohne
+ * Hover-Reveal lesbar (Touch). Ersetzt die zuvor pro Modul gestreuten Stile
+ * (mal Fill-Kreis, mal nacktes Icon, mal zu blass). Delete trägt --danger,
+ * semantische Sonderfälle (z.B. Anrufen) setzen nur die Farbe.
+ * ================================================================ */
+.row-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex-shrink: 0;
+}
+
+.row-action {
+  width: var(--target-lg);
+  height: var(--target-lg);
+  min-width: var(--target-lg);
+  min-height: var(--target-lg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-text-tertiary);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.row-action:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text-primary);
+}
+
+.row-action:active {
+  transform: scale(0.94);
+}
+
+.row-action:focus-visible {
+  outline: 2px solid var(--active-module-accent, var(--color-accent));
+  outline-offset: 2px;
+}
+
+.row-action--danger:hover {
+  background: var(--color-danger-light);
+  color: var(--color-danger);
+}
+
+.row-action--success {
+  color: var(--color-success);
+}
+
+.row-action--success:hover {
+  background: var(--color-success-light);
+  color: var(--color-success);
+}
+
+.row-action svg {
+  width: 18px;
+  height: 18px;
 }
 
 .btn--icon {

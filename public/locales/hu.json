@@ -1,5 +1,6 @@
 {
     "common": {
+        "searchClear": "Keresés törlése",
         "save": "Mentés",
         "cancel": "Mégse",
         "delete": "Törlés",
@@ -289,6 +290,13 @@
         "navLabelOverdue": "Feladatok, {{count}} lejárt",
         "pointsLabel": "Pontok",
         "pointsHint": "A pontok teljesítéskor jóváíródnak.",
+        "documentsLabel": "Dokumentumok",
+        "documentsHint": "Kapcsolj dokumentumokat a Dokumentumok modulból ehhez a feladathoz.",
+        "documentAdd": "Dokumentum csatolása",
+        "documentAddPlaceholder": "Válassz dokumentumot…",
+        "documentRemove": "Kapcsolat eltávolítása",
+        "documentsEmpty": "Még nincs csatolt dokumentum.",
+        "documentsCount": "{{count}} dokumentum",
         "assignedToMe": "Hozzám rendelve"
     },
     "shopping": {
@@ -1562,6 +1570,9 @@
         "holidaySubdivisionLabel": "Állam / Régió",
         "holidaySubdivisionNone": "Egész ország",
         "holidaySubdivisionPlaceholder": "Válasszon egy államot…",
+        "holidayGroupLabel": "Iskolai szünet régiója",
+        "holidayGroupNone": "Összes megjelenítése",
+        "holidayGroupHint": "Egyes többnyelvű kantonokban az iskolai szünetek időpontjai a nyelvi régiótól függően eltérnek. Válaszd ki a megfelelő régiót a pontos dátumokért.",
         "holidayPublicLabel": "Nyilvános ünnepek megjelenítése",
         "holidaySchoolLabel": "Iskolai szünetek megjelenítése",
         "holidayPublicColor": "Nyilvános ünnepek színe",
@@ -2140,7 +2151,7 @@
         "dmsAccountLabel": "DMS fiók"
     },
     "housekeeping": {
-        "title": "Takarító munkaterület",
+        "title": "Háztartás",
         "bottomNav": "Takarítás navigáció",
         "home": "Kezdőlap",
         "tasks": "Feladatok",

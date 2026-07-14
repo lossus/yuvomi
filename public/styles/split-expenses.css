@@ -29,7 +29,7 @@
 .split-group-header h2,
 .split-card h3 {
   margin: 0;
-  letter-spacing: 0;
+  letter-spacing: var(--tracking-normal);
   color: var(--color-text-primary);
 }
 
@@ -145,6 +145,19 @@
   outline: 0;
   background: transparent;
   color: var(--color-text-primary);
+  /* Drop WebKit's native type=search magnifier; the explicit leading icon is
+   * the only magnifier this field should show. */
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.split-search input::-webkit-search-decoration,
+.split-search input::-webkit-search-results-decoration,
+.split-search input::-webkit-search-results-button,
+.split-search input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
 }
 
 .split-groups {
@@ -193,7 +206,7 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--space-0h);
 }
 
 .split-group__name,

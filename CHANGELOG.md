@@ -22,8 +22,72 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Recipe, meal, recurring-meal, and shopping quantities can now optionally store an explicit positive amount with `g`, `kg`, `ml`, or `l`, while legacy free-text quantities remain editable and unchanged.
 
 ### Changed
+- The fork now includes the upstream v1.20.0–v1.22.2 fixes and features while preserving the published Kitchen migration lineage; task-document links and multilingual school-holiday groups are added as fork migrations 92 and 93.
 - Existing shopping lists receive a stable order during migration (`created_at`, then `id`), and new lists are appended to that order.
 - Meal-plan imports keep free-text quantities separate but deterministically aggregate explicit compatible mass or volume values while retaining every provenance source.
+## [1.22.2] - 2026-07-14
+
+### Fixed
+- Documents toolbar: on desktop the search box overlapped the title, the category chips were cut off at the right edge, and the status filters landed in the wrong row. The toolbar had crammed the title, search, view toggle, status filters, and all category chips into a single header row behind a collapsible slider, with no layout rule for wide screens. The filters now live in their own row beneath the header (matching the Contacts module): the header holds the title, search, and view toggle, while the status and category chips share a separate horizontally scrolling filter bar.
+
+## [1.22.1] - 2026-07-14
+
+### Fixed
+- Category manager (Contacts, Budget, Tasks): category names were shown in black and became unreadable in dark mode. The reusable category-manager component's styles lived only in the settings stylesheet, which is not loaded on those pages, so the names fell back to the browser default color. The styles are now loaded globally, so category names use the correct theme text color everywhere.
+
+## [1.22.0] - 2026-07-14
+
+### Added
+- Calendar holidays: multilingual regions with more than one school-holiday schedule (such as the Swiss canton Bern, split into a German-speaking and a French-speaking Bernese Jura schedule) can now be narrowed to the correct one. When such a region is selected in Settings → Modules → Calendar, an optional school-holiday-region picker appears; the chosen region filters the overlay to its own dates instead of merging both into one longer span.
+
+### Fixed
+- Calendar holidays: fixed school-holiday dates for multilingual Swiss cantons being shown too long. Previously the two language-region schedules were merged into their combined span (e.g. Bern ending 14 August instead of 9 August for the German-speaking part); with the new region picker each part now shows its real dates. Public holidays remain visible regardless of the selected region.
+
+## [1.21.0] - 2026-07-14
+
+### Added
+- Tasks: documents from the Documents module can now be linked to a task and opened directly from it. Linked documents appear as chips in the task dialog (opening the document preview or download), and the task card shows a paperclip badge with the count. Only documents you are allowed to see are listed or linkable.
+
+## [1.20.4] - 2026-07-14
+
+### Fixed
+- Navigation sidebar (collapsed): section titles no longer leave empty gaps between the icon groups, and the three footer icons (help, changes, logout) now line up on the same vertical rail as the navigation icons above instead of each sitting at a different horizontal position.
+
+## [1.20.3] - 2026-07-14
+
+### Fixed
+- Documents: the viewer modal now shows document names with special characters (such as `&`) correctly, instead of displaying HTML escape sequences. The title was being escaped twice.
+
+## [1.20.2] - 2026-07-13
+
+### Changed
+- Row actions (edit, delete, call, more) across all lists and cards now share one consistent style: bare icon buttons with a 48px touch target. This replaces the previous mix of filled circle buttons (Birthdays, Contacts) and bare icons of varying visibility elsewhere.
+- Statistics cards in Housekeeping and Subscriptions now use a compact two-column layout on mobile instead of four full-width stacked cards, so more information is visible without scrolling.
+
+### Fixed
+- Budget: the recurring-entry indicator now uses a monochrome icon consistent with the calendar, instead of a colored emoji.
+- Documents: on mobile, the filter button now sits beside the page title instead of alone below it.
+- Subscriptions: the two toolbar action buttons no longer stretch into full-width empty pills on mobile; they now share one compact row.
+- Housekeeping: the "recorded today" state now shows a readable label with a green check instead of a near-invisible checkmark.
+- Recipes: the "open recipe link" now carries an external-link icon so it reads as a link rather than plain text.
+- Shopping: the edit button on each item is now fully visible on touch devices instead of staying dimmed until hover.
+- Meals: the floating action button no longer overlaps the last "add meal" button at the end of the week.
+
+## [1.20.1] - 2026-07-13
+
+### Fixed
+- Search fields no longer show two magnifier icons in WebKit-based browsers (Safari). The browser's native search-field magnifier is now suppressed so only the app's own leading icon appears, across the shared page search (Notes, Contacts, Documents, Birthdays), Subscriptions, and the Split-expenses group filter.
+
+## [1.20.0] - 2026-07-13
+
+### Changed
+- UI/UX consistency pass across list and filter modules. Budget tabs now use the same shared tab component and keyboard behavior (arrow keys, Home/End, roving focus) as the Rewards and Housekeeping tabs.
+- Document filters (status and category) are now chip toggles instead of dropdown menus, matching the filter style already used in Contacts.
+- Search fields in Notes, Contacts, Documents, and Birthdays now share one persistent, labeled search field with a clear button, so search looks and behaves the same across those modules.
+- The Housekeeping page title now matches its navigation label.
+
+### Fixed
+- Budget: opening an account's transactions from the Accounts tab now moves the highlighted tab to "Budget" so it matches the content shown, instead of leaving the highlight on "Accounts".
 
 ## [1.19.1] - 2026-07-13
 

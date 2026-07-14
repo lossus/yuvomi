@@ -1,5 +1,6 @@
 {
     "common": {
+        "searchClear": "Limpar pesquisa",
         "save": "Salvar",
         "cancel": "Cancelar",
         "delete": "Excluir",
@@ -289,6 +290,13 @@
         "selectTask": "Select task",
         "pointsLabel": "Pontos",
         "pointsHint": "Os pontos são creditados ao concluir.",
+        "documentsLabel": "Documentos",
+        "documentsHint": "Associe documentos do módulo Documentos a esta tarefa.",
+        "documentAdd": "Associar documento",
+        "documentAddPlaceholder": "Selecione um documento…",
+        "documentRemove": "Remover associação",
+        "documentsEmpty": "Ainda não há documentos associados.",
+        "documentsCount": "{{count}} documentos",
         "assignedToMe": "Atribuídos a mim"
     },
     "shopping": {
@@ -1562,6 +1570,9 @@
         "holidaySubdivisionLabel": "Estado / Região",
         "holidaySubdivisionNone": "País inteiro",
         "holidaySubdivisionPlaceholder": "Selecionar uma região…",
+        "holidayGroupLabel": "Região de férias escolares",
+        "holidayGroupNone": "Mostrar tudo",
+        "holidayGroupHint": "Alguns cantões plurilingues têm datas de férias escolares diferentes consoante a região linguística. Escolha a região correspondente para datas corretas.",
         "holidayPublicLabel": "Mostrar feriados",
         "holidaySchoolLabel": "Mostrar férias escolares",
         "holidayPublicColor": "Cor dos feriados",
@@ -2140,7 +2151,7 @@
         "goHealth": "Saúde"
     },
     "housekeeping": {
-        "title": "Área da faxineira",
+        "title": "Faxina",
         "bottomNav": "Navegação da faxina",
         "home": "Início",
         "tasks": "Tarefas",

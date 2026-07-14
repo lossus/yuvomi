@@ -395,6 +395,7 @@ test('module-specific settings leaves only reference their owned preferences and
       endpoints: [
         '/preferences',
         '/preferences/holidays/countries',
+        '/preferences/holidays/groups/',
         '/preferences/holidays/subdivisions/',
         '/preferences/holidays/sync',
       ],
@@ -405,6 +406,7 @@ test('module-specific settings leaves only reference their owned preferences and
         'week_start',
         'holiday_country',
         'holiday_subdivision',
+        'holiday_group',
         'holiday_show_public',
         'holiday_show_school',
         'holiday_public_color',
@@ -1292,8 +1294,10 @@ test('phase 3 mobile Tasks toolbar collapses secondary controls into one overflo
 test('responsive adaptation keeps Notes vertical and prevents intrinsic-width overflow', () => {
   const notes = read('../public/styles/notes.css');
   const dashboard = read('../public/styles/dashboard.css');
+  const pageSearch = read('../public/styles/page-search.css');
 
-  assert.match(notes, /\.notes-toolbar__search\s*\{[\s\S]*min-width:\s*0/);
+  // The shared search control guards its own intrinsic-width overflow.
+  assert.match(pageSearch, /\.page-search\s*\{[\s\S]*min-width:\s*0/);
   assert.match(notes, /\.notes-toolbar\s+\.page-toolbar__title\s*\{[\s\S]*flex:\s*0\s+0\s+auto/);
   assert.match(notes, /\.notes-grid\s*\{[\s\S]*display:\s*grid/);
   assert.match(notes, /\.notes-grid\s*\{[\s\S]*grid-template-columns:\s*minmax\(0,\s*1fr\)/);
@@ -1367,13 +1371,15 @@ test('responsive adaptation uses tablet space without crowding module toolbars',
   const documents = read('../public/styles/documents.css');
   const settings = read('../public/styles/settings.css');
 
+  // Der Dokument-Kopf lehnt sich am kanonischen page-toolbar--wrap-Muster an
+  // (Titel + Suche + Aktionen brechen bei Bedarf um), die Filter leben in einer
+  // eigenen Zeile darunter — kein in die Kopfzeile gequetschter Filter-Block (#506).
+  const documentsPageSrc = read('../public/pages/documents.js');
+  assert.match(documentsPageSrc, /class="page-toolbar page-toolbar--wrap documents-toolbar"/);
+  assert.match(documentsPageSrc, /<div class="documents-filters">/);
   assert.match(
     documents,
-    /@media \(min-width:\s*768px\) and \(max-width:\s*1023px\)[\s\S]*\.documents-toolbar\s*\{[\s\S]*flex-wrap:\s*wrap/
-  );
-  assert.match(
-    documents,
-    /@media \(min-width:\s*768px\) and \(max-width:\s*1023px\)[\s\S]*\.documents-toolbar__search\s*\{[\s\S]*flex-basis:\s*100%/
+    /\.documents-filters\s*\{[\s\S]*overflow-x:\s*auto/
   );
   assert.match(
     settings,
@@ -1464,20 +1470,18 @@ test('hardening keeps Birthday cards bounded with extreme localized content', ()
 
 test('hardening uses logical alignment for RTL-sensitive adapted controls', () => {
   const notes = read('../public/styles/notes.css');
-  const documents = read('../public/styles/documents.css');
-  const birthdays = read('../public/styles/birthdays.css');
   const tasks = read('../public/styles/tasks.css');
+  const pageSearch = read('../public/styles/page-search.css');
 
   assert.match(notes, /margin-inline-start:\s*auto/);
-  assert.match(notes, /\.notes-toolbar__search-icon\s*\{[\s\S]*inset-inline-start:/);
+  // The shared search control's leading icon uses logical inset for RTL.
+  assert.match(pageSearch, /\.page-search__icon\s*\{[\s\S]*inset-inline-start:/);
   assert.match(notes, /\.note-card__pin\s*\{[\s\S]*inset-inline-end:/);
-  assert.match(documents, /\.documents-toolbar__search-icon\s*\{[\s\S]*inset-inline-start:/);
   assert.match(tasks, /\.tasks-toolbar__secondary-panel\s*\{[\s\S]*inset-inline-end:\s*0/);
   assert.match(
     tasks,
     /\[dir=['"]rtl['"]\] \.tasks-toolbar__secondary-panel\s*\{[\s\S]*inset-inline-start:\s*0;[\s\S]*inset-inline-end:\s*auto/
   );
-  assert.match(birthdays, /\.birthdays-toolbar__search-icon\s*\{[\s\S]*inset-inline-start:/);
 });
 
 test('route failures expose a localized recoverable alert instead of raw technical errors', () => {
@@ -1540,14 +1544,17 @@ test('phase 6 touched UI files continue using design tokens for target sizes', (
   const tasks = read('../public/styles/tasks.css');
   const shopping = read('../public/styles/shopping.css');
   const notes = read('../public/styles/notes.css');
-  const contacts = read('../public/styles/contacts.css');
+  // Zeilen-Aktionen nutzen jetzt die geteilte .row-action-Grammatik in
+  // layout.css (Audit F1) statt pro Modul eigener Klassen (früher
+  // .contact-action-btn/.birthday-action-btn/.budget-entry__action).
+  const layout = read('../public/styles/layout.css');
   const targetRules = [
     ['../public/styles/tasks.css', tasks, '.task-status-btn'],
     ['../public/styles/shopping.css', shopping, '.quick-add__btn'],
     ['../public/styles/shopping.css', shopping, '.item-check'],
     ['../public/styles/notes.css', notes, '.note-card__pin'],
     ['../public/styles/notes.css', notes, '.note-card__delete'],
-    ['../public/styles/contacts.css', contacts, '.contact-action-btn'],
+    ['../public/styles/layout.css', layout, '.row-action'],
   ];
 
   for (const [file, source, selector] of targetRules) {
@@ -1565,11 +1572,11 @@ test('phase 6 touched UI files continue using design tokens for target sizes', (
     assertRuleUsesToken(shopping, '.item-check', property, '--target-base', '../public/styles/shopping.css');
     assertRuleUsesToken(notes, '.note-card__pin', property, '--target-base', '../public/styles/notes.css');
     assertRuleUsesToken(notes, '.note-card__delete', property, '--target-base', '../public/styles/notes.css');
-    assertRuleUsesToken(contacts, '.contact-action-btn', property, '--target-lg', '../public/styles/contacts.css');
+    assertRuleUsesToken(layout, '.row-action', property, '--target-lg', '../public/styles/layout.css');
   }
 
-  assertRuleUsesToken(contacts, '.contact-action-btn', 'min-height', '--target-lg', '../public/styles/contacts.css');
-  assertRuleUsesToken(contacts, '.contact-action-btn', 'min-width', '--target-lg', '../public/styles/contacts.css');
+  assertRuleUsesToken(layout, '.row-action', 'min-height', '--target-lg', '../public/styles/layout.css');
+  assertRuleUsesToken(layout, '.row-action', 'min-width', '--target-lg', '../public/styles/layout.css');
 });
 
 test('phase 4 keeps Kitchen navigation identity stable', () => {
@@ -1826,19 +1833,16 @@ test('phase 7 calendar inline polish keeps icons and all-day labels tokenized', 
 
 test('phase 7 Budget row actions stay touch-safe on mobile', () => {
   const source = read('../public/pages/budget.js');
-  const budget = read('../public/styles/budget.css');
-  // Row-Action-Buttons (Löschen UND Bearbeiten) teilen die touch-sichere
-  // Basisklasse .budget-entry__action; .budget-entry__delete trägt nur noch
-  // die Delete-Semantik (roter Hover).
-  const actionRule = cssRuleBody(budget, '.budget-entry__action');
+  const layout = read('../public/styles/layout.css');
+  // Zeilen-Aktionen (Löschen UND Bearbeiten) teilen die geteilte .row-action-
+  // Grammatik (layout.css, Audit F1): 48px-Touch-Fläche, immer sichtbar (kein
+  // Hover-Reveal → auch auf Touch nutzbar), Löschen trägt row-action--danger.
+  const actionRule = cssRuleBody(layout, '.row-action');
 
-  assert.match(actionRule, /width:\s*var\(--target-base\)/, 'Budget row action buttons should use the base touch target width');
-  assert.match(actionRule, /height:\s*var\(--target-base\)/, 'Budget row action buttons should use the base touch target height');
-  assert.match(
-    budget,
-    /@media \(hover:\s*none\), \(max-width:\s*640px\)[\s\S]*\.budget-entry__action\s*\{[\s\S]*opacity:\s*1/,
-    'Budget row actions should be visible on touch/mobile viewports',
-  );
+  assert.match(actionRule, /width:\s*var\(--target-lg\)/, 'Row action buttons should use the large touch target width');
+  assert.match(actionRule, /height:\s*var\(--target-lg\)/, 'Row action buttons should use the large touch target height');
+  assert.doesNotMatch(actionRule, /opacity:\s*0/, 'Row actions stay visible without hover (touch-safe)');
+  assert.match(source, /class="row-action row-action--danger"/, 'Budget delete uses the shared danger row action');
   assert.doesNotMatch(source, /data-lucide="(?:plus|trash-2|pencil)"\s+style=/, 'Budget Lucide actions should use icon utility classes');
 });
 
@@ -2252,9 +2256,11 @@ test('budget chart exposes a screen-reader summary (audit 1.7)', () => {
 test('Budget places Subscriptions between Budget and Loans with secure rendering', () => {
   const budget = read('../public/pages/budget.js');
   const subscriptions = read('../public/pages/subscriptions.js');
-  const budgetTab = budget.indexOf('data-tab="budget"');
-  const subscriptionsTab = budget.indexOf('data-tab="subscriptions"');
-  const loansTab = budget.indexOf('data-tab="loans"');
+  // Tab-Reihenfolge liegt in der Definitionsliste (data-tab-id wird daraus
+  // generiert): Abonnements müssen zwischen Budget und Darlehen stehen.
+  const budgetTab = budget.indexOf("['budget',");
+  const subscriptionsTab = budget.indexOf("['subscriptions',");
+  const loansTab = budget.indexOf("['loans',");
 
   assert.ok(budgetTab >= 0 && subscriptionsTab > budgetTab && loansTab > subscriptionsTab);
   assert.match(budget, /renderSubscriptions/);
@@ -2264,15 +2270,33 @@ test('Budget places Subscriptions between Budget and Loans with secure rendering
 });
 
 test('search fields keep visible labels after users enter a query', () => {
-  const fields = [
+  // The shared page-search building block renders the label+input pair once;
+  // page-toolbar modules opt in by calling renderPageSearch with their field id.
+  // Split-expenses keeps its own sidebar-filter markup (visible label above the
+  // control, server-side reload) as a documented, distinct pattern.
+  const pageSearch = read('../public/utils/page-search.js');
+  assert.match(pageSearch, /<label[^>]*for="\$\{esc\(id\)\}"/);
+  assert.match(pageSearch, /<input[^>]*id="\$\{esc\(id\)\}"/);
+
+  const viaComponent = [
     ['../public/pages/birthdays.js', 'birthdays-search'],
     ['../public/pages/contacts.js', 'contacts-search'],
     ['../public/pages/notes.js', 'notes-search'],
     ['../public/pages/documents.js', 'documents-search'],
+  ];
+  for (const [file, id] of viaComponent) {
+    const source = read(file);
+    assert.match(
+      source,
+      new RegExp(`renderPageSearch\\(\\{[^}]*id:\\s*['"]${id}['"]`),
+      `${file} must render #${id} via the shared page-search component`,
+    );
+  }
+
+  const inlineLabel = [
     ['../public/pages/split-expenses.js', 'split-group-search'],
   ];
-
-  for (const [file, id] of fields) {
+  for (const [file, id] of inlineLabel) {
     const source = read(file);
     assert.match(
       source,
@@ -2367,10 +2391,11 @@ test('mobile meal actions remain visible and touch-safe after the full cascade',
 
 test('audited profile, birthday, navigation, and budget controls meet mobile touch targets', () => {
   const settings = read('../public/styles/settings.css');
-  const birthdays = read('../public/styles/birthdays.css');
+  const layout = read('../public/styles/layout.css');
   const budget = read('../public/styles/budget.css');
   const contacts = read('../public/styles/contacts.css');
   const housekeeping = read('../public/styles/housekeeping.css');
+  const subTabs = read('../public/styles/sub-tabs.css');
 
   assert.match(settings, /\.settings-avatar-action\s*\{[\s\S]*width:\s*var\(--target-md\)[\s\S]*height:\s*var\(--target-md\)/);
   assert.match(
@@ -2378,8 +2403,13 @@ test('audited profile, birthday, navigation, and budget controls meet mobile tou
     /@media \(max-width:\s*640px\)[\s\S]*\.settings-avatar-action\s*\{[\s\S]*width:\s*var\(--target-lg\)[\s\S]*height:\s*var\(--target-lg\)/,
   );
   assert.match(settings, /\.settings-module-move\s*\{[\s\S]*width:\s*var\(--target-base\)[\s\S]*height:\s*var\(--target-base\)/);
-  assert.match(birthdays, /\.birthday-action-btn\s*\{[\s\S]*width:\s*var\(--target-lg\)[\s\S]*height:\s*var\(--target-lg\)/);
-  assert.match(budget, /\.budget-tab\s*\{[\s\S]*min-height:\s*var\(--target-lg\)/);
+  // Zeilen-Aktionen (Bearbeiten/Löschen in Geburtstags-/Budget-/Kontakt-Karten)
+  // teilen jetzt .row-action mit 48px-Touch-Fläche (Audit F1).
+  assert.match(layout, /\.row-action\s*\{[\s\S]*width:\s*var\(--target-lg\)[\s\S]*height:\s*var\(--target-lg\)/);
+  // Budget-Tabs nutzen jetzt das geteilte .sub-tab (sub-tabs.css) statt eigener
+  // .budget-tab-Buttons — Touch-Target dort prüfen (44px, iOS-Minimum, wie alle
+  // Sub-Tab-Module: Belohnungen/Haushaltshilfe/Küche/Gesundheit).
+  assert.match(subTabs, /\.sub-tab\s*\{[\s\S]*height:\s*var\(--target-base\)/);
   assert.match(budget, /\.budget-nav__today\s*\{[\s\S]*min-height:\s*var\(--target-lg\)/);
   assert.match(
     contacts,
@@ -2410,7 +2440,9 @@ test('contacts keep one primary call action and disclose the rest through a labe
   const contactsCss = read('../public/styles/contacts.css');
 
   // Genau eine stets sichtbare Primäraktion pro Zeile: Anrufen (falls Telefon da).
-  assert.match(contactsPage, /contact-action-btn--call/);
+  // Nutzt die geteilte .row-action-Grammatik mit semantischer Erfolgs-Färbung
+  // (grün) über row-action--success (Audit F1).
+  assert.match(contactsPage, /href="tel:[\s\S]*class="row-action row-action--success"/);
   // Sekundäraktionen leben im „Mehr"-Menü als BESCHRIFTETE Einträge (Icon + Text),
   // identisch auf Desktop und Mobile — behebt das „nackte Icons"-Problem.
   assert.match(contactsPage, /class="contact-menu-item"[\s\S]*contact-menu-item__icon[\s\S]*<span>/);
@@ -2459,20 +2491,18 @@ test('documents and navigation settings use progressive disclosure instead of st
   const navigationPage = read('../public/settings/pages/modules-navigation.js');
   const settingsCss = read('../public/styles/settings.css');
 
-  assert.match(documentsPage, /<details class="documents-secondary-controls"/);
-  assert.match(documentsPage, /<summary[^>]*documents-secondary-controls__trigger/);
+  // Dokumente folgen dem Kontakte-Muster (Issue #506): Filter leben in einer
+  // eigenen, horizontal scrollenden Zeile unter dem Kopf — nicht mehr hinter
+  // einem <details>-Slider in die Kopfzeile gequetscht.
+  assert.doesNotMatch(documentsPage, /documents-secondary-controls/);
+  assert.match(documentsPage, /<div class="documents-filters">/);
+  assert.match(documentsPage, /class="documents-filter-group" id="documents-status"/);
+  assert.match(documentsPage, /class="documents-filter-chips" id="documents-category"/);
   assert.match(
     documentsCss,
-    /@media \(max-width:\s*767px\)[\s\S]*\.documents-secondary-controls__panel\s*\{[\s\S]*display:\s*none/,
+    /\.documents-filters\s*\{[\s\S]*overflow-x:\s*auto[\s\S]*\}/,
   );
-  assert.match(
-    documentsCss,
-    /@media \(max-width:\s*767px\)[\s\S]*\.documents-secondary-controls\s*\{[\s\S]*position:\s*static/,
-  );
-  assert.match(
-    documentsCss,
-    /@media \(max-width:\s*767px\)[\s\S]*\.documents-secondary-controls__panel\s*\{[\s\S]*inset-inline:\s*var\(--space-4\)[\s\S]*width:\s*auto/,
-  );
+  assert.doesNotMatch(documentsCss, /documents-secondary-controls/);
   assert.match(navigationPage, /class="settings-navigation-panel"/);
   assert.doesNotMatch(navigationPage, /<div class="settings-card">/);
   assert.match(settingsCss, /\.settings-navigation-panel\s*\{[\s\S]*border-bottom:\s*var\(--space-px\)\s+solid\s+var\(--color-border-subtle\)/);
@@ -2498,6 +2528,50 @@ test('housekeeping exposes its page title as the primary heading', () => {
 
   assert.match(housekeeping, /<h1 class="page-toolbar__title" id="housekeeping-title">/);
   assert.doesNotMatch(housekeeping, /<div class="page-toolbar__title" id="housekeeping-title">/);
+});
+
+// Modulkopf-Familien (R2/F4): Es gibt ZWEI bewusste, in utils/tablist.js
+// dokumentierte Kopf-Muster, kein Ausreißer:
+//   (1) In-Page-Tabs  — Tabs leben im kanonischen `.page-toolbar` mit sichtbarem
+//       `<h1 class="page-toolbar__title">`, verdrahtet via wireTablist. Der Tab-
+//       wechsel tauscht Inhalt INNERHALB einer Route (budget/housekeeping/rewards).
+//   (2) Routen-Cluster — geteilte sticky `.sub-tabs-bar` via renderSubTabs mit
+//       dekorativem Inline-Titel + separater `sr-only` <h1>; die Leiste NAVIGIERT
+//       zwischen Deep-Link-Routen (health, kitchen: meals/recipes/shopping).
+// Der Web-Audit flaggte health als Kopf-Ausreißer; tatsächlich teilt es exakt das
+// Muster von kitchen. health auf ein page-toolbar zu zwingen würde es von seinen
+// vier Geschwister-Modulen wegbrechen. Dieser Guard pinnt die Grenze, damit ein
+// künftiges „Köpfe vereinheitlichen"-Refactor die Routen-Cluster-Familie nicht
+// still zerlegt.
+test('module-head families stay split: in-page tabs vs route clusters', () => {
+  // Familie 1: page-toolbar-Kopf + wireTablist, keine sub-tabs-bar.
+  for (const mod of ['budget', 'housekeeping', 'rewards']) {
+    const src = read(`../public/pages/${mod}.js`);
+    assert.match(src, /wireTablist/, `${mod}: erwartet wireTablist (In-Page-Tab-Familie)`);
+    assert.match(src, /<h1 class="page-toolbar__title"/, `${mod}: erwartet sichtbares <h1 page-toolbar__title>`);
+    assert.match(src, /role="tablist"/, `${mod}: Tabs tragen role="tablist" im page-toolbar`);
+    assert.doesNotMatch(src, /renderSubTabs\b/, `${mod}: In-Page-Tab-Familie nutzt keine sub-tabs-bar`);
+  }
+
+  // Familie 2: geteilte sub-tabs-bar via renderSubTabs, sichtbarer Titel in der
+  // Leiste, separates sr-only <h1> als semantische Überschrift.
+  const healthTabs = read('../public/utils/health-tabs.js');
+  const kitchenTabs = read('../public/utils/kitchen-tabs.js');
+  assert.match(healthTabs, /renderSubTabs/, 'health-tabs.js: erwartet renderSubTabs');
+  assert.match(healthTabs, /title:\s*t\('nav\.health'\)/, 'health-tabs.js: sichtbarer Inline-Titel in der Leiste');
+  assert.match(kitchenTabs, /renderSubTabs/, 'kitchen-tabs.js: erwartet renderSubTabs');
+
+  const health = read('../public/pages/health.js');
+  assert.match(health, /renderHealthTabsBar/, 'health: erwartet renderHealthTabsBar');
+  assert.match(health, /<h1 class="sr-only">/, 'health: sr-only <h1> (die sub-tabs-bar trägt den sichtbaren Titel)');
+  // Präzise auf den Import des geteilten wireTablist-Utils prüfen — der lokale
+  // Helfer `wireTablistKeys` (Panel-interne Pfeiltasten) ist bewusst unberührt.
+  assert.doesNotMatch(health, /from '\/utils\/tablist\.js'/, 'health bleibt Routen-Cluster (kein wireTablist-Util-Import)');
+
+  // Der Interaktions-Baustein dokumentiert den bewussten Split (eine Grammatik,
+  // zwei Layout-Familien) — damit der Guard eine benannte Quelle hat.
+  const tablist = read('../public/utils/tablist.js');
+  assert.match(tablist, /renderSubTabs/, 'tablist.js dokumentiert die Abgrenzung zu renderSubTabs');
 });
 
 test('priority badges and meal labels meet WCAG AA contrast in both themes', () => {

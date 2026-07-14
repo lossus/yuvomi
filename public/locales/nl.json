@@ -1,5 +1,6 @@
 {
     "common": {
+        "searchClear": "Zoekopdracht wissen",
         "save": "Opslaan",
         "cancel": "Annuleren",
         "delete": "Verwijderen",
@@ -289,6 +290,13 @@
         "navLabelOverdue": "Taken, {{count}} verlopen",
         "pointsLabel": "Punten",
         "pointsHint": "Punten worden bij voltooiing bijgeschreven.",
+        "documentsLabel": "Documenten",
+        "documentsHint": "Koppel documenten uit de module Documenten aan deze taak.",
+        "documentAdd": "Document koppelen",
+        "documentAddPlaceholder": "Selecteer een document…",
+        "documentRemove": "Koppeling verwijderen",
+        "documentsEmpty": "Nog geen documenten gekoppeld.",
+        "documentsCount": "{{count}} documenten",
         "assignedToMe": "Aan mij toegewezen"
     },
     "shopping": {
@@ -1562,6 +1570,9 @@
         "holidaySubdivisionLabel": "Provincie / Regio",
         "holidaySubdivisionNone": "Hele land",
         "holidaySubdivisionPlaceholder": "Selecteer een regio…",
+        "holidayGroupLabel": "Schoolvakantieregio",
+        "holidayGroupNone": "Alles tonen",
+        "holidayGroupHint": "Sommige meertalige kantons hebben verschillende schoolvakantiedata afhankelijk van de taalregio. Kies de juiste regio voor correcte datums.",
         "holidayPublicLabel": "Feestdagen weergeven",
         "holidaySchoolLabel": "Schoolvakanties weergeven",
         "holidayPublicColor": "Kleur feestdagen",
@@ -2140,7 +2151,7 @@
         "dmsAccountLabel": "DMS-account"
     },
     "housekeeping": {
-        "title": "Werkruimte schoonmaker",
+        "title": "Huishouden",
         "bottomNav": "Huishoudnavigatie",
         "home": "Thuis",
         "tasks": "Taken",

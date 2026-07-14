@@ -1,5 +1,6 @@
 {
     "common": {
+        "searchClear": "Εκκαθάριση αναζήτησης",
         "save": "Αποθήκευση",
         "cancel": "Ακύρωση",
         "delete": "Διαγραφή",
@@ -289,6 +290,13 @@
         "selectTask": "Select task",
         "pointsLabel": "Πόντοι",
         "pointsHint": "Οι πόντοι πιστώνονται με την ολοκλήρωση.",
+        "documentsLabel": "Έγγραφα",
+        "documentsHint": "Συνδέστε έγγραφα από τη μονάδα Έγγραφα με αυτή την εργασία.",
+        "documentAdd": "Σύνδεση εγγράφου",
+        "documentAddPlaceholder": "Επιλέξτε ένα έγγραφο…",
+        "documentRemove": "Κατάργηση σύνδεσης",
+        "documentsEmpty": "Δεν έχουν συνδεθεί έγγραφα ακόμη.",
+        "documentsCount": "{{count}} έγγραφα",
         "assignedToMe": "Ανατεθειμένα σε μένα"
     },
     "shopping": {
@@ -1562,6 +1570,9 @@
         "holidaySubdivisionLabel": "Περιφέρεια / Πολιτεία",
         "holidaySubdivisionNone": "Ολόκληρη η χώρα",
         "holidaySubdivisionPlaceholder": "Επιλέξτε περιφέρεια…",
+        "holidayGroupLabel": "Περιοχή σχολικών διακοπών",
+        "holidayGroupNone": "Εμφάνιση όλων",
+        "holidayGroupHint": "Ορισμένα πολύγλωσσα καντόνια έχουν διαφορετικές ημερομηνίες σχολικών διακοπών ανάλογα με τη γλωσσική περιοχή. Επίλεξε τη σωστή περιοχή για σωστές ημερομηνίες.",
         "holidayPublicLabel": "Εμφάνιση αργιών",
         "holidaySchoolLabel": "Εμφάνιση σχολικών διακοπών",
         "holidayPublicColor": "Χρώμα αργιών",
@@ -2140,7 +2151,7 @@
         "goHealth": "Υγεία"
     },
     "housekeeping": {
-        "title": "Cleaner workspace",
+        "title": "Νοικοκυριό",
         "bottomNav": "Housekeeping navigation",
         "home": "Home",
         "tasks": "Tasks",

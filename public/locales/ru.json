@@ -1,5 +1,6 @@
 {
     "common": {
+        "searchClear": "Очистить поиск",
         "save": "Сохранить",
         "cancel": "Отмена",
         "delete": "Удалить",
@@ -289,6 +290,13 @@
         "selectTask": "Select task",
         "pointsLabel": "Баллы",
         "pointsHint": "Баллы начисляются после выполнения.",
+        "documentsLabel": "Документы",
+        "documentsHint": "Свяжите документы из модуля «Документы» с этой задачей.",
+        "documentAdd": "Связать документ",
+        "documentAddPlaceholder": "Выберите документ…",
+        "documentRemove": "Удалить связь",
+        "documentsEmpty": "Пока нет связанных документов.",
+        "documentsCount": "Документов: {{count}}",
         "assignedToMe": "Назначенные мне"
     },
     "shopping": {
@@ -1562,6 +1570,9 @@
         "holidaySubdivisionLabel": "Регион / штат",
         "holidaySubdivisionNone": "Вся страна",
         "holidaySubdivisionPlaceholder": "Выберите регион…",
+        "holidayGroupLabel": "Регион школьных каникул",
+        "holidayGroupNone": "Показать все",
+        "holidayGroupHint": "В некоторых многоязычных кантонах даты школьных каникул различаются в зависимости от языкового региона. Выберите нужный регион для правильных дат.",
         "holidayPublicLabel": "Показывать праздники",
         "holidaySchoolLabel": "Показывать школьные каникулы",
         "holidayPublicColor": "Цвет праздников",
@@ -2140,7 +2151,7 @@
         "goHealth": "Здоровье"
     },
     "housekeeping": {
-        "title": "Cleaner workspace",
+        "title": "Уборка",
         "bottomNav": "Housekeeping navigation",
         "home": "Home",
         "tasks": "Tasks",
