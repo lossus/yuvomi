@@ -243,6 +243,15 @@ Analysierte Implementierungsbereiche:
 - Auswirkungen: Eine Präferenz ist ein separater späterer UX-Task.
 - Status: **accepted und in KWF-004 implementiert**.
 
+### ADR-KITCHEN-012 — Upstream-Funktionalität in der Fork-Migrationslinie fortführen
+
+- Problem: Fork und Upstream haben die Migrationsnummern 86/87 bereits mit unterschiedlichen Inhalten veröffentlicht.
+- Entscheidung: Die bestehende Fork-/Kitchen-Linie 86–91 bleibt unverändert. Die Upstream-Funktionen `task_documents` und `holiday_cache.group_code` werden im Fork additiv als Migration 92 beziehungsweise 93 integriert. Unterstützt werden bestehende Fork-Datenbanken bis v91 und frische Installationen; der direkte Wechsel einer bereits auf Upstream v1.22.x migrierten Datenbank in diesen Fork ist ausdrücklich nicht Teil dieses Integrations-Scope.
+- Begründung: Sämtliche Kitchen-Daten und veröffentlichte Fork-Upgrades bleiben sicher, während keine wichtige Upstream-Funktionalität verloren geht. `upstream` bleibt read-only; die Integration wird ausschließlich im Fork fortgeführt.
+- Alternativen: veröffentlichte Fork-Migrationen umschreiben; Upstream-Funktionen auslassen; bidirektionale Lineage-Reconciliation. Alle drei wurden für diesen Scope verworfen.
+- Auswirkungen: DB-/Schema-Tests müssen v91→v93 und Fresh→v93 abdecken. Upstream-Migrationstexte werden nur im Fork-Integrationsresultat umnummeriert; ihre Tabellen-/Spaltensemantik bleibt unverändert.
+- Status: **accepted durch Benutzerentscheidung am 2026-07-14**.
+
 ## 6. Datenmodell-Mapping
 
 | Tabelle | Zweck / wichtige Spalten | Beziehungen | Geplante Änderung | Migration / Rückwärtskompatibilität |
@@ -457,7 +466,7 @@ Neue i18n-Namensräume: KWF-006 implementiert `quantity.*`; KWF-007 implementier
 - Schweregrad: hoch für die Repository-Integration.
 - Auswirkung: Im Fork sind 86 `shopping_lists.sort_order` und 87 `shopping_item_sources`; Upstream verwendet 86 für `task_documents` und 87 für `holiday_cache.group_code`. Ein normaler Merge kann nur eine Bedeutung je Versionsnummer behalten. Einfaches Umnummerieren der Upstream-Migrationen auf 92/93 schützt bestehende Fork-Datenbanken und frische Installationen, unterstützt aber ohne zusätzliche Reconciliation keinen Wechsel einer bereits auf Upstream 1.22.x migrierten Datenbank zum Fork: Dort würden die Kitchen-Migrationen 86/87 wegen der belegten Versionsnummern übersprungen und spätere abhängige Migrationen könnten scheitern.
 - Empfehlung: Vor der Integration explizit entscheiden, ob ausschließlich bestehende Fork-/Fresh-Install-Upgrades unterstützt werden (Upstream 86/87 werden 92/93) oder ob zusätzlich ein bidirektionaler Lineage-Reconciliation-Pfad für bereits migrierte Upstream-Datenbanken entworfen und getestet werden muss. Keine veröffentlichte Migration stillschweigend umschreiben.
-- Status: offen; Merge vor jeder Konfliktauflösung angehalten.
+- Status: **Entscheidung getroffen**: Option 1 ist bestätigt. Fork 86–91 bleibt kanonisch, Upstream-Funktionalität folgt als 92/93; direkte Upstream-v1.22.x→Fork-Datenbankmigration bleibt außerhalb des Scope.
 - Task: KWF-FINDING-013 Repository-Integration.
 
 ### KWF-FINDING-014 — KWF-004-API-Vertrag ist in der Task-2-Analyse veraltet
