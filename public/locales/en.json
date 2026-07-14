@@ -354,7 +354,24 @@
         "sourceSingleNoDate": "From: {{source}}",
         "sourcesMultiple": "{{count}} sources",
         "sourceDeleted": "{{source}} (source deleted)",
-        "sourceUnknown": "Unknown source"
+        "sourceUnknown": "Unknown source",
+        "addToPantry": "Add to pantry",
+        "pantryTransferred": "Added to pantry",
+        "pantryUndo": "Undo",
+        "pantryTransferTitle": "Add {{name}} to pantry",
+        "pantryTransferHint": "Confirm the quantity and choose whether to create a new stock lot or add to an existing one.",
+        "pantryTarget": "Pantry target",
+        "pantryNewItem": "Create new pantry item",
+        "pantryConfirmedDisplay": "Confirmed display quantity",
+        "pantryDisplayHint": "Free text is kept exactly as entered and is never interpreted automatically.",
+        "pantryLocation": "Location",
+        "onlyCheck": "Only check off",
+        "pantryQuantityRequired": "Confirm an amount and unit or enter an explicit display quantity.",
+        "pantryExistingStructuredRequired": "Adding to an existing pantry item requires a structured amount and unit.",
+        "pantryTransferReason": "Purchased from shopping list",
+        "pantryTransferSuccess": "Added to pantry",
+        "pantryUndoReason": "Undo shopping purchase",
+        "pantryUndoSuccess": "Pantry transfer reversed"
     },
     "meals": {
         "title": "Meal Plan",
@@ -3254,7 +3271,8 @@
             "initial": "Initial stock",
             "adjustment": "Stock adjustment",
             "correction": "Stock correction",
-            "reversal": "Reversal"
+            "reversal": "Reversal",
+            "purchase": "Shopping purchase"
         },
         "locations": {
             "fridge": "Fridge",

@@ -3321,6 +3321,18 @@ const MIGRATIONS = [
         ('other', 'pantry.locations.other', 4);
     `,
   },
+  {
+    version: 90,
+    description: 'Shopping item provenance for idempotent pantry purchase transfers',
+    up: `
+      ALTER TABLE inventory_movements
+        ADD COLUMN shopping_item_id INTEGER REFERENCES shopping_items(id) ON DELETE SET NULL;
+
+      CREATE INDEX IF NOT EXISTS idx_inventory_movements_shopping_item
+        ON inventory_movements(shopping_item_id, created_at DESC, id DESC)
+        WHERE shopping_item_id IS NOT NULL;
+    `,
+  },
 ];
 
 /**

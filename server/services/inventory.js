@@ -78,8 +78,8 @@ function insertMovement(database, movement) {
     INSERT INTO inventory_movements (
       pantry_item_id, movement_type, amount_delta, unit, balance_after,
       quantity_display_before, quantity_display_after, reason,
-      idempotency_key, reverses_movement_id, actor_id
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      idempotency_key, reverses_movement_id, actor_id, shopping_item_id
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).run(
     movement.itemId,
     movement.type,
@@ -92,6 +92,7 @@ function insertMovement(database, movement) {
     movement.idempotencyKey,
     movement.reversesMovementId,
     movement.actorId,
+    movement.shoppingItemId ?? null,
   );
   return database.prepare('SELECT * FROM inventory_movements WHERE id = ?').get(result.lastInsertRowid);
 }
@@ -134,8 +135,146 @@ function createPantryItem(database, input, actorId) {
       idempotencyKey: `pantry:create:${randomUUID()}`,
       reversesMovementId: null,
       actorId,
+      shoppingItemId: null,
     });
     return pantryItem(database, itemId);
+  })();
+}
+
+function activeShoppingTransfer(database, shoppingItemId) {
+  return database.prepare(`
+    SELECT im.*, pi.name AS pantry_item_name, pi.deleted_at AS pantry_item_deleted_at
+    FROM inventory_movements im
+    JOIN pantry_items pi ON pi.id = im.pantry_item_id
+    WHERE im.shopping_item_id = ?
+      AND im.reverses_movement_id IS NULL
+      AND NOT EXISTS (
+        SELECT 1 FROM inventory_movements reversal
+        WHERE reversal.reverses_movement_id = im.id
+      )
+    ORDER BY im.id DESC
+    LIMIT 1
+  `).get(shoppingItemId) || null;
+}
+
+function shoppingTransferFlags(database, shoppingItems) {
+  const items = Array.isArray(shoppingItems) ? shoppingItems : [];
+  if (!items.length) return items;
+  const ids = items.map((item) => Number(item.id)).filter((id) => Number.isInteger(id) && id > 0);
+  if (!ids.length) return items.map((item) => ({ ...item, pantry_transfer_active: false }));
+  const placeholders = ids.map(() => '?').join(', ');
+  const active = new Set(database.prepare(`
+    SELECT DISTINCT im.shopping_item_id
+    FROM inventory_movements im
+    WHERE im.shopping_item_id IN (${placeholders})
+      AND im.reverses_movement_id IS NULL
+      AND NOT EXISTS (
+        SELECT 1 FROM inventory_movements reversal
+        WHERE reversal.reverses_movement_id = im.id
+      )
+  `).all(...ids).map((row) => row.shopping_item_id));
+  return items.map((item) => ({ ...item, pantry_transfer_active: active.has(item.id) }));
+}
+
+function transferQuantity(input) {
+  const structured = normalizeStock(input.amount, input.unit);
+  const display = quantityDisplay(input.quantity_display, structured);
+  if (structured.amount !== null && structured.amount <= 0) {
+    throw new InventoryError('Purchase amount must be greater than zero.');
+  }
+  if (structured.amount === null && !display) {
+    throw new InventoryError('Confirm amount and unit or provide an explicit quantity_display.');
+  }
+  return { ...structured, display };
+}
+
+function transferShoppingItemToPantry(database, shoppingItemId, input, actorId) {
+  const id = Number(shoppingItemId);
+  if (!Number.isInteger(id) || id < 1) throw new InventoryError('Invalid shopping item ID.');
+
+  return database.transaction(() => {
+    const shoppingItem = database.prepare('SELECT * FROM shopping_items WHERE id = ?').get(id);
+    if (!shoppingItem) throw new InventoryError('Shopping item not found.', 404);
+
+    const existingTransfer = activeShoppingTransfer(database, id);
+    if (existingTransfer) {
+      database.prepare('UPDATE shopping_items SET is_checked = 1 WHERE id = ?').run(id);
+      return {
+        item: pantryItem(database, existingTransfer.pantry_item_id, { includeDeleted: true }),
+        movement: existingTransfer,
+        replayed: true,
+      };
+    }
+
+    const quantity = transferQuantity(input || {});
+    const requestedTargetId = input?.pantry_item_id === undefined || input?.pantry_item_id === null || input?.pantry_item_id === ''
+      ? null
+      : Number(input.pantry_item_id);
+    if (requestedTargetId !== null && (!Number.isInteger(requestedTargetId) || requestedTargetId < 1)) {
+      throw new InventoryError('pantry_item_id must be a positive integer.');
+    }
+
+    let item;
+    let movement;
+    if (requestedTargetId !== null) {
+      item = pantryItem(database, requestedTargetId);
+      if (!item) throw new InventoryError('Pantry item not found.', 404);
+      if (quantity.amount === null) {
+        throw new InventoryError('A structured amount and unit are required when adding to an existing pantry item.');
+      }
+      const adjustment = adjustPantryItem(database, item.id, {
+        idempotency_key: `shopping:purchase:${id}:${randomUUID()}`,
+        delta_amount: quantity.amount,
+        unit: quantity.unit,
+        reason: input?.reason,
+      }, actorId);
+      movement = adjustment.movement;
+      database.prepare('UPDATE inventory_movements SET shopping_item_id = ? WHERE id = ?').run(id, movement.id);
+      item = adjustment.item;
+    } else {
+      const locationId = Number(input?.location_id);
+      assertLocation(database, locationId);
+      item = createPantryItem(database, {
+        name: shoppingItem.name,
+        category: shoppingItem.category,
+        location_id: locationId,
+        amount: quantity.amount,
+        unit: quantity.unit,
+        quantity_display: quantity.display,
+        minimum_amount: null,
+        expiry_date: null,
+        notes: null,
+        reason: input?.reason,
+      }, actorId);
+      movement = database.prepare(
+        'SELECT * FROM inventory_movements WHERE pantry_item_id = ? ORDER BY id DESC LIMIT 1'
+      ).get(item.id);
+      database.prepare('UPDATE inventory_movements SET shopping_item_id = ? WHERE id = ?').run(id, movement.id);
+    }
+
+    database.prepare('UPDATE shopping_items SET is_checked = 1 WHERE id = ?').run(id);
+    return {
+      item: pantryItem(database, item.id),
+      movement: database.prepare('SELECT * FROM inventory_movements WHERE id = ?').get(movement.id),
+      replayed: false,
+    };
+  })();
+}
+
+function undoShoppingItemTransfer(database, shoppingItemId, actorId, reason = null) {
+  const id = Number(shoppingItemId);
+  if (!Number.isInteger(id) || id < 1) throw new InventoryError('Invalid shopping item ID.');
+  return database.transaction(() => {
+    const shoppingItem = database.prepare('SELECT id FROM shopping_items WHERE id = ?').get(id);
+    if (!shoppingItem) throw new InventoryError('Shopping item not found.', 404);
+    const transfer = activeShoppingTransfer(database, id);
+    if (!transfer) throw new InventoryError('Shopping item has no active pantry transfer.', 409);
+    const reversal = adjustPantryItem(database, transfer.pantry_item_id, {
+      idempotency_key: `shopping:purchase:${id}:undo:${transfer.id}`,
+      reverses_movement_id: transfer.id,
+      reason,
+    }, actorId, { includeDeleted: true });
+    return { ...reversal, transfer_movement_id: transfer.id };
   })();
 }
 
@@ -144,18 +283,18 @@ function convertSignedAmount(amount, fromUnit, toUnit) {
   return converted === null ? null : Math.sign(amount) * converted;
 }
 
-function adjustPantryItem(database, itemId, input, actorId) {
+function adjustPantryItem(database, itemId, input, actorId, { includeDeleted = false } = {}) {
   const key = String(input.idempotency_key || '').trim();
   if (!key || key.length > 200) throw new InventoryError('A valid idempotency_key is required.');
 
   const prior = database.prepare('SELECT * FROM inventory_movements WHERE idempotency_key = ?').get(key);
   if (prior) {
     if (prior.pantry_item_id !== itemId) throw new InventoryError('Idempotency key is already in use.', 409);
-    return { item: pantryItem(database, itemId), movement: prior, replayed: true };
+    return { item: pantryItem(database, itemId, { includeDeleted }), movement: prior, replayed: true };
   }
 
   return database.transaction(() => {
-    const current = pantryItem(database, itemId);
+    const current = pantryItem(database, itemId, { includeDeleted });
     if (!current) throw new InventoryError('Pantry item not found.', 404);
 
     let type = 'adjustment';
@@ -243,16 +382,20 @@ function adjustPantryItem(database, itemId, input, actorId) {
       reversesMovementId,
       actorId,
     });
-    return { item: pantryItem(database, itemId), movement, replayed: false };
+    return { item: pantryItem(database, itemId, { includeDeleted }), movement, replayed: false };
   })();
 }
 
 export {
   InventoryError,
   adjustPantryItem,
+  activeShoppingTransfer,
   assertLocation,
   createPantryItem,
   inventoryMovements,
   normalizeMinimum,
   pantryItem,
+  shoppingTransferFlags,
+  transferShoppingItemToPantry,
+  undoShoppingItemTransfer,
 };

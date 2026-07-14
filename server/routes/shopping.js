@@ -14,11 +14,17 @@ import { str, oneOf, url, date, collectErrors, MAX_TITLE, MAX_SHORT, MAX_TEXT } 
 import { shoppingItemsFromMealIngredients } from '../services/shopping-import.js';
 import {
   attachShoppingItemSources,
-  attachShoppingItemSourcesOne,
   insertShoppingItemSource,
 } from '../services/shopping-item-sources.js';
 import { SHOPPING_LIST_ORDER, createShoppingList } from '../services/shopping-lists.js';
 import { validateStructuredQuantity } from '../../public/utils/quantity.js';
+import { tokenAllows } from '../scopes.js';
+import {
+  InventoryError,
+  shoppingTransferFlags,
+  transferShoppingItemToPantry,
+  undoShoppingItemTransfer,
+} from '../services/inventory.js';
 
 const log = createLogger('Shopping');
 
@@ -50,6 +56,36 @@ function loadShoppingLists() {
     GROUP BY sl.id
     ORDER BY sl.${SHOPPING_LIST_ORDER.replaceAll(', ', ', sl.')}
   `).all();
+}
+
+function shoppingItemsWithMetadata(items) {
+  return shoppingTransferFlags(db.get(), attachShoppingItemSources(db.get(), items));
+}
+
+function shoppingItemWithMetadata(item) {
+  return shoppingItemsWithMetadata(item ? [item] : [])[0] || null;
+}
+
+function requirePantryWrite(req, res, next) {
+  if (req.authMethod === 'api_token' && req.authScopes != null && !tokenAllows(req.authScopes, 'pantry', 'write')) {
+    return res.status(403).json({ error: 'Token scope does not permit this Pantry operation.', code: 403 });
+  }
+  const level = req.sessionModuleAccess?.pantry;
+  if (level === 'none') {
+    return res.status(403).json({ error: 'You do not have access to the Pantry module.', code: 403 });
+  }
+  if (level === 'read') {
+    return res.status(403).json({ error: 'You have read-only access to the Pantry module.', code: 403 });
+  }
+  return next();
+}
+
+function inventoryError(res, err, context) {
+  if (err instanceof InventoryError) {
+    return res.status(err.status).json({ error: err.message, code: err.status });
+  }
+  log.error(`${context} error:`, err);
+  return res.status(500).json({ error: 'Internal server error.', code: 500 });
 }
 
 // --------------------------------------------------------
@@ -276,6 +312,38 @@ router.get('/suggestions', (req, res) => {
 // Body: { is_checked?, name?, quantity?, category?, notes?, url? }
 // Response: { data: ShoppingItem }
 // --------------------------------------------------------
+router.post('/items/:itemId/to-pantry', requirePantryWrite, (req, res) => {
+  const vReason = str(req.body?.reason, 'Reason', { max: MAX_TEXT, required: false });
+  if (vReason.error) return res.status(400).json({ error: vReason.error, code: 400 });
+  try {
+    const result = transferShoppingItemToPantry(
+      db.get(),
+      req.params.itemId,
+      { ...req.body, reason: vReason.value },
+      req.authUserId || req.session?.userId || null,
+    );
+    res.status(result.replayed ? 200 : 201).json({ data: result });
+  } catch (err) {
+    inventoryError(res, err, 'POST items/:itemId/to-pantry');
+  }
+});
+
+router.post('/items/:itemId/to-pantry/undo', requirePantryWrite, (req, res) => {
+  const vReason = str(req.body?.reason, 'Reason', { max: MAX_TEXT, required: false });
+  if (vReason.error) return res.status(400).json({ error: vReason.error, code: 400 });
+  try {
+    const result = undoShoppingItemTransfer(
+      db.get(),
+      req.params.itemId,
+      req.authUserId || req.session?.userId || null,
+      vReason.value,
+    );
+    res.status(201).json({ data: result });
+  } catch (err) {
+    inventoryError(res, err, 'POST items/:itemId/to-pantry/undo');
+  }
+});
+
 router.patch('/items/:itemId', (req, res) => {
   try {
     const item = db.get()
@@ -328,7 +396,7 @@ router.patch('/items/:itemId', (req, res) => {
     const updated = db.get()
       .prepare('SELECT * FROM shopping_items WHERE id = ?')
       .get(req.params.itemId);
-    res.json({ data: attachShoppingItemSourcesOne(db.get(), updated) });
+    res.json({ data: shoppingItemWithMetadata(updated) });
   } catch (err) {
     log.error('PATCH items/:id error:', err);
     res.status(500).json({ error: 'Internal server error.', code: 500 });
@@ -458,7 +526,7 @@ router.get('/:listId/items', (req, res) => {
         created_at ASC
     `).all(req.params.listId);
 
-    res.json({ data: attachShoppingItemSources(db.get(), items), list, categories });
+    res.json({ data: shoppingItemsWithMetadata(items), list, categories });
   } catch (err) {
     log.error('GET /:listId/items error:', err);
     res.status(500).json({ error: 'Internal server error.', code: 500 });
@@ -509,7 +577,7 @@ router.post('/:listId/items', (req, res) => {
     const item = db.get()
       .prepare('SELECT * FROM shopping_items WHERE id = ?')
       .get(result.lastInsertRowid);
-    res.status(201).json({ data: attachShoppingItemSourcesOne(db.get(), item) });
+    res.status(201).json({ data: shoppingItemWithMetadata(item) });
   } catch (err) {
     log.error('POST /:listId/items error:', err);
     res.status(500).json({ error: 'Internal server error.', code: 500 });

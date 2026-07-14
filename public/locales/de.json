@@ -361,7 +361,24 @@
         "sourceSingleNoDate": "Aus: {{source}}",
         "sourcesMultiple": "{{count}} Quellen",
         "sourceDeleted": "{{source}} (Quelle gelöscht)",
-        "sourceUnknown": "Unbekannte Quelle"
+        "sourceUnknown": "Unbekannte Quelle",
+        "addToPantry": "In Vorrat übernehmen",
+        "pantryTransferred": "In Vorrat übernommen",
+        "pantryUndo": "Rückgängig",
+        "pantryTransferTitle": "{{name}} in den Vorrat übernehmen",
+        "pantryTransferHint": "Bestätige die Menge und wähle, ob ein neuer Vorratsposten angelegt oder ein vorhandener erhöht wird.",
+        "pantryTarget": "Ziel im Vorrat",
+        "pantryNewItem": "Neuen Vorratsposten anlegen",
+        "pantryConfirmedDisplay": "Bestätigte Anzeigemenge",
+        "pantryDisplayHint": "Freitext bleibt exakt erhalten und wird niemals automatisch interpretiert.",
+        "pantryLocation": "Lagerort",
+        "onlyCheck": "Nur abhaken",
+        "pantryQuantityRequired": "Bestätige Menge und Einheit oder gib eine ausdrückliche Anzeigemenge ein.",
+        "pantryExistingStructuredRequired": "Für einen vorhandenen Vorratsposten sind eine strukturierte Menge und Einheit erforderlich.",
+        "pantryTransferReason": "Übernahme aus der Einkaufsliste",
+        "pantryTransferSuccess": "In den Vorrat übernommen",
+        "pantryUndoReason": "Einkaufsübernahme rückgängig",
+        "pantryUndoSuccess": "Vorratsübernahme gegengebucht"
     },
     "meals": {
         "title": "Essensplan",
@@ -3254,7 +3271,8 @@
             "initial": "Anfangsbestand",
             "adjustment": "Bestandsänderung",
             "correction": "Bestandskorrektur",
-            "reversal": "Gegenbuchung"
+            "reversal": "Gegenbuchung",
+            "purchase": "Einkaufszugang"
         },
         "locations": {
             "fridge": "Kühlschrank",
