@@ -339,7 +339,14 @@ class YuvomiDatepicker extends HTMLElement {
     el.setAttribute('role', 'dialog');
     document.body.appendChild(el);
     el.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') { this._closePopover(); this._activeSub?.trigger.focus(); return; }
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
+        const trigger = this._activeSub?.trigger;
+        this._closePopover();
+        trigger?.focus();
+        return;
+      }
       if (e.key === 'Tab') this._trapTab(e, el);
     });
     this._popover = el;

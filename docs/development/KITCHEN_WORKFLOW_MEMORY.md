@@ -102,6 +102,7 @@ Analysierte Implementierungsbereiche:
 - KWF-006 ergänzt die eigenständige Suite `npm run test:quantity` und erweitert DB-, Shopping- und Meals-Regressionen um Migration 88, API-Validierung, Snapshot-Propagation und Quellenaggregation.
 - KWF-008 ergänzt `npm run test:shopping-pantry` für atomaren Transfer, Berechtigungen, Idempotenz, Undo/Redo, Freitextbestätigung und Rollback.
 - KWF-009 ergänzt `npm run test:meal-cooking` für read-only Preview, Rechte, FIFO-Vorschläge, Mehrfachlose, Parallelbestätigung, Undo, Freitextgrenze, Missing→Shopping, Rollback, Rekurrenz und Lösch-/Snapshotverhalten.
+- KWF-010 ergänzt `npm run test:kitchen-workflow`: produktives Upgrade einer belegten v85-DB bis v91, ein gemeinsamer Route-Level-Flow Recipe→Meal→Shopping→Pantry→Cook mit Purchase-/Cooking-Undo und erzwungenem Rollback sowie Verträge für OpenAPI, Scopes/Permissions, PWA und exakte Key-Parität aller 23 Locales.
 - `npm test` ist auf Windows/Node 24.12.0 nach erfolgreichem `test:task-categories` durch eine Node/libuv-Assertion abgebrochen; siehe KWF-FINDING-009.
 
 ### i18n
@@ -135,6 +136,7 @@ Analysierte Implementierungsbereiche:
 | 2026-07-14 | Codex | KWF-007 / `feature/pantry-mvp` | Untersucht und geändert: Migration 89/Schema-Test, Inventory-Service, Pantry-Route, Scope/Rechte/OpenAPI, Pantry-Seite/-Styles, Router/Kitchen-Tabs/Settings/SW, alle 23 Locales, fokussierte Pantry-/DB-/Integrations-Tests, SPEC/Changelog/Kitchen-Doku | Core-Pantry-MVP mit Lot-Modell, atomarem unveränderlichem Bewegungsjournal und Network-only-API implementiert und lokal fokussiert verifiziert | abgeschlossen; Feature-Commit `70ed5cfd` erstellt, finaler Handoff-/Push-Abschluss folgt | keine aktive Fremdreservierung; KWF-006 ist in `main`; Fork-`main` vs. `upstream/main` live 20/10 divergent, daher kein Upstream-Merge; kein KWF-008/009-Scope begonnen |
 | 2026-07-14 | Codex | KWF-008 / `feature/shopping-to-pantry` | Untersucht und geändert: Migration 90/Schema-Test, Shopping-Route, Inventory-Service, OpenAPI, Shopping-/Pantry-Frontend, Client-Permission-Mapping, Shopping-CSS, alle 23 Locales, DB-/Shopping-/Pantry-/Transfer- und betroffene Regressionstests, SPEC/Changelog/Plan/Memory | Expliziten atomaren Einkauf→Vorrat-Transfer mit Zielauswahl, Freitextbestätigung, aktiver Idempotenz und journalisiertem Undo/Redo implementiert, dokumentiert sowie automatisch und im Browser verifiziert | extern akzeptiert und über Merge-Commit `245538f0` in Fork-`main` integriert | `main` und `origin/main` nach Push synchron; `upstream/main` blieb wegen dokumentierter Divergenz unberührt; kein KWF-009-Scope begonnen |
 | 2026-07-14 | Codex | KWF-009 / `feature/meal-cooking-consumption` | Untersucht und geändert: Migration 91/Schema-Test, Meals-Route, Inventory-/Cooking-Service, OpenAPI, Meals-UI/-CSS, `meals.cook*` in 23 Locales, DB-/Meals-/Pantry-/Shopping-/Frontend-Regressionen, SPEC/Changelog/Plan/Memory | Cooking-Event mit read-only Preview, exakten kompatiblen FIFO-Vorschlägen, manueller Mehrfachlos-Allokation, atomarem Verbrauch und optionalem Missing→Shopping sowie journalisiertem Undo implementiert, dokumentiert und automatisch/im Browser verifiziert | extern akzeptiert und über Merge-Commit `f89b2ec6` in Fork-`main` integriert | `main` wird mit diesem Integrations-Handoff zu `origin/main` gepusht; `upstream/main` bleibt unverändert; KWF-FINDING-009 offen, kein KWF-010-Scope begonnen |
+| 2026-07-14 | Codex | KWF-010 / `feature/kitchen-workflow-integration` | Untersucht: Migrationen 86–91, DB-/Route-/Service-/OpenAPI-/Scope-/Permission-/SW-/Locale-Verträge und KWF-002–009-Suiten; geändert: produktive Cross-Domain-/Upgrade-Suite, Datepicker-Escape/Fokus-Vertrag, Package-Script, SPEC/Changelog/Plan/Memory | Gesamtworkflow, Legacy-Upgrade, Rollbacks, Idempotenz, Undo und Verträge automatisiert; verschachteltes Escape im realen Browser gefunden und behoben; Desktop/Tablet/Mobil verifiziert | implementiert und lokal verifiziert; Commit-/Push-Abschluss folgt | keine aktive Fremdreservierung; keine Schema-/API-/i18n-/SW-Änderung; `main...upstream/main` live 32/20 divergent und unverändert; KWF-FINDING-009 reproduziert, KWF-FINDING-022/-023 gelöst; kein Folge-Task |
 
 ## 5. Architekturentscheidungen
 
@@ -295,6 +297,8 @@ Technische Grenze: Ohne ein bestätigtes Zutaten-Stammdatenmodell kann ein Name 
 
 Die KWF-009-Pfade sind in `server/openapi.js` dokumentiert und verwenden die vorhandenen Scope-Keys: Meals bleibt `meals`, Pantry bleibt `pantry`, Shopping bleibt `shopping`. Cross-Domain-Schreibzugriffe werden zusätzlich in der Meals-Route für Token und Mitglieder geprüft; neue Scope-Keys oder Service-Worker-Regeln waren nicht erforderlich.
 
+KWF-010 fand keinen Datenmodell-, Migrations-, API-, OpenAPI-, Scope-, Permission- oder Service-Worker-Drift. Die produktiven Migrationen 86–91 aktualisieren eine mit Legacy-Rezept, -Meal und -Shoppingdaten belegte v85-DB verlustfrei; der gemeinsame Route-Level-Test bestätigt die vorhandenen Transaktionsgrenzen und unveränderten Verträge. Daher wurde bewusst keine Migration und kein API-Vertrag ergänzt oder umgeschrieben.
+
 ## 8. Frontend-Mapping
 
 | Ansicht/Datei | Geplante Verantwortung | Handler/Formulare | i18n / Mobil-Tablet |
@@ -302,7 +306,7 @@ Die KWF-009-Pfade sind in `server/openapi.js` dokumentiert und verwenden die vor
 | `public/pages/shopping.js` | Quellen und strukturierte Mengen; KWF-008 zeigt abgehakten Artikeln Transferstatus und explizite Übernahme | bestehende Check-/Swipe-Handler bleiben; Transfermodal wählt Neuanlage oder vorhandenes Los, verlangt bei Freitext eine ausdrückliche Bestätigung und bietet Undo | `shopping.toPantry*` in 23 Locales; Deutsch/Englisch fachlich vollständig; 390/768/Desktop ohne Überlauf und mit logischer Fokusfolge |
 | `public/pages/meals.js` | KWF-004: optionaler Import; KWF-006 strukturierte Snapshots; KWF-009 Cooking-Status/Review/Undo | `buildModalContent`/`saveModal`, Einzel-Edit, Copy/Scale/Apply-Plan propagieren `amount`,`unit`; Cooking-Review editiert Mehrfachlos-Allokationen und ausgewählte Missing-Artikel; kein stiller Freitextparser | `quantity.*` und `meals.cook*`; Shared Modal, Desktop/768/390 px ohne Überlauf und tastaturbedienbar |
 | `public/pages/recipes.js` | bestehende Navigation; KWF-006 strukturierte Rezeptzutaten | Create/Update/Copy und `add-to-meals` erhalten `amount`,`unit` | gemeinsamer `quantity.*`-Namespace; Freitextanzeige bleibt Fallback |
-| `public/components/datepicker.js` | gemeinsamer Microkalender; KWF-005 öffnet das Datumspopover auch bei grobem Pointer und ergänzt Home/End-Navigation | bestehendes Grid/Keyboard; nativer Touch-Picker bleibt nur für Uhrzeit | KWF-005 nutzt vorhandene Texte; keine Marker-API ohne separaten Reviewbedarf |
+| `public/components/datepicker.js` | gemeinsamer Microkalender; KWF-005 öffnet das Datumspopover auch bei grobem Pointer und ergänzt Home/End-Navigation; KWF-010 isoliert Escape im verschachtelten Popover | bestehendes Grid/Keyboard; Escape stoppt Propagation, schließt nur den Picker und fokussiert den Trigger; nativer Touch-Picker bleibt nur für Uhrzeit | vorhandene Texte; keine neuen i18n-Keys oder Marker-API |
 | `public/pages/pantry.js` | Liste/Karten, Suche, Filter, CRUD, Korrektur und History; KWF-008 kennzeichnet Shopping-Kaufzugänge | Shared Modal; Add/Edit/Adjust/Reversal/Delete; Read-only blendet Schreibaktionen aus | `pantry.*` einschließlich `pantry.movement.purchase` in 23 Locales; responsive Grid/Filter, Touch-Ziele und Reduced Motion |
 | `public/router.js`, `public/utils/kitchen-tabs.js` | `/pantry` als Kitchen-Child | Route, Titel, Nav-Ziel, Shortcuts | `nav.pantry` in allen Locales |
 | `public/settings/pages/modules-kitchen.js` | Pantry-bezogene bestätigte Defaults, falls später nötig | keine globale Autoübernahme im MVP | explizite, sichere Defaults |
@@ -324,7 +328,7 @@ Neue i18n-Namensräume: KWF-006 implementiert `quantity.*`; KWF-007 implementier
 | KWF-007 Pantry MVP | Servicevalidierung, Konvertierung, Idempotenz und Rollback | 11/11: CRUD/Filter/Adjust/Reversal/History | DB 41/41; Migration 89, Seeds, FKs/Checks/Indizes | Shared Modal, responsive CRUD/Filter, Tastatur-/Touchmuster | Scopes/Permissions/Kitchen/Settings/SW/Frontend grün | implementiert und fokussiert verifiziert |
 | KWF-008 Einkauf→Vorrat | Transfermenge, aktiver Bezug, Reversal | Transfer/Undo/Redo/Recheck, Zweitrechteprüfung, Parallel-Replay und Rollback 8/8 | DB 42/42; Migration 90 additiv, kein Backfill | Bestätigungsdialog, Zielauswahl, Freitextkorrektur; Desktop/768/390 px + Tastatur | Shopping 62/62, Pantry 11/11, Scopes/Permissions/SW/MCP/Frontend grün | implementiert und lokal verifiziert |
 | KWF-009 Kochen→Verbrauch | exaktes Matching, kompatible Dimension, FIFO-Vorschlag | Cooking 8/8: Preview/Commit/Undo, Rechte, Parallelität, Missing, Rollback, Rekurrenz/Delete | DB 43/43; Migration 91, Event-/Ingredient-/Allocation-Snapshots und Journal-FK | Shared Reviewdialog, editierbare Mehrfachlose/Missing; Desktop/768/390 px + Tastatur | Meals 48/48, Shopping 62/62, Pantry 11/11, Scopes/Permissions/SW/MCP/Frontend grün | implementiert und lokal verifiziert |
-| KWF-010 Integration | Cross-Domain | E2E API-Flows | Upgrade-Szenarien | Desktop/Tablet/Mobile/a11y | `npm test` | geplant |
+| KWF-010 Integration | produktive Verträge/Replay/Rollback | 3/3: gemeinsamer Route-Level-Flow, OpenAPI/Scopes/Permissions/PWA/Locales | belegte v85→v91-DB, Legacy-Daten/FKs/Snapshots | Datepicker-Escape/Fokus 25/25; Browser 1440/768/390 px, Touch-/Tastaturpfad, keine Console-Fehler | fokussierte Kitchen-/MCP-/Housekeeping-/CalDAV-/Installer-/Frontend-Suiten grün; `npm test` bis Task-Categories grün, danach KWF-FINDING-009 | implementiert und lokal verifiziert |
 
 ## 10. Offene Findings
 
@@ -388,7 +392,7 @@ Neue i18n-Namensräume: KWF-006 implementiert `quantity.*`; KWF-007 implementier
 - Schweregrad: hoch für Einkauf→Vorrat.
 - Auswirkung: Check/Uncheck kann ohne Transferjournal keine Doppelbuchung verhindern.
 - Empfehlung: separater bestätigter Transfer mit eindeutiger Referenz und atomarer Check-Aktualisierung.
-- Status: offen.
+- Status: **resolved in KWF-008** durch expliziten atomaren Transfer, eindeutigen aktiven `shopping_item_id`-Bezug und journalisiertes Undo/Redo; normales Abhaken bleibt unabhängig.
 - Task: KWF-008.
 
 ### KWF-FINDING-008 — Pantry benötigt neue Core-Integrationspunkte
@@ -406,7 +410,7 @@ Neue i18n-Namensräume: KWF-006 implementiert `quantity.*`; KWF-007 implementier
 - Schweregrad: mittel für lokale Verifikation.
 - Auswirkung: Die restliche Suite startet in diesem Lauf nicht; Meldung: `Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76`.
 - Empfehlung: Separat gegen unterstützte Node-LTS-Version und isolierten Testprozess prüfen; nicht als Featurefehler deklarieren.
-- Status: offen, reproduziert.
+- Status: offen, in KWF-010 auf der einzigen installierten Node-LTS-Version 24.12.0 erneut exakt reproduziert; alle taskrelevanten späteren Suiten separat bestanden.
 - Task: KWF-010 / Tooling-Follow-up.
 
 ### KWF-FINDING-010 — Pantry-Offlineverhalten ist unentschieden
@@ -442,7 +446,7 @@ Neue i18n-Namensräume: KWF-006 implementiert `quantity.*`; KWF-007 implementier
 - Schweregrad: mittel für spätere Upstream-Integration, niedrig für den isolierten KWF-003-Scope.
 - Auswirkung: `main` kann nicht per Fast-Forward synchronisiert werden. Vor KWF-003 betrug `main...upstream/main` 7/8 Commits; vor KWF-004 sind es nach der KWF-003-Integration 9/8 Commits. Ein ungeprüfter Merge würde Kitchen-Historie und die Upstream-v1.20.0-Änderungen vermischen.
 - Empfehlung: KWF-003 auf dem aktuellen, sauberen Fork-`main` implementieren; Upstream-Integration separat und konfliktbewusst durchführen.
-- Status: offen; vor KWF-009 live mit 27/20 Commits verifiziert, keine taskbezogene Upstream-Synchronisierung vorgenommen.
+- Status: offen; vor KWF-010 live mit 32/20 Commits verifiziert, keine taskbezogene Upstream-Synchronisierung vorgenommen.
 - Task: Repository-Integration, nicht KWF-003-Feature-Scope.
 
 ### KWF-FINDING-014 — KWF-004-API-Vertrag ist in der Task-2-Analyse veraltet
@@ -517,6 +521,24 @@ Neue i18n-Namensräume: KWF-006 implementiert `quantity.*`; KWF-007 implementier
 - Status: **resolved in KWF-009**; Migration 91 ergänzt `cooking_event_id`, Entnahmen verwenden `adjustment`, Undo `reversal`, und keine veröffentlichte Migration wurde verändert.
 - Task: KWF-009.
 
+### KWF-FINDING-022 — Gesamtworkflow und echtes KWF-Upgrade sind nicht durch eine Suite abgesichert
+
+- Betroffene Bereiche: produktive Migrationen 86–91, Meals-/Shopping-/Pantry-Routen und -Services, OpenAPI, Scopes/Permissions, PWA-/Locale-Verträge und `package.json`.
+- Schweregrad: mittel für KWF-010.
+- Auswirkung: Die fokussierten Suiten prüfen die einzelnen Domänen erfolgreich, führen aber weder Rezept/Meal→Shopping→Pantry→Cook→Undo in einer gemeinsamen DB aus noch ein mit Legacy-Daten belegtes Schema v85 über die produktiven `MIGRATIONS` bis v91.
+- Empfehlung: Eine fokussierte KWF-010-Integrationssuite mit realen Express-Routen, produktiven Migrationen, Cross-Domain-Journal-/Snapshot-Prüfungen, Rollback/Idempotenz sowie statischen OpenAPI-/Scope-/PWA-/Locale-Gates ergänzen und in `npm test` aufnehmen.
+- Status: **resolved in KWF-010** durch `test/test-kitchen-workflow.js` und `npm run test:kitchen-workflow` (3/3); kein Schema- oder API-Defekt gefunden.
+- Task: KWF-010.
+
+### KWF-FINDING-023 — Datepicker-Escape schließt das übergeordnete Meal-Modal
+
+- Betroffene Dateien: `public/components/datepicker.js`, `public/components/modal.js`, `test/test-datepicker.js`.
+- Schweregrad: mittel für Tastaturbedienung und verschachtelte Dialoge.
+- Auswirkung: Im realen Recipe→Meals-Modal schließt `Escape` zuerst das Kalender-Popover und läuft danach bis zum dokumentweiten Shared-Modal-Handler weiter, wodurch auch das vollständige Meal-Formular geschlossen wird.
+- Empfehlung: Escape im bestehenden Datepicker-Popover behandeln, Default unterbinden und Propagation stoppen; das Shared-Modal-Verhalten außerhalb eines offenen Pickers unverändert lassen.
+- Status: **resolved in KWF-010**; Datepicker 25/25 und reale Browserprüfung bestätigen isoliertes Schließen, `aria-expanded=false`, offenen Meal-Dialog und Fokusrückgabe an den Trigger.
+- Task: KWF-010.
+
 ## 11. Session-Handoff
 
 ### Vorheriger Handoff — KWF-006
@@ -577,3 +599,18 @@ Neue i18n-Namensräume: KWF-006 implementiert `quantity.*`; KWF-007 implementier
 - Findings: KWF-FINDING-011, -012 und -021 sind für KWF-009 gelöst. Offen bleiben KWF-FINDING-009 (Windows/Node-libuv) und KWF-FINDING-013 (separate Upstream-Integration); kein neues ungeklärtes KWF-009-Finding.
 - Nächster sinnvoller Schritt: KWF-010 erst in einer neuen, ausdrücklich reservierten Session analysieren. In dieser Integrationssession wurde kein Folge-Task begonnen.
 - Nicht erneut analysieren: Migration-91-Event-/Snapshotmodell, bestehender Movement-Type, Matching-/Einheitengrenze, konkrete Rekurrenzinstanz, Delete-Guard, kombinierte Rechteprüfung, atomare Transaktionsgrenze, Missing-Herkunft, Undo-Semantik, Modal-/Responsive-Verhalten und Locale-Keyset sind geklärt.
+
+### Aktueller Handoff — KWF-010
+
+- Letzter abgeschlossener Schritt: KWF-010 wurde vollständig analysiert, reserviert, implementiert, dokumentiert sowie automatisch und im realen Browser verifiziert. Der Git-Abschluss auf `feature/kitchen-workflow-integration` folgt nach der finalen Diff-Prüfung; kein Pull Request, Merge oder Folge-Task.
+- Aktueller Branch: `feature/kitchen-workflow-integration`, Basis Fork-`main` `c6375c97`; `main` entsprach zu Beginn `origin/main`. `upstream/main` wurde wegen der live bestätigten Divergenz 32/20 weder gemergt noch verändert.
+- Commit-/Working-Tree-Status: Die taskbezogenen Änderungen sind noch uncommitted und werden nach `git diff --check`, Status- und Stat-Prüfung in einen klaren KWF-010-Commit aufgenommen und zu `origin/feature/kitchen-workflow-integration` gepusht.
+- Geänderte Dateien: `test/test-kitchen-workflow.js`, `test/test-datepicker.js`, `public/components/datepicker.js`, `package.json`, `docs/SPEC.md`, `CHANGELOG.md`, Kitchen-Plan und -Memory. Keine Migration, Route, Service-, OpenAPI-, Scope-, Permission-, Locale-, CSS- oder Service-Worker-Datei musste geändert werden.
+- Untersucht, aber fachlich unverändert: produktive Migrationen 86–91 und Schema-Tests; Meals-/Shopping-/Pantry-Routen und Import-/Inventory-/Cooking-Services; Recipe-/Meal-/Shopping-/Pantry-Frontend; OpenAPI/MCP-Bridge; Token-Scopes, Mitgliederrechte, Service Worker, Kitchen-/Settings-Navigation, alle 23 Locale-Dateien, Installer-Schema, Housekeeping und CalDAV.
+- Bestätigte Annahmen/Entscheidungen: v85→v91 ist additiv und erhält Legacy-Daten. Der Fachfluss bewahrt Herkunft, Snapshots, aktive Idempotenz und Gegenbewegungen; erzwungene Cooking-Fehler hinterlassen weder Event noch Allokation oder Teilbewegung. Pantry-API bleibt network-only, statische Assets bleiben precached. Alle 23 Locales besitzen exakt dasselbe Keyset mit 3060 Blatt-Keys. Keine neue ADR war nötig. Datepicker-Escape gehört dem offenen Picker, stoppt dort die Propagation und gibt den Fokus zurück; ohne offenen Picker bleibt das bestehende Modal-Escape unverändert.
+- Automatische Tests bestanden: `test:kitchen-workflow` 3/3, `test:db` 43/43, `test:quantity` 4/4, `test:shopping` 62/62, `test:shopping-pantry` 8/8, `test:pantry` 11/11, `test:meal-cooking` 8/8, `test:meals` 48/48, `test:datepicker` 25/25, `test:kitchen-tabs` 8/8, `test:frontend-audit` 142/142, `test:sw-api-cache` 9/9, `test:token-scopes` 16/16, `test:permissions` 15/15, `test:settings-navigation` 65/65, `test:mcp` 29/29, `test:housekeeping` 13/13, `test:caldav-reminders` 9/9, `test:api` 11/11, `test:installer-schema` 27/27, `test:mobile-scroll-layout` 6/6, `test:typography` 12/12 und `test:changelog` 5/5.
+- Vollsuite: `npm test` bestand alle gestarteten Suiten einschließlich DB 43/43, Shopping 62/62, Shopping→Pantry 8/8, Pantry 11/11, Meal-Cooking 8/8, KWF-Integration 3/3, Meals 48/48, Calendar 48/48, Notes/Contacts/Budget 52/52 und Task-Categories 13/13. Danach reproduzierte die einzige installierte Node-LTS-Version 24.12.0 KWF-FINDING-009 exakt mit `Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76`; die taskrelevanten späteren Suiten wurden separat erfolgreich ausgeführt.
+- Browserprüfung: isolierte Migration-91-DB und lokaler Server; Rezept „Browser Brot“ wurde in das vorbefüllte Meal-Modal übernommen, mit strukturiertem `1 kg` und explizitem Shopping-Import angelegt und als Shoppingartikel samt Herkunft „Aus: Browser Brot · 14.07.2026“ angezeigt. Home/End und Escape wurden per Tastatur geprüft. Der zunächst reproduzierte doppelte Escape-Close wurde behoben: Kalender schließt allein, Meal-Modal bleibt offen und Fokus kehrt zum Trigger zurück. Desktop 1440×900, Tablet 768×1024 und Mobil 390×844 ohne horizontalen Überlauf; mobiles Modal und Kalender vollständig im Viewport; keine Console-Warnungen/-Fehler. Testserver und temporäre DB samt Sidecars wurden entfernt. Die Browser-Skill-Anleitung führte zur echten UI-, Fokus- und Viewportprüfung statt nur statischer Frontend-Verträge.
+- Findings: KWF-FINDING-007 war bereits durch KWF-008 gelöst und ist korrigiert dokumentiert. KWF-FINDING-022 und KWF-FINDING-023 sind gelöst. Offen bleiben KWF-FINDING-009 (Windows/Node-libuv; reproduziert, Tooling-Follow-up) und KWF-FINDING-013 (separate Upstream-Integration); beide blockieren den isolierten KWF-010-Feature-Branch nicht.
+- Nächster sinnvoller Schritt: externe Prüfung des gepushten Task-Branches. Kein Pull Request, kein Merge und kein Folge-Task.
+- Nicht erneut analysieren: produktiver v85→v91-Upgradepfad, Recipe→Meal→Shopping→Pantry→Cook/Undo-Datenfluss, bestehende Transaktions-/Rollback-/Replay-Grenzen, OpenAPI-/Scope-/Permission-Zuordnung, Network-only-Pantry-API, vollständiges Locale-Keyset und verschachteltes Datepicker-Escape/Fokusverhalten sind geklärt.

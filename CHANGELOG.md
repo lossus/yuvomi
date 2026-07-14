@@ -8,9 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+- Pressing Escape in the meal-planning calendar now closes only the date picker and returns focus to its trigger instead of also dismissing the surrounding meal dialog.
 - The shared meal-planning microcalendar now remains available inside the recipe-to-meal dialog on tablets and phones, stays within small viewports, and supports Home/End keyboard navigation without replacing the calendar with the native date field.
 
 ### Added
+- A Kitchen integration suite now verifies the production upgrade from schema v85 through v91 with legacy data, the complete recipe-to-meal-to-shopping-to-pantry-to-cooking workflow and both Undo paths, rollback and replay safety, plus OpenAPI, permissions, PWA, and 23-locale parity contracts.
 - Planned meals can now be reviewed and explicitly marked as cooked. Exact, unit-compatible Pantry suggestions are editable across multiple lots; confirmation atomically journals consumption and optional missing Shopping items, prevents duplicate consumption, and supports Undo through counter-movements without interpreting free-text quantities.
 - Checked shopping items can now be explicitly transferred into a new or selected Pantry stock lot. The confirmed operation is atomic, dual-permission guarded, replay-safe, journaled, reversible with a counter-movement, and never parses free-text quantities automatically; ordinary check/uncheck behavior remains unchanged.
 - A new Pantry Kitchen area tracks stock lots by location, category, minimum level, and expiry date. Manual additions, corrections, and reversals are recorded in an immutable, idempotent movement journal; search and filters, read-only permissions, responsive controls, API scopes, and OpenAPI documentation are included.

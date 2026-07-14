@@ -1370,6 +1370,12 @@ The fourth Kitchen child provides manual stock-lot CRUD, name/category search, l
 
 REST API: `GET/POST /api/v1/pantry`, `GET/PATCH/DELETE /api/v1/pantry/:id`, `POST /api/v1/pantry/:id/adjust`, read-only `GET /api/v1/pantry/locations`, and the dual-gated Shopping purchase/Undo endpoints described above. Adjustment requests require an idempotency key. Pantry has its own `pantry:read`/`pantry:write` token scope and module permission. Static page assets are precached, but Pantry API reads and every mutation remain network-only to avoid retaining stale household inventory offline.
 
+### Kitchen integration guarantees
+
+The productive migrations support an in-place upgrade from the pre-Kitchen schema v85 through v91 without rewriting legacy recipe, meal, or shopping data. The integrated flow keeps recipe and meal snapshots traceable through Shopping provenance, a confirmed purchase transfer, Pantry movement history, cooking allocations, and both purchase and cooking counter-movements. Cross-domain writes are server-side transactions; a failed source, stock, or cooking write leaves no partial state, and replay guards prevent duplicate purchase or consumption movements.
+
+`test:kitchen-workflow` exercises that upgrade and the complete route-level workflow in one database. It also keeps the OpenAPI paths, module scopes and permissions, network-only Pantry API policy, static Pantry assets, and exact locale-key parity aligned. The shared date picker consumes Escape while its popover is open, closes only that nested picker, and restores focus to its trigger; the surrounding modal keeps its normal Escape behavior when no picker is open.
+
 ### Meal Plan (`/meals`)
 
 **Desktop:** full weekly grid (Mon–Sun), slots: breakfast / lunch / dinner / snack. **Mobile:** the same full week (Mon–Sun) stacked vertically and scrollable, auto-scrolled to today on open.
