@@ -42,7 +42,7 @@ Begründete Anpassung der vorgeschlagenen Reihenfolge: KWF-003 kommt vor dem dir
 | 6 | KWF-006 | rückwärtskompatible strukturierte Mengenbasis | groß | implementiert und lokal verifiziert |
 | 7 | KWF-007 | Core-Pantry-MVP mit Bewegungsjournal | groß | implementiert und lokal verifiziert |
 | 8 | KWF-008 | idempotenter Einkauf→Vorrat-Transfer | groß | abgeschlossen und in `main` |
-| 9 | KWF-009 | Kochvorgang, Verbrauch und Undo | groß | implementiert und lokal verifiziert |
+| 9 | KWF-009 | Kochvorgang, Verbrauch und Undo | groß | abgeschlossen und in `main` |
 | 10 | KWF-010 | End-to-End-Regression und UX-Härtung | groß | geplant |
 
 ## KWF-001 — Repository- und Architektur-Baseline
@@ -355,7 +355,7 @@ Begründete Anpassung der vorgeschlagenen Reihenfolge: KWF-003 kommt vor dem dir
   - Transaktionsfehler hinterlassen weder Event noch Teilbewegungen/Shoppingartikel.
 - Branch: `feature/meal-cooking-consumption`.
 - Komplexität: groß.
-- Empfohlene Reihenfolge: 9; **implementiert und lokal verifiziert auf `feature/meal-cooking-consumption`**.
+- Empfohlene Reihenfolge: 9; **extern akzeptiert und über Merge-Commit `f89b2ec6` in Fork-`main` integriert**.
 
 ## KWF-010 — Integration, Regression und UX-Polish
 
@@ -387,8 +387,8 @@ Begründete Anpassung der vorgeschlagenen Reihenfolge: KWF-003 kommt vor dem dir
 
 ## Empfohlener nächster Schritt
 
-1. KWF-009 ist auf `feature/meal-cooking-consumption` implementiert und lokal automatisch sowie im Browser verifiziert; als nächstes erfolgt die externe Prüfung des gepushten Branches.
-2. Keinen Folge-Task in derselben Session beginnen. KWF-010 erst nach externer KWF-009-Akzeptanz in einer neuen Session reservieren und analysieren.
+1. KWF-009 ist extern akzeptiert und über Merge-Commit `f89b2ec6` in Fork-`main` integriert.
+2. Keinen Folge-Task in derselben Session beginnen. KWF-010 erst in einer neuen Session reservieren und analysieren.
 3. `upstream/main` bleibt wegen der dokumentierten Divergenz unverändert; eine Integration ist ein separater Repository-Task.
 
 KWF-009 interpretiert weiterhin keine Freitextmenge und führt keinen unbestätigten Verbrauch aus. Vorschläge sind deterministisch und editierbar; jede Bestätigung und jedes Undo bleibt journalisiert.
